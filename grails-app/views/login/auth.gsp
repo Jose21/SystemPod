@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Login Page - Ace Admin</title>
+    <title>SGCon - Login</title>
 
     <meta name="description" content="User login page" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -51,8 +51,11 @@
                 <div class="center">
                   <br/>
                   <h1>
-                    <span class="red">I N F O N A V I T</span>
-                  </h1>                  
+                    <span class="red">S G C O N</span>
+                  </h1>
+                  <h3>
+                    <span class="red">Sistema de Gestión de Convenios, Tareas y Poderes.</span>
+                  </h3>
                 </div>
               </div>
 

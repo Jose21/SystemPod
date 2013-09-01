@@ -14,6 +14,9 @@ class Usuario implements Serializable {
     boolean accountLocked
     boolean passwordExpired
 
+    Date dateCreated
+    Date lastUpdated
+    
     static constraints = {
         username blank: false, unique: true
         password blank: false
@@ -22,6 +25,7 @@ class Usuario implements Serializable {
 
     static mapping = {
         password column: '`password`'
+        autoTimestamp true
     }
 
     Set<Rol> getAuthorities() {
@@ -44,5 +48,5 @@ class Usuario implements Serializable {
     
     String toString() {
         "${username}"
-    }
+    }    
 }
