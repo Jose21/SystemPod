@@ -6,6 +6,13 @@ class DocumentoController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def downloadArchivo (Long id) {
+        def documentoInstance = Documento.get(id)
+        response.setHeader("Content-Disposition", "attachment;filename=\"" + documentoInstance.nombre + "\"");
+        byte[] archivo = documentoInstance.archivo
+        response.outputStream << archivo
+    }
+    
     def index() {
         redirect(action: "list", params: params)
     }

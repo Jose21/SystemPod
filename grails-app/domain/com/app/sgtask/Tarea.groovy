@@ -1,5 +1,7 @@
 package com.app.sgtask
 
+import com.app.security.Usuario
+
 class Tarea {
 
     String nombre
@@ -8,6 +10,8 @@ class Tarea {
     boolean cerrada = false
     Date dateCreated
     Date lastUpdated
+    Usuario creadaPor
+    Usuario asignadaA
     
     Grupo grupo
     
@@ -20,6 +24,8 @@ class Tarea {
         grupo nullable:false
         cerrada blank:false
         notas nullable:true
+        creadaPor nullable:false
+        asignadaA nullable:false
     }
     
     static mapping = {

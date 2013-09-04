@@ -8,13 +8,7 @@
   </head>
   <body>
     <div class="page-header position-relative">
-      <h1>Editar: Nota</h1>
-      <div class="btn-group">
-        <g:link class="btn btn-small tip-bottom" action="index">
-          <i class="icon-file"></i>
-          <g:message code="default.list.label" args="[entityName]" />
-        </g:link>
-      </div>
+      <h1>Editar: Nota</h1>      
     </div>
     
     <div class="container-fluid">
@@ -36,7 +30,7 @@
             <g:render template="form"/>
             <div class="form-actions">
               <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
-              <g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+              
             </div>
           </g:form>
 

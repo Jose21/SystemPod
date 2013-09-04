@@ -4,6 +4,9 @@ import org.springframework.dao.DataIntegrityViolationException
 
 class NotaController {
 
+    def historialDeTareaService
+    def springSecurityService
+    
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     //Mis metodos
@@ -32,6 +35,7 @@ class NotaController {
 
     def save() {
         def tareaId = session.tareaId
+        params.agregadaPor = springSecurityService.currentUser
         def notaInstance = new Nota(params)
         notaInstance.tarea = Tarea.get(params.tarea as long)
         
@@ -51,6 +55,7 @@ class NotaController {
                 return
             }
         }
+        historialDeTareaService.agregar(notaInstance.tarea, springSecurityService.currentUser, "agregó una nota")
         flash.message = message(code: 'default.created.message', args: [message(code: 'nota.label', default: 'Nota'), notaInstance.id])
         redirect(controller:"tarea", action: "show", id: tareaId)
     }
@@ -68,21 +73,21 @@ class NotaController {
 
     def edit(Long id) {
         def notaInstance = Nota.get(id)
-        session.tareaId = id
+        session.tareaId = params.tareaId
         if (!notaInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'nota.label', default: 'Nota'), id])
             redirect(action: "list")
             return
         }
-
         [notaInstance: notaInstance]
     }
 
     def update(Long id, Long version) {
         def notaInstance = Nota.get(id)
+        def tareaId = session.tareaId
         if (!notaInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'nota.label', default: 'Nota'), id])
-            redirect(action: "list")
+            redirect(controller:"tarea",action: "list")
             return
         }
 
@@ -98,13 +103,17 @@ class NotaController {
 
         notaInstance.properties = params
 
+        if (!notaInstance.validate()) {
+            notaInstance.errors.each {}
+        }
         if (!notaInstance.save(flush: true)) {
             render(view: "edit", model: [notaInstance: notaInstance])
             return
         }
 
+        historialDeTareaService.agregar(Tarea.get(tareaId as long), springSecurityService.currentUser, "modificó una nota")
         flash.message = message(code: 'default.updated.message', args: [message(code: 'nota.label', default: 'Nota'), notaInstance.id])
-        redirect(action: "show", id: notaInstance.id)
+        redirect(controller:"tarea", action: "show", id: tareaId)
     }
 
     def delete(Long id) {

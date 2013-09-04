@@ -2,20 +2,59 @@ package com.app.sgtask
 
 import org.springframework.dao.DataIntegrityViolationException
 import java.text.SimpleDateFormat
+import com.app.security.Usuario
 
 class TareaController {
 
+    def historialDeTareaService
+    def springSecurityService
+    
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {
         redirect(action: "list", params: params)
     }
 
+    def reasignar (Long id) {
+        def tareaInstance = Tarea.get(id)
+        def asignarA = Usuario.get(params.asignadaA.id)
+        if (tareaInstance.asignadaA != asignarA) {
+            tareaInstance.asignadaA = asignarA
+            if (tareaInstance.save(flush:true)) {
+                historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "reasignó una tarea")
+                def emailPattern = /[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})/
+                def email = params.alertaPorEmail.trim()
+                if (email != "") {
+                    if (email ==~ emailPattern) {
+                        sendMail {
+                            to email
+                            subject "Tarea nueva asignada."
+                            body "${tareaInstance.asignadaA.firstName} ${tareaInstance.asignadaA.lastName}, se le ha asignado la tarea con folio ${tareaInstance.id}."
+                        }
+                    } else {
+                        flash.message = "La tarea "+tareaInstance.id+" fue reasignada satisfactoriamente a " + tareaInstance.asignadaA
+                        flash.warn = "No se envío el email. El email ingresado (${email}) no es válido."
+                    }
+                } else {
+                    flash.message = "La tarea "+tareaInstance.id+" fue reasignada satisfactoriamente a " + tareaInstance.asignadaA
+                }
+                redirect (action:session.opt, id:tareaInstance.id)
+            } else {
+                flash.error = "La tarea no pudo ser reasiganda. Favor de intentar nuevamente."
+                redirect (action:"show", id:tareaInstance.id)
+            }
+        } else {
+            flash.warn = "Ya se encuentra asignada al usuario seleccionado."
+            redirect (action:"show", id:tareaInstance.id)
+        }
+    }
+    
     def cerrarTarea (Long id) {
         def tareaInstance = Tarea.get(id)
         tareaInstance.cerrada = true
         if (tareaInstance.save(flush:true)) {
-            flash.message = "La tarea fue cerrada satisfactoriamente."
+            historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "concluyó una tarea")
+            flash.message = "La tarea fue cerrada satisfactoriamente."            
         } else {
             flash.message = "No se pudo cerrar la tarea. Intente nuevamente."
         }
@@ -23,18 +62,32 @@ class TareaController {
     }
     
     def hoy() {
-        def taskList = Tarea.findAllByFechaLimite(null);
-        render(view: "list", model: [tareaInstanceList: taskList, tareaInstanceTotal: taskList.size(), opt:"hoy"])
+        session.opt = params.action
+        def taskList = Tarea.findAllByFechaLimiteAndAsignadaA(null, springSecurityService.currentUser);
+        render(view: "list", model: [tareaInstanceList: taskList, tareaInstanceTotal: taskList.size()])
     }
     
     def programadas() {
-        def taskList = Tarea.findAllByFechaLimiteGreaterThanEquals(new Date());
-        render(view: "list", model: [tareaInstanceList: taskList, tareaInstanceTotal: taskList.size(), opt:"programadas"])
+        session.opt = params.action
+        def taskList = Tarea.findAllByFechaLimiteGreaterThanEqualsAndAsignadaA(new Date(), springSecurityService.currentUser);
+        render(view: "list", model: [tareaInstanceList: taskList, tareaInstanceTotal: taskList.size()])
     }
     
     def retrasadas () {
-        def taskList = Tarea.findAllByFechaLimiteLessThan(new Date());
-        render(view: "list", model: [tareaInstanceList: taskList, tareaInstanceTotal: taskList.size(), opt:"retrasadas"])
+        session.opt = params.action
+        def taskList = Tarea.findAllByFechaLimiteLessThanAndAsignadaA(new Date(), springSecurityService.currentUser);
+        render(view: "list", model: [tareaInstanceList: taskList, tareaInstanceTotal: taskList.size()])
+    }
+    
+    def asignadas () {
+        session.opt = params.action
+        def taskList = Tarea.findAllByAsignadaA(springSecurityService.currentUser);
+        render(view: "list", model: [tareaInstanceList: taskList, tareaInstanceTotal: taskList.size()])
+    }
+    
+    def historial (Long id) {
+        def tareaInstance = Tarea.get(id)
+        [ tareaInstance : tareaInstance, histList : HistorialDeTarea.findAllByTarea(tareaInstance)]
     }
     
     def list(Integer max) {
@@ -49,13 +102,16 @@ class TareaController {
     def save() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date fechaLimite = sdf.parse(params.fechaLimite)
-        params.fechaLimite = fechaLimite        
+        params.fechaLimite = fechaLimite
+        params.creadaPor = springSecurityService.currentUser
+        params.asignadaA = springSecurityService.currentUser
         def tareaInstance = new Tarea(params)
         if (!tareaInstance.save(flush: true)) {
             render(view: "create", model: [tareaInstance: tareaInstance])
             return
         }
 
+        historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "creó una tarea")        
         flash.message = message(code: 'default.created.message', args: [message(code: 'tarea.label', default: 'Tarea'), tareaInstance.id])
         redirect(action: "show", id: tareaInstance.id)
     }
@@ -67,7 +123,9 @@ class TareaController {
             redirect(action: "list")
             return
         }
-
+        if (tareaInstance.creadaPor != tareaInstance.asignadaA) {
+            historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "abrió una tarea")
+        }
         [tareaInstance: tareaInstance]
     }
 
@@ -112,6 +170,7 @@ class TareaController {
             return
         }
 
+        historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "editó una tarea")
         flash.message = message(code: 'default.updated.message', args: [message(code: 'tarea.label', default: 'Tarea'), tareaInstance.id])
         redirect(action: "show", id: tareaInstance.id)
     }

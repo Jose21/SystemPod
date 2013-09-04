@@ -12,4 +12,8 @@ class Documento {
         archivo nullable:false, maxSize:5242880
         nota nullable:false
     }
+    
+    String toString() {
+        "${nombre}"
+    }
 }

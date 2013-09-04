@@ -30,7 +30,7 @@
   <div class="controls">
     <ul class="one-to-many">
       <g:each in="${notaInstance?.documentos?}" var="d">
-        <li><g:link controller="documento" action="show" id="${d.id}">${d?.encodeAsHTML()}</g:link></li>
+        <li><g:link controller="documento" action="downloadArchivo" id="${d.id}">${d?.encodeAsHTML()}</g:link></li>
       </g:each>
       <li class="add">
           <input type="file" id="archivo" name="archivo" />        

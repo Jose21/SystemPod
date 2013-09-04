@@ -1,5 +1,10 @@
 dataSource {
     pooled = true
+    username = "sgdb"
+    password = "sgdb"
+    driverClassName = "org.postgresql.Driver"
+    url = "jdbc:postgresql://localhost:5432/sgdb"
+    dialect="org.hibernate.dialect.PostgreSQLDialect"
 }
 hibernate {
     cache.use_second_level_cache = true
@@ -10,21 +15,12 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = "create-drop"
-            username = "sa"
-            password = ""
-            driverClassName = "org.h2.Driver"
-            url = "jdbc:h2:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
+            dbCreate = "create-drop"            
         }
     }
     production {
         dataSource {
             dbCreate = "update"
-            username = "sgdemo"
-            password = "sgdemo"
-            driverClassName = "org.postgresql.Driver"
-            url = "jdbc:postgresql://postgres-infonavit.jelastic.servint.net/sgdemo"
-            dialect="org.hibernate.dialect.PostgreSQLDialect"
             properties {
                 maxActive = -1
                 minEvictableIdleTimeMillis=1800000

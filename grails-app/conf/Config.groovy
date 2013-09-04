@@ -90,8 +90,25 @@ log4j = {
            'net.sf.ehcache.hibernate'
 }
 
+grails.gorm.default.mapping = {
+    id generator: 'identity'
+}
+
 // Added by the Spring Security Core plugin:
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'com.app.security.Usuario'
 grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'com.app.security.UsuarioRol'
 grails.plugins.springsecurity.authority.className = 'com.app.security.Rol'
 grails.plugins.springsecurity.ui.encodePassword = false
+
+grails {
+   mail {
+     host = "smtp.gmail.com"
+     port = 465
+     username = "alertas.sgcon@gmail.com"
+     password = "1nf0n4pps"
+     props = ["mail.smtp.auth":"true", 					   
+              "mail.smtp.socketFactory.port":"465",
+              "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+              "mail.smtp.socketFactory.fallback":"false"]
+   }
+}

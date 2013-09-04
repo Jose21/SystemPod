@@ -27,6 +27,14 @@
           <g:form class="form-horizontal" method="post" >
             <g:hiddenField name="id" value="${tareaInstance?.id}" />
             <g:hiddenField name="version" value="${tareaInstance?.version}" />
+            <div class="control-group fieldcontain ${hasErrors(bean: tareaInstance, field: 'id', 'error')}">
+              <label for="id" class="control-label">
+                <g:message code="tarea.id.label" default="Identificador" />
+              </label>
+              <div class="controls">
+                <span class="label label-success arrowed-in">${tareaInstance?.id}</span>
+              </div>
+            </div>
             <g:render template="form"/>
             <div class="form-actions">
               <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />

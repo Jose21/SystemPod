@@ -61,10 +61,10 @@
 
             <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
               <li>
-                <a href="#">
+                <g:link controller="dashboard" action="index">
                   <i class="icon-user"></i>
                   Información
-                </a>
+                </g:link>
               </li>
 
               <li class="divider"></li>

@@ -19,7 +19,7 @@
 
     <div class="container-fluid">
       <br/>
-      <g:render template="/shared/"
+      <g:render template="/shared/alerts"/>
 
       <g:hasErrors bean="${documentoInstance}">
         <ul class="errors" role="alert">
