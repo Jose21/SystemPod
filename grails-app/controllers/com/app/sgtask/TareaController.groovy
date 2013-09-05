@@ -23,7 +23,8 @@ class TareaController {
             if (tareaInstance.save(flush:true)) {
                 historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "reasignó una tarea")
                 def emailPattern = /[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})/
-                def email = params.alertaPorEmail.trim()
+                //def email = params.alertaPorEmail.trim()
+                def email = springSecurityService.currentUser.email
                 if (email != "") {
                     if (email ==~ emailPattern) {
                         sendMail {
@@ -31,11 +32,12 @@ class TareaController {
                             subject "Tarea nueva asignada."
                             body "${tareaInstance.asignadaA.firstName} ${tareaInstance.asignadaA.lastName}, se le ha asignado la tarea con folio ${tareaInstance.id}."
                         }
-                    } else {
-                        flash.message = "La tarea "+tareaInstance.id+" fue reasignada satisfactoriamente a " + tareaInstance.asignadaA
+                    } else {                        
                         flash.warn = "No se envío el email. El email ingresado (${email}) no es válido."
                     }
+                    flash.message = "La tarea "+tareaInstance.id+" fue reasignada satisfactoriamente a " + tareaInstance.asignadaA
                 } else {
+                    flash.warn = "No se envió el email de notificación. El usuario seleccionado no tiene una dirección de email asociado."
                     flash.message = "La tarea "+tareaInstance.id+" fue reasignada satisfactoriamente a " + tareaInstance.asignadaA
                 }
                 redirect (action:session.opt, id:tareaInstance.id)

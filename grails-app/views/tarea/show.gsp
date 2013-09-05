@@ -14,7 +14,7 @@
       <div class="btn-group">        
         <g:link class="btn btn-info btn-small tip-bottom" action="create">
           <i class="icon-asterisk"></i>
-          Nueva Tarea
+          Nueva
         </g:link>        
         <g:link class="btn btn-success  btn-small tip-bottom" controller="nota" action="create" params="[tareaId: tareaInstance?.id]">
           <i class="icon-asterisk"></i>
@@ -23,12 +23,12 @@
         
         <a class="btn btn-primary btn-small tip-bottom" href="#reasignarTarea" data-toggle="modal">
           <i class="icon-asterisk"></i>
-          Reasignar Tarea
+          Reasignar
         </a>
         <g:if test="${!tareaInstance?.cerrada}">
           <g:link class="btn btn-warning btn-small tip-bottom" controller="tarea" action="cerrarTarea" id="${tareaInstance?.id}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
             <i class="icon-asterisk"></i>
-            Cerrar Tarea
+            Cerrar
           </g:link>
         </g:if>
       </div>
@@ -184,15 +184,11 @@
                 Asignar a:
               </label>
               <div class="controls">
-                <g:select id="asignadaA" name="asignadaA.id" from="${com.app.security.Usuario.findAll { enabled }}" optionKey="id" required="" value="${tareaInstance?.asignadaA?.id}" class="many-to-one"/>
+                <g:select id="asignadaA" name="asignadaA.id" 
+                          from="${com.app.security.Usuario.findAll { enabled }}" optionKey="id" 
+                          required="" value="${tareaInstance?.asignadaA?.id}" class="many-to-one"/>
               </div>
-            </div>            
-            <div class="control-group">
-              <label for="asignarA" class="control-label">Enviar email a:</label>
-              <div class="controls">
-                <g:textField id="alertaPorEmail" name="alertaPorEmail" value=""/>
-              </div>
-            </div>            
+            </div>                        
             <div class="form-actions">
               <g:actionSubmit class="btn btn-primary" action="reasignar" value="Asignar Tarea" />
             </div>              
