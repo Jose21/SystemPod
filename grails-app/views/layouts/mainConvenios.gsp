@@ -202,6 +202,9 @@
             minuteStep: 1,
             showSeconds: true,
             showMeridian: false
+          });          
+          $("#btnIndefinida").click(function() {
+            $("#vigencia").val("Indefinida");
           });
         })(jQuery);
     </script>

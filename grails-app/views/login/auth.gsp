@@ -54,7 +54,7 @@
                     <span class="red">S G C O N</span>
                   </h1>
                   <h3>
-                    <span class="red">Sistema de Gestión de Convenios, Tareas y Poderes.</span>
+                    <span class="red">Sistema de Gestión de Convenios y Poderes.</span>
                   </h3>
                 </div>
               </div>

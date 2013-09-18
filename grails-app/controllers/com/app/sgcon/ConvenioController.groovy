@@ -23,8 +23,22 @@ class ConvenioController {
 
     def save() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Date fechaDeFirma = sdf.parse(params.fechaDeFirma)
+        
+        if (params.vigencia != "Indefinida") {
+            Date vigencia = sdf.parse(params.vigencia)
+            params.vigencia = vigencia
+        } else {
+            params.vigencia = null
+        }
+        
+        if (params.fechaDeFirma == "") {
+            flash.error = "Debe existir una fecha de firma del convenio."
+            redirect(action: "create", params:params)
+            return
+        }
+        Date fechaDeFirma = sdf.parse(params.fechaDeFirma)        
         params.fechaDeFirma = fechaDeFirma        
+        
         def convenioInstance = new Convenio(params)
         if (!convenioInstance.save(flush: true)) {
             render(view: "create", model: [convenioInstance: convenioInstance])
@@ -75,8 +89,20 @@ class ConvenioController {
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Date fechaDeFirma = sdf.parse(params.fechaDeFirma)
-        params.fechaDeFirma = fechaDeFirma
+        if (params.fechaDeFirma == "") {
+            flash.error = "Debe existir una fecha de firma del convenio."
+            params.fechaDeFirma = null
+        } else {
+            Date fechaDeFirma = sdf.parse(params.fechaDeFirma)        
+            params.fechaDeFirma = fechaDeFirma
+        }
+        
+        if (params.vigencia != "Indefinida") {
+            Date vigencia = sdf.parse(params.vigencia)
+            params.vigencia = vigencia
+        } else {
+            params.vigencia = null
+        }
                 
         convenioInstance.properties = params
 

@@ -47,10 +47,23 @@
   </label>
   <div class="controls">          
     <div class="row-fluid input-append">
-      <input readonly="readonly" class="span10 date-picker" id="fechaDeFirma" type="text" value="${convenioInstance?.fechaDeFirma?(new SimpleDateFormat("dd/MM/yyyy")).format(convenioInstance?.fechaDeFirma):""}" data-date-format="dd/mm/yyyy" name="fechaDeFirma" />
+      <input readonly="readonly" class="span10 date-picker" id="fechaDeFirma" type="text" value="${convenioInstance?.fechaDeFirma?(new SimpleDateFormat("dd/MM/yyyy")).format(convenioInstance?.fechaDeFirma):""}" data-date-format="dd/mm/yyyy" name="fechaDeFirma" />      
       <span class="add-on">
         <i class="icon-calendar"></i>
       </span>
+    </div>
+  </div>
+</div>
+
+<div class="control-group fieldcontain ${hasErrors(bean: convenioInstance, field: 'vigencia', 'error')} required">
+  <label for="vigencia" class="control-label">
+    <g:message code="convenio.vigencia.label" default="Vigencia" />
+    <span class="required-indicator">*</span>
+  </label>
+  <div class="controls">          
+    <div class="row-fluid input-append">
+      <input readonly="readonly" class="span10 date-picker" id="vigencia" type="text" value="${convenioInstance?.vigencia?(new SimpleDateFormat("dd/MM/yyyy")).format(convenioInstance?.vigencia):"Indefinida"}" data-date-format="dd/mm/yyyy" name="vigencia" />
+      <input class="btn btn-small" type="button" name="btnIndefinida" id="btnIndefinida" value="Indefinida"></input>
     </div>
   </div>
 </div>

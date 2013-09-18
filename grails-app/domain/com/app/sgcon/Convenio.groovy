@@ -7,7 +7,8 @@ class Convenio {
     String numeroDeConvenio
     String objeto
     String sustentoNormativo
-    Date fechaDeFirma 
+    Date fechaDeFirma
+    Date vigencia
     StatusDelConvenio status
     String tipoDeConvenio
     String institucion
@@ -27,13 +28,14 @@ class Convenio {
         objeto blank: false, maxSize: 100
         sustentoNormativo blank: false, maxSize: 200
         fechaDeFirma blank: false
+        vigencia nullable:true, blank:true
         status nullable:false
         tipoDeConvenio blank:false
         institucion blank:false        
         nombreDeCopiaElectronica nullable:true        
         copiaElectronica nullable:true, maxSize:5242880        
         compromisos nullable:true, blank: true, maxsize:1048576
-                
+        
         modificaA nullable:true
         esModificadoPor nullable:true
         

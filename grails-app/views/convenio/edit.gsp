@@ -139,7 +139,7 @@
           </tbody>
         </table>          
         
-        <h3 class="header smaller lighter blue">Quiénes firman</h3>       
+        <h3 class="header smaller lighter blue">Sujetos Obligados</h3>       
         
         <table class="table table-bordered table-striped">
           <thead>
@@ -200,7 +200,7 @@
             </tbody>
           </table>
         
-          <h3 class="header smaller lighter blue">Responsables de la Operación</h3>
+          <h3 class="header smaller lighter blue">Responsables del Seguimiento</h3>
         
           <table class="table table-striped table-bordered table-hover">
             <thead>
