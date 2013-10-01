@@ -57,6 +57,7 @@ grails.project.dependency.resolution = {
         compile ":jquery-ui:1.8.24"
         compile ":famfamfam:1.0.1"
         compile ":mail:1.0.1"
+        compile ":asynchronous-mail:1.0-RC5"
         
         compile ":spring-security-core:1.2.7.3"
         compile ":spring-security-ui:0.2"

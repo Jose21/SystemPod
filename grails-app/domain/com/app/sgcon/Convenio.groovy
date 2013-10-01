@@ -21,7 +21,7 @@ class Convenio {
     Convenio modificaA
     Convenio esModificadoPor
     
-    static hasMany = [ firmantes : Persona, responsables : Persona ]
+    static hasMany = [ firmantes : Persona, responsables : Persona, usuariosDeConvenio : UsuarioDeConvenio ]
     
     static constraints = {
         numeroDeConvenio blank:false, maxSize:20
@@ -41,6 +41,7 @@ class Convenio {
         
         firmantes nullable: true
         responsables nullable: true
+        usuariosDeConvenio nullable:true
     }
     
     String toString () {

@@ -3,11 +3,13 @@ package com.app.sgtask
 import org.springframework.dao.DataIntegrityViolationException
 import java.text.SimpleDateFormat
 import com.app.security.Usuario
+import grails.plugin.asyncmail.AsynchronousMailService
 
 class TareaController {
 
     def historialDeTareaService
     def springSecurityService
+    AsynchronousMailService asyncMailService
     
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -15,7 +17,8 @@ class TareaController {
         redirect(action: "list", params: params)
     }
 
-    def reasignar (Long id) {
+    //TODO desacoplar funcionalidad de correo electronico y pasarlo al servicio
+    def reasignar (Long id) {        
         def tareaInstance = Tarea.get(id)
         def asignarA = Usuario.get(params.asignadaA.id)
         if (tareaInstance.asignadaA != asignarA) {
@@ -24,21 +27,21 @@ class TareaController {
                 historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "reasignó una tarea")
                 def emailPattern = /[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})/
                 //def email = params.alertaPorEmail.trim()
-                def email = springSecurityService.currentUser.email
+                def email = asignarA.email
                 if (email != "") {
-                    if (email ==~ emailPattern) {
-                        sendMail {
+                    if (email ==~ emailPattern) { 
+                       asyncMailService.sendMail {
                             to email
-                            subject "Tarea nueva asignada."
-                            body "${tareaInstance.asignadaA.firstName} ${tareaInstance.asignadaA.lastName}, se le ha asignado la tarea con folio ${tareaInstance.id}."
+                            subject "Tienes una nueva tarea asignada."
+                            html "<body><b>Te han asignado la tarea con folio ${tareaInstance.id}.</b></body>"
                         }
-                    } else {                        
+                    } else {
                         flash.warn = "No se envío el email. El email ingresado (${email}) no es válido."
                     }
-                    flash.message = "La tarea "+tareaInstance.id+" fue reasignada satisfactoriamente a " + tareaInstance.asignadaA
+                    flash.message = "La tarea " + tareaInstance.id + " fue reasignada satisfactoriamente."
                 } else {
                     flash.warn = "No se envió el email de notificación. El usuario seleccionado no tiene una dirección de email asociado."
-                    flash.message = "La tarea "+tareaInstance.id+" fue reasignada satisfactoriamente a " + tareaInstance.asignadaA
+                    flash.message = "La tarea "+tareaInstance.id+" fue reasignada satisfactoriamente."
                 }
                 redirect (action:session.opt, id:tareaInstance.id)
             } else {
@@ -125,7 +128,7 @@ class TareaController {
             redirect(action: "list")
             return
         }
-        if (tareaInstance.creadaPor != tareaInstance.asignadaA) {
+        if (tareaInstance.creadaPor != springSecurityService.currentUser) {
             historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "abrió una tarea")
         }
         [tareaInstance: tareaInstance]

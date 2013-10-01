@@ -19,7 +19,7 @@
         <g:link class="btn btn-success  btn-small tip-bottom" controller="nota" action="create" params="[tareaId: tareaInstance?.id]">
           <i class="icon-asterisk"></i>
           Agregar Nota
-        </g:link>
+        </g:link>        
         
         <a class="btn btn-primary btn-small tip-bottom" href="#reasignarTarea" data-toggle="modal">
           <i class="icon-asterisk"></i>
@@ -150,18 +150,7 @@
             </div><!--/widget-main-->
           </div><!--/widget-body-->
         </div><!--/widget-box-->
-        </g:if>
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-			
+        </g:if>		
       </div>
       <g:form class="form-actions">
         <fieldset class="buttons">
@@ -170,7 +159,7 @@
           <g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
         </fieldset>
       </g:form>
-    </div>
+    </div>    
     <div id="reasignarTarea" class="modal hide" style="width:600px;">
         <div class="modal-header">
           <button data-dismiss="modal" class="close" type="button">×</button>

@@ -12,7 +12,7 @@ class BootStrap {
                 new Usuario (
                     firstName : "Administrador",
                     lastName : "Del Sistema",
-                    email : "admin@sgcon.com",
+                    email : "the.real.thom@gmail.com",
                     username : "admin",
                     password : "4dm1n!",
                     enabled : true,
@@ -20,8 +20,46 @@ class BootStrap {
                     accountLocked : false,
                     passwordExpired : false
                 ).save()
+                new Usuario (
+                    firstName : "Test",
+                    lastName : "Uno",
+                    email : "tomas.moreno@siis.ws",
+                    username : "test1",
+                    password : "test1",
+                    enabled : true,
+                    accountExpired : false,
+                    accountLocked : false,
+                    passwordExpired : false
+                ).save()
+                new Usuario (
+                    firstName : "Test",
+                    lastName : "Dos",
+                    email : "tomas_mp@yahoo.com.mx",
+                    username : "test2",
+                    password : "test2",
+                    enabled : true,
+                    accountExpired : false,
+                    accountLocked : false,
+                    passwordExpired : false
+                ).save()
+                new Usuario (
+                    firstName : "Test",
+                    lastName : "Tres",
+                    email : "the_real_thom@hotmail.com",
+                    username : "test3",
+                    password : "test3",
+                    enabled : true,
+                    accountExpired : false,
+                    accountLocked : false,
+                    passwordExpired : false
+                ).save()
+                
                 new Rol (authority : "ROLE_ADMINISTRADOR").save()
+                
                 new UsuarioRol (usuario : Usuario.findByUsername("admin"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
+                new UsuarioRol (usuario : Usuario.findByUsername("test1"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
+                new UsuarioRol (usuario : Usuario.findByUsername("test2"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
+                new UsuarioRol (usuario : Usuario.findByUsername("test3"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
             case Environment.PRODUCTION :
                 break
         }

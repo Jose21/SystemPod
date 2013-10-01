@@ -88,6 +88,8 @@ log4j = {
            'org.springframework',
            'org.hibernate',
            'net.sf.ehcache.hibernate'
+    
+    //trace 'grails.app.jobs.grails.plugin.asyncmail', 'grails.app.services.grails.plugin.asyncmail'
 }
 
 grails.gorm.default.mapping = {

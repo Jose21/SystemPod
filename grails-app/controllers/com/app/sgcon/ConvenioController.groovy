@@ -3,9 +3,12 @@ package com.app.sgcon
 import org.springframework.dao.DataIntegrityViolationException
 import com.app.sgcon.beans.BusquedaBean
 import java.text.SimpleDateFormat
+import com.app.security.Usuario
 
 class ConvenioController {
 
+    def springSecurityService
+    
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {
@@ -40,10 +43,20 @@ class ConvenioController {
         params.fechaDeFirma = fechaDeFirma        
         
         def convenioInstance = new Convenio(params)
+        
+        //TODO Corregir
         if (!convenioInstance.save(flush: true)) {
             render(view: "create", model: [convenioInstance: convenioInstance])
             return
         }
+            
+        //Se agrega el que lo creó como dueño y se le comparte por default
+        def usuarioDeConvenio = new UsuarioDeConvenio()
+        usuarioDeConvenio.usuario = springSecurityService.currentUser
+        usuarioDeConvenio.owner = true
+        usuarioDeConvenio.convenio = convenioInstance
+        usuarioDeConvenio.save(flush:true)
+        
         flash.message = message(code: 'default.created.message', args: [message(code: 'convenio.label', default: 'Convenio'), convenioInstance.id])
         redirect(action: "edit", id: convenioInstance.id)
     }
@@ -296,4 +309,27 @@ class ConvenioController {
         }
         redirect(action: "edit", id: convenioInstance.id)
     }
+    
+    def share (Long id) {
+        def convenioInstance = Convenio.get(id)
+        [ convenioInstance : convenioInstance ]
+    }
+    
+    def addUsuarioToConvenio(Long id) {
+        def convenioInstance = Convenio.get(id)
+        def usuarioDeConvenio = new UsuarioDeConvenio()
+        usuarioDeConvenio.usuario = Usuario.get(params.compartidoCon.id as long)
+        usuarioDeConvenio.owner = false
+        usuarioDeConvenio.convenio = convenioInstance
+        usuarioDeConvenio.save(flush:true)
+        redirect (action:"share", params : [ id : convenioInstance.id ])
+    }
+    
+    def removeUsuarioFromConvenio() {
+        def convenioInstance = Convenio.get(params.convenioId as long)
+        def usuario = Usuario.get(params.usuarioId as long)
+        def usuarioDeConvenio = UsuarioDeConvenio.findByConvenioAndUsuario(convenioInstance, usuario)
+        usuarioDeConvenio.delete()
+        redirect (action:"share", params : [ id : convenioInstance.id ])
+    } 
 }

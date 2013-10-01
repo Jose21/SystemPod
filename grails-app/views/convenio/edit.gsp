@@ -12,10 +12,13 @@
       <div class="page-header position-relative">
         <h1>Editar: Convenio</h1>
         <div class="btn-group">
-        <a class="btn btn-small tip-bottom" href="#vincularConvenio" data-toggle="modal">
-          <i class="icon-user"></i> Vincular convenio al que modifica
-        </a>
-      </div>
+          <a class="btn btn-small tip-bottom" href="#vincularConvenio" data-toggle="modal">
+            <i class="icon-user"></i> Vincular convenio al que modifica
+          </a>
+          <g:link action="share" class="btn btn-small btn-purple tip-bottom" id="${convenioInstance?.id}">          
+            <i class="icon-share-alt"></i> Compartir
+          </g:link>
+        </div>
       </div><!--/.page-header-->
     
       <div class="container-fluid">      
@@ -100,46 +103,7 @@
           </div>
         </g:form>          
       
-      
-        <h3 class="header smaller lighter blue">Copia Eletrónica del Convenio</h3>
-      
-        <table class="table table-bordered table-striped">
-          <thead>
-            <tr>
-              <th>Subir copia electrónica</th>
-              <g:if test="${convenioInstance?.nombreDeCopiaElectronica}">
-                <th>Descargar copia electrónica</th>
-              </g:if>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <g:uploadForm class="form-horizontal" action="uploadCopiaElectronica" >
-                  <g:hiddenField name="convenio.id" value="${convenioInstance?.id}" />                    
-                  <div class="control-group">
-                    <div class="controls">          
-                      <input type="file" name="copiaElectronica"/>          
-                    </div>
-                  </div>
-                  <div class="form-actions">
-                    <g:submitButton name="adjuntar" class="btn btn-primary" value="Adjuntar" />
-                  </div>
-                </g:uploadForm>
-              </td>
-              <g:if test="${convenioInstance?.nombreDeCopiaElectronica}">
-                <td style="text-align:center">                  
-                  <g:link controller="convenio" action="downloadCopiaEletronica" params="[convenioId: convenioInstance.id]">
-                    <g:img dir="images" file="download.png" width="64px" height="64px"/>
-                    <br/>${convenioInstance?.nombreDeCopiaElectronica}
-                  </g:link>
-                </td>
-              </g:if>
-            </tr>
-          </tbody>
-        </table>          
-        
-        <h3 class="header smaller lighter blue">Sujetos Obligados</h3>       
+        <h3 class="header smaller lighter blue">Firmantes</h3>       
         
         <table class="table table-bordered table-striped">
           <thead>
@@ -260,6 +224,45 @@
               </g:form>
             </tbody>
           </table>
+          
+          <h3 class="header smaller lighter blue">Copia Eletrónica del Convenio</h3>
+      
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Subir copia electrónica</th>
+                <g:if test="${convenioInstance?.nombreDeCopiaElectronica}">
+                  <th>Descargar copia electrónica</th>
+                </g:if>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <g:uploadForm class="form-horizontal" action="uploadCopiaElectronica" >
+                    <g:hiddenField name="convenio.id" value="${convenioInstance?.id}" />                    
+                    <div class="control-group">
+                      <div class="controls">          
+                        <input type="file" name="copiaElectronica"/>          
+                      </div>
+                    </div>
+                    <div class="form-actions">
+                      <g:submitButton name="adjuntar" class="btn btn-primary" value="Adjuntar" />
+                    </div>
+                  </g:uploadForm>
+                </td>
+                <g:if test="${convenioInstance?.nombreDeCopiaElectronica}">
+                  <td style="text-align:center">                  
+                    <g:link controller="convenio" action="downloadCopiaEletronica" params="[convenioId: convenioInstance.id]">
+                      <g:img dir="images" file="download.png" width="64px" height="64px"/>
+                      <br/>${convenioInstance?.nombreDeCopiaElectronica}
+                    </g:link>
+                  </td>
+                </g:if>
+              </tr>
+            </tbody>
+          </table>          
+        
       </div>
       <div id="vincularConvenio" class="modal hide" style="width:600px;">
         <div class="modal-header">
