@@ -9,7 +9,7 @@ class Documento {
     
     static constraints = {
         nombre blank:false
-        archivo nullable:false, maxSize:5242880
+        archivo nullable:false, maxSize:52428800
         nota nullable:false
     }
     

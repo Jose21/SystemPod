@@ -37,13 +37,13 @@
   <li class="active open">
     <a href="#" class="dropdown-toggle">
       <i class="icon-book"></i>
-      <span class="menu-text">Tareas</span>
+      <span class="menu-text">Turnos</span>
       <b class="arrow icon-angle-down"></b>
     </a>
     <ul class="submenu">
       <li>
         <g:link controller="tarea" action="create">
-          <i class="icon-double-angle-right"></i> Nueva
+          <i class="icon-double-angle-right"></i> Nuevo
         </g:link>
       </li>
       <li>
@@ -53,12 +53,12 @@
       </li>
       <li>
         <g:link controller="tarea" action="programadas">
-          <i class="icon-double-angle-right"></i> Programadas
+          <i class="icon-double-angle-right"></i> Programados
         </g:link>
       </li>
       <li>
         <g:link controller="tarea" action="retrasadas">
-          <i class="icon-double-angle-right"></i> Retrasadas
+          <i class="icon-double-angle-right"></i> Retrasados
         </g:link>
       </li>
       <!--<li>

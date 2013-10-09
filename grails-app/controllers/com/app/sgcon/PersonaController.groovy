@@ -2,7 +2,9 @@ package com.app.sgcon
 
 import org.springframework.dao.DataIntegrityViolationException
 import grails.converters.JSON
+import grails.plugins.springsecurity.Secured
 
+@Secured(['IS_AUTHENTICATED_FULLY'])
 class PersonaController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]

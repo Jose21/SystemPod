@@ -22,18 +22,15 @@
           </g:eachError>
         </ul>
       </g:hasErrors>
-
-          <g:form class="form-horizontal" method="post" >
+          <g:form class="form-horizontal" method="post" enctype="multipart/form-data">
             <g:hiddenField name="id" value="${notaInstance?.id}" />
             <g:hiddenField name="version" value="${notaInstance?.version}" />
             <g:hiddenField name="tarea" id="tarea.id" value="${notaInstance?.tarea?.id}"/>
             <g:render template="form"/>
             <div class="form-actions">
-              <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
-              
+              <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />              
             </div>
           </g:form>
-
     </div>
   </body>
 </html>

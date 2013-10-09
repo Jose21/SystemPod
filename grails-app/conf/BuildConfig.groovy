@@ -54,6 +54,9 @@ grails.project.dependency.resolution = {
         runtime ":jquery:1.8.3"
         runtime ":resources:1.2"
 
+        compile ":scaffolding:2.0.0"
+        
+        compile ":grails-melody:1.47.2"
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"
         //runtime ":cached-resources:1.0"
@@ -75,3 +78,9 @@ grails.project.dependency.resolution = {
         compile ':cache:1.0.1'        
     }
 }
+
+forkConfig = [maxMemory: 2048, minMemory: 256, debug: false, maxPerm: 1024]
+grails.project.fork = [   
+   run: forkConfig, // configure settings for the run-app JVM
+   //war: forkConfig, // configure settings for the run-war JVM
+]

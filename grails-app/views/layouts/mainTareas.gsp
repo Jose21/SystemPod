@@ -44,7 +44,7 @@
     <div class="navbar-inner">
       <div class="container-fluid">
         <a href="#" class="brand">
-          <b>SGCon -> Tareas</b>
+          <b>SGCon -> Turnos</b>
         </a><!--/.brand-->
 
         <ul class="nav ace-nav pull-right">

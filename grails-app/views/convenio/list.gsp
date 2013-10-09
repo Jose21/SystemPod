@@ -14,13 +14,15 @@
       </div><!--/.page-header-->
       <div class="container-fluid">
         <br/>
+        <g:render template="/shared/alerts" />
+        <br/>
         <g:form method="post">
           <div class="control-group">
             <div class="row-fluid input-prepend">
               <span class="add-on">
                 <i class="icon-calendar"></i>
               </span>
-              <input class="span5" type="text" name="rangoDeFecha" id="rangoDeFecha" />
+              <input class="span5" type="text" name="rangoDeFecha" id="rangoDeFecha" readonly="true" />
               <g:actionSubmit class="btn btn-primary" action="buscarConvenios" value="Buscar" />
             </div>
           </div>

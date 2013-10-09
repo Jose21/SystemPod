@@ -1,7 +1,9 @@
 package com.app.sgtask
 
 import org.springframework.dao.DataIntegrityViolationException
+import grails.plugins.springsecurity.Secured
 
+@Secured(['IS_AUTHENTICATED_FULLY'])
 class NotaController {
 
     def historialDeTareaService
@@ -109,6 +111,16 @@ class NotaController {
         if (!notaInstance.save(flush: true)) {
             render(view: "edit", model: [notaInstance: notaInstance])
             return
+        }
+        
+        if (params.archivo.getSize()!=0) {            
+            def documentoInstance = new Documento(params)
+            documentoInstance.nombre = params.archivo.getOriginalFilename()
+            notaInstance.addToDocumentos(documentoInstance)
+            if (!notaInstance.save(flush: true)) {
+                render(view: "create", model: [notaInstance: notaInstance])
+                return
+            }
         }
 
         historialDeTareaService.agregar(Tarea.get(tareaId as long), springSecurityService.currentUser, "modificó una nota")

@@ -4,84 +4,152 @@ import org.springframework.dao.DataIntegrityViolationException
 import java.text.SimpleDateFormat
 import com.app.security.Usuario
 import grails.plugin.asyncmail.AsynchronousMailService
+import com.app.NotificacionesService
+import grails.plugins.springsecurity.Secured
 
+@Secured(['IS_AUTHENTICATED_FULLY'])
 class TareaController {
 
     def historialDeTareaService
     def springSecurityService
     AsynchronousMailService asyncMailService
+    NotificacionesService notificacionesService
     
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {
         redirect(action: "list", params: params)
-    }
-
-    //TODO desacoplar funcionalidad de correo electronico y pasarlo al servicio
-    def reasignar (Long id) {        
-        def tareaInstance = Tarea.get(id)
-        def asignarA = Usuario.get(params.asignadaA.id)
-        if (tareaInstance.asignadaA != asignarA) {
-            tareaInstance.asignadaA = asignarA
-            if (tareaInstance.save(flush:true)) {
-                historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "reasignó una tarea")
-                def emailPattern = /[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})/
-                //def email = params.alertaPorEmail.trim()
-                def email = asignarA.email
-                if (email != "") {
-                    if (email ==~ emailPattern) { 
-                       asyncMailService.sendMail {
-                            to email
-                            subject "Tienes una nueva tarea asignada."
-                            html "<body><b>Te han asignado la tarea con folio ${tareaInstance.id}.</b></body>"
-                        }
-                    } else {
-                        flash.warn = "No se envío el email. El email ingresado (${email}) no es válido."
-                    }
-                    flash.message = "La tarea " + tareaInstance.id + " fue reasignada satisfactoriamente."
-                } else {
-                    flash.warn = "No se envió el email de notificación. El usuario seleccionado no tiene una dirección de email asociado."
-                    flash.message = "La tarea "+tareaInstance.id+" fue reasignada satisfactoriamente."
-                }
-                redirect (action:session.opt, id:tareaInstance.id)
-            } else {
-                flash.error = "La tarea no pudo ser reasiganda. Favor de intentar nuevamente."
-                redirect (action:"show", id:tareaInstance.id)
-            }
-        } else {
-            flash.warn = "Ya se encuentra asignada al usuario seleccionado."
-            redirect (action:"show", id:tareaInstance.id)
-        }
-    }
-    
-    def cerrarTarea (Long id) {
-        def tareaInstance = Tarea.get(id)
-        tareaInstance.cerrada = true
-        if (tareaInstance.save(flush:true)) {
-            historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "concluyó una tarea")
-            flash.message = "La tarea fue cerrada satisfactoriamente."            
-        } else {
-            flash.message = "No se pudo cerrar la tarea. Intente nuevamente."
-        }
-        redirect (action:"show", id:tareaInstance.id)
-    }
+    }       
     
     def hoy() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
+        
         session.opt = params.action
-        def taskList = Tarea.findAllByFechaLimiteAndAsignadaA(null, springSecurityService.currentUser);
-        render(view: "list", model: [tareaInstanceList: taskList, tareaInstanceTotal: taskList.size()])
+        
+        //Mis turnos
+        def taskListQuery = Tarea.where {            
+            sdf.format(fechaLimite) == sdf.format(new Date()) &&
+            cerrada == false &&
+            responsable.id == springSecurityService.currentUser.id
+        }
+        def taskList = taskListQuery.list(sort:"id")
+        
+        //Compartidos
+        def usuariosDeTarea = UsuarioDeTarea.findAllByUsuarioAndOwner(springSecurityService.currentUser, false)
+        def sharedTaskList = usuariosDeTarea*.tarea        
+        sharedTaskList = sharedTaskList.findAll {
+            sdf.format(it.fechaLimite) == sdf.format(new Date()) &&
+            it.cerrada == false &&
+            it.responsable.id != springSecurityService.currentUser.id &&
+            it.creadaPor.id != springSecurityService.currentUser.id
+        }
+        
+        //Turnados
+        def turnadosQuery = Tarea.where {
+            cerrada == false &&            
+            sdf.format(fechaLimite) == sdf.format(new Date()) &&
+            creadaPor.id == springSecurityService.currentUser.id &&
+            responsable.id != springSecurityService.currentUser.id
+        }
+        def turnados = turnadosQuery.list(sort:"id")  
+        
+        render (
+            view: "list", 
+            model: [
+                tareaInstanceList: taskList, 
+                tareaInstanceTotal: taskList.size(),
+                sharedTaskList : sharedTaskList,
+                sharedTaskTotal : sharedTaskList.size(),
+                turnadosList : turnados,
+                turnadosTotal : turnados.size()
+            ]
+        )
     }
     
     def programadas() {
         session.opt = params.action
-        def taskList = Tarea.findAllByFechaLimiteGreaterThanEqualsAndAsignadaA(new Date(), springSecurityService.currentUser);
-        render(view: "list", model: [tareaInstanceList: taskList, tareaInstanceTotal: taskList.size()])
+        
+        //Mis turnos        
+        def taskListQuery = Tarea.where {            
+            fechaLimite > new Date() &&
+            cerrada == false &&
+            responsable == springSecurityService.currentUser
+        }
+        def taskList = taskListQuery.list(sort:"id")
+        
+        //Compartidos        
+        def usuariosDeTarea = UsuarioDeTarea.findAllByUsuarioAndOwner(springSecurityService.currentUser, false)
+        def sharedTaskList = usuariosDeTarea*.tarea        
+        sharedTaskList = sharedTaskList.findAll {            
+            it.fechaLimite > new Date() &&
+            it.cerrada == false &&
+            it.responsable != springSecurityService.currentUser &&
+            it.creadaPor != springSecurityService.currentUser
+        }
+        
+        //Turnados
+        def turnadosQuery = Tarea.where {
+            fechaLimite > new Date() &&
+            cerrada == false &&
+            responsable != springSecurityService.currentUser &&
+            creadaPor == springSecurityService.currentUser
+        }
+        def turnados = turnadosQuery.list(sort:"id")
+        
+        render (
+            view: "list", 
+            model: [
+                tareaInstanceList: taskList, 
+                tareaInstanceTotal: taskList.size(),
+                sharedTaskList : sharedTaskList,
+                sharedTaskTotal : sharedTaskList.size(),
+                turnadosList : turnados,
+                turnadosTotal : turnados.size()
+            ]
+        )
     }
     
     def retrasadas () {
         session.opt = params.action
-        def taskList = Tarea.findAllByFechaLimiteLessThanAndAsignadaA(new Date(), springSecurityService.currentUser);
-        render(view: "list", model: [tareaInstanceList: taskList, tareaInstanceTotal: taskList.size()])
+        
+        //Mis turnos        
+        def taskListQuery = Tarea.where {
+            fechaLimite < (new Date() - 1) &&
+            cerrada == false &&
+            responsable == springSecurityService.currentUser
+        }
+        def taskList = taskListQuery.list(sort:"id")
+        
+        //Compartidos
+        def usuariosDeTarea = UsuarioDeTarea.findAllByUsuarioAndOwner(springSecurityService.currentUser, false)
+        def sharedTaskList = usuariosDeTarea*.tarea        
+        sharedTaskList = sharedTaskList.findAll {
+            it.fechaLimite < (new Date() - 1) &&
+            it.cerrada == false &&
+            it.responsable != springSecurityService.currentUser &&
+            it.creadaPor != springSecurityService.currentUser
+        }
+        
+        //Turnados
+        def turnadosQuery = Tarea.where {
+            fechaLimite < (new Date() - 1) &&
+            cerrada == false &&
+            responsable != springSecurityService.currentUser &&
+            creadaPor == springSecurityService.currentUser
+        }
+        def turnados = turnadosQuery.list(sort:"id")
+        
+        render (
+            view: "list", 
+            model: [
+                tareaInstanceList: taskList, 
+                tareaInstanceTotal: taskList.size(),
+                sharedTaskList : sharedTaskList,
+                sharedTaskTotal : sharedTaskList.size(),
+                turnadosList : turnados,
+                turnadosTotal : turnados.size()
+            ]
+        )
     }
     
     def asignadas () {
@@ -106,7 +174,10 @@ class TareaController {
 
     def save() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Date fechaLimite = sdf.parse(params.fechaLimite)
+        Date fechaLimite = null
+        if (params.fechaLimite != "") {
+            fechaLimite = sdf.parse(params.fechaLimite)
+        }
         params.fechaLimite = fechaLimite
         params.creadaPor = springSecurityService.currentUser
         params.asignadaA = springSecurityService.currentUser
@@ -116,7 +187,25 @@ class TareaController {
             return
         }
 
-        historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "creó una tarea")        
+        //Se agrega el que lo creó como dueño y se le comparte por default
+        def creadaPor = new UsuarioDeTarea()
+        creadaPor.usuario = springSecurityService.currentUser
+        creadaPor.owner = true
+        creadaPor.tarea = tareaInstance
+        creadaPor.save(flush:true)
+        
+        //Si el responsable es distinto al creador, se le asigna automaticamente
+        if (params.responsable.id as long != springSecurityService.currentUser.id) {
+            def responsable = new UsuarioDeTarea()
+            responsable.usuario = Usuario.get(params.responsable.id as long)
+            responsable.owner = false
+            responsable.tarea = tareaInstance
+            if (responsable.save(flush:true)) {
+                notificacionesService.tareaAsignada(tareaInstance, responsable.usuario)
+            }
+        }
+        
+        historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "creó un turno")        
         flash.message = message(code: 'default.created.message', args: [message(code: 'tarea.label', default: 'Tarea'), tareaInstance.id])
         redirect(action: "show", id: tareaInstance.id)
     }
@@ -129,9 +218,9 @@ class TareaController {
             return
         }
         if (tareaInstance.creadaPor != springSecurityService.currentUser) {
-            historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "abrió una tarea")
+            historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "abrió un turno")
         }
-        [tareaInstance: tareaInstance]
+        [tareaInstance: tareaInstance, currentUser : springSecurityService.currentUser]
     }
 
     def edit(Long id) {
@@ -158,7 +247,7 @@ class TareaController {
         if (version != null) {
             if (tareaInstance.version > version) {
                 tareaInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'tarea.label', default: 'Tarea')] as Object[],
+                    [message(code: 'tarea.label', default: 'Tarea')] as Object[],
                           "Another user has updated this Tarea while you were editing")
                 render(view: "edit", model: [tareaInstance: tareaInstance])
                 return
@@ -166,16 +255,19 @@ class TareaController {
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Date fechaLimite = sdf.parse(params.fechaLimite)
-        params.fechaLimite = fechaLimite        
+        Date fechaLimite = null
+        if (params.fechaLimite != "") {
+            fechaLimite = sdf.parse(params.fechaLimite)
+        }
         tareaInstance.properties = params
         
         if (!tareaInstance.save(flush: true)) {
             render(view: "edit", model: [tareaInstance: tareaInstance])
             return
         }
-
-        historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "editó una tarea")
+        
+        notificacionesService.tareaAsignada(tareaInstance, tareaInstance.creadaPor)    
+        historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "editó un turno")
         flash.message = message(code: 'default.updated.message', args: [message(code: 'tarea.label', default: 'Tarea'), tareaInstance.id])
         redirect(action: "show", id: tareaInstance.id)
     }
@@ -197,5 +289,63 @@ class TareaController {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'tarea.label', default: 'Tarea'), id])
             redirect(action: "show", id: id)
         }
+    }
+    
+    def share (Long id) {
+        def tareaInstance = Tarea.get(id)
+        [ tareaInstance : tareaInstance ]
+    }
+    
+    def addUsuarioToTarea(Long id) {
+        def tareaInstance = Tarea.get(id)        
+        def compartirCon = Usuario.get(params.compartidoCon.id as long)
+        def lista = tareaInstance.usuariosDeTarea
+        def existe = false
+        lista.each {
+            if (it.usuario.id == compartirCon.id) {
+                existe = true
+            }
+        }
+        if (!existe) {
+            def usuarioDeTarea = new UsuarioDeTarea()
+            usuarioDeTarea.usuario = compartirCon
+            usuarioDeTarea.owner = false
+            usuarioDeTarea.tarea = tareaInstance
+            if (usuarioDeTarea.save(flush:true)) {            
+                notificacionesService.tareaCompartida(tareaInstance, usuarioDeTarea.usuario)
+            }
+            flash.message = "Tarea compartida satisfactoriamente."
+        } else {
+            flash.warn = "Ya se encuentra compartida con el usuario seleccionado."
+        }
+        redirect (action:"share", params : [ id : tareaInstance.id ])
+    }
+    
+    def removeUsuarioFromTarea() {
+        def tareaInstance = Tarea.get(params.tareaId as long)
+        def usuario = Usuario.get(params.usuarioId as long)
+        def usuarioDeTarea = UsuarioDeTarea.findByTareaAndUsuario(tareaInstance, usuario)
+        usuarioDeTarea.delete()
+        redirect (action:"share", params : [ id : tareaInstance.id ])
+    }
+    
+    def regresar(Long id) {
+        redirect(action: "show", id: id)
+    }
+    
+    def cerrarTarea (Long id) {
+        def tareaInstance = Tarea.get(id)
+        tareaInstance.cerrada = true
+        if (tareaInstance.save(flush:true)) {
+            def usuariosDeTarea = tareaInstance.usuariosDeTarea
+            usuariosDeTarea.each { it ->
+                notificacionesService.tareaCerrada(tareaInstance, it.usuario)
+            }
+            historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "concluyó un turno")
+            flash.message = "La tarea fue cerrada satisfactoriamente."            
+        } else {
+            flash.message = "No se pudo cerrar la tarea. Intente nuevamente."
+        }
+        redirect (action:"show", id:tareaInstance.id)
     }
 }

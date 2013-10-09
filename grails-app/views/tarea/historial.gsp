@@ -5,12 +5,12 @@
   <head>
     <meta name="layout" content="mainTareas">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Historial de Tareas</title>
+    <title>Historial de Turnos</title>
   </head>
   <body>
     <div class="page-header position-relative">
       <h1>
-        Historial de Tareas
+        Historial de Turnos
       </h1>      
     </div><!--/.page-header-->
 
@@ -20,7 +20,7 @@
 
           <div class="timeline-container timeline-style2">
             <span class="timeline-label">
-              <b>Tarea: ${tareaInstance.id}</b>
+              <b>Turno: ${tareaInstance.id}</b>
             </span>
 
             <div class="timeline-items">
@@ -37,7 +37,7 @@
                       <div class="widget-main no-padding">
                         <span class="bigger-110">
                           <span class="green bolder">${historial.quien.username}</span>
-                          <g:if test="${historial.que == 'Leyó una tarea'}">
+                          <g:if test="${historial.que == 'Leyó una turno'}">
                             <span class="red bolder">${historial.que}
                             </span>
                           </g:if>

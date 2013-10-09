@@ -44,4 +44,14 @@
   </div>
 </div>
 
+<div class="control-group fieldcontain ${hasErrors(bean: tareaInstance, field: 'responsable', 'error')} required">
+  <label for="grupo" class="control-label">
+    <g:message code="tarea.responsable.label" default="Responsable" />
+    <span class="required-indicator">*</span>
+  </label>
+  <div class="controls">
+    <g:select id="responsable" name="responsable.id" from="${com.app.security.Usuario.list()}" optionKey="id" required="" value="${tareaInstance?.responsable?.id}" class="many-to-one"/>
+  </div>
+</div>
+
 <g:javascript src="ckeditor/ckeditor.js"/>

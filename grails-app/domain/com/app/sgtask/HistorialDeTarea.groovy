@@ -11,13 +11,13 @@ class HistorialDeTarea extends Historial {
     static constraints = {
         que nullable:false, 
             inList : [
-                "creó una tarea", 
-                "abrió una tarea", 
-                "editó una tarea", 
+                "creó un turno", 
+                "abrió un turno", 
+                "editó un turno", 
                 "agregó una nota", 
                 "modificó una nota",
-                "reasignó una tarea", 
-                "concluyó una tarea"
+                "reasignó un turno", 
+                "concluyó un turno"
             ]
         tarea nullable:false
     }

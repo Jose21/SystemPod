@@ -2,6 +2,8 @@ import com.app.security.Usuario
 import com.app.security.Rol
 import com.app.security.UsuarioRol
 import grails.util.Environment
+import com.app.sgtask.Grupo
+import com.app.sgcon.StatusDelConvenio
 
 class BootStrap {
 
@@ -60,6 +62,10 @@ class BootStrap {
                 new UsuarioRol (usuario : Usuario.findByUsername("test1"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
                 new UsuarioRol (usuario : Usuario.findByUsername("test2"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
                 new UsuarioRol (usuario : Usuario.findByUsername("test3"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
+                
+                new Grupo(nombre:"Sin Categoría", descripcion: "asd").save()
+                new StatusDelConvenio(nombre:"Vigente").save()
+                new StatusDelConvenio(nombre:"En Proceso").save()
             case Environment.PRODUCTION :
                 break
         }

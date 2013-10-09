@@ -3,7 +3,8 @@ package com.app
 import grails.plugins.springsecurity.Secured
 import com.app.security.Usuario
 
-@Secured(['ROLE_ADMINISTRADOR'])
+//@Secured(['ROLE_ADMINISTRADOR'])
+@Secured(['IS_AUTHENTICATED_FULLY'])
 class DashboardController {
 
     def springSecurityService

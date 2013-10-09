@@ -4,7 +4,9 @@ import org.springframework.dao.DataIntegrityViolationException
 import com.app.sgcon.beans.BusquedaBean
 import java.text.SimpleDateFormat
 import com.app.security.Usuario
+import grails.plugins.springsecurity.Secured
 
+@Secured(['IS_AUTHENTICATED_FULLY'])
 class ConvenioController {
 
     def springSecurityService
@@ -17,6 +19,7 @@ class ConvenioController {
 
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
+        def convenios = UsuarioDeConvenio.findByUsuarioAndOwner(springSecurityService.currentUser, true, params)
         [convenioInstanceList: Convenio.list(params), convenioInstanceTotal: Convenio.count()]
     }
 
@@ -49,7 +52,7 @@ class ConvenioController {
             render(view: "create", model: [convenioInstance: convenioInstance])
             return
         }
-            
+
         //Se agrega el que lo creó como dueño y se le comparte por default
         def usuarioDeConvenio = new UsuarioDeConvenio()
         usuarioDeConvenio.usuario = springSecurityService.currentUser
@@ -262,14 +265,26 @@ class ConvenioController {
     }
     
     def buscarConvenios () {
+        
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
-        def rangoDeFecha = params.rangoDeFecha
-        def fechaInicio = sdf.parse(rangoDeFecha.split("-")[0].trim())
-        def fechaFin = sdf.parse(rangoDeFecha.split("-")[1].trim())
-        def busquedaBean = new BusquedaBean()        
-        busquedaBean.fechaInicio = fechaInicio
-        busquedaBean.fechaFin = fechaFin
-        def convenioInstanceList = Convenio.findAllByFechaDeFirmaBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin)
+        
+        def rangoDeFecha = null
+        def fechaInicio = null
+        def fechaFin = null
+        def busquedaBean = null
+        def convenioInstanceList = []
+        if (params.rangoDeFecha != "") {
+            flash.warn = null
+            rangoDeFecha = params.rangoDeFecha
+            fechaInicio = sdf.parse(rangoDeFecha.split("-")[0].trim())
+            fechaFin = sdf.parse(rangoDeFecha.split("-")[1].trim())
+            busquedaBean = new BusquedaBean()        
+            busquedaBean.fechaInicio = fechaInicio
+            busquedaBean.fechaFin = fechaFin
+            convenioInstanceList = Convenio.findAllByFechaDeFirmaBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin)
+        } else {
+            flash.warn = "Debe elegir un rango de fechas válido."
+        }
         render(
             view: "list", 
             model: [
@@ -316,12 +331,25 @@ class ConvenioController {
     }
     
     def addUsuarioToConvenio(Long id) {
-        def convenioInstance = Convenio.get(id)
-        def usuarioDeConvenio = new UsuarioDeConvenio()
-        usuarioDeConvenio.usuario = Usuario.get(params.compartidoCon.id as long)
-        usuarioDeConvenio.owner = false
-        usuarioDeConvenio.convenio = convenioInstance
-        usuarioDeConvenio.save(flush:true)
+        def convenioInstance = Convenio.get(id)        
+        def compartirCon = Usuario.get(params.compartidoCon.id as long)
+        def lista = convenioInstance.usuariosDeConvenio
+        def existe = false
+        lista.each {
+            if (it.usuario.id == compartirCon.id) {
+                existe = true
+            }
+        }
+        if (!existe) {
+            def usuarioDeConvenio = new UsuarioDeConvenio()
+            usuarioDeConvenio.usuario = compartirCon
+            usuarioDeConvenio.owner = false
+            usuarioDeConvenio.convenio = convenioInstance
+            usuarioDeConvenio.save(flush:true)
+            flash.message = "Convenio compartido satisfactoriamente."
+        } else {
+            flash.warn = "Ya se encuentra compartido con el usuario seleccionado."
+        }
         redirect (action:"share", params : [ id : convenioInstance.id ])
     }
     
@@ -331,5 +359,9 @@ class ConvenioController {
         def usuarioDeConvenio = UsuarioDeConvenio.findByConvenioAndUsuario(convenioInstance, usuario)
         usuarioDeConvenio.delete()
         redirect (action:"share", params : [ id : convenioInstance.id ])
-    } 
+    }
+    
+    def regresar(Long id) {
+        redirect(action: "edit", id: id)
+    }
 }

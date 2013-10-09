@@ -3,13 +3,13 @@
 <html>
   <head>
     <meta name="layout" content="mainTareas">
-    <g:set var="entityName" value="${message(code: 'tarea.label', default: 'Tarea')}" />
+    <g:set var="entityName" value="${message(code: 'tarea.label', default: 'Turno')}" />
     <title><g:message code="default.edit.label" args="[entityName]" /></title>
     <calendar:resources lang="es" theme="aqua"/>
   </head>
   <body>
     <div class="page-header position-relative">
-      <h1>Editar: Tarea</h1>
+      <h1>Editar: Turno</h1>
     </div>
     
     <div class="container-fluid">
