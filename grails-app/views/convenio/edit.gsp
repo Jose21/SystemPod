@@ -12,12 +12,18 @@
       <div class="page-header position-relative">
         <h1>Editar: Convenio</h1>
         <div class="btn-group">
-          <a class="btn btn-small tip-bottom" href="#vincularConvenio" data-toggle="modal">
+          <a class="btn btn-small btn-success tip-bottom" href="#vincularConvenio" data-toggle="modal">
             <i class="icon-user"></i> Vincular convenio al que modifica
           </a>
-          <g:link action="share" class="btn btn-small btn-purple tip-bottom" id="${convenioInstance?.id}">          
+          <g:link action="share" class="btn btn-small btn-info tip-bottom" id="${convenioInstance?.id}">          
             <i class="icon-share-alt"></i> Compartir
           </g:link>
+          <g:link controller="tarea" action="create" class="btn btn-small btn-inverse tip-bottom" params="[ idConvenio : convenioInstance?.id ]">
+            <i class="icon-external-link"></i> Asociar Turno
+          </g:link>
+          <a class="btn btn-small btn-purple tip-bottom" href="#tareasAsociadas" data-toggle="modal">
+            <i class="icon-comments"></i> Turnos Asociados
+          </a>
         </div>
       </div><!--/.page-header-->
     
@@ -285,8 +291,51 @@
               <g:actionSubmit class="btn btn-primary" action="linkToConvenioQueModifica" value="${message(code: 'default.button.update.label', default: 'Update')}" />
             </div>
           </g:form>
-        </div>
+        </div>        
       </div>
+      <div id="tareasAsociadas" class="modal hide" style="width:600px;">
+          <div class="modal-header">
+            <button data-dismiss="modal" class="close" type="button">×</button>
+            <h3>Turnos asociados al convenio</h3>
+          </div>
+          <div class="modal-body">     
+            <g:if test="${convenioInstance?.tareas.findAll{ it.cerrada == false }}">
+              <div class="widget-box">
+                <div class="widget-header widget-header-flat widget-header-small">
+                  <h5><i class="icon-circle"></i>Turnos Abiertos</h5>                    
+                </div>
+                <div class="widget-body">
+                  <div class="widget-main">
+                    <g:each in="${convenioInstance?.tareas.findAll{ it.cerrada == false }}" var="tarea">
+                      <g:link class="btn btn-mini btn-info btn-block" controller="tarea" action="show" id="${tarea.id}" params="[ idConvenio : convenioInstance?.id ]">
+                        <span class="label label-large label-info arrowed-in-right arrowed-in">Turno: ${tarea.id}</span>
+                        ${tarea.nombre}
+                      </g:link></br>
+                    </g:each>
+                  </div><!--/widget-main-->
+                </div><!--/widget-body-->
+              </div><!--/widget-box-->
+            </g:if>
+            <g:if test="${convenioInstance?.tareas.findAll{ it.cerrada == true }}">
+              <br/>
+              <div class="widget-box">
+                <div class="widget-header widget-header-flat widget-header-small">
+                  <h5><i class="icon-circle"></i>Turnos Cerrados</h5>                    
+                </div>
+                <div class="widget-body">
+                  <div class="widget-main">
+                    <g:each in="${convenioInstance?.tareas.findAll{ it.cerrada == true }}" var="tarea">
+                      <g:link class="btn btn-mini btn-light btn-block" controller="tarea" action="show" id="${tarea.id}" params="[ idConvenio : convenioInstance?.id ]">
+                        <span class="label label-large label-light arrowed-in-right arrowed-in">Turno: ${tarea.id}</span>
+                        ${tarea.nombre}
+                      </g:link></br>
+                    </g:each>
+                  </div><!--/widget-main-->
+                </div><!--/widget-body-->
+              </div><!--/widget-box-->
+            </g:if>
+          </div>
+        </div>
     </div>
     <script lang="javascript" type="text/javascript">
           (function($) { 

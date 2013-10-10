@@ -6,6 +6,7 @@ import com.app.security.Usuario
 import grails.plugin.asyncmail.AsynchronousMailService
 import com.app.NotificacionesService
 import grails.plugins.springsecurity.Secured
+import com.app.sgcon.Convenio
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class TareaController {
@@ -169,6 +170,11 @@ class TareaController {
     }
 
     def create() {
+        if (params.idConvenio) {
+            session.idConvenio = params.idConvenio as long
+        } else {
+            session.idConvenio = null
+        }
         [tareaInstance: new Tarea(params)]
     }
 
@@ -194,7 +200,7 @@ class TareaController {
         creadaPor.tarea = tareaInstance
         creadaPor.save(flush:true)
         
-        //Si el responsable es distinto al creador, se le asigna automaticamente
+        //Si el responsable es distinto al creador, se le asigna
         if (params.responsable.id as long != springSecurityService.currentUser.id) {
             def responsable = new UsuarioDeTarea()
             responsable.usuario = Usuario.get(params.responsable.id as long)
@@ -205,12 +211,23 @@ class TareaController {
             }
         }
         
+        //Integración con Convenios
+        if (session.idConvenio) {
+            def convenioInstance = Convenio.get(session.idConvenio)
+            convenioInstance.addToTareas(tareaInstance).save(flush:true)
+        }
+            
         historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "creó un turno")        
         flash.message = message(code: 'default.created.message', args: [message(code: 'tarea.label', default: 'Tarea'), tareaInstance.id])
         redirect(action: "show", id: tareaInstance.id)
     }
 
     def show(Long id) {
+        if (params.idConvenio) {
+            session.idConvenio = params.idConvenio as long
+        } else {
+            session.idConvenio = null
+        }
         def tareaInstance = Tarea.get(id)
         if (!tareaInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'tarea.label', default: 'Tarea'), id])

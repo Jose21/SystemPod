@@ -76,6 +76,7 @@ class ConvenioController {
     }
 
     def edit(Long id) {
+        session.idConvenio = null
         def convenioInstance = Convenio.get(id)
         if (!convenioInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])

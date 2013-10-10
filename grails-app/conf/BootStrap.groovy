@@ -64,9 +64,34 @@ class BootStrap {
                 new UsuarioRol (usuario : Usuario.findByUsername("test3"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
                 
                 new Grupo(nombre:"Sin Categoría", descripcion: "asd").save()
+                
+                new StatusDelConvenio(nombre:"En Elaboración").save()
                 new StatusDelConvenio(nombre:"Vigente").save()
-                new StatusDelConvenio(nombre:"En Proceso").save()
+                
+                break
             case Environment.PRODUCTION :
+                
+                new Usuario (
+                    firstName : "Administrador",
+                    lastName : "Del Sistema",
+                    email : "the.real.thom@gmail.com",
+                    username : "admin",
+                    password : "4dm1n!",
+                    enabled : true,
+                    accountExpired : false,
+                    accountLocked : false,
+                    passwordExpired : false
+                ).save()
+                
+                new Rol (authority : "ROLE_ADMINISTRADOR").save()
+                
+                new UsuarioRol (usuario : Usuario.findByUsername("admin"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
+                
+                new Grupo(nombre:"Sin Categoría", descripcion: "asd").save()
+                
+                new StatusDelConvenio(nombre:"En Elaboración").save()
+                new StatusDelConvenio(nombre:"Vigente").save()
+                
                 break
         }
     }

@@ -1,4 +1,4 @@
-<%@ page import="com.app.sgtask.Tarea" %>
+<%@ page import="com.app.sgtask.Tarea;com.app.sgcon.Convenio" %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -12,6 +12,13 @@
     </div>
 
     <div class="container-fluid">
+      <g:if test="${session.idConvenio}">
+        <br/>
+          <g:link class="btn btn-small btn-info btn-block" controller="convenio" action="edit" id="${Convenio.get(session.idConvenio).id}">
+            El turno se asociará al convenio: ${Convenio.get(session.idConvenio).id} - Número de Convenio: ${Convenio.get(session.idConvenio).numeroDeConvenio} - Objeto: ${Convenio.get(session.idConvenio).objeto}
+          </g:link>
+        <br/>
+      </g:if>
       <br/>
       <g:render template="/shared/alerts" />
 

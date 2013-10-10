@@ -1,6 +1,7 @@
 package com.app.sgtask
 
 import com.app.security.Usuario
+import com.app.sgcon.Convenio
 
 class Tarea implements Comparable {
 
@@ -15,6 +16,7 @@ class Tarea implements Comparable {
     
     Grupo grupo
     
+    static belongsTo = [ convenio : Convenio ]
     static hasMany = [notas : Nota, usuariosDeTarea : UsuarioDeTarea]
     
     static constraints = {
@@ -26,7 +28,7 @@ class Tarea implements Comparable {
         notas nullable:true
         creadaPor nullable:false
         responsable nullable:true
-        nullable:false
+        convenio nullable:true
         usuariosDeTarea nullable:true
     }
     

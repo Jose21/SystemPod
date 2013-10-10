@@ -7,7 +7,7 @@ class StatusDelConvenio {
     Date lastUpdated
     
     static constraints = {
-        nombre blank: false
+        nombre blank: false, unique:true
     }
     
     String toString() {

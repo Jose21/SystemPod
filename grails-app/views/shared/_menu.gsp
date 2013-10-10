@@ -14,7 +14,7 @@
       <i class="icon-book"></i>
     </g:link>
 
-    <g:link class="btn btn-small btn-warning" controller="tarea" action="create">
+    <g:link class="btn btn-small btn-warning" controller="tarea" action="hoy">
       <i class="icon-check"></i>
     </g:link>
 

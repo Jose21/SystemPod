@@ -1,5 +1,6 @@
 package com.app.sgcon
 
+import com.app.sgtask.Tarea
 import java.text.SimpleDateFormat
 
 class Convenio {
@@ -21,7 +22,12 @@ class Convenio {
     Convenio modificaA
     Convenio esModificadoPor
     
-    static hasMany = [ firmantes : Persona, responsables : Persona, usuariosDeConvenio : UsuarioDeConvenio ]
+    static hasMany = [ 
+        firmantes : Persona, 
+        responsables : Persona, 
+        usuariosDeConvenio : UsuarioDeConvenio,
+        tareas : Tarea
+    ]
     
     static constraints = {
         numeroDeConvenio blank:false, maxSize:20
@@ -31,9 +37,9 @@ class Convenio {
         vigencia nullable:true, blank:true
         status nullable:false
         tipoDeConvenio blank:false
-        institucion blank:false        
-        nombreDeCopiaElectronica nullable:true        
-        copiaElectronica nullable:true, maxSize:5242880        
+        institucion blank:false
+        nombreDeCopiaElectronica nullable:true
+        copiaElectronica nullable:true, maxSize:52428800
         compromisos nullable:true, blank: true, maxsize:1048576
         
         modificaA nullable:true
@@ -42,6 +48,7 @@ class Convenio {
         firmantes nullable: true
         responsables nullable: true
         usuariosDeConvenio nullable:true
+        tareas nullable:true
     }
     
     String toString () {

@@ -26,7 +26,7 @@
               <i class="icon-share-alt"></i> Compartir
           </g:link>
         </g:if>  
-        <g:if test="${!tareaInstance?.cerrada && tareaInstance?.creadaPor.id == currentUser.id && tareaInstance?.responsable.id == currentUser.id}">
+        <g:if test="${!tareaInstance?.cerrada && (tareaInstance?.creadaPor.id == currentUser.id || tareaInstance?.responsable.id == currentUser.id)}">
           <g:link class="btn btn-warning btn-small tip-bottom" controller="tarea" action="cerrarTarea" id="${tareaInstance?.id}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
             <i class="icon-asterisk"></i>
             Cerrar
@@ -36,6 +36,13 @@
     </div>
     
     <div class="container-fluid">
+      <g:if test="${tareaInstance?.convenio}">
+        <br/>
+          <g:link class="btn btn-small btn-info btn-block" controller="convenio" action="edit" id="${tareaInstance?.convenio.id}">                
+            El turno está asociado al convenio: ${tareaInstance?.convenio.id} - Número de Convenio: ${tareaInstance?.convenio.numeroDeConvenio} - Objeto: ${tareaInstance?.convenio.objeto}
+          </g:link>
+        <br/>
+      </g:if>
       <br/>
       <g:render template="/shared/alerts" />
       <div class="well">        

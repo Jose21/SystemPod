@@ -34,19 +34,19 @@
           <li class="active">
             <a data-toggle="tab" href="#inbox">
               <i class="blue icon-inbox bigger-130"></i>
-              <span class="bigger-110">Mis Turnos (${tareaInstanceTotal})</span>
+              <span class="bigger-110">Mis Turnos <span class="badge">${tareaInstanceTotal}</span></span>
             </a>
           </li>
           <li>
             <a data-toggle="tab" href="#shared">
               <i class="icon-share-alt bigger-130"></i>
-              <span class="bigger-110">Compartidos (${sharedTaskTotal})</span>
+              <span class="bigger-110">Compartidos <span class="badge">${sharedTaskTotal}</span></span>
             </a>
           </li>
           <li>
             <a data-toggle="tab" href="#turnados">              
               <i class="icon-arrow-right icon-on-right bigger-130"></i>
-              <span class="bigger-110">Turnados (${turnadosTotal})</span>
+              <span class="bigger-110">Turnados <span class="badge">${turnadosTotal}</span></span>
             </a>
           </li>
         </ul>
