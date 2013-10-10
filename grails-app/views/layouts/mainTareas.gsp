@@ -202,7 +202,10 @@
             minuteStep: 1,
             showSeconds: true,
             showMeridian: false
-          });          
+          });
+          $("#btnLimpiar").click(function() {
+            $("#fechaLimite").val("");
+          });
         })(jQuery);
     </script>
     <g:javascript library="application"/>

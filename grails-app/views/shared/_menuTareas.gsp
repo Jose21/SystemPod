@@ -61,11 +61,11 @@
           <i class="icon-double-angle-right"></i> Retrasados
         </g:link>
       </li>
-      <!--<li>
-        <g:link controller="tarea" action="asignadas">
-          <i class="icon-double-angle-right"></i> Asignadas
+      <li>
+        <g:link controller="tarea" action="concluidas">
+          <i class="icon-double-angle-right"></i> Concluídos
         </g:link>
-      </li>-->
+      </li>
     </ul>
   </li>
   

@@ -27,9 +27,7 @@
   <div class="controls">
     <div class="row-fluid input-append">
       <input readonly="readonly" class="span10 date-picker" id="fechaLimite" type="text" value="${tareaInstance?.fechaLimite?(new SimpleDateFormat("dd/MM/yyyy")).format(tareaInstance?.fechaLimite):""}" data-date-format="dd/mm/yyyy" name="fechaLimite" />
-      <span class="add-on">
-        <i class="icon-calendar"></i>
-      </span>
+      <input class="btn btn-small" type="button" name="btnLimpiar" id="btnLimpiar" value="Limpiar"></input>
     </div>
   </div>
 </div>

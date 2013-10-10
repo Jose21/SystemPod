@@ -11,28 +11,30 @@
     <div class="page-header position-relative">
       <h1>Mostrar: Turno</h1>
       <br/>
-      <div class="btn-group">        
-        <g:link class="btn btn-info btn-small tip-bottom" action="create">
-          <i class="icon-asterisk"></i>
-          Nuevo
-        </g:link>        
-        <g:link class="btn btn-success btn-small tip-bottom" controller="nota" action="create" params="[tareaId: tareaInstance?.id]">
-          <i class="icon-asterisk"></i>
-          Agregar Nota
-        </g:link>        
-        
-        <g:if test="${tareaInstance?.creadaPor.id == currentUser.id || tareaInstance?.responsable.id == currentUser.id}">
-          <g:link action="share" class="btn btn-small btn-purple tip-bottom" id="${tareaInstance?.id}">          
-              <i class="icon-share-alt"></i> Compartir
-          </g:link>
-        </g:if>  
-        <g:if test="${!tareaInstance?.cerrada && (tareaInstance?.creadaPor.id == currentUser.id || tareaInstance?.responsable.id == currentUser.id)}">
-          <g:link class="btn btn-warning btn-small tip-bottom" controller="tarea" action="cerrarTarea" id="${tareaInstance?.id}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+      <g:if test="${tareaInstance?.cerrada == false}">
+        <div class="btn-group">        
+          <g:link class="btn btn-info btn-small tip-bottom" action="create">
             <i class="icon-asterisk"></i>
-            Cerrar
-          </g:link>
-        </g:if>
-      </div>
+            Nuevo
+          </g:link>        
+          <g:link class="btn btn-success btn-small tip-bottom" controller="nota" action="create" params="[tareaId: tareaInstance?.id]">
+            <i class="icon-asterisk"></i>
+            Agregar Nota
+          </g:link>        
+
+          <g:if test="${tareaInstance?.creadaPor.id == currentUser.id || tareaInstance?.responsable.id == currentUser.id}">
+            <g:link action="share" class="btn btn-small btn-purple tip-bottom" id="${tareaInstance?.id}">          
+                <i class="icon-share-alt"></i> Compartir
+            </g:link>
+          </g:if>  
+          <g:if test="${!tareaInstance?.cerrada && (tareaInstance?.creadaPor.id == currentUser.id || tareaInstance?.responsable.id == currentUser.id)}">
+            <g:link class="btn btn-warning btn-small tip-bottom" controller="tarea" action="cerrarTarea" id="${tareaInstance?.id}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+              <i class="icon-asterisk"></i>
+              Cerrar
+            </g:link>
+          </g:if>
+        </div>
+      </g:if>
     </div>
     
     <div class="container-fluid">
@@ -165,13 +167,17 @@
         </div><!--/widget-box-->
         </g:if>		
       </div>
-      <g:form class="form-actions">
-        <fieldset class="buttons">
-          <g:hiddenField name="id" value="${tareaInstance?.id}" />
-          <g:link class="btn btn-primary" action="edit" id="${tareaInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-          <!--<g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />-->
-        </fieldset>
-      </g:form>
+      <g:if test="${tareaInstance?.cerrada == false}">
+        <g:form class="form-actions">
+          <fieldset class="buttons">
+            <g:hiddenField name="id" value="${tareaInstance?.id}" />
+            <g:link class="btn btn-primary" action="edit" id="${tareaInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
+          </fieldset>
+        </g:form>
+      </g:if>
+      <g:else>
+        <g:link class="btn btn-small btn-primary" action="${session.opt}">Regresar</g:link>
+      </g:else>
     </div>        
   </body>
   <g:javascript src="ckeditor/ckeditor.js"/>

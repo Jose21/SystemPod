@@ -19,10 +19,10 @@
         </g:elseif>
         <g:elseif test="${session.opt == 'retrasadas'}">
           Turnos Retrasados
-        </g:elseif>
-        <g:elseif test="${session.opt == 'asignadas'}">
-          Turnos Asignadas
-        </g:elseif>        
+        </g:elseif>  
+        <g:elseif test="${session.opt == 'concluidas'}">
+          Turnos Concluídos
+        </g:elseif>       
       </h1>
     </div><!--/.page-header-->
 

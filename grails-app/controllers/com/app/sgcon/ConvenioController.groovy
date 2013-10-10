@@ -291,7 +291,8 @@ class ConvenioController {
             model: [
                 convenioInstanceList: convenioInstanceList, 
                 convenioInstanceTotal: convenioInstanceList.size(),
-                busquedaBean : busquedaBean
+                busquedaBean : busquedaBean,
+                rangoDeFecha : params.rangoDeFecha
             ]
         )
     }     

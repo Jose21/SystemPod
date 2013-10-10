@@ -22,7 +22,7 @@
               <span class="add-on">
                 <i class="icon-calendar"></i>
               </span>
-              <input class="span5" type="text" name="rangoDeFecha" id="rangoDeFecha" readonly="true" />
+              <input class="span5" type="text" name="rangoDeFecha" id="rangoDeFecha" value="${rangoDeFecha?rangoDeFecha:""}" readonly="true" />
               <g:actionSubmit class="btn btn-primary" action="buscarConvenios" value="Buscar" />
             </div>
           </div>
@@ -30,6 +30,11 @@
         <div class="widget-content nopadding">
           <table class="table table-bordered table-striped">
             <thead>
+              <g:if test="${rangoDeFecha}">
+                <tr>
+                  <th colspan="6" style="text-align:center">Resultado para el rango de fechas: ${rangoDeFecha}</br></br></th>
+                </tr>
+              </g:if>
               <tr>
                 <g:sortableColumn property="id" title="${message(code: 'convenio.id.label', default: 'Identificador interno')}" />
                 <g:sortableColumn property="numeroDeConvenio" title="${message(code: 'convenio.numeroDeConvenio.label', default: 'Número de Convenio')}" />
@@ -50,6 +55,9 @@
                 <td>${fieldValue(bean: convenioInstance, field: "status")}</td>
               </tr>
             </g:each>
+            <tr>
+              <td colspan="6" style="text-align:center">Total: ${convenioInstanceList.size()} </td>
+            </tr>
             </tbody>
           </table>
         </div>        

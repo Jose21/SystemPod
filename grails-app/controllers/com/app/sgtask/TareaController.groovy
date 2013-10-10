@@ -153,10 +153,44 @@ class TareaController {
         )
     }
     
-    def asignadas () {
+    def concluidas () {
         session.opt = params.action
-        def taskList = Tarea.findAllByAsignadaA(springSecurityService.currentUser);
-        render(view: "list", model: [tareaInstanceList: taskList, tareaInstanceTotal: taskList.size()])
+        
+        //Mis turnos        
+        def taskListQuery = Tarea.where {
+            cerrada == true &&
+            responsable == springSecurityService.currentUser
+        }
+        def taskList = taskListQuery.list(sort:"id")
+        
+        //Compartidos
+        def usuariosDeTarea = UsuarioDeTarea.findAllByUsuarioAndOwner(springSecurityService.currentUser, false)
+        def sharedTaskList = usuariosDeTarea*.tarea        
+        sharedTaskList = sharedTaskList.findAll {
+            it.cerrada == true &&
+            it.responsable != springSecurityService.currentUser &&
+            it.creadaPor != springSecurityService.currentUser
+        }
+        
+        //Turnados
+        def turnadosQuery = Tarea.where {
+            cerrada == true &&
+            responsable != springSecurityService.currentUser &&
+            creadaPor == springSecurityService.currentUser
+        }
+        def turnados = turnadosQuery.list(sort:"id")
+        
+        render (
+            view: "list", 
+            model: [
+                tareaInstanceList: taskList, 
+                tareaInstanceTotal: taskList.size(),
+                sharedTaskList : sharedTaskList,
+                sharedTaskTotal : sharedTaskList.size(),
+                turnadosList : turnados,
+                turnadosTotal : turnados.size()
+            ]
+        )
     }
     
     def historial (Long id) {
