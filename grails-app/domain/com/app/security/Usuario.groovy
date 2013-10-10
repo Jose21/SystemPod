@@ -47,6 +47,6 @@ class Usuario implements Serializable {
     }
     
     String toString() {
-        "${username}"
+        "${firstName} ${lastName}"
     }    
 }

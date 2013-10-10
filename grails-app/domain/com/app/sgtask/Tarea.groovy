@@ -22,7 +22,7 @@ class Tarea implements Comparable {
     static constraints = {
         nombre blank:false, maxSize:140
         descripcion blank:false, maxSize:10240
-        fechaLimite nullable:true, blank:true
+        fechaLimite nullable:true
         grupo nullable:false
         cerrada blank:false
         notas nullable:true

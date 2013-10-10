@@ -270,12 +270,11 @@ class TareaController {
                 return
             }
         }
-
+        
+        
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Date fechaLimite = null
-        if (params.fechaLimite != "") {
-            fechaLimite = sdf.parse(params.fechaLimite)
-        }
+        
+        params.fechaLimite = params.fechaLimite!=""?sdf.parse(params.fechaLimite):null
         tareaInstance.properties = params
         
         if (!tareaInstance.save(flush: true)) {
