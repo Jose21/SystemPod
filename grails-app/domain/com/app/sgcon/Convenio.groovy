@@ -33,11 +33,12 @@ class Convenio {
         numeroDeConvenio blank:false, maxSize:5000
         objeto blank: false, maxSize:5000
         sustentoNormativo blank: false, maxSize:5000
-        fechaDeFirma blank: false
-        vigencia nullable:true, blank:true
-        status nullable:false
         tipoDeConvenio blank:false, maxSize:5000
         institucion blank:false, maxSize:5000
+        
+        fechaDeFirma blank: false
+        vigencia nullable:true, blank:true
+        status nullable:false        
         nombreDeCopiaElectronica nullable:true, maxSize:1000
         copiaElectronica nullable:true, maxSize:52428800
         compromisos nullable:true, blank: true, maxsize:1048576

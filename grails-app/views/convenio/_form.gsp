@@ -16,7 +16,7 @@
     <span class="required-indicator">*</span>
   </label>
   <div class="controls">
-    <g:textField class="span5" name="objeto" maxlength="100" required="" value="${convenioInstance?.objeto}" autocomplete="off"/>
+    <g:textArea class="span5" name="objeto" maxlength="5000" required="" value="${convenioInstance?.objeto}" autocomplete="off"/>
   </div>
 </div>
 
@@ -36,7 +36,7 @@
     <span class="required-indicator">*</span>
   </label>
   <div class="controls">
-    <g:textField class="span5" name="sustentoNormativo" maxlength="200" required="" value="${convenioInstance?.sustentoNormativo}" autocomplete="off"/>
+    <g:textArea class="span5" name="sustentoNormativo" maxlength="5000" required="" value="${convenioInstance?.sustentoNormativo}" autocomplete="off"/>
   </div>
 </div>
 
@@ -84,7 +84,7 @@
     <span class="required-indicator">*</span>
   </label>
   <div class="controls">
-    <g:textField class="span5" name="tipoDeConvenio" maxlength="255" required="" value="${convenioInstance?.tipoDeConvenio}" autocomplete="off"/>
+    <g:textArea class="span5" name="tipoDeConvenio" maxlength="5000" required="" value="${convenioInstance?.tipoDeConvenio}" autocomplete="off"/>
   </div>
 </div>
 
@@ -94,7 +94,7 @@
     <span class="required-indicator">*</span>
   </label>
   <div class="controls">
-    <g:textField class="span5" name="institucion" maxlength="255" required="" value="${convenioInstance?.institucion}" autocomplete="off"/>
+    <g:textArea class="span5" name="institucion" maxlength="5000" required="" value="${convenioInstance?.institucion}" autocomplete="off"/>
   </div>
 </div>
 
