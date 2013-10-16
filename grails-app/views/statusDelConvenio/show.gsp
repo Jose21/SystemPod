@@ -13,11 +13,11 @@
       <div class="btn-group">
         <g:link class="btn btn-small tip-bottom" action="index">
           <i class="icon-file"></i>
-          <g:message code="default.list.label" args="[entityName]" />
+          Lista: Status de Convenio
         </g:link>
         <g:link class="btn btn-small tip-bottom" action="create">
           <i class="icon-file"></i>
-          <g:message code="default.new.label" args="[entityName]" />
+          Nuevo: Status de Convenio
         </g:link>
       </div>
     </div>

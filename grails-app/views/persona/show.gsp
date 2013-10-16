@@ -13,7 +13,7 @@
       <div class="btn-group">
         <g:link class="btn btn-small tip-bottom" action="index">
           <i class="icon-file"></i>
-          <g:message code="default.list.label" args="[entityName]" />
+          Lista: Personas
         </g:link>
         <g:link class="btn btn-small tip-bottom" action="create">
           <i class="icon-file"></i>
@@ -58,6 +58,15 @@
                                   </dl>
 				</g:if>
 			
+                                <g:if test="${personaInstance?.institucion}">
+                                  <dl>
+                                      <dt><g:message code="persona.institucion.label" default="Institución" /></dt>
+					
+                                                <dd><g:fieldValue bean="${personaInstance}" field="institucion"/></dd>
+					
+                                  </dl>
+				</g:if>
+      
 				<g:if test="${personaInstance?.email}">
                                   <dl>
                                       <dt><g:message code="persona.email.label" default="Email" /></dt>
@@ -87,7 +96,7 @@
 			
 				<g:if test="${personaInstance?.dateCreated}">
                                   <dl>
-                                      <dt><g:message code="persona.dateCreated.label" default="Date Created" /></dt>
+                                      <dt><g:message code="persona.dateCreated.label" default="Fecha de Creación" /></dt>
 					
 						<dd><g:formatDate date="${personaInstance?.dateCreated}" /></dd>
 					
@@ -96,7 +105,7 @@
 			
 				<g:if test="${personaInstance?.lastUpdated}">
                                   <dl>
-                                      <dt><g:message code="persona.lastUpdated.label" default="Last Updated" /></dt>
+                                      <dt><g:message code="persona.lastUpdated.label" default="Última Actualización" /></dt>
 					
 						<dd><g:formatDate date="${personaInstance?.lastUpdated}" /></dd>
 					

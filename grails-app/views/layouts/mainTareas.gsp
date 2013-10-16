@@ -183,12 +183,18 @@
     <script src="${resource(dir:'assets/js',file:'jquery.hotkeys.min.js')}"></script>    
     <script src="${resource(dir:'assets/js',file:'bootbox.min.js')}"></script>
 
+    <script src="${resource(dir:'js',file:'highcharts.js')}"></script>
+    <script src="${resource(dir:'js/modules',file:'exporting.js')}"></script>
+  
     <!--ace scripts-->
     <script src="${resource(dir:'assets/js',file:'ace-elements.min.js')}"></script>
     <script src="${resource(dir:'assets/js',file:'ace.min.js')}"></script>
     <script type="text/javascript">      
-        (function($) { 
-          $('.date-picker').datepicker().next().on(ace.click_event, function(){
+        (function($) {
+          $('.date-picker').datepicker({
+              format: 'DD/MM/YYYY',
+              locale: 'es'
+          }).next().on(ace.click_event, function(){
             $(this).prev().focus();
           });
           $('#rangoDeFecha').daterangepicker({ 
@@ -205,6 +211,72 @@
           });
           $("#btnLimpiar").click(function() {
             $("#fechaLimite").val("");
+          });
+          $('#container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Turnos Por Fecha'
+            },
+            //subtitle: {
+            //    text: 'Source: WorldClimate.com'
+            //},
+            xAxis: {
+                categories: [
+                    'Total',
+                    'Resueltos',
+                    'Pendientes',
+                    'Atrasados'
+                ]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Cantidad de Turnos'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: 'Mis Turnos',
+                data: [
+                  ${turnosPorFechaBean?turnosPorFechaBean?.totalMisTurnos:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.resueltosMisTurnos:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.pendientesMisTurnos:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.atrasadosMisTurnos:0}
+                ]
+            }, 
+            {
+                name: 'Compartidos',
+                data: [
+                  ${turnosPorFechaBean?turnosPorFechaBean?.totalCompartidos:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.resueltosCompartidos:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.pendientesCompartidos:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.atrasadosCompartidos:0}
+                ]
+            },
+            {
+                name: 'Turnados',
+                data: [
+                  ${turnosPorFechaBean?turnosPorFechaBean?.totalTurnados:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.resueltosTurnados:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.pendientesTurnados:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.atrasadosTurnados:0}
+                ]
+            }]
           });
         })(jQuery);
     </script>

@@ -99,7 +99,7 @@
                         </g:link>
                       </span>
                       <span class="time" title="Fecha Límite" style="width:150px">
-                        <g:formatDate date="${tareaInstance.fechaLimite}" />
+                        <g:formatDate date="${tareaInstance?.fechaLimite}" />
                       </span>
 
                       <span class="summary" title="Título del Turno">
@@ -216,7 +216,7 @@
                         </g:link>
                       </span>
                       <span class="time" title="Fecha Límite" style="width:150px">
-                        <g:formatDate date="${tareaInstance.fechaLimite}" />
+                        <g:formatDate date="${tareaInstance?.fechaLimite}" />
                       </span>
 
                       <span class="summary" title="Título del Turno">
@@ -327,7 +327,7 @@
                         </g:link>
                       </span>
                       <span class="time" title="Fecha Límite" style="width:150px">
-                        <g:formatDate date="${tareaInstance.fechaLimite}" />
+                        <g:formatDate date="${tareaInstance?.fechaLimite}" />
                       </span>
 
                       <span class="summary" title="Título del Turno">

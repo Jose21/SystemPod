@@ -72,6 +72,21 @@
   <li class="active open">
     <a href="#" class="dropdown-toggle">
       <i class="icon-hdd"></i>
+      <span class="menu-text"> Reportes </span>
+      <b class="arrow icon-angle-down"></b>
+    </a>
+    <ul class="submenu">
+      <li>
+        <g:link controller="reporteDeTarea" action="turnosPorFecha">
+          <i class="icon-double-angle-right"></i> Turnos por Fecha
+        </g:link>
+      </li>
+    </ul>
+  </li>
+  
+  <li class="active open">
+    <a href="#" class="dropdown-toggle">
+      <i class="icon-hdd"></i>
       <span class="menu-text"> Grupos </span>
       <b class="arrow icon-angle-down"></b>
     </a>

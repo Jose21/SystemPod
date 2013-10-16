@@ -50,7 +50,7 @@
   <li>
     <g:link controller="tarea" action="hoy">
       <i class="icon-check"></i>
-      <span class="menu-text">Tareas</span>
+      <span class="menu-text">Turnos</span>
     </g:link> 
   </li>
   <!--<li>

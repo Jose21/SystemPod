@@ -188,7 +188,10 @@
     <script src="${resource(dir:'assets/js',file:'ace.min.js')}"></script>
     <script type="text/javascript">      
         (function($) { 
-          $('.date-picker').datepicker().next().on(ace.click_event, function(){
+          $('.date-picker').datepicker({
+              format: 'DD/MM/YYYY',
+              locale: 'es'
+          }).next().on(ace.click_event, function(){
             $(this).prev().focus();
           });
           $('#rangoDeFecha').daterangepicker({ 

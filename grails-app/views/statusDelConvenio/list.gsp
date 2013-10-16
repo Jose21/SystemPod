@@ -16,7 +16,7 @@
       <div class="btn-group">
         <g:link class="btn btn-small tip-bottom" action="create">
           <i class="icon-file"></i>
-          <g:message code="default.new.label" args="[entityName]" />
+          Nuevo: Status De Convenio
         </g:link>
       </div>
     </div><!--/.page-header-->
@@ -33,9 +33,9 @@
   
           <g:sortableColumn property="nombre" title="${message(code: 'statusDelConvenio.nombre.label', default: 'Nombre')}" />
         
-          <g:sortableColumn property="dateCreated" title="${message(code: 'statusDelConvenio.dateCreated.label', default: 'Date Created')}" />
+          <g:sortableColumn property="dateCreated" title="${message(code: 'statusDelConvenio.dateCreated.label', default: 'Fecha de Creación')}" />
         
-          <g:sortableColumn property="lastUpdated" title="${message(code: 'statusDelConvenio.lastUpdated.label', default: 'Last Updated')}" />
+          <g:sortableColumn property="lastUpdated" title="${message(code: 'statusDelConvenio.lastUpdated.label', default: 'Última Actualización')}" />
         
           </tr>
           </thead>

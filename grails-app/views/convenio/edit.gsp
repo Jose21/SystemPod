@@ -1,4 +1,4 @@
-<%@ page import="com.app.sgcon.Convenio" %>
+c<%@ page import="com.app.sgcon.Convenio" %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -117,6 +117,7 @@
               <g:sortableColumn property="nombre" title="${message(code: 'persona.nombre.label', default: 'Nombre')}" />        
               <g:sortableColumn property="puesto" title="${message(code: 'persona.puesto.label', default: 'Puesto')}" />        
               <g:sortableColumn property="area" title="${message(code: 'persona.area.label', default: 'Área')}" />
+              <g:sortableColumn property="institucion" title="${message(code: 'persona.institucion.label', default: 'Institución')}" />
               <th></th>
             </tr>
             </thead>
@@ -231,7 +232,7 @@
             </tbody>
           </table>
           
-          <h3 class="header smaller lighter blue">Copia Eletrónica del Convenio</h3>
+          <h3 class="header smaller lighter blue">Copia Electrónica del Convenio</h3>
       
           <table class="table table-bordered table-striped">
             <thead>
