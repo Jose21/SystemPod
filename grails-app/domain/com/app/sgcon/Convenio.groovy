@@ -41,7 +41,7 @@ class Convenio {
         status nullable:false        
         nombreDeCopiaElectronica nullable:true, maxSize:1000
         copiaElectronica nullable:true, maxSize:52428800
-        compromisos nullable:true, blank: true, maxsize:1048576
+        compromisos nullable:true, blank: true, maxSize:1048576
         
         modificaA nullable:true
         esModificadoPor nullable:true

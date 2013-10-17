@@ -151,7 +151,7 @@
           </div>
         </div><!--/#ace-settings-container-->
     </div><!--/.main-content-->
-  </div><!--/.main-container-->
+  </div><!--/.main-container-->        
         
     <!--basic scripts-->
     <!--[if !IE]>-->
@@ -184,7 +184,7 @@
 
     <!--ace scripts-->
     <script src="${resource(dir:'assets/js',file:'ace-elements.min.js')}"></script>
-    <script src="${resource(dir:'assets/js',file:'ace.min.js')}"></script>
+    <script src="${resource(dir:'assets/js',file:'ace.min.js')}"></script>    
     <script type="text/javascript">      
         (function($) { 
           $.fn.datepicker.dates['es'] = {
@@ -200,7 +200,7 @@
               language: 'es'
           }).next().on(ace.click_event, function(){
             $(this).prev().focus();
-          });
+          });          
           $('#rangoDeFecha').daterangepicker({ 
               format: 'dd/mm/yyyy',
               language: 'es'
@@ -208,17 +208,12 @@
           ).prev().on(ace.click_event, function(){
             $(this).next().focus();
           });
-          $('#timepicker1').timepicker({
-            minuteStep: 1,
-            showSeconds: true,
-            showMeridian: false
-          });          
           $("#btnIndefinida").click(function() {
             $("#vigencia").val("Indefinida");
           });
         })(jQuery);
     </script>
     <g:javascript library="application"/>
-    <r:layoutResources />    
+    <r:layoutResources />
   </body>
 </html>
