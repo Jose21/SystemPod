@@ -15,6 +15,14 @@ class DocumentoController {
         response.outputStream << archivo
     }
     
+    def deleteArchivo (Long id) {
+        def tareaId = session.tareaId
+        def documento = Documento.get(id)
+        documento.delete()
+        flash.message = "El archivo se ha eliminado satisfactoriamente."
+        redirect(controller:"tarea", action: "show", id: tareaId)
+    }
+    
     def index() {
         redirect(action: "list", params: params)
     }
@@ -72,7 +80,7 @@ class DocumentoController {
         if (version != null) {
             if (documentoInstance.version > version) {
                 documentoInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'documento.label', default: 'Documento')] as Object[],
+                    [message(code: 'documento.label', default: 'Documento')] as Object[],
                           "Another user has updated this Documento while you were editing")
                 render(view: "edit", model: [documentoInstance: documentoInstance])
                 return

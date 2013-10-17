@@ -16,7 +16,7 @@
       <h1>Reporte: Turnos Por Fecha</h1>      
     </div>
     <div class="container-fluid">
-      <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+      <div id="containerTurnosPorFecha" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     </div>    
   </body>  
 </html>

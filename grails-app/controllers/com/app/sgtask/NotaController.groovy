@@ -11,16 +11,6 @@ class NotaController {
     
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    //Mis metodos
-    def agregarDocumento () {
-        def tareaId = session.tareaId
-        redirect(controller:"tarea", action: "show", id: tareaId)
-    }
-    def eliminarDocumento () {
-        def tareaId = session.tareaId
-        redirect(controller:"tarea", action: "show", id: tareaId)
-    }
-    //Metodos por default
     def index() {
         redirect(action: "list", params: params)
     }

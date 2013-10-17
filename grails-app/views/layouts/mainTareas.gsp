@@ -212,15 +212,10 @@
           ).prev().on(ace.click_event, function(){
             $(this).next().focus();
           });
-          $('#timepicker1').timepicker({
-            minuteStep: 1,
-            showSeconds: true,
-            showMeridian: false
-          });
           $("#btnLimpiar").click(function() {
             $("#fechaLimite").val("");
           });
-          $('#container').highcharts({
+          $('#containerTurnosPorFecha').highcharts({
             chart: {
                 type: 'column'
             },
