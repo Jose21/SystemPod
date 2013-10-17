@@ -206,7 +206,7 @@
             $(this).prev().focus();
           });
           $('#rangoDeFecha').daterangepicker({ 
-              format: 'dd/mm/yyyy',
+              format: 'DD/MM/YYYY',
               language: 'es'
             }
           ).prev().on(ace.click_event, function(){
@@ -220,7 +220,7 @@
                 type: 'column'
             },
             title: {
-                text: 'Turnos Por Fecha'
+                text: '${tituloDeReporte}'
             },
             //subtitle: {
             //    text: 'Source: WorldClimate.com'

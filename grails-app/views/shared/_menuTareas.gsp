@@ -77,6 +77,11 @@
     </a>
     <ul class="submenu">
       <li>
+        <g:link controller="reporteDeTarea" action="totalDeTurnos">
+          <i class="icon-double-angle-right"></i> Total de Turnos
+        </g:link>
+      </li>
+      <li>
         <g:link controller="reporteDeTarea" action="turnosPorFecha">
           <i class="icon-double-angle-right"></i> Turnos por Fecha
         </g:link>

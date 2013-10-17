@@ -4,12 +4,35 @@ import com.pogos.TurnosPorFechaBean
 import java.text.SimpleDateFormat
 import com.app.sgtask.UsuarioDeTarea
 import com.app.sgtask.Tarea
+import com.pogos.BusquedaBean
 
 class ReporteDeTareaController {
 
     def springSecurityService
     
     def turnosPorFecha () {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
+        
+        def rangoDeFecha = null
+        def fechaInicio = null
+        def fechaFin = null
+        def busquedaBean = null
+        def tareaInstanceList = []
+        /*if (params.rangoDeFecha != "") {
+            flash.warn = null
+            rangoDeFecha = params.rangoDeFecha
+            fechaInicio = sdf.parse(rangoDeFecha.split("-")[0].trim())
+            fechaFin = sdf.parse(rangoDeFecha.split("-")[1].trim())
+            busquedaBean = new BusquedaBean()        
+            busquedaBean.fechaInicio = fechaInicio
+            busquedaBean.fechaFin = fechaFin
+            
+        } else {
+            flash.warn = "Debe elegir un rango de fechas válido."
+        }*/
+    }
+    
+    def totalDeTurnos () {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
         
         def turnosPorFechaBean = new TurnosPorFechaBean()
@@ -120,6 +143,9 @@ class ReporteDeTareaController {
         def atrasadosTurnados = atrasadosTurnadosQuery.list(sort:"id")
         turnosPorFechaBean.atrasadosTurnados = atrasadosTurnados.size()
         
-        [ turnosPorFechaBean : turnosPorFechaBean ]
+        [ 
+            tituloDeReporte : "Total de Turnos",
+            turnosPorFechaBean : turnosPorFechaBean 
+        ]
     }
 }
