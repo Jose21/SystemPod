@@ -174,7 +174,7 @@ class ConvenioController {
                 flash.error = "No se pudo agregar el firmante. Favor de reintentar."
             }
         }
-        redirect(action: "edit", id: convenioInstance.id)
+        redirect(action: "edit", id: convenioInstance.id, anchor : params.anchor)
     }
     
     def removeFirmante () {  

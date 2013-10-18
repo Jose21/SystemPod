@@ -10,7 +10,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
   <body>
     <div class="content-header">
       <div class="page-header position-relative">
-        <h1>Editar: Convenio</h1>
+        <h1 id="editarConvenio">Editar: Convenio</h1>
         <div class="btn-group">
           <a class="btn btn-small btn-success tip-bottom" href="#vincularConvenio" data-toggle="modal">
             <i class="icon-user"></i> Vincular convenio al que modifica
@@ -90,9 +90,10 @@ c<%@ page import="com.app.sgcon.Convenio" %>
           </div>
         </g:if>
         
-        <h3 class="header smaller lighter blue">Datos del Convenio</h3>								
+        <h3 id="bloqueDatosDelConvenio" class="header smaller lighter blue">Datos del Convenio</h3>								
         
         <g:form class="form-horizontal" method="post" >
+          <g:hiddenField name="anchor" value="bloqueDatosDelConvenio" />
           <g:hiddenField name="id" value="${convenioInstance?.id}" />
           <g:hiddenField name="version" value="${convenioInstance?.version}" />
           <div class="control-group fieldcontain ${hasErrors(bean: convenioInstance, field: 'id', 'error')}">
@@ -136,6 +137,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                       </div>
                       <div class="modal-body">
                         <g:form class="form-horizontal" controller="persona" method="post">
+                            <g:hiddenField name="anchor" value="bloqueFirmantes" />
                             <g:hiddenField name="convenio.id" value="${convenioInstance?.id}" />
                             <g:hiddenField name="id" value="${firmante?.id}" />
                             <g:hiddenField name="version" value="${firmante?.version}" />
@@ -153,6 +155,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                   <td>${firmante.institucion}</td>
                   <td>
                     <g:form class="form-horizontal" controller="convenio" method="post" >
+                      <g:hiddenField name="anchor" value="bloqueFirmantes" />
                       <g:hiddenField name="convenio.id" value="${convenioInstance?.id}" />
                       <g:hiddenField name="firmante.id" value="${firmante?.id}" />
                       <g:actionSubmit class="btn btn-danger btn-mini" action="removeFirmante" value="Quitar" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
@@ -163,6 +166,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
               <g:form controller="convenio" method="post">
               <tr>
                 <td colspan="5">                  
+                  <g:hiddenField name="anchor" value="bloqueFirmantes" />
                   <g:textField class="span6" name="firmante" value="" autocomplete="off"/>
                 </td>
                 <td>
@@ -201,6 +205,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                       </div>
                       <div class="modal-body">
                         <g:form class="form-horizontal" controller="persona" method="post">
+                            <g:hiddenField name="anchor" value="bloqueResponsables" />
                             <g:hiddenField name="convenio.id" value="${convenioInstance?.id}" />
                             <g:hiddenField name="id" value="${responsable?.id}" />
                             <g:hiddenField name="version" value="${responsable?.version}" />
@@ -218,6 +223,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                   <td>${responsable.institucion}</td>
                   <td>
                     <g:form class="form-horizontal" controller="convenio" method="post" >
+                      <g:hiddenField name="anchor" value="bloqueResponsables" />
                       <g:hiddenField name="convenio.id" value="${convenioInstance?.id}" />
                       <g:hiddenField name="responsable.id" value="${responsable?.id}" />
                       <g:actionSubmit class="btn btn-danger btn-mini" action="removeResponsable" value="Quitar" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
@@ -227,7 +233,8 @@ c<%@ page import="com.app.sgcon.Convenio" %>
               </g:each>
               <g:form controller="convenio" method="post">
               <tr>
-                <td colspan="5">                  
+                <td colspan="5">
+                  <g:hiddenField name="anchor" value="bloqueResponsables" />
                   <g:textField class="span6" name="responsable" value="" autocomplete="off"/>
                 </td>
                 <td>
@@ -239,7 +246,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
             </tbody>
           </table>
           
-          <h3 class="header smaller lighter blue">Copia Electrónica del Convenio</h3>
+          <h3 id="bloqueCopiaElectronica" class="header smaller lighter blue">Copia Electrónica del Convenio</h3>
       
           <table class="table table-bordered table-striped">
             <thead>
@@ -254,6 +261,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
               <tr>
                 <td>
                   <g:uploadForm class="form-horizontal" action="uploadCopiaElectronica" >
+                    <g:hiddenField name="anchor" value="bloqueCopiaElectronica" />
                     <g:hiddenField name="convenio.id" value="${convenioInstance?.id}" />                    
                     <div class="control-group">
                       <div class="controls">          
@@ -347,6 +355,9 @@ c<%@ page import="com.app.sgcon.Convenio" %>
     </div>
     <script lang="javascript" type="text/javascript">
           (function($) { 
+            $(document.body).animate({
+                'scrollTop':   $("#"+${anchor?:"editarConvenio"}).offset().top
+            }, 0);
             $('#firmante').autocomplete({
               source : function(request, response){
                 $.ajax({
