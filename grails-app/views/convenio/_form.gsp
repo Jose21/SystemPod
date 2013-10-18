@@ -6,7 +6,7 @@
     <span class="required-indicator">*</span>
   </label>
   <div class="controls">
-    <g:textField class="span5" name="numeroDeConvenio" maxlength="100" required="" value="${convenioInstance?.numeroDeConvenio}" autocomplete="off"/>
+    <g:textField class="span6" name="numeroDeConvenio" maxlength="100" required="" value="${convenioInstance?.numeroDeConvenio}" autocomplete="off"/>
   </div>
 </div>
 
@@ -16,7 +16,7 @@
     <span class="required-indicator">*</span>
   </label>
   <div class="controls">
-    <g:textArea class="span5" name="objeto" maxlength="5000" required="" value="${convenioInstance?.objeto}" autocomplete="off"/>
+    <g:textArea class="span6" name="objeto" maxlength="5000" required="" value="${convenioInstance?.objeto}" autocomplete="off"/>
   </div>
 </div>
 
@@ -26,7 +26,7 @@
     <span class="required-indicator">*</span>
   </label>
   <div class="controls">
-    <g:textArea name="compromisos" class="ckeditor" cols="50" rows="15" value="${convenioInstance?.compromisos}"/>
+    <textArea class="span6" rows="10" id="compromisos" name="compromisos" maxlength="5000">${convenioInstance?.compromisos}</textArea>
   </div>
 </div>
 
@@ -36,7 +36,7 @@
     <span class="required-indicator">*</span>
   </label>
   <div class="controls">
-    <g:textArea class="span5" name="sustentoNormativo" maxlength="5000" required="" value="${convenioInstance?.sustentoNormativo}" autocomplete="off"/>
+    <g:textArea class="span6" name="sustentoNormativo" maxlength="5000" required="" value="${convenioInstance?.sustentoNormativo}" autocomplete="off"/>
   </div>
 </div>
 
@@ -63,7 +63,7 @@
   <div class="controls">          
     <div class="row-fluid input-append">
       <input readonly="readonly" class="span10 date-picker" id="vigencia" type="text" value="${convenioInstance?.vigencia?(new SimpleDateFormat("dd/MM/yyyy")).format(convenioInstance?.vigencia):"Indefinida"}" data-date-format="dd/mm/yyyy" name="vigencia" />
-      <input class="btn btn-small" type="button" name="btnIndefinida" id="btnIndefinida" value="Indefinida"></input>
+      <input class="btn btn-small" type="button" name="btnIndefinida" id="btnIndefinida" value="Indefinida"/>
     </div>
   </div>
 </div>
@@ -84,7 +84,7 @@
     <span class="required-indicator">*</span>
   </label>
   <div class="controls">
-    <g:textArea class="span5" name="tipoDeConvenio" maxlength="5000" required="" value="${convenioInstance?.tipoDeConvenio}" autocomplete="off"/>
+    <g:textArea class="span6" name="tipoDeConvenio" maxlength="5000" required="" value="${convenioInstance?.tipoDeConvenio}" autocomplete="off"/>
   </div>
 </div>
 
@@ -94,8 +94,6 @@
     <span class="required-indicator">*</span>
   </label>
   <div class="controls">
-    <g:textArea class="span5" name="institucion" maxlength="5000" required="" value="${convenioInstance?.institucion}" autocomplete="off"/>
+    <g:textArea class="span6" name="institucion" maxlength="5000" required="" value="${convenioInstance?.institucion}" autocomplete="off"/>
   </div>
 </div>
-
-<g:javascript src="ckeditor/ckeditor.js"/>

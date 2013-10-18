@@ -222,7 +222,7 @@ class ConvenioController {
         def convenioInstance = Convenio.get(params.convenio.id as long)
         def f = request.getFile('copiaElectronica')
         if (f.getSize() == 0) {
-            flash.message = "Debe indicar la ruta de la copia electrónica."
+            flash.warn = "Debe indicar la ruta de la copia electrónica."
         } else if (f.getSize() >= 52428800) {
             flash.warn = "El archivo debe pesar menos de 50 Mb."
         } else {               

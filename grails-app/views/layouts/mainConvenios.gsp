@@ -206,14 +206,42 @@
           ).prev().on(ace.click_event, function(){
             $(this).next().focus();
           });
-          $('#timepicker1').timepicker({
-            minuteStep: 1,
-            showSeconds: true,
-            showMeridian: false
-          });         
           $("#btnIndefinida").click(function() {
             $("#vigencia").val("Indefinida");
           });
+          $('#firmante').autocomplete({
+              source : function(request, response){
+                $.ajax({
+                 url: '/<g:meta name='app.name'/>/persona/ajaxFinder', 
+                  data: request,
+                  success: function(data){
+                    response(data); 
+                  },
+                  error: function(){}
+                });
+              },
+              minLength: 3,
+              select: function(event, ui) {
+                $('#firmante').val(ui.item.nasSymbol + "-")
+              }
+            });
+
+            $('#responsable').autocomplete({
+              source : function(request, response){
+                $.ajax({
+                 url: '/<g:meta name='app.name'/>/persona/ajaxFinder', 
+                  data: request,
+                  success: function(data){
+                    response(data); 
+                  },
+                  error: function(){}
+                });
+              },
+              minLength: 3,
+              select: function(event, ui) {
+                $('#responsable').val(ui.item.nasSymbol + "-")
+              }
+            });
         })(jQuery);
     </script>
     <g:javascript library="application"/>
