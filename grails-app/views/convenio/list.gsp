@@ -182,12 +182,12 @@
                         </g:if>
                     <br>
                     <tr>
-                        <g:sortableColumn property="id" title="${message(code: 'convenio.id.label', default: 'Identificador interno')}" />
-                        <g:sortableColumn property="numeroDeConvenio" title="${message(code: 'convenio.numeroDeConvenio.label', default: 'Número de Convenio')}" />
-                        <g:sortableColumn property="objeto" title="${message(code: 'convenio.objeto.label', default: 'Objeto')}" />
-                        <g:sortableColumn property="dateCreated" title="${message(code: 'convenio.dateCreated.label', default: 'Fecha de Registro')}" />
-                        <g:sortableColumn property="responsables" title="${message(code: 'convenio.responsables.label', default: 'Responsables')}" />
-                        <g:sortableColumn property="fechaDeFirma" title="${message(code: 'convenio.fechaDeFirma.label', default: 'Fecha De Firma')}" />
+                        <th><g:message code="convenio.id.label"  default="Identificador interno" /></th>
+                        <th><g:message code="convenio.numeroDeConvenio.label" default="Número de Convenio" /></th>
+                        <th><g:message code="convenio.objeto.label" default="Objeto" /></th>
+                        <th><g:message code="convenio.dateCreated.label" default="Fecha de Registro" /></th>
+                        <th><g:message code="convenio.responsables.label" default="Responsables" /></th>
+                        <th><g:message code="convenio.fechaDeFirma.label" default="Fecha De Firma" />
                         <th><g:message code="convenio.status.label" default="Status" /></th>
                     </tr>
                     </thead>
