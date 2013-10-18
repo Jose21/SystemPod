@@ -12,7 +12,7 @@
       <div class="btn-group">
         <g:link class="btn btn-small tip-bottom" action="index">
           <i class="icon-file"></i>
-          <g:message code="default.list.label" args="[entityName]" />
+          Lista: Personas
         </g:link>
       </div>
     </div>

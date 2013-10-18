@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title><g:layoutTitle default="Grails"/></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    
     <link href="${resource(dir:'assets/css',file:'bootstrap.min.css')}" rel="stylesheet" />
     <link href="${resource(dir:'assets/css',file:'bootstrap-responsive.min.css')}" rel="stylesheet" />
     <link href="${resource(dir:'assets/css',file:'font-awesome.min.css')}" rel="stylesheet" />
@@ -29,10 +29,12 @@
     <link href="${resource(dir:'assets/css',file:'ace-skins.min.css')}" rel="stylesheet" />
     <!--[if lte IE 8]>
       <link rel="stylesheet" href="${resource(dir:'assets/css',file:'ace-ie.min.css')}" />
-    <![endif]-->            
+    <![endif]--> 
+    <r:require module="jquery"/>
+    <r:require module="jquery-ui"/>
     <script src="${resource(dir:'assets/js',file:'ace-extra.min.js')}"></script>
-    <g:layoutHead/>
     <r:layoutResources />
+    <g:layoutHead/>    
   </head>
   <body>
 
@@ -153,18 +155,7 @@
     </div><!--/.main-content-->
   </div><!--/.main-container-->
 
-  
     <!--basic scripts-->
-    <!--[if !IE]>-->
-    <script type="text/javascript">
-            window.jQuery || document.write("<script src='${resource(dir:'assets/js',file:'jquery-2.0.3.min.js')}'>"+"<"+"/script>");
-    </script>
-    <!--<![endif]-->
-    <!--[if IE]>
-      <script type="text/javascript">
-        window.jQuery || document.write("<script src='${resource(dir:'assets/js',file:'jquery-1.10.2.min.js')}'>"+"<"+"/script>");
-      </script>
-    <![endif]-->
     <script type="text/javascript">
             if("ontouchend" in document) document.write("<script src='${resource(dir:'assets/js',file:'jquery.mobile.custom.min.js')}'>"+"<"+"/script>");
     </script>
@@ -172,8 +163,7 @@
     <!--page specific plugin scripts-->
     <!--[if lte IE 8]>
       <script src="${resource(dir:'assets/js',file:'excanvas.min.js')}"></script>
-    <![endif]-->
-    <script src="${resource(dir:'assets/js',file:'jquery-ui-1.10.3.custom.min.js')}"></script>
+    <![endif]-->  
     <script src="${resource(dir:'assets/js',file:'jquery.ui.touch-punch.min.js')}"></script>
     <script src="${resource(dir:'assets/js',file:'chosen.jquery.min.js')}"></script>
     <script src="${resource(dir:'assets/js/fuelux',file:'fuelux.spinner.min.js')}"></script>

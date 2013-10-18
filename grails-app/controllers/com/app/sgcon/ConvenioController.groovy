@@ -223,8 +223,8 @@ class ConvenioController {
         def f = request.getFile('copiaElectronica')
         if (f.getSize() == 0) {
             flash.message = "Debe indicar la ruta de la copia electrónica."
-        } else if (f.getSize() >= 5242880) {
-            flash.warn = "El archivo debe pesar menos de 5 Mb."
+        } else if (f.getSize() >= 52428800) {
+            flash.warn = "El archivo debe pesar menos de 50 Mb."
         } else {               
             def filename = f.getOriginalFilename() 
             def extension = filename.substring(filename.lastIndexOf(".") + 1, filename.size()).toLowerCase()

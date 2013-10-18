@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title><g:layoutTitle default="Grails"/></title>
+    <title><g:layoutTitle default="SGCon"/></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <link href="${resource(dir:'assets/css',file:'bootstrap.min.css')}" rel="stylesheet" />
@@ -17,7 +17,7 @@
       <link rel="stylesheet" href="${resource(dir:'assets/css',file:'font-awesome-ie7.min.css')}" />
     <![endif]-->
     <!--page specific plugin styles-->
-    <link rel="stylesheet" href="${resource(dir:'assets/css',file:'jquery-ui-1.10.3.custom.min.css')}" />
+    <link rel="stylesheet" href="${resource(dir:'assets/css',file:'jquery-ui-1.10.3.full.min.css')}" />
     <link rel="stylesheet" href="${resource(dir:'assets/css',file:'chosen.css')}" />
     <link rel="stylesheet" href="${resource(dir:'assets/css',file:'datepicker.css')}" />
     <link rel="stylesheet" href="${resource(dir:'assets/css',file:'bootstrap-timepicker.css')}" />
@@ -29,10 +29,12 @@
     <link href="${resource(dir:'assets/css',file:'ace-skins.min.css')}" rel="stylesheet" />
     <!--[if lte IE 8]>
       <link rel="stylesheet" href="${resource(dir:'assets/css',file:'ace-ie.min.css')}" />
-    <![endif]-->            
+    <![endif]--> 
+    <r:require module="jquery"/>
+    <r:require module="jquery-ui"/>
     <script src="${resource(dir:'assets/js',file:'ace-extra.min.js')}"></script>
-    <g:layoutHead/>
-    <r:layoutResources />
+    <r:layoutResources />    
+    <g:layoutHead/>      
   </head>
   <body>
 
@@ -44,7 +46,7 @@
     <div class="navbar-inner">
       <div class="container-fluid">
         <a href="#" class="brand">
-          <b>SGCon -> Convenios</b>
+          <b>SGCon: Convenios</b>
         </a><!--/.brand-->
 
         <ul class="nav ace-nav pull-right">
@@ -151,19 +153,9 @@
           </div>
         </div><!--/#ace-settings-container-->
     </div><!--/.main-content-->
-  </div><!--/.main-container-->
+  </div><!--/.main-container-->        
         
     <!--basic scripts-->
-    <!--[if !IE]>-->
-    <script type="text/javascript">
-            window.jQuery || document.write("<script src='${resource(dir:'assets/js',file:'jquery-2.0.3.min.js')}'>"+"<"+"/script>");
-    </script>
-    <!--<![endif]-->
-    <!--[if IE]>
-      <script type="text/javascript">
-        window.jQuery || document.write("<script src='${resource(dir:'assets/js',file:'jquery-1.10.2.min.js')}'>"+"<"+"/script>");
-      </script>
-    <![endif]-->
     <script type="text/javascript">
             if("ontouchend" in document) document.write("<script src='${resource(dir:'assets/js',file:'jquery.mobile.custom.min.js')}'>"+"<"+"/script>");
     </script>
@@ -172,10 +164,8 @@
     <!--[if lte IE 8]>
       <script src="${resource(dir:'assets/js',file:'excanvas.min.js')}"></script>
     <![endif]-->
-    <script src="${resource(dir:'assets/js',file:'jquery-ui-1.10.3.custom.min.js')}"></script>
     <script src="${resource(dir:'assets/js',file:'jquery.ui.touch-punch.min.js')}"></script>
     <script src="${resource(dir:'assets/js/date-time',file:'bootstrap-datepicker.min.js')}"></script>
-    <script src="${resource(dir:'assets/js/date-time',file:'bootstrap-timepicker.min.js')}"></script>
     <script src="${resource(dir:'assets/js/date-time',file:'moment.min.js')}"></script>
     <script src="${resource(dir:'assets/js/date-time',file:'daterangepicker.min.js')}"></script>
     <script src="${resource(dir:'assets/js/markdown',file:'markdown.min.js')}"></script>
@@ -185,15 +175,26 @@
 
     <!--ace scripts-->
     <script src="${resource(dir:'assets/js',file:'ace-elements.min.js')}"></script>
-    <script src="${resource(dir:'assets/js',file:'ace.min.js')}"></script>
+    <script src="${resource(dir:'assets/js',file:'ace.min.js')}"></script>    
     <script type="text/javascript">      
-        (function($) { 
-          $('.date-picker').datepicker().next().on(ace.click_event, function(){
+        (function($) {                     
+          $.fn.datepicker.dates['es'] = {
+		days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"],
+		daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
+		daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa", "Do"],
+		months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+		monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+		today: "Hoy"
+          };
+          $('.date-picker').datepicker({
+              format: 'dd/mm/yyyy',
+              language: 'es'
+          }).next().on(ace.click_event, function(){
             $(this).prev().focus();
-          });
+          });          
           $('#rangoDeFecha').daterangepicker({ 
               format: 'DD/MM/YYYY',
-              locale: 'es'
+              language: 'es'
             }
           ).prev().on(ace.click_event, function(){
             $(this).next().focus();
@@ -209,13 +210,13 @@
             minuteStep: 1,
             showSeconds: true,
             showMeridian: false
-          });          
+          });         
           $("#btnIndefinida").click(function() {
             $("#vigencia").val("Indefinida");
           });
         })(jQuery);
     </script>
     <g:javascript library="application"/>
-    <r:layoutResources />    
+    <r:layoutResources />
   </body>
 </html>

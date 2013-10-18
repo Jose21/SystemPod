@@ -1,4 +1,4 @@
-<%@ page import="com.app.sgcon.Convenio" %>
+c<%@ page import="com.app.sgcon.Convenio" %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -109,14 +109,16 @@
           </div>
         </g:form>          
       
-        <h3 class="header smaller lighter blue">Firmantes</h3>       
+        <h3 id="bloqueFirmantes"  class="header smaller lighter blue">Firmantes</h3>       
         
         <table class="table table-bordered table-striped">
           <thead>
-            <tr>  
+            <tr>
+              <th>Editar</th>
               <g:sortableColumn property="nombre" title="${message(code: 'persona.nombre.label', default: 'Nombre')}" />        
               <g:sortableColumn property="puesto" title="${message(code: 'persona.puesto.label', default: 'Puesto')}" />        
               <g:sortableColumn property="area" title="${message(code: 'persona.area.label', default: 'Área')}" />
+              <g:sortableColumn property="institucion" title="${message(code: 'persona.institucion.label', default: 'Institución')}" />
               <th></th>
             </tr>
             </thead>
@@ -124,8 +126,8 @@
               <g:each in="${convenioInstance.firmantes}" status="i" var="firmante">
                 <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                   <td>
-                    <a href="#editarFirmanteModal${i}" data-toggle="modal">                      
-                      ${firmante.nombre}
+                    <a href="#editarFirmanteModal${i}" data-toggle="modal" class="btn btn-success btn-mini">
+                      <i class="icon-edit bigger-110"></i>
                     </a>
                     <div id="editarFirmanteModal${i}" class="modal hide" style="width:600px;">
                       <div class="modal-header">
@@ -145,8 +147,10 @@
                       </div>
                     </div>
                   </td>
+                  <td>${firmante.nombre}</td>
                   <td>${firmante.puesto}</td>
                   <td>${firmante.area}</td>
+                  <td>${firmante.institucion}</td>
                   <td>
                     <g:form class="form-horizontal" controller="convenio" method="post" >
                       <g:hiddenField name="convenio.id" value="${convenioInstance?.id}" />
@@ -158,7 +162,7 @@
               </g:each>
               <g:form controller="convenio" method="post">
               <tr>
-                <td colspan="3">                  
+                <td colspan="5">                  
                   <g:textField class="span6" name="firmante" value="" autocomplete="off"/>
                 </td>
                 <td>
@@ -170,14 +174,16 @@
             </tbody>
           </table>
         
-          <h3 class="header smaller lighter blue">Responsables del Seguimiento</h3>
+          <h3 id="bloqueResponsables" class="header smaller lighter blue">Responsables del Seguimiento</h3>
         
           <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>  
+                <th>Editar</th>
                 <g:sortableColumn property="nombre" title="${message(code: 'persona.nombre.label', default: 'Nombre')}" />        
                 <g:sortableColumn property="puesto" title="${message(code: 'persona.puesto.label', default: 'Puesto')}" />        
                 <g:sortableColumn property="area" title="${message(code: 'persona.area.label', default: 'Área')}" />
+                <g:sortableColumn property="institucion" title="${message(code: 'persona.institucion.label', default: 'Institución')}" />
                 <th></th>
               </tr>
             </thead>
@@ -185,8 +191,8 @@
               <g:each in="${convenioInstance.responsables}" status="i" var="responsable">
                 <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                   <td>
-                    <a href="#editarResponsableModal${i}" data-toggle="modal">                      
-                      ${responsable.nombre}
+                    <a href="#editarResponsableModal${i}"  data-toggle="modal" class="btn btn-success btn-mini">
+                      <i class="icon-edit bigger-110"></i>
                     </a>
                     <div id="editarResponsableModal${i}" class="modal hide" style="width:600px;">
                       <div class="modal-header">
@@ -206,8 +212,10 @@
                       </div>
                     </div>
                   </td>
+                  <td>${responsable.nombre}</td>
                   <td>${responsable.puesto}</td>
                   <td>${responsable.area}</td>
+                  <td>${responsable.institucion}</td>
                   <td>
                     <g:form class="form-horizontal" controller="convenio" method="post" >
                       <g:hiddenField name="convenio.id" value="${convenioInstance?.id}" />
@@ -219,7 +227,7 @@
               </g:each>
               <g:form controller="convenio" method="post">
               <tr>
-                <td colspan="3">                  
+                <td colspan="5">                  
                   <g:textField class="span6" name="responsable" value="" autocomplete="off"/>
                 </td>
                 <td>
@@ -231,7 +239,7 @@
             </tbody>
           </table>
           
-          <h3 class="header smaller lighter blue">Copia Eletrónica del Convenio</h3>
+          <h3 class="header smaller lighter blue">Copia Electrónica del Convenio</h3>
       
           <table class="table table-bordered table-striped">
             <thead>
@@ -375,9 +383,6 @@
               }
             });
           })(jQuery);
-          /*CKEDITOR.replace( 'compromisos', {
-            enterMode : CKEDITOR.ENTER_BR
-          });*/
     </script>
   </body>
 </html>

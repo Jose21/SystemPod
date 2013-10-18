@@ -150,10 +150,10 @@
                         <%=nota.descripcion%>
                         <g:if test="${nota.documentos}">
                         -- Archivos adjuntos<br/>
-                          <g:each in="${nota.documentos}" var="documento">
+                          <g:each in="${nota.documentos}" var="documento">                            
                             <g:link controller="documento" action="downloadArchivo" id ="${documento.id}">
                               ${documento.nombre} 
-                            </g:link>
+                            </g:link><br/>
                           </g:each>
                         </g:if>                                                
                       </div>

@@ -28,6 +28,16 @@
   </div>
 </div>
 
+<div class="control-group fieldcontain ${hasErrors(bean: it, field: 'institucion', 'error')} ">
+	<label for="institucion" class="control-label">
+		<g:message code="persona.institucion.label" default="Institución" />
+		
+	</label>
+        <div class="controls">
+          <g:textField name="institucion" value="${it?.institucion}"/>
+        </div>
+</div>
+
 <div class="control-group fieldcontain ${hasErrors(bean: it, field: 'email', 'error')} ">
   <label for="email" class="control-label">
     <g:message code="persona.email.label" default="Email" />

@@ -29,10 +29,12 @@
     <link href="${resource(dir:'assets/css',file:'ace-skins.min.css')}" rel="stylesheet" />
     <!--[if lte IE 8]>
       <link rel="stylesheet" href="${resource(dir:'assets/css',file:'ace-ie.min.css')}" />
-    <![endif]-->            
-    <script src="${resource(dir:'assets/js',file:'ace-extra.min.js')}"></script>
-    <g:layoutHead/>
+    <![endif]-->       
+    <r:require module="jquery"/>
+    <r:require module="jquery-ui"/>
+    <script src="${resource(dir:'assets/js',file:'ace-extra.min.js')}"></script>    
     <r:layoutResources />
+    <g:layoutHead/>
   </head>
   <body>
 
@@ -44,7 +46,7 @@
     <div class="navbar-inner">
       <div class="container-fluid">
         <a href="#" class="brand">
-          <b>SGCon -> Turnos</b>
+          <b>SGCon: Turnos</b>
         </a><!--/.brand-->
 
         <ul class="nav ace-nav pull-right">
@@ -153,17 +155,7 @@
     </div><!--/.main-content-->
   </div><!--/.main-container-->
         
-    <!--basic scripts-->
-    <!--[if !IE]>-->
-    <script type="text/javascript">
-            window.jQuery || document.write("<script src='${resource(dir:'assets/js',file:'jquery-2.0.3.min.js')}'>"+"<"+"/script>");
-    </script>
-    <!--<![endif]-->
-    <!--[if IE]>
-      <script type="text/javascript">
-        window.jQuery || document.write("<script src='${resource(dir:'assets/js',file:'jquery-1.10.2.min.js')}'>"+"<"+"/script>");
-      </script>
-    <![endif]-->
+    <!--basic scripts-->    
     <script type="text/javascript">
             if("ontouchend" in document) document.write("<script src='${resource(dir:'assets/js',file:'jquery.mobile.custom.min.js')}'>"+"<"+"/script>");
     </script>
@@ -172,10 +164,9 @@
     <!--[if lte IE 8]>
       <script src="${resource(dir:'assets/js',file:'excanvas.min.js')}"></script>
     <![endif]-->
-    <script src="${resource(dir:'assets/js',file:'jquery-ui-1.10.3.custom.min.js')}"></script>
+    
     <script src="${resource(dir:'assets/js',file:'jquery.ui.touch-punch.min.js')}"></script>
     <script src="${resource(dir:'assets/js/date-time',file:'bootstrap-datepicker.min.js')}"></script>
-    <script src="${resource(dir:'assets/js/date-time',file:'bootstrap-timepicker.min.js')}"></script>
     <script src="${resource(dir:'assets/js/date-time',file:'moment.min.js')}"></script>
     <script src="${resource(dir:'assets/js/date-time',file:'daterangepicker.min.js')}"></script>
     <script src="${resource(dir:'assets/js/markdown',file:'markdown.min.js')}"></script>
@@ -183,30 +174,106 @@
     <script src="${resource(dir:'assets/js',file:'jquery.hotkeys.min.js')}"></script>    
     <script src="${resource(dir:'assets/js',file:'bootbox.min.js')}"></script>
 
+    <script src="${resource(dir:'js',file:'highcharts.js')}"></script>
+    <script src="${resource(dir:'js/modules',file:'exporting.js')}"></script>
+  
     <!--ace scripts-->
     <script src="${resource(dir:'assets/js',file:'ace-elements.min.js')}"></script>
     <script src="${resource(dir:'assets/js',file:'ace.min.js')}"></script>
     <script type="text/javascript">      
-        (function($) { 
-          $('.date-picker').datepicker().next().on(ace.click_event, function(){
+        (function($) {
+          $.fn.datepicker.dates['es'] = {
+		days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"],
+		daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
+		daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa", "Do"],
+		months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+		monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+		today: "Hoy"
+          };
+          $('.date-picker').datepicker({
+              format: 'dd/mm/yyyy',
+              language: 'es'
+          }).next().on(ace.click_event, function(){
             $(this).prev().focus();
           });
           $('#rangoDeFecha').daterangepicker({ 
               format: 'DD/MM/YYYY',
-              locale: 'es'
+              language: 'es'
             }
           ).prev().on(ace.click_event, function(){
             $(this).next().focus();
           });
-          $('#timepicker1').timepicker({
-            minuteStep: 1,
-            showSeconds: true,
-            showMeridian: false
-          });
           $("#btnLimpiar").click(function() {
             $("#fechaLimite").val("");
           });
-        })(jQuery);
+          
+          $('#containerTotalDeTurnos').highcharts({
+            chart: { type: 'column' },
+            title: { text: 'Total de Turnos' },
+            xAxis: { categories: [ 'Total', 'Resueltos', 'Pendientes', 'Atrasados'] },
+            yAxis: { min: 0, title: { text: 'Cantidad de Turnos' } },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: { column: { pointPadding: 0.2, borderWidth: 0 } },
+            series: [{
+                name: 'Mis Turnos',
+                data: [ ${turnosPorFechaBean?turnosPorFechaBean?.totalMisTurnos:0}, ${turnosPorFechaBean?turnosPorFechaBean?.resueltosMisTurnos:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.pendientesMisTurnos:0}, ${turnosPorFechaBean?turnosPorFechaBean?.atrasadosMisTurnos:0}
+                ]
+            }, {
+                name: 'Compartidos',
+                data: [ ${turnosPorFechaBean?turnosPorFechaBean?.totalCompartidos:0}, ${turnosPorFechaBean?turnosPorFechaBean?.resueltosCompartidos:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.pendientesCompartidos:0}, ${turnosPorFechaBean?turnosPorFechaBean?.atrasadosCompartidos:0}
+                ]
+            }, {
+                name: 'Turnados',
+                data: [ ${turnosPorFechaBean?turnosPorFechaBean?.totalTurnados:0}, ${turnosPorFechaBean?turnosPorFechaBean?.resueltosTurnados:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.pendientesTurnados:0}, ${turnosPorFechaBean?turnosPorFechaBean?.atrasadosTurnados:0}
+                ]
+            }]
+          });
+          
+          $('#containerTurnosPorFecha').highcharts({
+            chart: { type: 'column' },
+            title: { text: 'Turnos Por Rango de Fecha' },
+            subtitle: {
+                text: 'De: Hasta:'
+            },
+            xAxis: { categories: [ 'Total', 'Resueltos', 'Pendientes', 'Atrasados'] },
+            yAxis: { min: 0, title: { text: 'Cantidad de Turnos' } },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: { column: { pointPadding: 0.2, borderWidth: 0 } },
+            series: [{
+                name: 'Mis Turnos',
+                data: [ ${turnosPorFechaBean?turnosPorFechaBean?.totalMisTurnos:0}, ${turnosPorFechaBean?turnosPorFechaBean?.resueltosMisTurnos:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.pendientesMisTurnos:0}, ${turnosPorFechaBean?turnosPorFechaBean?.atrasadosMisTurnos:0}
+                ]
+            }, {
+                name: 'Compartidos',
+                data: [ ${turnosPorFechaBean?turnosPorFechaBean?.totalCompartidos:0}, ${turnosPorFechaBean?turnosPorFechaBean?.resueltosCompartidos:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.pendientesCompartidos:0}, ${turnosPorFechaBean?turnosPorFechaBean?.atrasadosCompartidos:0}
+                ]
+            }, {
+                name: 'Turnados',
+                data: [ ${turnosPorFechaBean?turnosPorFechaBean?.totalTurnados:0}, ${turnosPorFechaBean?turnosPorFechaBean?.resueltosTurnados:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.pendientesTurnados:0}, ${turnosPorFechaBean?turnosPorFechaBean?.atrasadosTurnados:0}
+                ]
+            }]
+          });
+        })(jQuery);        
     </script>
     <g:javascript library="application"/>
     <r:layoutResources />    

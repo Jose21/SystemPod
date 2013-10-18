@@ -25,17 +25,16 @@
 <div class="control-group fieldcontain ${hasErrors(bean: notaInstance, field: 'documentos', 'error')} ">
   <label for="documentos" class="control-label">
     <g:message code="nota.documentos.label" default="Documentos" />
-
   </label>
   <div class="controls">
-    <ul class="one-to-many">
-      <g:each in="${notaInstance?.documentos?}" var="d">
-        <li><g:link controller="documento" action="downloadArchivo" id="${d.id}">${d?.encodeAsHTML()}</g:link></li>
-      </g:each>
-      <li class="add">
-          <input type="file" id="archivo" name="archivo" />        
-      </li>
-    </ul>
+    <g:each in="${notaInstance?.documentos?}" var="d">
+      <g:link controller="documento" action="deleteArchivo" id ="${d.id}">
+        <i class="icon-remove red"></i>
+      </g:link>                      -
+      <g:link controller="documento" action="downloadArchivo" id="${d.id}">${d?.encodeAsHTML()}</g:link>
+      <br/>
+    </g:each>
+    <input type="file" id="archivo" name="archivo" />
   </div>
 </div>
 

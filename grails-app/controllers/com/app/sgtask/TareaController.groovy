@@ -20,7 +20,7 @@ class TareaController {
 
     def index() {
         redirect(action: "list", params: params)
-    }       
+    }
     
     def hoy() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
@@ -28,31 +28,33 @@ class TareaController {
         session.opt = params.action
         
         //Mis turnos
-        def taskListQuery = Tarea.where {            
-            sdf.format(fechaLimite) == sdf.format(new Date()) &&
-            cerrada == false &&
-            responsable.id == springSecurityService.currentUser.id
-        }
-        def taskList = taskListQuery.list(sort:"id")
+        def taskList1 = Tarea.findAllByCerradaAndResponsableAndFechaLimite(false, springSecurityService.currentUser, sdf.parse(sdf.format(new Date())))
+        def taskList2 = Tarea.findAllByCerradaAndResponsableAndFechaLimiteIsNull(false, springSecurityService.currentUser)
+        def taskList = taskList1 + taskList2
         
         //Compartidos
-        def usuariosDeTarea = UsuarioDeTarea.findAllByUsuarioAndOwner(springSecurityService.currentUser, false)
-        def sharedTaskList = usuariosDeTarea*.tarea        
-        sharedTaskList = sharedTaskList.findAll {
-            sdf.format(it.fechaLimite) == sdf.format(new Date()) &&
-            it.cerrada == false &&
-            it.responsable.id != springSecurityService.currentUser.id &&
-            it.creadaPor.id != springSecurityService.currentUser.id
-        }
+        def c = Tarea.createCriteria()
+        def sharedTaskList = c.list {
+            eq ("cerrada", false)
+            ne ("responsable", springSecurityService.currentUser)
+            ne ("creadaPor", springSecurityService.currentUser)
+            or {
+                eq ("fechaLimite", sdf.parse(sdf.format(new Date())))
+                isNull ("fechaLimite")
+            }
+            usuariosDeTarea {
+                eq ("usuario", springSecurityService.currentUser)
+                eq ("owner", false)
+            }
+        }        
         
         //Turnados
-        def turnadosQuery = Tarea.where {
-            cerrada == false &&            
-            sdf.format(fechaLimite) == sdf.format(new Date()) &&
-            creadaPor.id == springSecurityService.currentUser.id &&
-            responsable.id != springSecurityService.currentUser.id
-        }
-        def turnados = turnadosQuery.list(sort:"id")  
+        def turnados = Tarea.findAllByFechaLimiteOrFechaLimiteIsNull(sdf.parse(sdf.format(new Date())))
+        turnados = turnados.findAll {
+            it.cerrada == false &&
+            it.creadaPor == springSecurityService.currentUser &&
+            it.responsable != springSecurityService.currentUser
+        }       
         
         render (
             view: "list", 
@@ -252,7 +254,7 @@ class TareaController {
         }
             
         historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "creó un turno")        
-        flash.message = message(code: 'default.created.message', args: [message(code: 'tarea.label', default: 'Tarea'), tareaInstance.id])
+        flash.message = message(code: 'default.created.message', args: [message(code: 'tarea.label', default: 'Turno'), tareaInstance.id])
         redirect(action: "show", id: tareaInstance.id)
     }
 
@@ -264,7 +266,7 @@ class TareaController {
         }
         def tareaInstance = Tarea.get(id)
         if (!tareaInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tarea.label', default: 'Tarea'), id])
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tarea.label', default: 'Turno'), id])
             redirect(action: "list")
             return
         }
@@ -277,7 +279,7 @@ class TareaController {
     def edit(Long id) {
         def tareaInstance = Tarea.get(id)
         if (!tareaInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tarea.label', default: 'Tarea'), id])
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tarea.label', default: 'Turno'), id])
             redirect(action: "list")
             return
         }
@@ -290,7 +292,7 @@ class TareaController {
         def tareaInstance = Tarea.get(id)
                
         if (!tareaInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tarea.label', default: 'Tarea'), id])
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tarea.label', default: 'Turno'), id])
             redirect(action: "list")
             return
         }
@@ -298,45 +300,43 @@ class TareaController {
         if (version != null) {
             if (tareaInstance.version > version) {
                 tareaInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                    [message(code: 'tarea.label', default: 'Tarea')] as Object[],
+                    [message(code: 'tarea.label', default: 'Turno')] as Object[],
                           "Another user has updated this Tarea while you were editing")
                 render(view: "edit", model: [tareaInstance: tareaInstance])
                 return
             }
         }
-        
-        
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
         params.fechaLimite = params.fechaLimite!=""?sdf.parse(params.fechaLimite):null
         tareaInstance.properties = params
-        
+
         if (!tareaInstance.save(flush: true)) {
             render(view: "edit", model: [tareaInstance: tareaInstance])
             return
         }
-        
+
         notificacionesService.tareaAsignada(tareaInstance, tareaInstance.creadaPor)    
         historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "editó un turno")
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'tarea.label', default: 'Tarea'), tareaInstance.id])
+        flash.message = message(code: 'default.updated.message', args: [message(code: 'tarea.label', default: 'Turno'), tareaInstance.id])
         redirect(action: "show", id: tareaInstance.id)
     }
 
     def delete(Long id) {
         def tareaInstance = Tarea.get(id)
         if (!tareaInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tarea.label', default: 'Tarea'), id])
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tarea.label', default: 'Turno'), id])
             redirect(action: "list")
             return
         }
 
         try {
             tareaInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'tarea.label', default: 'Tarea'), id])
+            flash.message = message(code: 'default.deleted.message', args: [message(code: 'tarea.label', default: 'Turno'), id])
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'tarea.label', default: 'Tarea'), id])
+            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'tarea.label', default: 'Turno'), id])
             redirect(action: "show", id: id)
         }
     }
@@ -397,5 +397,5 @@ class TareaController {
             flash.message = "No se pudo cerrar la tarea. Intente nuevamente."
         }
         redirect (action:"show", id:tareaInstance.id)
-    }
+    }    
 }

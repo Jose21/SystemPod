@@ -5,6 +5,7 @@ class Persona {
     String nombre
     String puesto
     String area
+    String institucion
     String email
     String telefono
     String extension
@@ -15,6 +16,7 @@ class Persona {
         nombre blank:false
         puesto nullable:true, blank:true
         area nullable:true, blank:true
+        institucion nullable:true, blank:true
         email nullable:true, email:true, blank:true
         telefono nullable:true, blank:true
         extension nullable:true, blank:true
