@@ -82,8 +82,8 @@ class ConvenioController {
             redirect(action: "list")
             return
         }
-
-        [convenioInstance: convenioInstance]
+        println "Edit: anchor->"+params.anchor
+        [convenioInstance: convenioInstance, anchor : params.anchor?:""]
     }
 
     def update(Long id, Long version) {
@@ -128,7 +128,7 @@ class ConvenioController {
         }
 
         flash.message = message(code: 'default.updated.message', args: [message(code: 'convenio.label', default: 'Convenio'), convenioInstance.id])
-        redirect(action: "edit", id: convenioInstance.id)
+        redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
     }
 
     def delete(Long id) {
@@ -173,7 +173,7 @@ class ConvenioController {
                 flash.error = "No se pudo agregar el firmante. Favor de reintentar."
             }
         }
-        redirect(action: "edit", id: convenioInstance.id, anchor : params.anchor)
+        redirect(action: "edit", id: convenioInstance.id, params : [anchor : params.anchor])
     }
     
     def removeFirmante () {  
@@ -181,7 +181,7 @@ class ConvenioController {
         def personaInstance = Persona.get(params.firmante.id as long)
         convenioInstance.removeFromFirmantes(personaInstance)
         flash.message = "El firmante ha sido eliminado."        
-        redirect(action: "edit", id: convenioInstance.id)
+        redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
     }
     
     def addResponsable () {
@@ -207,7 +207,7 @@ class ConvenioController {
                 flash.message = "No se pudo agregar el responsable. Favor de reintentar."
             }
         }
-        redirect(action: "edit", id: convenioInstance.id)
+        redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
     }
     
     def removeResponsable () {  
@@ -215,7 +215,7 @@ class ConvenioController {
         def personaInstance = Persona.get(params.responsable.id as long)
         convenioInstance.removeFromResponsables(personaInstance)
         flash.message = "El responsable ha sido eliminado."        
-        redirect(action: "edit", id: convenioInstance.id)
+        redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
     }
     
     def uploadCopiaElectronica () {
@@ -242,7 +242,7 @@ class ConvenioController {
             }
             
         }
-        redirect(action: "edit", id: convenioInstance.id)
+        redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
     }
     
     def downloadCopiaEletronica () {
@@ -298,6 +298,7 @@ class ConvenioController {
             ]
         )
     }
+    
     def buscarPorFolio (){        
         def porFolioActive = null
         if (params.inActive=="porFolio") {
@@ -324,6 +325,7 @@ class ConvenioController {
             ]
         )  
     }
+    
     def buscarPorNombreResponsables (){
         def nombreResponsablesActive = null
         if (params.inActive=="nombreResponsables") {
@@ -345,6 +347,7 @@ class ConvenioController {
             ]
         )       
     } 
+    
     def buscarPorCategoria (){
         def porCategoriaActive = null
         if (params.inActive=="porCategoria") {
@@ -366,6 +369,7 @@ class ConvenioController {
             ]
         )       
     }
+    
     def buscarPorFechaRegistro () {
         def porFechaRegistroActive = null
         if (params.inActive=="porFechaRegistro") {

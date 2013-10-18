@@ -26,7 +26,7 @@
     <span class="required-indicator">*</span>
   </label>
   <div class="controls">
-    <textArea class="span6" rows="10" id="compromisos" name="compromisos" maxlength="5000">${convenioInstance?.compromisos}</textArea>
+    <textArea class="span6" rows="6" id="compromisos" name="compromisos" maxlength="5000">${convenioInstance?.compromisos}</textArea>
   </div>
 </div>
 

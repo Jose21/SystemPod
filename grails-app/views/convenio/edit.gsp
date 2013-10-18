@@ -394,7 +394,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                 $('#responsable').val(ui.item.nasSymbol + "-")
               }
             });
-            $(document).scrollTop( $("#${archor?:""}").offset().top );
+            $(document).scrollTop( $("#${anchor?:""}").offset().top );
         })(jQuery);
     </script>
   </body>  
