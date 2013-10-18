@@ -25,7 +25,7 @@ class BootStrap {
                 new Usuario (
                     firstName : "Test",
                     lastName : "Uno",
-                    email : "tomas.moreno@siis.ws",
+                    email : "kokoro.miramar@gmail.com",
                     username : "test1",
                     password : "test1",
                     enabled : true,

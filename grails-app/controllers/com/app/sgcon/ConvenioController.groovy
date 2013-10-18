@@ -17,10 +17,9 @@ class ConvenioController {
         redirect(action: "list", params: params)
     }
 
-    def list(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        def convenios = UsuarioDeConvenio.findByUsuarioAndOwner(springSecurityService.currentUser, true, params)
-        [convenioInstanceList: Convenio.list(params), convenioInstanceTotal: Convenio.count()]
+    def list() {
+         [porFolioActive:"active"]
+          
     }
 
     def create() {
@@ -266,9 +265,11 @@ class ConvenioController {
     }
     
     def buscarConvenios () {
-        
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
-        
+        def rangoDeFechaActive = null
+        if (params.inActive=="rangoDeFecha") {
+            rangoDeFechaActive = "active"
+        }        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")       
         def rangoDeFecha = null
         def fechaInicio = null
         def fechaFin = null
@@ -292,10 +293,115 @@ class ConvenioController {
                 convenioInstanceList: convenioInstanceList, 
                 convenioInstanceTotal: convenioInstanceList.size(),
                 busquedaBean : busquedaBean,
-                rangoDeFecha : params.rangoDeFecha
+                rangoDeFecha : params.rangoDeFecha,
+                rangoDeFechaActive : rangoDeFechaActive
             ]
         )
-    }     
+    }
+    def buscarPorFolio (){
+        def porFolioActive = null
+        if (params.inActive=="porFolio") {
+            porFolioActive = "active"
+        }        
+        def numeroDeConvenio = null
+        def convenioInstanceList = null
+        if (params.numeroDeConvenio != "") {
+            flash.warn = null
+            numeroDeConvenio = params.numeroDeConvenio
+            convenioInstanceList = Convenio.findAllByNumeroDeConvenioIlike("%"+params.numeroDeConvenio+"%")
+            
+        } else {
+            flash.warn = "Debe elegir un rango de fechas válido."
+        }
+        render(
+            view: "list", 
+            model: [
+                convenioInstanceList: convenioInstanceList,
+                convenioInstanceTotal: convenioInstanceList.size(),
+                numeroDeConvenio: params.numeroDeConvenio,
+                porFolioActive : porFolioActive
+                
+            ]
+        )  
+    }
+    def buscarPorNombreResponsables (){
+        def nombreResponsablesActive = null
+        if (params.inActive=="nombreResponsables") {
+            nombreResponsablesActive = "active"
+        }        
+        def c = Convenio.createCriteria()
+        def convenioInstanceList = c.list {
+            responsables {
+                like("nombre", "%"+params.nombre+"%")
+            }
+            maxResults(10)
+            order("id", "asc")
+        }       
+        render(
+            view: "list", 
+            model: [
+                convenioInstanceList: convenioInstanceList,
+                convenioInstanceTotal: convenioInstanceList.size(),
+                nombreResponsablesActive : nombreResponsablesActive       
+            ]
+        )       
+    } 
+    def buscarPorCategoria (){
+        def porCategoriaActive = null
+        if (params.inActive=="porCategoria") {
+            porCategoriaActive = "active"
+        }        
+        def c = Convenio.createCriteria()
+        def convenioInstanceList = c.list {
+            status {
+                like("nombre", "%"+params.nombre+"%")
+            }
+            maxResults(10)
+            order("id", "asc")
+        }       
+        render(
+            view: "list", 
+            model: [
+                convenioInstanceList: convenioInstanceList,
+                convenioInstanceTotal: convenioInstanceList.size(),
+                porCategoriaActive : porCategoriaActive       
+            ]
+        )       
+    }
+    def buscarPorFechaRegistro () {
+        def porFechaRegistroActive = null
+        if (params.inActive=="porFechaRegistro") {
+            porFechaRegistroActive = "active"
+        }        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")       
+        def rangoDeFechaRegistro = null
+        def fechaInicio = null
+        def fechaFin = null
+        def busquedaBean = null
+        def convenioInstanceList = []
+        if (params.rangoDeFechaRegistro != "") {
+            flash.warn = null
+            rangoDeFechaRegistro = params.rangoDeFechaRegistro
+            fechaInicio = sdf.parse(rangoDeFechaRegistro.split("-")[0].trim())
+            fechaFin = sdf.parse(rangoDeFechaRegistro.split("-")[1].trim())
+            busquedaBean = new BusquedaBean()        
+            busquedaBean.fechaInicio = fechaInicio
+            busquedaBean.fechaFin = fechaFin
+            convenioInstanceList = Convenio.findAllByDateCreatedBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin)
+        } else {
+            flash.warn = "Debe elegir un rango de fechas válido."
+        }
+        render(
+            view: "list", 
+            model: [
+                convenioInstanceList: convenioInstanceList, 
+                convenioInstanceTotal: convenioInstanceList.size(),
+                busquedaBean : busquedaBean,
+                rangoDeFechaRegistro : params.rangoDeFechaRegistro,
+                porFechaRegistroActive : porFechaRegistroActive
+            ]
+        )
+    }    
     
     def linkToConvenioQueModifica () {
         def convenioInstance = Convenio.get(params.convenio.id as long)
