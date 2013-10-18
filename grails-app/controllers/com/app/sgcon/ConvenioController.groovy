@@ -334,7 +334,6 @@ class ConvenioController {
             responsables {
                 like("nombre", "%"+params.nombre+"%")
             }
-            maxResults(10)
             order("id", "asc")
         }       
         render(
@@ -356,7 +355,6 @@ class ConvenioController {
             status {
                 like("nombre", "%"+params.nombre+"%")
             }
-            maxResults(10)
             order("id", "asc")
         }       
         render(
