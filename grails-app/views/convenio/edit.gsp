@@ -1,11 +1,11 @@
 c<%@ page import="com.app.sgcon.Convenio" %>
 <!DOCTYPE html>
 <html>
-  <head>
+  <head>      
     <meta name="layout" content="mainConvenios">
     <g:set var="entityName" value="${message(code: 'convenio.label', default: 'Convenio')}" />
     <title><g:message code="default.edit.label" args="[entityName]" /></title>
-    <calendar:resources lang="es" theme="aqua"/>
+    <calendar:resources lang="es" theme="aqua"/>    
   </head>
   <body>
     <div class="content-header">
@@ -115,10 +115,15 @@ c<%@ page import="com.app.sgcon.Convenio" %>
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
-              <g:sortableColumn property="nombre" title="${message(code: 'persona.nombre.label', default: 'Nombre')}" />        
-              <g:sortableColumn property="puesto" title="${message(code: 'persona.puesto.label', default: 'Puesto')}" />        
-              <g:sortableColumn property="area" title="${message(code: 'persona.area.label', default: 'Área')}" />
-              <g:sortableColumn property="institucion" title="${message(code: 'persona.institucion.label', default: 'Institución')}" />
+              <g:if test="${convenioInstance.firmantes}">
+                <th>Nombre</th>
+                <th>Puesto</th>
+                <th>Área</th>
+                <th>Institución</th>
+              </g:if>
+              <g:else>
+                  <th colspan="4">Nombre</th>
+              </g:else>
               <th></th>
             </tr>
             </thead>
@@ -181,10 +186,15 @@ c<%@ page import="com.app.sgcon.Convenio" %>
           <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>  
-                <g:sortableColumn property="nombre" title="${message(code: 'persona.nombre.label', default: 'Nombre')}" />        
-                <g:sortableColumn property="puesto" title="${message(code: 'persona.puesto.label', default: 'Puesto')}" />        
-                <g:sortableColumn property="area" title="${message(code: 'persona.area.label', default: 'Área')}" />
-                <g:sortableColumn property="institucion" title="${message(code: 'persona.institucion.label', default: 'Institución')}" />
+                <g:if test="${convenioInstance.responsables}">
+                    <th>Nombre</th>
+                    <th>Puesto</th>
+                    <th>Área</th>
+                    <th>Institución</th>
+                </g:if>
+                <g:else>
+                    <th colspan="4">Nombre</th>
+                </g:else>
                 <th></th>
               </tr>
             </thead>
@@ -349,13 +359,43 @@ c<%@ page import="com.app.sgcon.Convenio" %>
             </g:if>
           </div>
         </div>
-    </div>
+    </div>    
     <script lang="javascript" type="text/javascript">
         (function($) {
-            $(document.body).animate({
-                'scrollTop':   $("#"+${anchor?:"editarConvenio"}).offset().top
-            }, 0);            
-          })(jQuery);
+            $('#firmante').autocomplete({
+              source : function(request, response){
+                $.ajax({
+                 url: '/<g:meta name='app.name'/>/persona/ajaxFinder', 
+                  data: request,
+                  success: function(data){
+                    response(data); 
+                  },
+                  error: function(){}
+                });
+              },
+              minLength: 3,
+              select: function(event, ui) {
+                $('#firmante').val(ui.item.nasSymbol + "-")
+              }
+            });
+            $('#responsable').autocomplete({
+              source : function(request, response){
+                $.ajax({
+                 url: '/<g:meta name='app.name'/>/persona/ajaxFinder', 
+                  data: request,
+                  success: function(data){
+                    response(data); 
+                  },
+                  error: function(){}
+                });
+              },
+              minLength: 3,
+              select: function(event, ui) {
+                $('#responsable').val(ui.item.nasSymbol + "-")
+              }
+            });
+            $(document).scrollTop( $("#${archor?:""}").offset().top );
+        })(jQuery);
     </script>
-  </body>
+  </body>  
 </html>
