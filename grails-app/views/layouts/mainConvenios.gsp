@@ -199,6 +199,18 @@
           ).prev().on(ace.click_event, function(){
             $(this).next().focus();
           });
+          $('#rangoDeFechaRegistro').daterangepicker({ 
+              format: 'DD/MM/YYYY',
+              locale: 'es'
+            }
+          ).prev().on(ace.click_event, function(){
+            $(this).next().focus();
+          });
+          $('#timepicker1').timepicker({
+            minuteStep: 1,
+            showSeconds: true,
+            showMeridian: false
+          });         
           $("#btnIndefinida").click(function() {
             $("#vigencia").val("Indefinida");
           });
