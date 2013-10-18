@@ -124,7 +124,7 @@
                                         <i class="icon-calendar"></i>
                                     </span>
                                     <input class="span5" type="text" name="rangoDeFecha" id="rangoDeFecha" value="${rangoDeFecha?rangoDeFecha:""}" readonly="true" />
-                                    <g:actionSubmit class="btn btn-primary" action="buscarConvenios" value="Buscar" />
+                                    <g:actionSubmit class="btn btn-primary" action="rangoDeFecha" value="Buscar" />
                                 </div>
                             </div>
                         </g:form>         
@@ -212,13 +212,7 @@
                 </table>
                 <div class="message-footer clearfix">
                     <div class="pull-left"> ${convenioInstanceTotal?:0} resultado(s) en total. </div>
-                    <div class="pull-right">
-                        <div class="pagination">
-                            <g:paginate total="${convenioInstanceTotal?:0}" />
-                        </div>
-                    </div>
                 </div> 
-            
         </div>
     </body>      
 </html>

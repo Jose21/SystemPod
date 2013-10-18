@@ -19,7 +19,7 @@ class ConvenioController {
 
     def list() {
          [porFolioActive:"active"]
-          
+         
     }
 
     def create() {
@@ -264,7 +264,7 @@ class ConvenioController {
         extensiones
     }
     
-    def buscarConvenios () {
+    def rangoDeFecha () {
         def rangoDeFechaActive = null
         if (params.inActive=="rangoDeFecha") {
             rangoDeFechaActive = "active"
@@ -274,7 +274,7 @@ class ConvenioController {
         def fechaInicio = null
         def fechaFin = null
         def busquedaBean = null
-        def convenioInstanceList = []
+        def convenioInstanceList = []        
         if (params.rangoDeFecha != "") {
             flash.warn = null
             rangoDeFecha = params.rangoDeFecha
@@ -298,7 +298,7 @@ class ConvenioController {
             ]
         )
     }
-    def buscarPorFolio (){
+    def buscarPorFolio (){        
         def porFolioActive = null
         if (params.inActive=="porFolio") {
             porFolioActive = "active"
