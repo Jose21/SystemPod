@@ -10,26 +10,32 @@ class ReporteDeTareaController {
 
     def springSecurityService
     
+    def turnosPorFechaInit () {
+        render (view:"turnosPorFecha")
+    }
+    
     def turnosPorFecha () {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
         
+        def turnosPorFechaBean = new TurnosPorFechaBean()
         def rangoDeFecha = null
         def fechaInicio = null
         def fechaFin = null
         def busquedaBean = null
         def tareaInstanceList = []
-        /*if (params.rangoDeFecha != "") {
+        
+        if (params.rangoDeFecha != "") {
             flash.warn = null
             rangoDeFecha = params.rangoDeFecha
             fechaInicio = sdf.parse(rangoDeFecha.split("-")[0].trim())
             fechaFin = sdf.parse(rangoDeFecha.split("-")[1].trim())
             busquedaBean = new BusquedaBean()        
             busquedaBean.fechaInicio = fechaInicio
-            busquedaBean.fechaFin = fechaFin
-            
+            busquedaBean.fechaFin = fechaFin            
         } else {
             flash.warn = "Debe elegir un rango de fechas válido."
-        }*/
+        }
+        [ turnosPorFechaBean : turnosPorFechaBean ]
     }
     
     def totalDeTurnos () {
@@ -143,9 +149,6 @@ class ReporteDeTareaController {
         def atrasadosTurnados = atrasadosTurnadosQuery.list(sort:"id")
         turnosPorFechaBean.atrasadosTurnados = atrasadosTurnados.size()
         
-        [ 
-            tituloDeReporte : "Total de Turnos",
-            turnosPorFechaBean : turnosPorFechaBean 
-        ]
+        [ turnosPorFechaBean : turnosPorFechaBean ]
     }
 }

@@ -109,12 +109,12 @@ c<%@ page import="com.app.sgcon.Convenio" %>
           </div>
         </g:form>          
       
-        <h3 class="header smaller lighter blue">Firmantes</h3>       
+        <h3 id="bloqueFirmantes"  class="header smaller lighter blue">Firmantes</h3>       
         
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th></th>
+              <th>Editar</th>
               <g:sortableColumn property="nombre" title="${message(code: 'persona.nombre.label', default: 'Nombre')}" />        
               <g:sortableColumn property="puesto" title="${message(code: 'persona.puesto.label', default: 'Puesto')}" />        
               <g:sortableColumn property="area" title="${message(code: 'persona.area.label', default: 'Área')}" />
@@ -174,12 +174,12 @@ c<%@ page import="com.app.sgcon.Convenio" %>
             </tbody>
           </table>
         
-          <h3 class="header smaller lighter blue">Responsables del Seguimiento</h3>
+          <h3 id="bloqueResponsables" class="header smaller lighter blue">Responsables del Seguimiento</h3>
         
           <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>  
-                <th></th>
+                <th>Editar</th>
                 <g:sortableColumn property="nombre" title="${message(code: 'persona.nombre.label', default: 'Nombre')}" />        
                 <g:sortableColumn property="puesto" title="${message(code: 'persona.puesto.label', default: 'Puesto')}" />        
                 <g:sortableColumn property="area" title="${message(code: 'persona.area.label', default: 'Área')}" />
@@ -383,9 +383,6 @@ c<%@ page import="com.app.sgcon.Convenio" %>
               }
             });
           })(jQuery);
-          /*CKEDITOR.replace( 'compromisos', {
-            enterMode : CKEDITOR.ENTER_BR
-          });*/
     </script>
   </body>
 </html>

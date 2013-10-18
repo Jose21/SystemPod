@@ -27,12 +27,13 @@
             <span class="add-on">
               <i class="icon-calendar"></i>
             </span>
-            <input class="span5" type="text" name="rangoDeFecha" id="rangoDeFecha" value="${rangoDeFecha?rangoDeFecha:""}" readonly="true" />
-            <g:actionSubmit class="btn btn-primary" action="buscarTurnosPorFecha" value="Buscar" />
+            <input class="span5" type="text" name="rangoDeFecha" id="rangoDeFecha" value="${rangoDeFecha?:""}" readonly="true" />
+            <g:actionSubmit class="btn btn-primary" action="turnosPorFecha" value="Buscar" />
           </div>
         </div>
       </g:form>
-      <br/>      
+      <br/>
+      <div id="containerTurnosPorFecha" style="min-width: 310px; height: 400px; margin: 0 auto"></div>      
     </div>    
   </body>  
 </html>

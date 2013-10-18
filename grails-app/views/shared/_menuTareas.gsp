@@ -82,9 +82,10 @@
         </g:link>
       </li>
       <li>
-        <g:link controller="reporteDeTarea" action="turnosPorFecha">
+          <!--
+        <g:link controller="reporteDeTarea" action="turnosPorFechaInit">
           <i class="icon-double-angle-right"></i> Turnos por Fecha
-        </g:link>
+        </g:link>-->
       </li>
     </ul>
   </li>

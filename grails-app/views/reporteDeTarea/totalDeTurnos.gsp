@@ -16,7 +16,7 @@
       <h1>Reporte: Total De Turnos</h1>      
     </div>
     <div class="container-fluid">      
-      <div id="containerTurnosPorFecha" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+      <div id="containerTotalDeTurnos" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     </div>    
   </body>  
 </html>
