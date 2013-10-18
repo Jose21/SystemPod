@@ -283,7 +283,7 @@ class ConvenioController {
             busquedaBean = new BusquedaBean()        
             busquedaBean.fechaInicio = fechaInicio
             busquedaBean.fechaFin = fechaFin
-            convenioInstanceList = Convenio.findAllByFechaDeFirmaBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin)
+            convenioInstanceList = Convenio.findAllByFechaDeFirmaBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin,, [sort: "id", order: "asc"])
         } else {
             flash.warn = "Debe elegir un rango de fechas válido."
         }
@@ -308,7 +308,7 @@ class ConvenioController {
         if (params.numeroDeConvenio != "") {
             flash.warn = null
             numeroDeConvenio = params.numeroDeConvenio
-            convenioInstanceList = Convenio.findAllByNumeroDeConvenioIlike("%"+params.numeroDeConvenio+"%")
+            convenioInstanceList = Convenio.findAllByNumeroDeConvenioIlike("%"+params.numeroDeConvenio+"%", [sort: "id", order: "asc"])
             
         } else {
             flash.warn = "Debe elegir un rango de fechas válido."
@@ -385,7 +385,7 @@ class ConvenioController {
             busquedaBean = new BusquedaBean()        
             busquedaBean.fechaInicio = fechaInicio
             busquedaBean.fechaFin = fechaFin
-            convenioInstanceList = Convenio.findAllByDateCreatedBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin)
+            convenioInstanceList = Convenio.findAllByDateCreatedBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin, [sort: "id", order: "asc"])
         } else {
             flash.warn = "Debe elegir un rango de fechas válido."
         }
