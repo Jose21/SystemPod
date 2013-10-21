@@ -7,17 +7,25 @@ import com.app.security.Usuario
 class NotificacionesService {
 
     AsynchronousMailService asyncMailService
-        
+    
     boolean tareaAsignada(Tarea tareaInstance, Usuario asignarA) {
         boolean flag = false
         def emailPattern = /[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})/
         //def email = params.alertaPorEmail.trim()
         def email = asignarA.email
+        def message = "SGCon: Tienes un nuevo turno asignado."
         if (email ==~ emailPattern) { 
             asyncMailService.sendMail {
                 to email
-                subject "Tienes un nuevo turno asignado."
-                html "<body><b>Te han asignado el turno con folio ${tareaInstance.id}.</b></body>"
+                subject message
+                html (
+                    view: "/tarea/notificationByEmail", 
+                    model: [ 
+                        tareaInstance : tareaInstance,
+                        message : "",
+                        usuarioInstance : asignarA
+                    ]
+                )
             }
             flag = true
         } else {
@@ -31,11 +39,19 @@ class NotificacionesService {
         def emailPattern = /[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})/
         //def email = params.alertaPorEmail.trim()
         def email = compartidaCon.email
+        def message = "SGCon: Tienes un nuevo turno compartido."
         if (email ==~ emailPattern) { 
             asyncMailService.sendMail {
                 to email
-                subject "Tienes un nuevo turno compartido."
-                html "<body><b>Te han compartido el turno con folio ${tareaInstance.id}.</b></body>"
+                subject message
+                html (
+                    view: "/tarea/notificationByEmail", 
+                    model: [ 
+                        tareaInstance : tareaInstance,
+                        message : "",
+                        usuarioInstance : compartidaCon
+                    ]
+                )
             }
             flag = true
         } else {
@@ -49,11 +65,19 @@ class NotificacionesService {
         def emailPattern = /[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})/
         //def email = params.alertaPorEmail.trim()
         def email = avisarA.email
+        def message = "SGCon: El turno ${tareaInstance.id} ha sido cerrado."
         if (email ==~ emailPattern) { 
             asyncMailService.sendMail {
                 to email
-                subject "El turno ${tareaInstance.id} ha sido cerrado."
-                html "<body><b>El turno con folio ${tareaInstance.id} fue cerrado.</b></body>"
+                subject message
+                html (
+                    view: "/tarea/notificationByEmail", 
+                    model: [ 
+                        tareaInstance : tareaInstance,
+                        message : "",
+                        usuarioInstance : avisarA
+                    ]
+                )
             }
             flag = true
         } else {

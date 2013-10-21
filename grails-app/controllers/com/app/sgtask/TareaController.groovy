@@ -400,6 +400,7 @@ class TareaController {
     }    
     
     def notificationByEmail () {
-        [ tareaInstance : Tarea.get(1) ]
+        def message = "Tienes una nueva tarea asignada."
+        [ tareaInstance : Tarea.get(1), message : message, usuarioInstance : springSecurityService.currentUser ]
     }
 }
