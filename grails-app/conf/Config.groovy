@@ -26,7 +26,9 @@ grails.mime.types = [
     multipartForm: 'multipart/form-data',
     rss:           'application/rss+xml',
     text:          'text/plain',
-    xml:           ['text/xml', 'application/xml']
+    xml:           ['text/xml', 'application/xml'],
+    excel:         'application/vnd.ms-excel',
+    pdf:           'application/pdf',
 ]
 
 // URL Mapping Cache Max Size, defaults to 5000

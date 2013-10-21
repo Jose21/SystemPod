@@ -8,7 +8,8 @@ import grails.plugins.springsecurity.Secured
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class ConvenioController {
-
+    def exportService
+    def grailsApplication
     def springSecurityService
     
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -18,8 +19,7 @@ class ConvenioController {
     }
 
     def list() {
-         [porFolioActive:"active"]
-         
+         [porFolioActive:"active"]  
     }
 
     def create() {
@@ -399,7 +399,32 @@ class ConvenioController {
                 porFechaRegistroActive : porFechaRegistroActive
             ]
         )
-    }    
+    }   
+    
+    def exportarPorFolio(){
+    if(params?.format && params.format != "html"){
+            response.contentType = grailsApplication.config.grails.mime.types[params.format]
+            response.setHeader("Content-disposition", "attachment; filename=convenios.${params.extension}")
+            List fields = ["id", "compromisos", "dateCreated", "fechaDeFirma", "institucion", "numeroDeConvenio", "status"]
+            Map labels = ["id": "Identificador Interno", "compromisos": "Compromisos","dateCreated":"Fecha De Registro",
+                            "fechaDeFirma":"Fecha De Firma","institucion":"Institucion","numeroDeConvenio":"Numero De Convenio",
+                            "status":"Status"]
+            def upperCase = { domain, value ->
+                return value.toUpperCase()
+            }
+            def data = Covenio.createCriteria().list {
+            status {
+                groupProperty("nombre")
+            }
+            order("id", "asc")
+}.collect { l -> new Expando("nombre": l[0], "id": l[1]) } 
+            //Map formatters = [institucion: upperCase]		
+            //Map parameters = [title: "Convenios aqui", "column.widths": [0.2, 0.3, 0.5]]
+
+            exportService.export(params.format, response.outputStream, data, fields, labels, [:], [:])
+        }
+  
+    }
     
     def linkToConvenioQueModifica () {
         def convenioInstance = Convenio.get(params.convenio.id as long)

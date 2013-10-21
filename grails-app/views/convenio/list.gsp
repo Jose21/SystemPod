@@ -10,7 +10,7 @@
     <body>
         <div class="page-header position-relative">
         </div><!--/.page-header-->
-
+        <r:require module="export"/>    
         <div class="container-fluid">      
             <g:render template="/shared/alerts" />
             <br/>
@@ -212,6 +212,7 @@
                 </table>
                 <div class="message-footer clearfix">
                     <div class="pull-left"> ${convenioInstanceTotal?:0} resultado(s) en total. </div>
+                    <export:formats formats="['excel', 'pdf']" action="exportarPorFolio"/>
                 </div> 
         </div>
     </body>      
