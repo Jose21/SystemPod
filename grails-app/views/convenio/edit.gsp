@@ -1,11 +1,11 @@
 c<%@ page import="com.app.sgcon.Convenio" %>
 <!DOCTYPE html>
 <html>
-  <head>
+  <head>      
     <meta name="layout" content="mainConvenios">
     <g:set var="entityName" value="${message(code: 'convenio.label', default: 'Convenio')}" />
     <title><g:message code="default.edit.label" args="[entityName]" /></title>
-    <calendar:resources lang="es" theme="aqua"/>
+    <calendar:resources lang="es" theme="aqua"/>    
   </head>
   <body>
     <div class="content-header">
@@ -115,21 +115,22 @@ c<%@ page import="com.app.sgcon.Convenio" %>
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th>Editar</th>
-              <g:sortableColumn property="nombre" title="${message(code: 'persona.nombre.label', default: 'Nombre')}" />        
-              <g:sortableColumn property="puesto" title="${message(code: 'persona.puesto.label', default: 'Puesto')}" />        
-              <g:sortableColumn property="area" title="${message(code: 'persona.area.label', default: 'Área')}" />
-              <g:sortableColumn property="institucion" title="${message(code: 'persona.institucion.label', default: 'Institución')}" />
+              <g:if test="${convenioInstance.firmantes}">
+                <th>Nombre</th>
+                <th>Puesto</th>
+                <th>Área</th>
+                <th>Institución</th>
+              </g:if>
+              <g:else>
+                  <th colspan="4">Nombre</th>
+              </g:else>
               <th></th>
             </tr>
             </thead>
             <tbody>
               <g:each in="${convenioInstance.firmantes}" status="i" var="firmante">
                 <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                  <td>
-                    <a href="#editarFirmanteModal${i}" data-toggle="modal" class="btn btn-success btn-mini">
-                      <i class="icon-edit bigger-110"></i>
-                    </a>
+                  <td>                    
                     <div id="editarFirmanteModal${i}" class="modal hide" style="width:600px;">
                       <div class="modal-header">
                         <button data-dismiss="modal" class="close" type="button">×</button>
@@ -148,8 +149,10 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                           </g:form>
                       </div>
                     </div>
-                  </td>
-                  <td>${firmante.nombre}</td>
+                    <a href="#editarFirmanteModal${i}" data-toggle="modal">
+                      <i class="icon-edit bigger-110"></i>
+                    </a>
+                    ${firmante.nombre}</td>
                   <td>${firmante.puesto}</td>
                   <td>${firmante.area}</td>
                   <td>${firmante.institucion}</td>
@@ -165,7 +168,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
               </g:each>
               <g:form controller="convenio" method="post">
               <tr>
-                <td colspan="5">                  
+                <td colspan="4">                  
                   <g:hiddenField name="anchor" value="bloqueFirmantes" />
                   <g:textField class="span6" name="firmante" value="" autocomplete="off"/>
                 </td>
@@ -183,11 +186,15 @@ c<%@ page import="com.app.sgcon.Convenio" %>
           <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>  
-                <th>Editar</th>
-                <g:sortableColumn property="nombre" title="${message(code: 'persona.nombre.label', default: 'Nombre')}" />        
-                <g:sortableColumn property="puesto" title="${message(code: 'persona.puesto.label', default: 'Puesto')}" />        
-                <g:sortableColumn property="area" title="${message(code: 'persona.area.label', default: 'Área')}" />
-                <g:sortableColumn property="institucion" title="${message(code: 'persona.institucion.label', default: 'Institución')}" />
+                <g:if test="${convenioInstance.responsables}">
+                    <th>Nombre</th>
+                    <th>Puesto</th>
+                    <th>Área</th>
+                    <th>Institución</th>
+                </g:if>
+                <g:else>
+                    <th colspan="4">Nombre</th>
+                </g:else>
                 <th></th>
               </tr>
             </thead>
@@ -195,9 +202,6 @@ c<%@ page import="com.app.sgcon.Convenio" %>
               <g:each in="${convenioInstance.responsables}" status="i" var="responsable">
                 <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                   <td>
-                    <a href="#editarResponsableModal${i}"  data-toggle="modal" class="btn btn-success btn-mini">
-                      <i class="icon-edit bigger-110"></i>
-                    </a>
                     <div id="editarResponsableModal${i}" class="modal hide" style="width:600px;">
                       <div class="modal-header">
                         <button data-dismiss="modal" class="close" type="button">×</button>
@@ -216,8 +220,11 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                           </g:form>
                       </div>
                     </div>
+                    <a href="#editarResponsableModal${i}"  data-toggle="modal">
+                      <i class="icon-edit bigger-110"></i>
+                    </a>
+                    ${responsable.nombre}
                   </td>
-                  <td>${responsable.nombre}</td>
                   <td>${responsable.puesto}</td>
                   <td>${responsable.area}</td>
                   <td>${responsable.institucion}</td>
@@ -233,7 +240,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
               </g:each>
               <g:form controller="convenio" method="post">
               <tr>
-                <td colspan="5">
+                <td colspan="4">
                   <g:hiddenField name="anchor" value="bloqueResponsables" />
                   <g:textField class="span6" name="responsable" value="" autocomplete="off"/>
                 </td>
@@ -352,12 +359,9 @@ c<%@ page import="com.app.sgcon.Convenio" %>
             </g:if>
           </div>
         </div>
-    </div>
+    </div>    
     <script lang="javascript" type="text/javascript">
-          (function($) { 
-            $(document.body).animate({
-                'scrollTop':   $("#"+${anchor?:"editarConvenio"}).offset().top
-            }, 0);
+        (function($) {
             $('#firmante').autocomplete({
               source : function(request, response){
                 $.ajax({
@@ -366,8 +370,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                   success: function(data){
                     response(data); 
                   },
-                  error: function(){ 
-                  }
+                  error: function(){}
                 });
               },
               minLength: 3,
@@ -375,7 +378,6 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                 $('#firmante').val(ui.item.nasSymbol + "-")
               }
             });
-
             $('#responsable').autocomplete({
               source : function(request, response){
                 $.ajax({
@@ -384,8 +386,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                   success: function(data){
                     response(data); 
                   },
-                  error: function(){ 
-                  }
+                  error: function(){}
                 });
               },
               minLength: 3,
@@ -393,7 +394,8 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                 $('#responsable').val(ui.item.nasSymbol + "-")
               }
             });
-          })(jQuery);
+            $(document).scrollTop( $("#${anchor?:""}").offset().top );
+        })(jQuery);
     </script>
-  </body>
+  </body>  
 </html>

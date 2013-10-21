@@ -4,7 +4,7 @@
 <!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
 <!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"><!--<![endif]-->
-  <head>
+  <head>    
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title><g:layoutTitle default="SGCon"/></title>
@@ -29,12 +29,13 @@
     <link href="${resource(dir:'assets/css',file:'ace-skins.min.css')}" rel="stylesheet" />
     <!--[if lte IE 8]>
       <link rel="stylesheet" href="${resource(dir:'assets/css',file:'ace-ie.min.css')}" />
-    <![endif]--> 
+    <![endif]-->     
+    <script src="${resource(dir:'assets/js',file:'ace-extra.min.js')}"></script>      
+    
     <r:require module="jquery"/>
-    <r:require module="jquery-ui"/>
-    <script src="${resource(dir:'assets/js',file:'ace-extra.min.js')}"></script>
-    <r:layoutResources />    
-    <g:layoutHead/>      
+    <r:require module="jquery-ui"/>    
+    <g:layoutHead/>
+    <r:layoutResources /> 
   </head>
   <body>
 
@@ -177,7 +178,7 @@
     <script src="${resource(dir:'assets/js',file:'ace-elements.min.js')}"></script>
     <script src="${resource(dir:'assets/js',file:'ace.min.js')}"></script>    
     <script type="text/javascript">      
-        (function($) {                     
+        (function($) { 
           $.fn.datepicker.dates['es'] = {
 		days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"],
 		daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
@@ -206,14 +207,9 @@
           ).prev().on(ace.click_event, function(){
             $(this).next().focus();
           });
-          $('#timepicker1').timepicker({
-            minuteStep: 1,
-            showSeconds: true,
-            showMeridian: false
-          });         
           $("#btnIndefinida").click(function() {
             $("#vigencia").val("Indefinida");
-          });
+          });           
         })(jQuery);
     </script>
     <g:javascript library="application"/>

@@ -398,4 +398,8 @@ class TareaController {
         }
         redirect (action:"show", id:tareaInstance.id)
     }    
+    
+    def notificationByEmail () {
+        [ tareaInstance : Tarea.get(1) ]
+    }
 }
