@@ -413,14 +413,12 @@ class ConvenioController {
             Map labels = ["id": "Identificador Interno", "compromisos": "Compromisos","dateCreated":"Fecha De Registro",
                             "fechaDeFirma":"Fecha De Firma","institucion":"Institucion","numeroDeConvenio":"Numero De Convenio",
                             "status":"Status"]
-            def upperCase = { domain, value ->
-                return value.toUpperCase()
             }
             def data = Covenio.createCriteria().list {
             status {
                 groupProperty("nombre")
             }
-            order("id", "asc")
+            countDistinct("id")
 }.collect { l -> new Expando("nombre": l[0], "id": l[1]) } 
             //Map formatters = [institucion: upperCase]		
             //Map parameters = [title: "Convenios aqui", "column.widths": [0.2, 0.3, 0.5]]
