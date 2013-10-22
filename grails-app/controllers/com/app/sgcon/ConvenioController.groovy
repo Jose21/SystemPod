@@ -19,7 +19,7 @@ class ConvenioController {
     }
 
     def list() {
-         [porFolioActive:"active"]  
+        [porFolioActive:"active"]  
     }
 
     def create() {
@@ -287,6 +287,7 @@ class ConvenioController {
         } else {
             flash.warn = "Debe elegir un rango de fechas válido."
         }
+        session.convenioInstanceList = convenioInstanceList
         render(
             view: "list", 
             model: [
@@ -306,6 +307,7 @@ class ConvenioController {
         }        
         def numeroDeConvenio = null
         def convenioInstanceList = null
+        def inActive = "active"
         if (params.numeroDeConvenio != "") {
             flash.warn = null
             numeroDeConvenio = params.numeroDeConvenio
@@ -314,6 +316,8 @@ class ConvenioController {
         } else {
             flash.warn = "Debe elegir un rango de fechas válido."
         }
+        session.convenioInstanceList = convenioInstanceList
+        session.inActive = inActive
         render(
             view: "list", 
             model: [
@@ -337,7 +341,8 @@ class ConvenioController {
                 like("nombre", "%"+params.nombre+"%")
             }
             order("id", "asc")
-        }       
+        }
+        session.convenioInstanceList = convenioInstanceList
         render(
             view: "list", 
             model: [
@@ -359,7 +364,8 @@ class ConvenioController {
                 like("nombre", "%"+params.nombre+"%")
             }
             order("id", "asc")
-        }       
+        }
+        session.convenioInstanceList = convenioInstanceList
         render(
             view: "list", 
             model: [
@@ -393,6 +399,7 @@ class ConvenioController {
         } else {
             flash.warn = "Debe elegir un rango de fechas válido."
         }
+        session.convenioInstanceList = convenioInstanceList
         render(
             view: "list", 
             model: [
@@ -404,30 +411,42 @@ class ConvenioController {
             ]
         )
     }   
-    
-    def exportarPorFolio(){
-    if(params?.format && params.format != "html"){
-            response.contentType = grailsApplication.config.grails.mime.types[params.format]
-            response.setHeader("Content-disposition", "attachment; filename=convenios.${params.extension}")
-            List fields = ["id", "compromisos", "dateCreated", "fechaDeFirma", "institucion", "numeroDeConvenio", "status"]
-            Map labels = ["id": "Identificador Interno", "compromisos": "Compromisos","dateCreated":"Fecha De Registro",
-                            "fechaDeFirma":"Fecha De Firma","institucion":"Institucion","numeroDeConvenio":"Numero De Convenio",
-                            "status":"Status"]
-            }
-            def data = Covenio.createCriteria().list {
-            status {
-                groupProperty("nombre")
-            }
-            countDistinct("id")
-}.collect { l -> new Expando("nombre": l[0], "id": l[1]) } 
-            //Map formatters = [institucion: upperCase]		
-            //Map parameters = [title: "Convenios aqui", "column.widths": [0.2, 0.3, 0.5]]
+ 
+    def generarReporte(){
+        def convenioInstanceList = session.convenioInstanceList
+        def inActive = session.inActive
+        println "activo:." + session.inActive
+        println "total::." + session.convenioInstanceList.size()
+        println "params::::::::::::::::"+ params
+        println "convenioinstance::::::"+ session.convenioInstanceList
+        if (convenioInstanceList.size != 0) {
+            println "despues del if::::::"+ convenioInstanceList
+            flash.warn = null
+            if(params?.format && params.format != "html"){
+                response.contentType = grailsApplication.config.grails.mime.types[params.format]
+                response.setHeader("Content-disposition", "attachment; filename=convenios.${params.extension}")
+                List fields = ["id", "compromisos", "dateCreated", "fechaDeFirma", "institucion", "numeroDeConvenio","responsables", "status"]
+                Map labels = ["id": "Id Interno", "compromisos": "Compromisos","dateCreated":"Fecha Registro","fechaDeFirma":"Fecha Firma",\
+                              "institucion":"Institucion","numeroDeConvenio":"No.Convenio","responsables":"Responsables","status":"Status"]
+                def upperCase = { domain, value ->
+                    return value.toUpperCase()
+                }
+                Map formatters = [institucion: upperCase]		
+                Map parameters = [title: "Reporte De Convenios", "column.widths": [0.2, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4], "title.font.size":12]
 
-            exportService.export(params.format, response.outputStream, data, fields, labels, [:], [:])
+                exportService.export(params.format, response.outputStream, session.convenioInstanceList, fields, labels, formatters, parameters)
+            }
+        }else{
+            println "<<<aaaaaaaaaaaaaaaaa" 
+            flash.warn = "No hay datos para generar reporte."
+            
         }
-  
+        render(
+            view: "list", 
+            model: [inActive: inActive, convenioInstanceList: convenioInstanceList ]
+        )
+        
     }
-    
     def linkToConvenioQueModifica () {
         def convenioInstance = Convenio.get(params.convenio.id as long)
         def convenioQueModifica = Convenio.get(params.modificaA.id as long)
