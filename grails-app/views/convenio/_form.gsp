@@ -19,7 +19,7 @@
     <g:textArea class="span6" name="objeto" maxlength="5000" required="" value="${convenioInstance?.objeto}" autocomplete="off"/>
   </div>
 </div>
-
+<g:hiddenField name="nombreDeCopiaElectronica" value="${convenioInstance.nombreDeCopiaElectronica?:null}" />
 <div class="control-group fieldcontain ${hasErrors(bean: convenioInstance, field: 'compromisos', 'error')} required">
   <label for="compromisos" class="control-label">
     <g:message code="convenio.v.label" default="Compromisos" />

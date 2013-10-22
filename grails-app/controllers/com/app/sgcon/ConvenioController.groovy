@@ -15,14 +15,17 @@ class ConvenioController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {
+        flash.error = null
         redirect(action: "list", params: params)
     }
 
     def list() {
+        flash.error = null
         [porFolioActive:"active"]  
     }
 
     def create() {
+        flash.error = null
         [convenioInstance: new Convenio(params)]
     }
 
@@ -86,67 +89,84 @@ class ConvenioController {
         [convenioInstance: convenioInstance, anchor : params.anchor?:""]
     }
 
-    def update(Long id, Long version) {
+    def update(Long id, Long version, String nombreDeCopiaElectronica) {
         def convenioInstance = Convenio.get(id)
-        if (!convenioInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
-            redirect(action: "list")
-            return
-        }
+        println "id del convenio" + id
+        println "status del campo de copia electronica del convenio:" + nombreDeCopiaElectronica
+        println "version:." + version
+        if (nombreDeCopiaElectronica == ""){
+            println "despues de comparar si es nulo"
+            if (!convenioInstance) {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
+                redirect(action: "list")
+                return
+            }
 
-        if (version != null) {
-            if (convenioInstance.version > version) {
-                convenioInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                    [message(code: 'convenio.label', default: 'Convenio')] as Object[],
+            if (version != null) {
+                if (convenioInstance.version > version) {
+                    convenioInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
+                        [message(code: 'convenio.label', default: 'Convenio')] as Object[],
                           "Another user has updated this Convenio while you were editing")
+                    render(view: "edit", model: [convenioInstance: convenioInstance])
+                    return
+                }
+            }
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            if (params.fechaDeFirma == "") {
+                flash.error = "Debe existir una fecha de firma del convenio."
+                params.fechaDeFirma = null
+            } else {
+                Date fechaDeFirma = sdf.parse(params.fechaDeFirma)        
+                params.fechaDeFirma = fechaDeFirma
+            }
+        
+            if (params.vigencia != "Indefinida") {
+                Date vigencia = sdf.parse(params.vigencia)
+                params.vigencia = vigencia
+            } else {
+                params.vigencia = null
+            }
+                
+            convenioInstance.properties = params
+
+            if (!convenioInstance.save(flush: true)) {
                 render(view: "edit", model: [convenioInstance: convenioInstance])
                 return
             }
-        }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        if (params.fechaDeFirma == "") {
-            flash.error = "Debe existir una fecha de firma del convenio."
-            params.fechaDeFirma = null
-        } else {
-            Date fechaDeFirma = sdf.parse(params.fechaDeFirma)        
-            params.fechaDeFirma = fechaDeFirma
-        }
-        
-        if (params.vigencia != "Indefinida") {
-            Date vigencia = sdf.parse(params.vigencia)
-            params.vigencia = vigencia
-        } else {
-            params.vigencia = null
-        }
-                
-        convenioInstance.properties = params
-
-        if (!convenioInstance.save(flush: true)) {
+            flash.message = message(code: 'default.updated.message', args: [message(code: 'convenio.label', default: 'Convenio'), convenioInstance.id])
+            redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
+            
+        }else{
+            println "se da por echo que es nulo el campo"
+            flash.error = "No puede modificarse, el convenio se encuentra actualmente firmado."
             render(view: "edit", model: [convenioInstance: convenioInstance])
-            return
         }
-
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'convenio.label', default: 'Convenio'), convenioInstance.id])
-        redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
     }
 
-    def delete(Long id) {
+    def delete(Long id, String nombreDeCopiaElectronica) {
         def convenioInstance = Convenio.get(id)
-        if (!convenioInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
-            redirect(action: "list")
-            return
-        }
+        if (nombreDeCopiaElectronica == ""){
+            if (!convenioInstance) {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
+                redirect(action: "list")
+                return
+            }
 
-        try {
-            convenioInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
-            redirect(action: "list")
-        }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
-            redirect(action: "show", id: id)
+            try {
+                convenioInstance.delete(flush: true)
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
+                redirect(action: "list")
+            }
+            catch (DataIntegrityViolationException e) {
+                flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
+                redirect(action: "show", id: id)
+            }
+        }else{
+            println "se da por echo que es nulo el campo"
+            flash.error = "No puede eliminarse, el convenio se encuentra actualmente firmado."
+            render(view: "edit", model: [convenioInstance: convenioInstance])
         }
     }
     
@@ -154,7 +174,7 @@ class ConvenioController {
         def convenioInstance = Convenio.get(params.convenio.id as long)
         def personaInstance = Persona.findByNombre(params."firmante")
         if (personaInstance) {
-            convenioInstance.addToFirmantes(personaInstance) 
+            convenioInstance.addToFirmantes(personaInstance)
             if (convenioInstance.save(flush:true)) {
                 flash.message = "Se ha agregado un firmante al convenio."
             } else {
@@ -176,12 +196,20 @@ class ConvenioController {
         redirect(action: "edit", id: convenioInstance.id, params : [anchor : params.anchor])
     }
     
-    def removeFirmante () {  
+    def removeFirmante (Long id, String nombreDeCopiaElectronica) {
         def convenioInstance = Convenio.get(params.convenio.id as long)        
         def personaInstance = Persona.get(params.firmante.id as long)
-        convenioInstance.removeFromFirmantes(personaInstance)
-        flash.message = "El firmante ha sido eliminado."        
-        redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
+        println "que esta imprimiendonombredecopiaelectro::" + params.convenio.nombreDeCopiaElectronica
+        println "que esra imprimiendo de id::" + params.convenio.id
+        if (nombreDeCopiaElectronica == ""){
+            convenioInstance.removeFromFirmantes(personaInstance)
+            flash.message = "El firmante ha sido eliminado."        
+            redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
+        }else{
+            println "se da por echo que es nulo el campo"
+            flash.error = "No puede eliminarse, el convenio se encuentra actualmente firmado."
+            render(view: "edit", model: [convenioInstance: convenioInstance])
+        }
     }
     
     def addResponsable () {

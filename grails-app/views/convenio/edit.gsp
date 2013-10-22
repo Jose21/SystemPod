@@ -106,7 +106,8 @@ c<%@ page import="com.app.sgcon.Convenio" %>
           </div>
           <g:render template="form"/>
           <div class="form-actions">
-            <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />              
+            <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+            <g:actionSubmit class="btn btn-primary" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" />
           </div>
         </g:form>          
       
