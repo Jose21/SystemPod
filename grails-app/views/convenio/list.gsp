@@ -213,7 +213,7 @@
         <div class="message-footer clearfix">
             <div class="pull-left"> ${convenioInstanceTotal?:0} resultado(s) en total. </div>
         </div>
-        <export:formats formats="['excel', 'pdf']" action="generarReporte" value="${convenioInstanceList.size?:0}"/>
+        <export:formats formats="['excel', 'pdf']" action="generarReporte"/>
     </div>
 </body>      
 </html>
