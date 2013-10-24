@@ -9,7 +9,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
   </head>
   <body>
     <div class="content-header">
-      <div class="page-header position-relative">
+      <div class="page-header position-relative deshabilitable">
         <h1 id="editarConvenio">Editar: Convenio</h1>
         <div class="btn-group">
           <a class="btn btn-small btn-success tip-bottom" href="#vincularConvenio" data-toggle="modal">
@@ -171,11 +171,11 @@ c<%@ page import="com.app.sgcon.Convenio" %>
               <tr>
                 <td colspan="4">                  
                   <g:hiddenField name="anchor" value="bloqueFirmantes" />
-                  <g:textField class="span6" name="firmante" value="" autocomplete="off"/>
+                  <g:textField class="span6 deshabilitable"  name="firmante" value="" autocomplete="off"/>
                 </td>
                 <td>
                   <g:hiddenField name="convenio.id" value="${convenioInstance?.id}"/>
-                  <g:actionSubmit class="btn btn-primary btn-mini" action="addFirmante" value="Agregar" />
+                  <g:actionSubmit class="btn btn-primary btn-mini deshabilitable" action="addFirmante" value="Agregar" />
                 </td>
               </tr>
               </g:form>
@@ -243,7 +243,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
               <tr>
                 <td colspan="4">
                   <g:hiddenField name="anchor" value="bloqueResponsables" />
-                  <g:textField class="span6" name="responsable" value="" autocomplete="off"/>
+                  <g:textField class="span6 deshabilitable" name="responsable" value="" autocomplete="off"/>
                 </td>
                 <td>
                   <g:hiddenField name="convenio.id" value="${convenioInstance?.id}"/>
@@ -394,6 +394,19 @@ c<%@ page import="com.app.sgcon.Convenio" %>
               select: function(event, ui) {
                 $('#responsable').val(ui.item.nasSymbol + "-")
               }
+            });
+            $(function(){
+                $("input").attr("disabled", "disabled");
+                $("textarea").attr("disabled", "disabled");
+                $("select").attr("disabled", "disabled");
+                $(".deshabilitable").attr("disabled", "disabled");
+                $("href").attr("disabled", "disabled");
+                
+                if(${yesedit} == true){
+                    $("input").removeAttr("disabled");
+                    $("textarea").removeAttr("disabled");
+                    $("select").removeAttr("disabled");
+                  }
             });
             $(document).scrollTop( $("#${anchor?:""}").offset().top );
         })(jQuery);
