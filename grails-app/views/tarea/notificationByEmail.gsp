@@ -4,7 +4,7 @@
         <!-- If you delete this meta tag, Half Life 3 will never be released. -->
         <meta name="viewport" content="width=device-width" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>ZURBemails</title>
+        <title>SGCon: Notificación de Turnos</title>
         <link href="${resource(dir:'css',file:'email.css')}" rel="stylesheet" />        
     </head>
     <body bgcolor="#FFFFFF">
@@ -38,30 +38,37 @@
                         <table>
                             <tr>
                                 <td>
-                                    <h3>Hola, ${usuarioInstance?.nombre}</h3>
-                                    <p class="lead">
-                                        ${mensaje}
+                                    <h3>Hola, ${usuarioInstance?.firstName}</h3>
+                                    <p class="callout">
+                                        ${message}
                                     </p>
-                                    <table class="social" width="100%">
+                                    <p>
+                                        <table style="font-size: medium">
+                                            <tr>
+                                                <td>Folio</td>
+                                                <td>${tareaInstance?.id}</td>
+                                            </tr>                                            
+                                            <tr>
+                                                <td>Creador del Turno</td>
+                                                <td>${tareaInstance?.creadaPor?.firstName} ${tareaInstance?.creadaPor?.lastName}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Fecha de Creación</td>
+                                                <td><g:formatDate format="dd-MMM-yyyy HH:mm" date="${tareaInstance?.dateCreated}"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Asunto</td>
+                                                <td>${tareaInstance?.nombre}</td>
+                                            </tr>
+                                        </table>
+                                    </p> <br/>
+                                    <table class="social" style="background-color: white" width="100%">
                                         <tr>
                                             <td>
-                                                <table align="left" class="column">
-                                                    <tr>
-                                                        <td>				
-                                                            <h5 class="">Connect with Us:</h5>
-                                                            <p class=""><a href="#" class="soc-btn fb">Facebook</a> <a href="#" class="soc-btn tw">Twitter</a> <a href="#" class="soc-btn gp">Google+</a></p>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                                <table align="left" class="column">
-                                                    <tr>
-                                                        <td>				
-                                                            <h5 class="">Contact Info:</h5>												
-                                                            <p>Phone: <strong>408.341.0600</strong><br/>
-                                                                Email: <strong><a href="emailto:hseldon@trantor.com">hseldon@trantor.com</a></strong></p>
-                                                        </td>
-                                                    </tr>
-                                                </table>
+                                                <p class="">
+                                                    <a href="http://192.168.1.3:8080/sgcon" class="soc-btn fb">Ir a la aplicación</a> 
+                                                    <a href="http://192.168.1.3:8080/sgcon/tarea/show/${tareaInstance?.id}" class="soc-btn tw">Ir al turno</a> 
+                                                </p>
                                                 <span class="clear"></span>	
                                             </td>
                                         </tr>
