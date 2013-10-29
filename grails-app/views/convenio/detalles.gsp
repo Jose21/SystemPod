@@ -82,7 +82,7 @@
                         <tr>
                             <td></td>
                             <td>${responsable.nombre}</td>
-                            <td><b><font color="red">${responsable.institucion}</font></b></td>
+                            <td>${responsable.institucion}</td>
                         </tr>
                     </g:if>
                 </g:each>
@@ -108,7 +108,7 @@
                         <tr>
                             <td></td>
                             <td>${firmante.nombre}</td>
-                            <td><b><font color="red">${firmante.institucion}</font></b></td>
+                            <td>${firmante.institucion}</td>
                         </tr>
                     </g:if>
                 </g:each>
