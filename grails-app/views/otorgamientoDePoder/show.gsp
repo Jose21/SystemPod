@@ -23,12 +23,9 @@
         </div>
 
         <div class="container-fluid">
-            <g:if test="${flash.message}">
-                <br/>
-                <div class="alert alert-info">
-                    <strong>¡Información!</strong> ${flash.message}
-                </div>
-            </g:if>
+            <g:render template="/shared/alerts" />
+            <br/>
+
             <div class="well">
 
                 <g:if test="${otorgamientoDePoderInstance?.numeroDeFolio}">
@@ -84,7 +81,7 @@
                     <dl>
                         <dt><g:message code="otorgamientoDePoder.motivoDeOtorgamiento.label" default="Motivo De Otorgamiento" /></dt>
                         <dd><g:link controller="motivoDeOtorgamiento" action="show" id="${otorgamientoDePoderInstance?.motivoDeOtorgamiento?.id}">${otorgamientoDePoderInstance?.motivoDeOtorgamiento?.encodeAsHTML()}</g:link></dd>
-                    </dl>
+                        </dl>
                 </g:if>
 
                 <g:if test="${otorgamientoDePoderInstance?.solicitadoPor}">

@@ -1,5 +1,6 @@
 package com.app.sgpod
 
+import java.text.SimpleDateFormat
 import org.springframework.dao.DataIntegrityViolationException
 
 class RevocacionDePoderController {
@@ -27,7 +28,7 @@ class RevocacionDePoderController {
         }
 
         flash.message = message(code: 'default.created.message', args: [message(code: 'revocacionDePoder.label', default: 'RevocacionDePoder'), revocacionDePoderInstance.id])
-        redirect(action: "show", id: revocacionDePoderInstance.id)
+        redirect(action: "edit", id: revocacionDePoderInstance.id)
     }
 
     def show(Long id) {
@@ -53,6 +54,7 @@ class RevocacionDePoderController {
     }
 
     def update(Long id, Long version) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         def revocacionDePoderInstance = RevocacionDePoder.get(id)
         if (!revocacionDePoderInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'revocacionDePoder.label', default: 'RevocacionDePoder'), id])
@@ -70,6 +72,12 @@ class RevocacionDePoderController {
             }
         }
 
+        if (params.fechaDeRevocacion) {
+            Date fechaDeRevocacion = sdf.parse(params.fechaDeRevocacion)
+            params.fechaDeRevocacion = fechaDeRevocacion
+        } else {
+            params.fechaDeRevocacion = null
+        }
         revocacionDePoderInstance.properties = params
 
         if (!revocacionDePoderInstance.save(flush: true)) {
@@ -78,7 +86,7 @@ class RevocacionDePoderController {
         }
 
         flash.message = message(code: 'default.updated.message', args: [message(code: 'revocacionDePoder.label', default: 'RevocacionDePoder'), revocacionDePoderInstance.id])
-        redirect(action: "show", id: revocacionDePoderInstance.id)
+        redirect(action: "edit", id: revocacionDePoderInstance.id)
     }
 
     def delete(Long id) {

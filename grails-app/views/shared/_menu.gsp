@@ -43,7 +43,7 @@
     </g:link> 
   </li>
   <li>
-    <g:link controller="poder" action="list">
+    <g:link controller="otorgamientoDePoder" action="list">
       <i class="icon-key"></i>
       <span class="menu-text">Poderes</span>
     </g:link> 
