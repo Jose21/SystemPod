@@ -215,7 +215,9 @@
         <div class="message-footer clearfix">
             <div class="pull-left"> ${convenioInstanceTotal?:0} resultado(s) en total. </div>
         </div>
-        <export:formats formats="['excel', 'pdf']" action="generarReporte"/>
+        <g:if test="${convenioInstanceTotal}">
+            <export:formats formats="['excel', 'pdf']" action="generarReporte"/>
+        </g:if>
     </div>
 </body>      
 </html>
