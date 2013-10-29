@@ -46,15 +46,6 @@ class ConvenioController {
         Date fechaDeFirma = sdf.parse(params.fechaDeFirma)        
         params.fechaDeFirma = fechaDeFirma
         
-        println "Vigencia=" + vigencia
-        println "Fecha de firma" + fechaDeFirma
-        
-        if(vigencia.compareTo(fechaDeFirma)>0) {
-            println "wfwefewwe"               
-            flash.error = "La fecha de vigencia debe ser mayor o igual a la fecha de firma."
-            redirect(action: "create", params:params)
-            return
-        }
         def convenioInstance = new Convenio(params)
         
         //TODO Corregir
