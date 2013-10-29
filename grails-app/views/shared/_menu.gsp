@@ -14,7 +14,7 @@
       <i class="icon-book"></i>
     </g:link>
 
-    <g:link class="btn btn-small btn-purple" controller="poder" action="create">
+    <g:link class="btn btn-small btn-purple" controller="otorgamientoDePoder" action="create">
       <i class="icon-user"></i>
     </g:link>
     

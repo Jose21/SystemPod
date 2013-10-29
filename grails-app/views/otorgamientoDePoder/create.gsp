@@ -1,9 +1,9 @@
-<%@ page import="com.app.sgpod.Poder" %>
+<%@ page import="com.app.sgpod.OtorgamientoDePoder" %>
 <!DOCTYPE html>
 <html>
   <head>
     <meta name="layout" content="mainPoderes">
-    <g:set var="entityName" value="${message(code: 'poder.label', default: 'Poder')}" />
+    <g:set var="entityName" value="${message(code: 'otorgamientoDePoder.label', default: 'Otorgamiento de Poder')}" />
     <title><g:message code="default.create.label" args="[entityName]" /></title>
   </head>
   <body>
@@ -15,9 +15,9 @@
       <g:render template="/shared/alerts" />
       <br/>
 
-      <g:hasErrors bean="${poderInstance}">
+      <g:hasErrors bean="${otorgamientoDePoderInstance}">
         <div class="alert alert-block alert-warning">            
-            <g:eachError bean="${poderInstance}" var="error">
+            <g:eachError bean="${otorgamientoDePoderInstance}" var="error">
                 - <g:message error="${error}"/> <br/>
             </g:eachError>
         </div>

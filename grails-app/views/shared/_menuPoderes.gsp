@@ -13,7 +13,7 @@
       <i class="icon-book"></i>
     </g:link>
     
-    <g:link class="btn btn-small btn-purple" controller="poder" action="create">
+    <g:link class="btn btn-small btn-purple" controller="otorgamientoDePoder" action="create">
       <i class="icon-user"></i>
     </g:link>
     
@@ -37,17 +37,37 @@
   <li class="active open">
     <a href="#" class="dropdown-toggle">
       <i class="icon-book"></i>
-      <span class="menu-text">Poderes</span>
+      <span class="menu-text">Otorgamiento</span>
       <b class="arrow icon-angle-down"></b>
     </a>
     <ul class="submenu">
       <li>
-        <g:link controller="poder" action="create">
-          <i class="icon-double-angle-right"></i> Otorgamiento
+        <g:link controller="otorgamientoDePoder" action="create">
+          <i class="icon-double-angle-right"></i> Nuevo
         </g:link>
       </li>
       <li>
-        <g:link controller="poder" action="list">
+        <g:link controller="otorgamientoDePoder" action="list">
+          <i class="icon-double-angle-right"></i> Consulta
+        </g:link>
+      </li>
+    </ul>
+  </li>
+  
+  <li class="active open">
+    <a href="#" class="dropdown-toggle">
+      <i class="icon-book"></i>
+      <span class="menu-text">Revocación</span>
+      <b class="arrow icon-angle-down"></b>
+    </a>
+    <ul class="submenu">
+      <li>
+        <g:link controller="revocacionDePoder" action="create">
+          <i class="icon-double-angle-right"></i> Nuevo
+        </g:link>
+      </li>
+      <li>
+        <g:link controller="revocacionDePoder" action="list">
           <i class="icon-double-angle-right"></i> Consulta
         </g:link>
       </li>
@@ -64,6 +84,11 @@
       <li>
         <g:link controller="motivoDeOtorgamiento">
           <i class="icon-double-angle-right"></i> Motivo de Otorgamiento
+        </g:link>
+      </li>
+      <li>
+        <g:link controller="motivoDeRevocacion">
+          <i class="icon-double-angle-right"></i> Motivo de Revocación
         </g:link>
       </li>
     </ul>
