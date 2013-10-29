@@ -50,7 +50,7 @@ class Convenio {
         responsables nullable: true
         usuariosDeConvenio nullable:true
         tareas nullable:true
-    }
+       }
     
     String toString () {
         def sdf = new SimpleDateFormat("dd-MMM-yyyy")

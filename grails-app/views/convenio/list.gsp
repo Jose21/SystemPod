@@ -189,6 +189,7 @@
                 <th><g:message code="convenio.responsables.label" default="Responsables" /></th>
                 <th><g:message code="convenio.fechaDeFirma.label" default="Fecha De Firma" />
                 <th><g:message code="convenio.status.label" default="Status" /></th>
+                <th><g:message default="Opciones"/></th>
             </tr>
             </thead>
             <tbody>
@@ -206,6 +207,7 @@
                         </td>
                         <td><g:formatDate date="${convenioInstance.fechaDeFirma}" /></td>
                         <td>${fieldValue(bean: convenioInstance, field: "status")}</td>
+                        <td><g:link class="icon-print bigger-120" action="detalles"  target="_blank" id="${convenioInstance?.id}" /></td>
                     </tr>
                 </g:each>
             </tbody>

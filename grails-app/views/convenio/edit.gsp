@@ -9,7 +9,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
   </head>
   <body>
     <div class="content-header">
-      <div class="page-header position-relative deshabilitable">
+      <div class="page-header position-relative">
         <h1 id="editarConvenio">Editar: Convenio</h1>
         <div class="btn-group">
           <a class="btn btn-small btn-success tip-bottom" href="#vincularConvenio" data-toggle="modal">

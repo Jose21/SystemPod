@@ -25,7 +25,6 @@ class ConvenioController {
     }
 
     def create() {
-        flash.error = null
         [convenioInstance: new Convenio(params)]
     }
 
@@ -34,7 +33,7 @@ class ConvenioController {
         
         if (params.vigencia != "Indefinida") {
             Date vigencia = sdf.parse(params.vigencia)
-            params.vigencia = vigencia
+            params.vigencia = vigencia           
         } else {
             params.vigencia = null
         }
@@ -45,8 +44,17 @@ class ConvenioController {
             return
         }
         Date fechaDeFirma = sdf.parse(params.fechaDeFirma)        
-        params.fechaDeFirma = fechaDeFirma        
+        params.fechaDeFirma = fechaDeFirma
         
+        println "Vigencia=" + vigencia
+        println "Fecha de firma" + fechaDeFirma
+        
+        if(vigencia.compareTo(fechaDeFirma)>0) {
+            println "wfwefewwe"               
+            flash.error = "La fecha de vigencia debe ser mayor o igual a la fecha de firma."
+            redirect(action: "create", params:params)
+            return
+        }
         def convenioInstance = new Convenio(params)
         
         //TODO Corregir
@@ -81,10 +89,12 @@ class ConvenioController {
         session.idConvenio = null
         def convenioInstance = Convenio.get(id)
         def yesedit = null
-        println "que me trae la variable de nombredecopiadefirma}::" + convenioInstance.nombreDeCopiaElectronica
+        println "que me trae la variable de nombredecopiadefirma: " + convenioInstance.nombreDeCopiaElectronica
         if (convenioInstance.nombreDeCopiaElectronica == null){
-           yesedit = true 
+            flash.info = null
+            yesedit = true 
         }else{
+         flash.info= "El convenio no puede editarse porque esta actualmente firmado."   
             yesedit = false
         }
         println "variable yesedit:::" + yesedit 
@@ -99,66 +109,66 @@ class ConvenioController {
 
     def update(Long id, Long version) {
         def convenioInstance = Convenio.get(id)
-            if (!convenioInstance) {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
-                redirect(action: "list")
-                return
-            }
+        if (!convenioInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
+            redirect(action: "list")
+            return
+        }
 
-            if (version != null) {
-                if (convenioInstance.version > version) {
-                    convenioInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                        [message(code: 'convenio.label', default: 'Convenio')] as Object[],
+        if (version != null) {
+            if (convenioInstance.version > version) {
+                convenioInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
+                    [message(code: 'convenio.label', default: 'Convenio')] as Object[],
                           "Another user has updated this Convenio while you were editing")
-                    render(view: "edit", model: [convenioInstance: convenioInstance])
-                    return
-                }
-            }
-    
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            if (params.fechaDeFirma == "") {
-                flash.error = "Debe existir una fecha de firma del convenio."
-                params.fechaDeFirma = null
-            } else {
-                Date fechaDeFirma = sdf.parse(params.fechaDeFirma)        
-                params.fechaDeFirma = fechaDeFirma
-            }
-        
-            if (params.vigencia != "Indefinida") {
-                Date vigencia = sdf.parse(params.vigencia)
-                params.vigencia = vigencia
-            } else {
-                params.vigencia = null
-            }
-                
-            convenioInstance.properties = params
-
-            if (!convenioInstance.save(flush: true)) {
                 render(view: "edit", model: [convenioInstance: convenioInstance])
                 return
             }
+        }
+    
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        if (params.fechaDeFirma == "") {
+            flash.error = "Debe existir una fecha de firma del convenio."
+            params.fechaDeFirma = null
+        } else {
+            Date fechaDeFirma = sdf.parse(params.fechaDeFirma)        
+            params.fechaDeFirma = fechaDeFirma
+        }
+        
+        if (params.vigencia != "Indefinida") {
+            Date vigencia = sdf.parse(params.vigencia)
+            params.vigencia = vigencia
+        } else {
+            params.vigencia = null
+        }
+                
+        convenioInstance.properties = params
 
-            flash.message = message(code: 'default.updated.message', args: [message(code: 'convenio.label', default: 'Convenio'), convenioInstance.id])
-            redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
+        if (!convenioInstance.save(flush: true)) {
+            render(view: "edit", model: [convenioInstance: convenioInstance])
+            return
+        }
+
+        flash.message = message(code: 'default.updated.message', args: [message(code: 'convenio.label', default: 'Convenio'), convenioInstance.id])
+        redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
     }
 
     def delete(Long id) {
         def convenioInstance = Convenio.get(id)
-            if (!convenioInstance) {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
-                redirect(action: "list")
-                return
-            }
+        if (!convenioInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
+            redirect(action: "list")
+            return
+        }
 
-            try {
-                convenioInstance.delete(flush: true)
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
-                redirect(action: "list")
-            }
-            catch (DataIntegrityViolationException e) {
-                flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
-                redirect(action: "show", id: id)
-            }
+        try {
+            convenioInstance.delete(flush: true)
+            flash.message = message(code: 'default.deleted.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
+            redirect(action: "list")
+        }
+        catch (DataIntegrityViolationException e) {
+            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
+            redirect(action: "show", id: id)
+        }
     }
     
     def addFirmante () {
@@ -190,9 +200,9 @@ class ConvenioController {
     def removeFirmante () {
         def convenioInstance = Convenio.get(params.convenio.id as long)        
         def personaInstance = Persona.get(params.firmante.id as long)
-            convenioInstance.removeFromFirmantes(personaInstance)
-            flash.message = "El firmante ha sido eliminado."        
-            redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
+        convenioInstance.removeFromFirmantes(personaInstance)
+        flash.message = "El firmante ha sido eliminado."        
+        redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
     }
     
     def addResponsable () {
@@ -527,4 +537,10 @@ class ConvenioController {
     def regresar(Long id) {
         redirect(action: "edit", id: id)
     }
+    def detalles(Long id){
+        def convenioInstance = Convenio.get(id)
+        println "variable id ::." + id
+        [ convenioInstance : convenioInstance ]
+    } 
 }
+
