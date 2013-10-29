@@ -12,13 +12,13 @@
     <g:link class="btn btn-small btn-info" controller="convenio" action="create">
       <i class="icon-book"></i>
     </g:link>
-
+    
+    <g:link class="btn btn-small btn-purple" controller="poder" action="create">
+      <i class="icon-user"></i>
+    </g:link>
+    
     <g:link class="btn btn-small btn-warning" controller="tarea" action="hoy">
       <i class="icon-check"></i>
-    </g:link>
-
-    <g:link class="btn btn-small btn-danger" controller="user">
-      <i class="icon-lock"></i>
     </g:link>
   </div>
 

@@ -12,7 +12,7 @@
     <g:link class="btn btn-small btn-info" controller="convenio" action="create">
       <i class="icon-book"></i>
     </g:link>
-
+    
     <g:link class="btn btn-small btn-purple" controller="poder" action="create">
       <i class="icon-user"></i>
     </g:link>
@@ -37,74 +37,33 @@
   <li class="active open">
     <a href="#" class="dropdown-toggle">
       <i class="icon-book"></i>
-      <span class="menu-text">Turnos</span>
+      <span class="menu-text">Poderes</span>
       <b class="arrow icon-angle-down"></b>
     </a>
     <ul class="submenu">
       <li>
-        <g:link controller="tarea" action="create">
-          <i class="icon-double-angle-right"></i> Nuevo
+        <g:link controller="poder" action="create">
+          <i class="icon-double-angle-right"></i> Otorgamiento
         </g:link>
       </li>
       <li>
-        <g:link controller="tarea" action="hoy">
-          <i class="icon-double-angle-right"></i> Para hoy
-        </g:link>
-      </li>
-      <li>
-        <g:link controller="tarea" action="programadas">
-          <i class="icon-double-angle-right"></i> Programados
-        </g:link>
-      </li>
-      <li>
-        <g:link controller="tarea" action="retrasadas">
-          <i class="icon-double-angle-right"></i> Retrasados
-        </g:link>
-      </li>
-      <li>
-        <g:link controller="tarea" action="concluidas">
-          <i class="icon-double-angle-right"></i> Concluídos
-        </g:link>
-      </li>
-    </ul>
-  </li>
-  
-  <li class="active open">
-    <a href="#" class="dropdown-toggle">
-      <i class="icon-hdd"></i>
-      <span class="menu-text"> Reportes </span>
-      <b class="arrow icon-angle-down"></b>
-    </a>
-    <ul class="submenu">
-      <li>
-        <g:link controller="reporteDeTarea" action="totalDeTurnos">
-          <i class="icon-double-angle-right"></i> Total de Turnos
-        </g:link>
-      </li>
-      <li>
-          <!--
-        <g:link controller="reporteDeTarea" action="turnosPorFechaInit">
-          <i class="icon-double-angle-right"></i> Turnos por Fecha
-        </g:link>-->
-      </li>
-    </ul>
-  </li>
-  
-  <li class="active open">
-    <a href="#" class="dropdown-toggle">
-      <i class="icon-hdd"></i>
-      <span class="menu-text"> Grupos </span>
-      <b class="arrow icon-angle-down"></b>
-    </a>
-    <ul class="submenu">
-      <li>
-        <g:link controller="grupo" action="create">
-          <i class="icon-double-angle-right"></i> Nuevo
-        </g:link>
-      </li>
-      <li>        
-        <g:link controller="grupo" action="list">
+        <g:link controller="poder" action="list">
           <i class="icon-double-angle-right"></i> Consulta
+        </g:link>
+      </li>
+    </ul>
+  </li>
+  
+  <li class="active open">
+    <a href="#" class="dropdown-toggle">
+      <i class="icon-hdd"></i>
+      <span class="menu-text"> Catálogos </span>
+      <b class="arrow icon-angle-down"></b>
+    </a>
+    <ul class="submenu">
+      <li>
+        <g:link controller="motivoDeOtorgamiento">
+          <i class="icon-double-angle-right"></i> Motivo de Otorgamiento
         </g:link>
       </li>
     </ul>

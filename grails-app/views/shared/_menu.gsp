@@ -14,13 +14,14 @@
       <i class="icon-book"></i>
     </g:link>
 
+    <g:link class="btn btn-small btn-purple" controller="poder" action="create">
+      <i class="icon-user"></i>
+    </g:link>
+    
     <g:link class="btn btn-small btn-warning" controller="tarea" action="hoy">
       <i class="icon-check"></i>
     </g:link>
 
-    <g:link class="btn btn-small btn-danger" controller="user">
-      <i class="icon-lock"></i>
-    </g:link>
   </div>
 
   <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
@@ -35,16 +36,16 @@
 </div><!--#sidebar-shortcuts-->
 
 <ul class="nav nav-list">
-  <!--<li>
-    <g:link controller="dashboard" action="index">
-      <i class="icon-dashboard"></i>
-      <span class="menu-text">Inicio</span>
-    </g:link>          
-  </li>-->
   <li>
     <g:link controller="convenio" action="list">
       <i class="icon-book"></i>
       <span class="menu-text">Convenios</span>
+    </g:link> 
+  </li>
+  <li>
+    <g:link controller="poder" action="list">
+      <i class="icon-key"></i>
+      <span class="menu-text">Poderes</span>
     </g:link> 
   </li>
   <li>
@@ -53,12 +54,6 @@
       <span class="menu-text">Turnos</span>
     </g:link> 
   </li>
-  <!--<li>
-    <g:link controller="poder" action="list">
-      <i class="icon-key"></i>
-      <span class="menu-text">Poderes</span>
-    </g:link> 
-  </li>-->
   <li>
     <g:link controller="user">
       <i class="icon-lock"></i>
