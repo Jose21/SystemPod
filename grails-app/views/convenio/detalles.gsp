@@ -7,15 +7,15 @@
     </head>
     <body onload="actualizaReloj()">
         <table  WIDTH="100%">
-                <td WIDTH="20%" style="text-align:right">                  
-                    <img src="/sgcon/static/images/infonavit.jpg" width="64px" height="64px" />
-                </td>
-                <td WIDTH="60%"> 
-                    <h2 style="text-align:center">Datos del Convenio</h2>
-                </td>
-                <td WIDTH="20%">
-                    <h2 style="text-align:center">SGCon</h2>
-                </td>                
+            <td WIDTH="20%" style="text-align:right">                  
+                <img src="/sgcon/static/images/infonavit.jpg" width="64px" height="64px" />
+            </td>
+            <td WIDTH="60%"> 
+                <h2 style="text-align:center">Datos del Convenio</h2>
+            </td>
+            <td WIDTH="20%">
+                <h2 style="text-align:center">SGCon</h2>
+            </td>                
         </table>
         <HR SIZE=5 WIDTH="100%" COLOR="#ff0000" ALIGN = left>
         <table WIDTH="100%">
@@ -71,26 +71,57 @@
                 <td style="text-align: left">${convenioInstance?.nombreDeCopiaElectronica}</td>
             </tr>
             <th style="text-align: right"><g:message code="convenio.firmantes.label" default="Responsables:" /></th>
-            <tr>
-                <th></th>
-                <th style="text-align:left"><g:message code="convenio.responsables.label" default="Nombre" /></th>
-                <th style="text-align:left"><g:message code="convenio.responsables.label" default="Institucion" /></th>
-            </tr>
-            <g:each in ="${convenioInstance.responsables}" var="responsable">
-                    <tr>
-                        <td></td>
-                        <td>${responsable.nombre}</td>
-                        <td>${responsable.institucion}</td>
-                    </tr>                
-            </g:each>
-            <th style="text-align: right"><g:message code="convenio.firmantes.label" default="Firmantes:" /></th>
-                <g:each in ="${convenioInstance.firmantes}" var="firmante">
+                <g:if test="${convenioInstance.responsables}">
                 <tr>
-                    <td></td>
-                    <td>${firmante.nombre}</td>
-                    <td>${firmante.institucion}</td>
+                    <th></th>
+                    <th style="text-align:left"><g:message code="convenio.responsables.label" default="Nombre" /></th>
+                    <th style="text-align:left"><g:message code="convenio.responsables.label" default="Institucion" /></th>
                 </tr>
-            </g:each>
+                <g:each in ="${convenioInstance.responsables}" var="responsable">
+                    <g:if test="${responsable.institucion && responsable.institucion.toUpperCase().contains("INFONAVIT")}">
+                        <tr>
+                            <td></td>
+                            <td>${responsable.nombre}</td>
+                            <td><b><font color="red">${responsable.institucion}</font></b></td>
+                        </tr>
+                    </g:if>
+                </g:each>
+                <g:each in ="${convenioInstance.responsables}" var="responsable">
+                    <g:if test="${!responsable.institucion  || !responsable.institucion.toUpperCase().contains("INFONAVIT")}">
+                        <tr>
+                            <td></td>
+                            <td>${responsable.nombre}</td>
+                            <td>${responsable.institucion}</td>
+                        </tr>
+                    </g:if>
+                </g:each>
+            </g:if>
+            <tr><th style="text-align: right"><g:message code="convenio.firmantes.label" default="Firmantes:" /></th></tr>
+                <g:if test="${convenioInstance.firmantes}">
+                    <tr>
+                    <th></th>
+                    <th style="text-align:left"><g:message code="convenio.responsables.label" default="Nombre" /></th>
+                    <th style="text-align:left"><g:message code="convenio.responsables.label" default="Institucion" /></th>
+                </tr>
+                    <g:each in ="${convenioInstance.firmantes}" var="firmante">
+                        <g:if test="${firmante.institucion && firmante.institucion.toUpperCase().contains("INFONAVIT")}">
+                        <tr>
+                            <td></td>
+                            <td>${firmante.nombre}</td>
+                            <td><b><font color="red">${firmante.institucion}</font></b></td>
+                        </tr>
+                    </g:if>
+                </g:each>
+                <g:each in ="${convenioInstance.firmantes}" var="firmante">
+                    <g:if test="${!firmante.institucion || !firmante.institucion.toUpperCase().contains("INFONAVIT")}">
+                        <tr>
+                            <td></td>
+                            <td>${firmante.nombre}</td>
+                            <td>${firmante.institucion}</td>
+                        </tr>
+                    </g:if>
+                </g:each>
+            </g:if>
             <tr>
                 <td></td>
                 <td></td>

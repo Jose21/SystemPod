@@ -440,7 +440,7 @@ class ConvenioController {
         println "total::." + session.convenioInstanceList.size()
         println "params::::::::::::::::"+ params
         println "convenioinstance::::::"+ session.convenioInstanceList
-        if (convenioInstanceList.size != 0) {
+        if (convenioInstanceList.size() != 0) {
             println "despues del if::::::"+ convenioInstanceList
             flash.warn = null
             if(params?.format && params.format != "html"){
