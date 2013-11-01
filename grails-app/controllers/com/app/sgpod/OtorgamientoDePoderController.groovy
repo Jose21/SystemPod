@@ -3,7 +3,7 @@ package com.app.sgpod
 import java.text.SimpleDateFormat
 import org.springframework.dao.DataIntegrityViolationException
 
-class PoderController {
+class OtorgamientoDePoderController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -13,11 +13,11 @@ class PoderController {
 
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [poderInstanceList: Poder.list(params), poderInstanceTotal: Poder.count()]
+        [otorgamientoDePoderInstanceList: OtorgamientoDePoder.list(params), otorgamientoDePoderInstanceTotal: OtorgamientoDePoder.count()]
     }
 
     def create() {
-        [poderInstance: new Poder(params)]
+        [otorgamientoDePoderInstance: new OtorgamientoDePoder(params)]
     }
 
     def save() {
@@ -27,57 +27,57 @@ class PoderController {
             Date registroDeLaSolicitud = sdf.parse(params.registroDeLaSolicitud)
             params.registroDeLaSolicitud = registroDeLaSolicitud
         }
-        if (params.fechaDeOtorgamientoDePoder) {
-            Date fechaDeOtorgamientoDePoder = sdf.parse(params.fechaDeOtorgamientoDePoder)
-            params.fechaDeOtorgamientoDePoder = fechaDeOtorgamientoDePoder
+        if (params.fechaDeOtorgamiento) {
+            Date fechaDeOtorgamiento = sdf.parse(params.fechaDeOtorgamiento)
+            params.fechaDeOtorgamiento = fechaDeOtorgamiento
         }
-        def poderInstance = new Poder(params)
-        if (!poderInstance.save(flush: true)) {
-            render(view: "create", model: [poderInstance: poderInstance])
+        def otorgamientoDePoderInstance = new OtorgamientoDePoder(params)
+        if (!otorgamientoDePoderInstance.save(flush: true)) {
+            render(view: "create", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])
             return
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'poder.label', default: 'Poder'), poderInstance.id])
-        redirect(action: "edit", id: poderInstance.id)
+        flash.message = message(code: 'default.created.message', args: [message(code: 'poder.label', default: 'Poder'), otorgamientoDePoderInstance.id])
+        redirect(action: "edit", id: otorgamientoDePoderInstance.id)
     }
 
     def show(Long id) {
-        def poderInstance = Poder.get(id)
-        if (!poderInstance) {
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)
+        if (!otorgamientoDePoderInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'poder.label', default: 'Poder'), id])
             redirect(action: "list")
             return
         }
 
-        [poderInstance: poderInstance]
+        [otorgamientoDePoderInstance: otorgamientoDePoderInstance]
     }
 
     def edit(Long id) {
-        def poderInstance = Poder.get(id)
-        if (!poderInstance) {
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)
+        if (!otorgamientoDePoderInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'poder.label', default: 'Poder'), id])
             redirect(action: "list")
             return
         }
 
-        [poderInstance: poderInstance]
+        [otorgamientoDePoderInstance: otorgamientoDePoderInstance]
     }
 
     def update(Long id, Long version) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        def poderInstance = Poder.get(id)
-        if (!poderInstance) {
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)
+        if (!otorgamientoDePoderInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'poder.label', default: 'Poder'), id])
             redirect(action: "list")
             return
         }
 
         if (version != null) {
-            if (poderInstance.version > version) {
-                poderInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
+            if (otorgamientoDePoderInstance.version > version) {
+                otorgamientoDePoderInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
                           [message(code: 'poder.label', default: 'Poder')] as Object[],
                           "Another user has updated this Poder while you were editing")
-                render(view: "edit", model: [poderInstance: poderInstance])
+                render(view: "edit", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])
                 return
             }
         }
@@ -86,34 +86,34 @@ class PoderController {
             Date registroDeLaSolicitud = sdf.parse(params.registroDeLaSolicitud)
             params.registroDeLaSolicitud = registroDeLaSolicitud
         }
-        if (params.fechaDeOtorgamientoDePoder) {
-            Date fechaDeOtorgamientoDePoder = sdf.parse(params.fechaDeOtorgamientoDePoder)
-            params.fechaDeOtorgamientoDePoder = fechaDeOtorgamientoDePoder
+        if (params.fechaDeOtorgamiento) {
+            Date fechaDeOtorgamiento = sdf.parse(params.fechaDeOtorgamiento)
+            params.fechaDeOtorgamiento = fechaDeOtorgamiento
         } else {
-            params.fechaDeOtorgamientoDePoder = null
+            params.fechaDeOtorgamiento = null
         }
         
-        poderInstance.properties = params
+        otorgamientoDePoderInstance.properties = params
 
-        if (!poderInstance.save(flush: true)) {
-            render(view: "edit", model: [poderInstance: poderInstance])
+        if (!otorgamientoDePoderInstance.save(flush: true)) {
+            render(view: "edit", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])
             return
         }
 
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'poder.label', default: 'Poder'), poderInstance.id])
-        redirect(action: "edit", id: poderInstance.id)
+        flash.message = message(code: 'default.updated.message', args: [message(code: 'poder.label', default: 'Poder'), otorgamientoDePoderInstance.id])
+        redirect(action: "edit", id: otorgamientoDePoderInstance.id)
     }
 
     def delete(Long id) {
-        def poderInstance = Poder.get(id)
-        if (!poderInstance) {
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)
+        if (!otorgamientoDePoderInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'poder.label', default: 'Poder'), id])
             redirect(action: "list")
             return
         }
 
         try {
-            poderInstance.delete(flush: true)
+            otorgamientoDePoderInstance.delete(flush: true)
             flash.message = message(code: 'default.deleted.message', args: [message(code: 'poder.label', default: 'Poder'), id])
             redirect(action: "list")
         }

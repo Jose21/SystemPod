@@ -14,7 +14,7 @@
       <i class="icon-book"></i>
     </g:link>
 
-    <g:link class="btn btn-small btn-purple" controller="poder" action="create">
+    <g:link class="btn btn-small btn-purple" controller="otorgamientoDePoder" action="create">
       <i class="icon-user"></i>
     </g:link>
     
@@ -43,7 +43,7 @@
     </g:link> 
   </li>
   <li>
-    <g:link controller="poder" action="list">
+    <g:link controller="otorgamientoDePoder" action="list">
       <i class="icon-key"></i>
       <span class="menu-text">Poderes</span>
     </g:link> 
