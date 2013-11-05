@@ -57,6 +57,26 @@
   <li class="active open">
     <a href="#" class="dropdown-toggle">
       <i class="icon-hdd"></i>
+      <span class="menu-text"> Reportes </span>
+      <b class="arrow icon-angle-down"></b>
+    </a>
+    <ul class="submenu">
+        <li>
+        <g:link controller="reporteDeConvenio" action="totalDeConvenios">
+          <i class="icon-double-angle-right"></i> Total de Convenios
+        </g:link>
+      </li>
+        <li>
+        <g:link controller="reporteDeConvenio" action="conveniosPorFechaInit">
+          <i class="icon-double-angle-right"></i> Por Rango de Fecha
+        </g:link>
+      </li>
+    </ul>
+  </li>
+  
+  <li class="active open">
+    <a href="#" class="dropdown-toggle">
+      <i class="icon-hdd"></i>
       <span class="menu-text"> Catálogos </span>
       <b class="arrow icon-angle-down"></b>
     </a>

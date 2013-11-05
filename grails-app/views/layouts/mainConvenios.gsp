@@ -173,6 +173,10 @@
     <script src="${resource(dir:'assets/js/markdown',file:'bootstrap-markdown.min.js')}"></script>
     <script src="${resource(dir:'assets/js',file:'jquery.hotkeys.min.js')}"></script>    
     <script src="${resource(dir:'assets/js',file:'bootbox.min.js')}"></script>
+    
+    <script src="${resource(dir:'js',file:'highcharts.js')}"></script>
+    <script src="${resource(dir:'js/modules',file:'exporting.js')}"></script>
+  
 
     <!--ace scripts-->
     <script src="${resource(dir:'assets/js',file:'ace-elements.min.js')}"></script>
@@ -209,7 +213,37 @@
           });
           $("#btnIndefinida").click(function() {
             $("#vigencia").val("Indefinida");
-          });           
+          }); 
+          
+          $('#containerTotalDeConvenios').highcharts({
+            chart: { type: 'column' },
+            title: { text: "${conveniosPorFechaBean?conveniosPorFechaBean.title:""}" },
+            xAxis: { categories: [ 'Total'] },
+            yAxis: { min: 0, title: { text: 'Cantidad de Convenios' } },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: { column: { pointPadding: 0.2, borderWidth: 0 } },
+            series: [{
+                name: 'Convenios',
+                data: [ ${conveniosPorFechaBean?conveniosPorFechaBean?.totalConvenios:0}
+                ]
+                }, {
+                name: 'Contraidas por INFONAVIT',
+                data: [ ${conveniosPorFechaBean?conveniosPorFechaBean?.totalConveniosContraidos:0}
+                ]
+                }, {
+                name: 'Otras Dependencias',
+                data: [ ${conveniosPorFechaBean?conveniosPorFechaBean?.totalConveniosNoContraidos:0}
+                ]
+            }]
+            });
+            
         })(jQuery);
     </script>
     <g:javascript library="application"/>
