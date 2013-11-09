@@ -1,19 +1,27 @@
 package com.app.sgcon
 
-import com.app.Historial
+import com.app.security.Usuario
+import com.app.sgcon.Convenio
 
-class HistorialDeConvenio extends Historial {
+class HistorialDeConvenio {
 
-    String que
-    static belongsTo = [  convenio : Convenio ]
+    Convenio convenio
+    Usuario usuario
+    String campo
+    String valorAnterior
+    String valorActual
+    Date dateCreated
+    String accion
     
     static constraints = {
-        que nullable:false, 
-            inList : [
-                "creó un convenio", 
-                "editó la información de un convenio", 
-                "cambió de estatus un convenio", 
-            ]
-        convenio nullable:false
+        
+        convenio nullable: false
+        usuario nullable: false
+        campo nullable: true, blank: true
+        valorAnterior nullable: true, blank: true
+        valorActual nullable: true, blank:true
+        accion blank: false
+        
     }
+    
 }
