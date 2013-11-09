@@ -46,6 +46,12 @@
                         <span class="bigger-110">Por Nombre de Responsables <span class="badge"></span></span>
                     </a>
                 </li>
+                <li class="${nombreFirmantesActive?:""}">
+                    <a data-toggle="tab" href="#nombreFirmantes">              
+                        <i class="icon-group bigger-130"></i>
+                        <span class="bigger-110">Por Nombre de Firmantes <span class="badge"></span></span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
@@ -70,7 +76,6 @@
         </div>
         <div id="porFechaRegistro" class="tab-pane ${porFechaRegistroActive?:""}">  
             <div class="message-container">
-              <!-- MIS TAREAS (PROPIAS Y LAS QUE HE COMPARTIDO) -->
                 <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
                     <div class="message-bar">
                     </div>
@@ -91,7 +96,6 @@
         </div>
         <div id="porCategoria" class="tab-pane ${porCategoriaActive?:""}">  
             <div class="message-container">
-              <!-- MIS TAREAS (PROPIAS Y LAS QUE HE COMPARTIDO) -->
                 <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
                     <div class="message-bar">
                     </div>
@@ -112,7 +116,6 @@
         </div>
         <div id="porFecha" class="tab-pane ${rangoDeFechaActive?:""}">  
             <div class="message-container">
-              <!-- MIS TAREAS (PROPIAS Y LAS QUE HE COMPARTIDO) -->
                 <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
                     <div class="message-bar">
                     </div>
@@ -133,7 +136,6 @@
         </div>
         <div id="nombreResponsables" class="tab-pane ${nombreResponsablesActive?:""}">  
             <div class="message-container">
-              <!-- MIS TAREAS (PROPIAS Y LAS QUE HE COMPARTIDO) -->
                 <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
                     <div class="message-bar">
                     </div>
@@ -152,34 +154,54 @@
                 </div>
             </div><!--/.message-container-->
         </div>
+        <div id="nombreFirmantes" class="tab-pane ${nombreFirmantesActive?:""}">  
+            <div class="message-container">
+                <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
+                    <div class="message-bar">
+                    </div>
+                    <g:form method="post">
+                        <g:hiddenField name="inActive" value="nombreFirmantes"/>
+                        <div class="control-group">
+                            <div class="row-fluid input-prepend">
+                                <label for="nombre" class="control-label">
+                                    <g:message code="persona.nombre.label" default="Nombre" />
+                                </label>
+                                <g:textField name="nombre" required="" value="${personaInstance?.nombre}"/>
+                                <g:actionSubmit class="btn btn-primary" action="buscarPorNombreFirmantes" value="Buscar" />
+                            </div>
+                        </div>
+                    </g:form>
+                </div>
+            </div><!--/.message-container-->
+        </div>
 
         <table class="table table-bordered table-striped">
             <thead>
                 <g:if test="${numeroDeConvenio}">
                     <tr>
-                        <th colspan="8"  style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR FOLIO: ${numeroDeConvenio}</th>
+                        <th colspan="9"  style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR FOLIO: ${numeroDeConvenio}</th>
                     </tr>
                 </g:if>
                 <g:if test="${rangoDeFechaRegistro}">
                     <tr>
-                        <th colspan="8" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR FECHA DE REGISTRO: ${rangoDeFechaRegistro}</br></br></th>
+                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR FECHA DE REGISTRO: ${rangoDeFechaRegistro}</br></br></th>
                     </tr>
                 </g:if>
                 <g:if test="${params.id}">
                     <tr>
-                        <th colspan="8" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR CATEGORIA: ${params.id}</br></br></th>
+                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR CATEGORIA: ${params.id}</br></br></th>
                     </tr>
                 </g:if>
                 <g:if test="${rangoDeFecha}">
                     <tr>
-                        <th colspan="8" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR FECHA DE FIRMA: ${rangoDeFecha}</br></br></th>
+                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR FECHA DE FIRMA: ${rangoDeFecha}</br></br></th>
                     </tr>
                 </g:if>
                 <g:if test="${params.nombre}">
                     <tr>
-                        <th colspan="8" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR RESPONSABLES: ${params.nombre}</br></br></th>
+                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR NOMBRE: ${params.nombre}</br></br></th>
                     </tr>
-                </g:if>
+                </g:if>                
             <br>
             <tr>
                 <th><g:message code="convenio.id.label"  default="Identificador interno" /></th>
@@ -187,6 +209,7 @@
                 <th><g:message code="convenio.objeto.label" default="Objeto" /></th>
                 <th><g:message code="convenio.dateCreated.label" default="Fecha de Registro" /></th>
                 <th><g:message code="convenio.responsables.label" default="Responsables" /></th>
+                <th><g:message code="convenio.firmantes.label" default="Firmantes" /></th>
                 <th><g:message code="convenio.fechaDeFirma.label" default="Fecha De Firma" />
                 <th><g:message code="convenio.status.label" default="Status" /></th>
                 <th><g:message code="convenio.status.label" default="Imprimir"/></th>
@@ -203,6 +226,12 @@
                         <td>
                             <g:each in ="${convenioInstance.responsables}" var="responsable">
                                 ${responsable.nombre}
+                                <br>
+                            </g:each>
+                        </td>
+                        <td>
+                            <g:each in ="${convenioInstance.firmantes}" var="firmante">
+                                ${firmante.nombre}
                                 <br>
                             </g:each>
                         </td>

@@ -15,9 +15,9 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                 <a class="btn btn-small btn-success tip-bottom" href="#vincularConvenio" data-toggle="modal">
                     <i class="icon-user"></i> Vincular convenio al que modifica
                 </a>
-                <g:link action="share" class="btn btn-small btn-info tip-bottom" id="${convenioInstance?.id}">          
+                <!--<g:link action="share" class="btn btn-small btn-info tip-bottom" id="${convenioInstance?.id}">          
                     <i class="icon-share-alt"></i> Compartir
-                </g:link>
+                </g:link>-->
                 <g:link controller="tarea" action="create" class="btn btn-small btn-inverse tip-bottom" params="[ idConvenio : convenioInstance?.id ]">
                     <i class="icon-external-link"></i> Asociar Turno
                 </g:link>
@@ -448,51 +448,51 @@ c<%@ page import="com.app.sgcon.Convenio" %>
     </div>    
     <script lang="javascript" type="text/javascript">
         (function($) {
-        $('#firmante').autocomplete({
-        source : function(request, response){
-        $.ajax({
-                 url: '/<g:meta name='app.name'/>/persona/ajaxFinder', 
-        data: request,
-        success: function(data){
-        response(data); 
-        },
-        error: function(){}
-        });
-        },
-        minLength: 3,
-        select: function(event, ui) {
-        $('#firmante').val(ui.item.nasSymbol + "-")
-        }
-        });
-        $('#responsable').autocomplete({
-        source : function(request, response){
-        $.ajax({
-                 url: '/<g:meta name='app.name'/>/persona/ajaxFinder', 
-        data: request,
-        success: function(data){
-        response(data); 
-        },
-        error: function(){}
-        });
-        },
-        minLength: 3,
-        select: function(event, ui) {
-        $('#responsable').val(ui.item.nasSymbol + "-")
-        }
-        });
-        $(function(){
-        $("input").attr("disabled", "disabled");
-        $("textarea").attr("disabled", "disabled");
-        $("select").attr("disabled", "disabled");
-        $(".deshabilitable").attr("disabled", "disabled");
-        $("href").attr("disabled", "disabled");
+            $('#firmante').autocomplete({
+                source : function(request, response){
+                    $.ajax({
+                        url: '/<g:meta name='app.name'/>/persona/ajaxFinder', 
+                        data: request,
+                        success: function(data){
+                            response(data); 
+                        },
+                        error: function(){}
+                    });
+                },
+                minLength: 3,
+                select: function(event, ui) {
+                    $('#firmante').val(ui.item.nasSymbol + "-")
+                }
+            });
+            $('#responsable').autocomplete({
+                source : function(request, response){
+                    $.ajax({
+                        url: '/<g:meta name='app.name'/>/persona/ajaxFinder', 
+                        data: request,
+                        success: function(data){
+                            response(data); 
+                        },
+                        error: function(){}
+                    });
+                },
+                minLength: 3,
+                select: function(event, ui) {
+                    $('#responsable').val(ui.item.nasSymbol + "-")
+                }
+            });
+            $(function(){
+                $("input").attr("disabled", "disabled");
+                $("textarea").attr("disabled", "disabled");
+                $("select").attr("disabled", "disabled");
+                $(".deshabilitable").attr("disabled", "disabled");
+                $("href").attr("disabled", "disabled");
 
                 if(${yesedit} == true){
-        $("input").removeAttr("disabled");
-        $("textarea").removeAttr("disabled");
-        $("select").removeAttr("disabled");
-        }
-        });
+                    $("input").removeAttr("disabled");
+                    $("textarea").removeAttr("disabled");
+                    $("select").removeAttr("disabled");
+                }
+            });
             $(document).scrollTop( $("#${anchor?:""}").offset().top );
         })(jQuery);
     </script>

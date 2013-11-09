@@ -10,7 +10,7 @@ class Persona {
     String telefono
     String extension
     Date dateCreated
-    Date lastUpdated
+    Date lastUpdated   
     
     static constraints = {
         nombre blank:false

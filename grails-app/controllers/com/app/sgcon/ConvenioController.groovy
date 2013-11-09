@@ -23,6 +23,9 @@ class ConvenioController {
 
     def list() {
         flash.error = null
+        flash.info = null
+        flash.message = null
+        flash.warn = null
         [porFolioActive:"active"]  
     }
 
@@ -82,8 +85,7 @@ class ConvenioController {
     def edit(Long id, String nombreDeCopiaElectronica) {
         session.idConvenio = null
         def convenioInstance = Convenio.get(id)
-        def yesedit = null
-        println "que me trae la variable de nombredecopiadefirma: " + convenioInstance.nombreDeCopiaElectronica
+        def yesedit = null        
         if (convenioInstance.nombreDeCopiaElectronica == null){
             flash.info = null
             yesedit = true 
@@ -91,13 +93,12 @@ class ConvenioController {
             flash.info= "El convenio no puede editarse porque esta actualmente firmado."   
             yesedit = false
         }
-        println "variable yesedit:::" + yesedit 
         if (!convenioInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
             redirect(action: "list")
             return
         }
-        println "Edit: anchor->"+params.anchor
+        //println "Edit: anchor->" + params.anchor
         [convenioInstance: convenioInstance, anchor : params.anchor?:"", yesedit:yesedit]
     }
 
@@ -365,7 +366,7 @@ class ConvenioController {
         def c = Convenio.createCriteria()
         def convenioInstanceList = c.list {
             responsables {
-                like("nombre", "%"+params.nombre+"%")
+                ilike("nombre", "%"+params.nombre+"%")
             }
             order("id", "asc")
         }
@@ -378,7 +379,30 @@ class ConvenioController {
                 nombreResponsablesActive : nombreResponsablesActive       
             ]
         )       
-    } 
+    }
+    
+    def buscarPorNombreFirmantes () {
+        def nombreFirmantesActive = null
+        if (params.inActive == "nombreFirmantes") {
+            nombreFirmantesActive = "active"
+        }        
+        def c = Convenio.createCriteria()
+        def convenioInstanceList = c.list {
+            firmantes {
+                ilike("nombre", "%"+params.nombre+"%")
+            }
+            order("id", "asc")
+        }
+        session.convenioInstanceList = convenioInstanceList
+        render(
+            view: "list", 
+            model: [
+                convenioInstanceList: convenioInstanceList,
+                convenioInstanceTotal: convenioInstanceList.size(),
+                nombreFirmantesActive : nombreFirmantesActive       
+            ]
+        )       
+    }
     
     def buscarPorCategoria (){
         def porCategoriaActive = null
@@ -559,6 +583,6 @@ class ConvenioController {
                 convenioInstance : convenioInstance
             ]
         )
-    }
+    }     
 }
 
