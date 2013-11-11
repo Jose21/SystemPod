@@ -193,20 +193,6 @@
         }).next().on(ace.click_event, function(){
         $(this).prev().focus();
         });
-        $('#rangoDeFecha').daterangepicker({ 
-        format: 'DD/MM/YYYY',
-        language: 'es'
-        }
-        ).prev().on(ace.click_event, function(){
-        $(this).next().focus();
-        });
-        $('#fechaLimite').daterangepicker({ 
-        format: 'DD/MM/YYYY',
-        locale: 'es'
-        }
-        ).prev().on(ace.click_event, function(){
-        $(this).next().focus();
-        });
         })(jQuery);
     </script>
     <g:javascript library="application"/>
