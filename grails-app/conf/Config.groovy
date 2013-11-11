@@ -1,3 +1,6 @@
+
+import org.apache.log4j.DailyRollingFileAppender
+
 // locations to search for config files that get merged into the main config;
 // config files can be ConfigSlurper scripts, Java properties files, or classes
 // in the classpath in ConfigSlurper format
@@ -73,12 +76,15 @@ environments {
 
 // log4j configuration
 log4j = {
-    // Example of changing the log pattern for the default console appender:
-    //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
-
+    appenders {
+        console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+        appender new DailyRollingFileAppender(
+            name: 'dailyAppender',
+            datePattern : "'.'yyyy-MM-dd",
+            fileName: "/var/uploads/sgcon/logs/sgcon.log",
+            layout: pattern(conversionPattern:'%d [%t] %-5p %c{2} %x - %m%n')
+        )
+    }
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts
@@ -92,6 +98,9 @@ log4j = {
            'net.sf.ehcache.hibernate'
     
     //trace 'grails.app.jobs.grails.plugin.asyncmail', 'grails.app.services.grails.plugin.asyncmail'
+    root {
+        info   'dailyAppender'
+    }
 }
 
 grails.gorm.default.mapping = {
@@ -105,20 +114,19 @@ grails.plugins.springsecurity.authority.className = 'com.app.security.Rol'
 grails.plugins.springsecurity.ui.encodePassword = false
 
 grails {
-   mail {
-     host = "smtp.gmail.com"
-     port = 465
-     username = "alertas.sgcon@gmail.com"
-     password = "1nf0n4pps"
-     props = ["mail.smtp.auth":"true", 					   
+    mail {
+        host = "smtp.gmail.com"
+        port = 465
+        username = "alertas.sgcon@gmail.com"
+        password = "1nf0n4pps"
+        props = ["mail.smtp.auth":"true", 					   
               "mail.smtp.socketFactory.port":"465",
               "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
               "mail.smtp.socketFactory.fallback":"false"]
-   }
+    }
 }
 // Uncomment and edit the following lines to start using Grails encoding & escaping improvements
 
-/* remove this line 
 // GSP settings
 grails {
     views {
@@ -138,4 +146,3 @@ grails {
         }
     }
 }
-remove this line */
