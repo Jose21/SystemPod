@@ -403,4 +403,43 @@ class TareaController {
         def message = "Tienes una nueva tarea asignada."
         [ tareaInstance : Tarea.get(1), message : message, usuarioInstance : springSecurityService.currentUser ]
     }
+    
+    def consultaTarea() {
+        flash.error = null
+        flash.info = null
+        flash.message = null
+        flash.warn = null
+        [porFolioActive:"active"]  
+    }
+    
+    def buscarPorFolio (){        
+        def porFolioActive = null
+        if (params.inActive=="porFolio") {
+            porFolioActive = "active"
+        }        
+        def id = null
+        def tareaInstanceList = null
+        def inActive = "active"
+        id = params.id
+        tareaInstanceList = Tarea.get(params.id)
+        if (params.id == "") {
+            flash.warn = "No existe el folio buscado "
+            
+        } else {
+            
+        }
+        session.tareaInstanceList = tareaInstanceList
+        session.inActive = inActive
+        render(
+            view: "consultaTarea", 
+            model: [
+                tareaInstanceList: tareaInstanceList,
+                //tareaInstanceTotal: tareaInstanceList.size(),
+                id: params.id,
+                porFolioActive : porFolioActive
+                
+            ]
+        )  
+    }
+    
 }
