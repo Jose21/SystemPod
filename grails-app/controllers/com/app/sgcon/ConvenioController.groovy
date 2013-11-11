@@ -98,7 +98,7 @@ class ConvenioController {
             redirect(action: "list")
             return
         }
-        //println "Edit: anchor->" + params.anchor
+        //log.info "Edit: anchor->" + params.anchor
         [convenioInstance: convenioInstance, anchor : params.anchor?:"", yesedit:yesedit]
     }
 
@@ -466,12 +466,12 @@ class ConvenioController {
     def generarReporte(){
         def convenioInstanceList = session.convenioInstanceList
         def inActive = session.inActive
-        println "activo:." + session.inActive
-        println "total::." + session.convenioInstanceList.size()
-        println "params::::::::::::::::"+ params
-        println "convenioinstance::::::"+ session.convenioInstanceList
+        log.info "activo:." + session.inActive
+        log.info "total::." + session.convenioInstanceList.size()
+        log.info "params::::::::::::::::"+ params
+        log.info "convenioinstance::::::"+ session.convenioInstanceList
         if (convenioInstanceList.size() != 0) {
-            println "despues del if::::::"+ convenioInstanceList
+            log.info "despues del if::::::"+ convenioInstanceList
             flash.warn = null
             if(params?.format && params.format != "html"){
                 response.contentType = grailsApplication.config.grails.mime.types[params.format]
@@ -488,7 +488,7 @@ class ConvenioController {
                 exportService.export(params.format, response.outputStream, session.convenioInstanceList, fields, labels, formatters, parameters)
             }
         }else{
-            println "<<<aaaaaaaaaaaaaaaaa" 
+            log.info "<<<aaaaaaaaaaaaaaaaa" 
             flash.warn = "No hay datos para generar reporte."
             
         }

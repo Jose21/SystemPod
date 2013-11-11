@@ -48,10 +48,10 @@ class DashboardController {
         //Checar que el oldPasswd sea correcto
         oldPasswd = springSecurityService.encodePassword(oldPasswd)
         
-        println "currentPasswd : " + user.password
-        println "oldPasswd : " + oldPasswd
-        println "newPasswd1 : " + newPasswd1
-        println "newPasswd2 : " + newPasswd2
+        log.info "currentPasswd : " + user.password
+        log.info "oldPasswd : " + oldPasswd
+        log.info "newPasswd1 : " + newPasswd1
+        log.info "newPasswd2 : " + newPasswd2
         
         if (oldPasswd != user.password) {
             flash.error = "La contraseña actual es incorrecta. Favor de verificarla."
