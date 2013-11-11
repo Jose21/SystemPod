@@ -6,6 +6,8 @@ import grails.plugins.springsecurity.Secured
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class PersonaController {
+    
+    def historialDeConvenioService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -86,7 +88,8 @@ class PersonaController {
 
     def updateIt(Long id, Long version) {
         def personaInstance = Persona.get(id)
-        
+        def convenioInstance = Convenio.get(params.convenio.id as long)
+        def personaOriginal = new Persona(personaInstance.properties)
         if (version != null) {
             if (personaInstance.version > version) {
                 personaInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
@@ -98,6 +101,9 @@ class PersonaController {
         }
 
         personaInstance.properties = params
+        if (personaInstance.isDirty()) {  
+            historialDeConvenioService.updateItConvenioToHistorial(personaInstance, personaOriginal, convenioInstance, "Se editó el convenio:")
+        }
 
         if (!personaInstance.save(flush: true)) {
             flash.message = ""

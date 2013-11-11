@@ -212,7 +212,8 @@
                 <th><g:message code="convenio.firmantes.label" default="Firmantes" /></th>
                 <th><g:message code="convenio.fechaDeFirma.label" default="Fecha De Firma" />
                 <th><g:message code="convenio.status.label" default="Status" /></th>
-                <th><g:message default="Opciones"/></th>
+                <th><g:message code="convenio.status.label" default="Imprimir"/></th>
+                <th><g:message code="convenio.status.label" default="Historial"/></th>
             </tr>
             </thead>
             <tbody>
@@ -236,7 +237,8 @@
                         </td>
                         <td><g:formatDate date="${convenioInstance.fechaDeFirma}" /></td>
                         <td>${fieldValue(bean: convenioInstance, field: "status")}</td>
-                        <td><g:link class="icon-print bigger-120" action="detalles"  target="_blank" id="${convenioInstance?.id}" /></td>
+                        <td style="text-align:center"><g:link class="icon-print bigger-120" action="detalles"  target="_blank" id="${convenioInstance?.id}" /></td>
+                        <td style="text-align:center"><g:link class="icon-calendar bigger-120" action="buscarHistorial" id="${convenioInstance?.id}" /></td>
                     </tr>
                 </g:each>
             </tbody>

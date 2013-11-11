@@ -5,12 +5,14 @@ import com.app.sgcon.beans.BusquedaBean
 import java.text.SimpleDateFormat
 import com.app.security.Usuario
 import grails.plugins.springsecurity.Secured
+import com.app.sgcon.HistorialDeConvenio
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class ConvenioController {
     def exportService
     def grailsApplication
     def springSecurityService
+    def historialDeConvenioService
     
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -65,6 +67,7 @@ class ConvenioController {
         usuarioDeConvenio.save(flush:true)
         
         flash.message = message(code: 'default.created.message', args: [message(code: 'convenio.label', default: 'Convenio'), convenioInstance.id])
+        historialDeConvenioService.addNewConvenioToHistorial(convenioInstance, null, null,"Se creo Convenio")
         redirect(action: "edit", id: convenioInstance.id)
     }
 
@@ -87,6 +90,7 @@ class ConvenioController {
             flash.info = null
             yesedit = true 
         }else{
+            flash.info= "El convenio no puede editarse porque esta actualmente firmado."   
             yesedit = false
         }
         if (!convenioInstance) {
@@ -100,6 +104,7 @@ class ConvenioController {
 
     def update(Long id, Long version) {
         def convenioInstance = Convenio.get(id)
+        def convenioOriginal = new Convenio(convenioInstance.properties)
         if (!convenioInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
             redirect(action: "list")
@@ -133,7 +138,11 @@ class ConvenioController {
         }
                 
         convenioInstance.properties = params
-
+         
+        if (convenioInstance.isDirty()) {  
+            historialDeConvenioService.agregar(convenioInstance, convenioOriginal, "Se editó el convenio:")
+        }
+        
         if (!convenioInstance.save(flush: true)) {
             render(view: "edit", model: [convenioInstance: convenioInstance])
             return
@@ -168,6 +177,7 @@ class ConvenioController {
         if (personaInstance) {
             convenioInstance.addToFirmantes(personaInstance)
             if (convenioInstance.save(flush:true)) {
+                historialDeConvenioService.addPersonaToHistorial(personaInstance, convenioInstance, null, null,"Se agregó Firmante")
                 flash.message = "Se ha agregado un firmante al convenio."
             } else {
                 flash.error = "No se pudo agregar el firmante. Favor de reintentar."
@@ -177,6 +187,7 @@ class ConvenioController {
             if (personaInstance.save(flush:true)) {
                 convenioInstance.addToFirmantes(personaInstance)
                 if (convenioInstance.save(flush:true)) {
+                    historialDeConvenioService.addPersonaToHistorial(personaInstance, convenioInstance, null, null,"Se agregó Firmante")
                     flash.message = "Se ha agregado un firmante al convenio."
                 } else {
                     flash.error = "No se pudo agregar el firmante. Favor de reintentar."
@@ -192,6 +203,7 @@ class ConvenioController {
         def convenioInstance = Convenio.get(params.convenio.id as long)        
         def personaInstance = Persona.get(params.firmante.id as long)
         convenioInstance.removeFromFirmantes(personaInstance)
+        historialDeConvenioService.removePersonaToHistorial(personaInstance, convenioInstance, null, null,"Se eliminó Firmante")
         flash.message = "El firmante ha sido eliminado."        
         redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
     }
@@ -202,6 +214,7 @@ class ConvenioController {
         if (personaInstance) {
             convenioInstance.addToResponsables(personaInstance)        
             if (convenioInstance.save(flush:true)) {
+                 historialDeConvenioService.addPersonaToHistorial(personaInstance, convenioInstance, null, null,"Se agregó Responsable")
                 flash.message = "Se ha agregado un responsable al convenio."
             } else {
                 flash.error = "No se pudo agregar el responsable. Favor de reintentar."
@@ -211,6 +224,7 @@ class ConvenioController {
             if (personaInstance.save(flush:true)) {
                 convenioInstance.addToResponsables(personaInstance)
                 if (convenioInstance.save(flush:true)) {
+                     historialDeConvenioService.addPersonaToHistorial(personaInstance, convenioInstance, null, null,"Se agregó Responsable")
                     flash.message = "Se ha agregado un responsable al convenio."
                 } else {
                     flash.error = "No se pudo agregar el responsable. Favor de reintentar."
@@ -226,6 +240,7 @@ class ConvenioController {
         def convenioInstance = Convenio.get(params.convenio.id as long)        
         def personaInstance = Persona.get(params.responsable.id as long)
         convenioInstance.removeFromResponsables(personaInstance)
+         historialDeConvenioService.removePersonaToHistorial(personaInstance, convenioInstance, null, null,"Se eliminó Responsable")
         flash.message = "El responsable ha sido eliminado."        
         redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
     }
@@ -245,6 +260,7 @@ class ConvenioController {
                 convenioInstance.nombreDeCopiaElectronica = filename
                 convenioInstance.copiaElectronica = f.getBytes()
                 if (convenioInstance.save(flash:true)) {
+                    historialDeConvenioService.addCopiaFirmaToHistorial(convenioInstance, null, null,"Se adjuntó copia de Firma Electronica")
                     flash.message = "La copia electrónica del convenio se adjuntó satisfactoriamente."
                 } else {
                     flash.error = "Error en base de datos."
@@ -518,7 +534,7 @@ class ConvenioController {
     }
     
     def addUsuarioToConvenio(Long id) {
-        def convenioInstance = Convenio.get(id)        
+        def convenioInstance = Convenio.get(id)
         def compartirCon = Usuario.get(params.compartidoCon.id as long)
         def lista = convenioInstance.usuariosDeConvenio
         def existe = false
@@ -551,10 +567,22 @@ class ConvenioController {
     def regresar(Long id) {
         redirect(action: "edit", id: id)
     }
+    
     def detalles(Long id){
         def convenioInstance = Convenio.get(id)
-        println "variable id ::." + id
         [ convenioInstance : convenioInstance ]
+    }
+    
+    def buscarHistorial (Long id){
+        def convenioInstance = Convenio.get(id)
+        def convenioInstanceList = HistorialDeConvenio.findAllByConvenio(convenioInstance, [sort: "dateCreated", order: "asc"])
+        render(
+            view: "historial", 
+            model: [
+                convenioInstanceList: convenioInstanceList,
+                convenioInstance : convenioInstance
+            ]
+        )
     }     
 }
 
