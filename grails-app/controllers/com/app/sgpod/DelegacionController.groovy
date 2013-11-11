@@ -1,6 +1,7 @@
 package com.app.sgpod
 
 import org.springframework.dao.DataIntegrityViolationException
+import grails.converters.JSON
 
 class DelegacionController {
 
@@ -28,6 +29,13 @@ class DelegacionController {
 
         flash.message = message(code: 'default.created.message', args: [message(code: 'delegacion.label', default: 'Delegacion'), delegacionInstance.id])
         redirect(action: "show", id: delegacionInstance.id)
+    }
+    
+    def saveIt() {
+        def delegacionInstance = new Delegacion(params)
+        delegacionInstance.save(flush: true)
+        flash.message = "La delegación fue agregada satisfactoriamente."
+        redirect(controller:params.miController, action: params.miAction, id: params.miPoder)
     }
 
     def show(Long id) {
@@ -98,5 +106,5 @@ class DelegacionController {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'delegacion.label', default: 'Delegacion'), id])
             redirect(action: "show", id: id)
         }
-    }
+    }    
 }

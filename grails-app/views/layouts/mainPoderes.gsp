@@ -24,6 +24,8 @@
     <link rel="stylesheet" href="${resource(dir:'assets/css',file:'daterangepicker.css')}" />
     <link rel="stylesheet" href="${resource(dir:'assets/css',file:'colorpicker.css')}" />
     <link rel="stylesheet" href="${resource(dir:'assets/css',file:'ace-fonts.css')}" />    
+    <link rel="stylesheet" href="${resource(dir:'assets/css',file:'chosen.css')}" />    
+    
     <link href="${resource(dir:'assets/css',file:'ace.min.css')}" rel="stylesheet" />
     <link href="${resource(dir:'assets/css',file:'ace-responsive.min.css')}" rel="stylesheet" />
     <link href="${resource(dir:'assets/css',file:'ace-skins.min.css')}" rel="stylesheet" />
@@ -173,7 +175,8 @@
     <script src="${resource(dir:'assets/js/markdown',file:'bootstrap-markdown.min.js')}"></script>
     <script src="${resource(dir:'assets/js',file:'jquery.hotkeys.min.js')}"></script>    
     <script src="${resource(dir:'assets/js',file:'bootbox.min.js')}"></script>
-
+    <script src="${resource(dir:'assets/js',file:'chosen.jquery.min.js')}"></script>
+    
     <!--ace scripts-->
     <script src="${resource(dir:'assets/js',file:'ace-elements.min.js')}"></script>
     <script src="${resource(dir:'assets/js',file:'ace.min.js')}"></script>    
@@ -193,6 +196,8 @@
           }).next().on(ace.click_event, function(){
             $(this).prev().focus();
           });     
+          
+          $(".chosen-select").chosen();
         })(jQuery);
     </script>
     <g:javascript library="application"/>

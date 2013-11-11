@@ -9,7 +9,7 @@ class OtorgamientoDePoder {
     String puesto
     String contrato
     String tipoDePoder
-    String delegacion
+    Delegacion delegacion
     
     String poderSolicitado
     MotivoDeOtorgamiento motivoDeOtorgamiento
@@ -29,7 +29,7 @@ class OtorgamientoDePoder {
         puesto blank:false
         contrato blank:false
         tipoDePoder blank:false, inList : ["Interno","Externo"]
-        delegacion blank:false
+        delegacion nullable:false
         
         poderSolicitado blank:false, maxSize:1048576
         motivoDeOtorgamiento nullable:false, maxSize:1048576

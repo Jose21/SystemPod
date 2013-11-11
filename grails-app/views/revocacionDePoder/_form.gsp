@@ -32,7 +32,7 @@
 
 <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'nombre', 'error')} required">
     <label for="nombre" class="control-label">
-        <g:message code="revocacionDePoder.nombre.label" default="Nombre" />
+        <g:message code="revocacionDePoder.nombre.label" default="Nombre (Apoderado)" />
         <span class="required-indicator">*</span>
     </label>
     <div class="controls">
