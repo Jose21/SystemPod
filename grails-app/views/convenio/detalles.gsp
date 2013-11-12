@@ -80,7 +80,7 @@
                 <g:each in ="${convenioInstance.responsables}" var="responsable">
                     <g:if test="${responsable.institucion && responsable.institucion.toUpperCase().contains("INFONAVIT")}">
                         <tr>
-                            <td></td>
+                <td></td>
                             <td>${responsable.nombre}</td>
                             <td>${responsable.institucion}</td>
                         </tr>
@@ -89,7 +89,7 @@
                 <g:each in ="${convenioInstance.responsables}" var="responsable">
                     <g:if test="${!responsable.institucion  || !responsable.institucion.toUpperCase().contains("INFONAVIT")}">
                         <tr>
-                            <td></td>
+                <td></td>
                             <td>${responsable.nombre}</td>
                             <td>${responsable.institucion}</td>
                         </tr>

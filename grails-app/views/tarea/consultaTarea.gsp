@@ -150,6 +150,7 @@
                 <th><g:message code="tarea.responsable.label" default="Responsable" /></th>
                 <th><g:message code="tarea.descripcion.label" default="Descripcion" /></th>
                 <th><g:message code="tarea.fechaLimite.label" default="Fecha Limite del Turno" />
+                <th><g:message code="tarea.status.label" default="Imprimir"/></th>
             </tr>
             </thead>
             <tbody>
@@ -163,6 +164,7 @@
                         <td>${fieldValue(bean: tareaInstance, field: "responsable")}</td>
                         <td>${fieldValue(bean: tareaInstance, field: "descripcion")}</td>
                         <td><g:formatDate date="${tareaInstance.fechaLimite}" /></td>
+                        <td style="text-align:center"><g:link class="icon-print bigger-120" action="detalles"  target="_blank" id="${tareaInstance?.id}" /></td>                                     
                     </tr>
                 </g:each>
             </tbody>

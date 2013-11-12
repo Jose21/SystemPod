@@ -563,8 +563,12 @@ class TareaController {
         render(
             view: "consultaTarea", 
             model: [inActive: inActive, tareaInstanceList: tareaInstanceList ]
-        )
-        
+        )  
+    }
+    def detalles(Long id){
+        def tareaInstance = Tarea.get(id)
+        log.info "id de tarea"+ id
+        [ tareaInstance : tareaInstance ]
     }
     
 }
