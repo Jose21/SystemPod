@@ -28,7 +28,7 @@
                 <li class="${rangoDeFechaActive?:""}">
                     <a data-toggle="tab" href="#porFecha">
                         <i class="icon-calendar bigger-130"></i>
-                        <span class="bigger-110">Por Periodo <span class="badge"></span></span>
+                        <span class="bigger-110">Por Fecha Limite <span class="badge"></span></span>
                     </a>
                 </li>
                 <li class="${nombreResponsablesActive?:""}">
@@ -107,12 +107,12 @@
                     <g:form method="post">
                         <g:hiddenField name="inActive" value="nombreResponsables"/>
                         <div class="control-group">
-                            <div class="row-fluid input-prepend">
-                                <label for="nombre" class="control-label">
-                                    <g:message code="persona.nombre.label" default="Nombre" />
+                            <div class="row-fluid input-prepend">               
+                                <label for="usuario" class="control-label">
+                                    <g:message code="convenio.usuario.label" default="Nombre" />
                                 </label>
-                                <g:textField name="nombre" required="" value="${personaInstance?.nombre}"/>
-                                <g:actionSubmit class="btn btn-primary" action="buscarPorNombreResponsables" value="Buscar" />
+                                <g:select id="usuario" name="username" from="${com.app.security.Usuario.list()}" optionKey="username" required="" value="${usuarioDeTareaInstance?.username}" noSelection="['':'-Elige Categoria-']" class="many-to-one"/>
+                                <g:actionSubmit class="btn btn-primary" action="buscarPorNombreResponsables" value="Buscar" />            
                             </div>
                         </div>
                     </g:form>
@@ -133,23 +133,23 @@
                 </g:if>
                 <g:if test="${rangoDeFecha}">
                     <tr>
-                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR FECHA DE FIRMA: ${rangoDeFecha}</br></br></th>
+                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR FECHA LIMITE: ${rangoDeFecha}</br></br></th>
                     </tr>
                 </g:if>
-                <g:if test="${params.nombre}">
+                <g:if test="${params.username}">
                     <tr>
-                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR NOMBRE: ${params.nombre}</br></br></th>
+                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR RESPONSABLE: ${params.username}</br></br></th>
                     </tr>
                 </g:if>                
             <br>
             <tr>
-                <th><g:message code="tarea.id.label"  default="Número de Turno" /></th>
-                <th><g:message code="tarea.nombre.label"  default="Nombre de Turno" /></th>
+                <th><g:message code="tarea.id.label"  default="Número del Turno" /></th>
+                <th><g:message code="tarea.nombre.label"  default="Nombre" /></th>
                 <th><g:message code="tarea.grupo.label" default="Compartida Con" /></th>
                 <th><g:message code="tarea.dateCreated.label" default="Fecha de Registro" /></th>
                 <th><g:message code="tarea.responsable.label" default="Responsable" /></th>
-                <th><g:message code="convenio.descripcion.label" default="Descripcion" /></th>
-                <th><g:message code="convenio.fechaLimite.label" default="Fecha Limite de Turno" />
+                <th><g:message code="tarea.descripcion.label" default="Descripcion" /></th>
+                <th><g:message code="tarea.fechaLimite.label" default="Fecha Limite del Turno" />
             </tr>
             </thead>
             <tbody>

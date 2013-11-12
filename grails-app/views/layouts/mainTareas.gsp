@@ -197,12 +197,19 @@
             $(this).prev().focus();
           });
           $('#rangoDeFecha').daterangepicker({ 
-              format: 'DD/MM/YYYY',
-              language: 'es'
-            }
-          ).prev().on(ace.click_event, function(){
-            $(this).next().focus();
-          });
+        format: 'DD/MM/YYYY',
+        language: 'es'
+        }
+        ).prev().on(ace.click_event, function(){
+        $(this).next().focus();
+        });
+        $('#rangoDeFechaRegistro').daterangepicker({ 
+        format: 'DD/MM/YYYY',
+        locale: 'es'
+        }
+        ).prev().on(ace.click_event, function(){
+        $(this).next().focus();
+        });
           $("#btnLimpiar").click(function() {
             $("#fechaLimite").val("");
           });
