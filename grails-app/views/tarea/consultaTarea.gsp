@@ -148,8 +148,9 @@
                 <th><g:message code="tarea.grupo.label" default="Compartida Con" /></th>
                 <th><g:message code="tarea.dateCreated.label" default="Fecha de Registro" /></th>
                 <th><g:message code="tarea.responsable.label" default="Responsable" /></th>
-                <th><g:message code="tarea.descripcion.label" default="Descripcion" /></th>
-                <th><g:message code="tarea.fechaLimite.label" default="Fecha Limite del Turno" />
+                <th><g:message code="tarea.descripcion.label" default="Descripción" /></th>
+                <th><g:message code="tarea.prioridad.label" default="Prioridad" /></th>
+                <th><g:message code="tarea.fechaLimite.label" default="Fecha Límite del Turno" />
                 <th><g:message code="tarea.status.label" default="Imprimir"/></th>
             </tr>
             </thead>
@@ -163,6 +164,7 @@
                         <td><g:formatDate date="${tareaInstance.dateCreated}" /></td>
                         <td>${fieldValue(bean: tareaInstance, field: "responsable")}</td>
                         <td>${fieldValue(bean: tareaInstance, field: "descripcion")}</td>
+                        <td>${fieldValue(bean: tareaInstance, field: "prioridad")}</td>
                         <td><g:formatDate date="${tareaInstance.fechaLimite}" /></td>
                         <td style="text-align:center"><g:link class="icon-print bigger-120" action="detalles"  target="_blank" id="${tareaInstance?.id}" /></td>                                     
                     </tr>

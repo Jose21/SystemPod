@@ -47,7 +47,11 @@
                 <td style="text-align: left">${tareaInstance?.descripcion}</td>
             </tr>
             <tr>
-                <th style="text-align: right"><g:message code="tarea.fechaLimite.label" default="Fecha Limite del Turno: "  /></th>
+                <th style="text-align: right"><g:message code="tarea.prioridad.label" default="Prioridad: " /></th>
+                <td style="text-align: left">${tareaInstance?.prioridad}</td>
+            </tr>
+            <tr>
+                <th style="text-align: right"><g:message code="tarea.fechaLimite.label" default="Fecha Límite del Turno: "  /></th>
                 <td style="text-align: left">${tareaInstance?.fechaLimite}</td>
             </tr>
             <tr>

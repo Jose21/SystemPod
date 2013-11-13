@@ -544,14 +544,14 @@ class TareaController {
             if(params?.format && params.format != "html"){
                 response.contentType = grailsApplication.config.grails.mime.types[params.format]
                 response.setHeader("Content-disposition", "attachment; filename= Turnos.${params.extension}")
-                List fields = ["id", "nombre", "grupo", "dateCreated", "responsable", "descripcion","fechaLimite"]
+                List fields = ["id", "nombre", "grupo", "dateCreated", "responsable", "descripcion", "prioridad","fechaLimite"]
                 Map labels = ["id": "Número de Turno", "nombre": "Nombre","grupo":"Compartida con","dateCreated":"Fecha de Registro",\
-                              "responsable":"Responsable","descripcion":"Descripción","fechaLimite":"Fecha Limite del Turno"]
+                              "responsable":"Responsable","descripcion":"Descripción","prioridad":"Prioridad","fechaLimite":"Fecha Limite del Turno"]
                 def upperCase = { domain, value ->
                     return value.toUpperCase()
                 }
                 Map formatters = [nombre: upperCase]		
-                Map parameters = [title: "Reporte De Turnos", "column.widths": [0.2, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4], "title.font.size":12]
+                Map parameters = [title: "Reporte De Turnos", "column.widths": [0.2, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4], "title.font.size":12]
 
                 exportService.export(params.format, response.outputStream, session.tareaInstanceList, fields, labels, formatters, parameters)
             }
@@ -567,7 +567,7 @@ class TareaController {
     }
     def detalles(Long id){
         def tareaInstance = Tarea.get(id)
-        log.info "id de tarea"+ id
+        log.info "id de tarea "+ id
         [ tareaInstance : tareaInstance ]
     }
     
