@@ -51,7 +51,7 @@
                                 <label for="id" class="control-label">
                                     <g:message code="tarea.id.label" default="Número de Turno"/>
                                 </label>
-                                <g:textField class="span5" name="id" required="" maxlength="100" value="${tareaInstance?.id}" autocomplete="off"/>
+                                <g:textField type="number" class="span5" name="id" required="" maxlength="100" value="${tareaInstance?.id}"autocomplete="off"/>                               
                                 <g:actionSubmit class="btn btn-primary" action="buscarPorFolio" value="Buscar" />
                             </div>
                         </div>

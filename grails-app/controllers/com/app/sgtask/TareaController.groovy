@@ -416,16 +416,19 @@ class TareaController {
         [porFolioActive:"active"]  
     }
     
-    def buscarPorFolio (){        
+    def buscarPorFolio (){
+        flash.warn = null
         def porFolioActive = null
         if (params.inActive=="porFolio") {
             porFolioActive = "active"
         }        
-        def id = null
         def tareaInstanceList = []
         def inActive = "active"
-        id = params.id
-        tareaInstanceList = Tarea.findAllById(params.id)   
+        if(params.id?.isNumber()){
+           tareaInstanceList = Tarea.findAllById(params.id) 
+        }else{
+            flash.warn = "Valor no válido. El campo debe contener sólo Números Enteros."
+        }   
         session.tareaInstanceList = tareaInstanceList
         session.inActive = inActive
         render(
