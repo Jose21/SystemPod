@@ -67,6 +67,20 @@ class ReporteDeTareaController {
         def totalTurnados = totalTurnadosQuery.list(sort:"id")  
         turnosPorFechaBean.totalTurnados = totalTurnados.size()
         
+        //Total Prioridad Urgente
+        def totalPrioridadUrgenteQuery = Tarea.where {
+            prioridad == "Urgente"
+        }
+        def totalPrioridadUrgente = totalPrioridadUrgenteQuery.list(sort:"id")
+        turnosPorFechaBean.totalPrioridadUrgente = totalPrioridadUrgente.size()
+        
+        //Total Prioridad Normal
+        def totalPrioridadNormalQuery = Tarea.where {
+            prioridad == "Normal"
+        }
+        def totalPrioridadNormal = totalPrioridadNormalQuery.list(sort:"id")
+        turnosPorFechaBean.totalPrioridadNormal = totalPrioridadNormal.size()
+        
         //Resueltos Mis turnos
         def resueltosMisTurnosQuery = Tarea.where {            
             cerrada == true &&
@@ -94,6 +108,22 @@ class ReporteDeTareaController {
         def resueltosTurnados = resueltosTurnadosQuery.list(sort:"id")  
         turnosPorFechaBean.resueltosTurnados = resueltosTurnados.size()
         
+        //Resueltos Prioridad Urgente
+        def resueltosPrioridadUrgenteQuery = Tarea.where {            
+            cerrada == true &&
+            prioridad == "Urgente"
+        }
+        def resueltosPrioridadUrgente = resueltosPrioridadUrgenteQuery.list(sort:"id")
+        turnosPorFechaBean.resueltosPrioridadUrgente = resueltosPrioridadUrgente.size()
+        
+        //Resueltos Prioridad Normal
+        def resueltosPrioridadNormalQuery = Tarea.where {            
+            cerrada == true &&
+            prioridad == "Normal"
+        }
+        def resueltosPrioridadNormal = resueltosPrioridadNormalQuery.list(sort:"id")
+        turnosPorFechaBean.resueltosPrioridadNormal = resueltosPrioridadNormal.size()
+        
         //Pendientes Mis Turnos
         def pendientesMisTurnosQuery = Tarea.where {            
             cerrada == false &&
@@ -118,6 +148,22 @@ class ReporteDeTareaController {
         }
         def pendientesTurnados = pendientesTurnadosQuery.list(sort:"id")  
         turnosPorFechaBean.pendientesTurnados = pendientesTurnados.size()
+        
+        //Pendientes Prioridad Urgente
+        def pendientesPrioridadUrgenteQuery = Tarea.where {            
+            cerrada == false &&
+            prioridad == "Urgente"
+        }
+        def pendientesPrioridadUrgente = pendientesPrioridadUrgenteQuery.list(sort:"id")
+        turnosPorFechaBean.pendientesPrioridadUrgente = pendientesPrioridadUrgente.size()
+        
+        //Pendientes Prioridad Normal
+        def pendientesPrioridadNormalQuery = Tarea.where {            
+            cerrada == false &&
+            prioridad == "Normal"
+        }
+        def pendientesPrioridadNormal = pendientesPrioridadNormalQuery.list(sort:"id")
+        turnosPorFechaBean.pendientesPrioridadNormal = pendientesPrioridadNormal.size()
         
         //Atrasados Mis Turnos
         def atrasadosMisTurnosQuery = Tarea.where {            
@@ -148,6 +194,24 @@ class ReporteDeTareaController {
         }
         def atrasadosTurnados = atrasadosTurnadosQuery.list(sort:"id")
         turnosPorFechaBean.atrasadosTurnados = atrasadosTurnados.size()
+        
+        //Atrasados Prioridad Urgente
+        def atrasadosPrioridadUrgenteQuery = Tarea.where {            
+            fechaLimite < (new Date() - 1) &&
+            cerrada == false &&
+            prioridad == "Urgente"
+        }
+        def atrasadosPrioridadUrgente = atrasadosPrioridadUrgenteQuery.list(sort:"id")
+        turnosPorFechaBean.atrasadosPrioridadUrgente = atrasadosPrioridadUrgente.size()
+        
+        //Atrasados Prioridad Normal
+        def atrasadosPrioridadNormalQuery = Tarea.where {            
+            fechaLimite < (new Date() - 1) &&
+            cerrada == false &&
+            prioridad == "Normal"
+        }
+        def atrasadosPrioridadNormal = atrasadosPrioridadNormalQuery.list(sort:"id")
+        turnosPorFechaBean.atrasadosPrioridadNormal = atrasadosPrioridadNormal.size()
         
         [ turnosPorFechaBean : turnosPorFechaBean ]
     }

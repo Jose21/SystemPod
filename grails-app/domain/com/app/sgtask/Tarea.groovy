@@ -31,7 +31,7 @@ class Tarea implements Comparable {
         responsable nullable:true
         convenio nullable:true
         usuariosDeTarea nullable:true
-        prioridad blank:false, inList : ["Urgente", "Normal"]
+        prioridad blank:false, inList : ["Normal", "Urgente"]
     }
     
     static mapping = {

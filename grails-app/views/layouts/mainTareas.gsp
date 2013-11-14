@@ -217,7 +217,7 @@
           $('#containerTotalDeTurnos').highcharts({
             chart: { type: 'column' },
             title: { text: 'Total de Turnos' },
-            xAxis: { categories: [ 'Total', 'Resueltos', 'Pendientes', 'Atrasados'] },
+            xAxis: { categories: [ 'Total', 'Resueltos', 'Pendientes', 'Atrasados', 'Prioridad Urgente', 'Prioridad Normal'] },
             yAxis: { min: 0, title: { text: 'Cantidad de Turnos' } },
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -242,6 +242,16 @@
                 name: 'Turnados',
                 data: [ ${turnosPorFechaBean?turnosPorFechaBean?.totalTurnados:0}, ${turnosPorFechaBean?turnosPorFechaBean?.resueltosTurnados:0}, 
                   ${turnosPorFechaBean?turnosPorFechaBean?.pendientesTurnados:0}, ${turnosPorFechaBean?turnosPorFechaBean?.atrasadosTurnados:0}
+                ]
+            }, {
+                name: 'Prioridad Urgente',
+                data: [ ${turnosPorFechaBean?turnosPorFechaBean?.totalPrioridadUrgente:0}, ${turnosPorFechaBean?turnosPorFechaBean?.resueltosPrioridadUrgente:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.pendientesPrioridadUrgente:0}, ${turnosPorFechaBean?turnosPorFechaBean?.atrasadosPrioridadUrgente:0}
+                ]
+            }, {
+                name: 'Prioridad Normal',
+                data: [ ${turnosPorFechaBean?turnosPorFechaBean?.totalPrioridadNormal:0}, ${turnosPorFechaBean?turnosPorFechaBean?.resueltosPrioridadNormal:0}, 
+                  ${turnosPorFechaBean?turnosPorFechaBean?.pendientesPrioridadNormal:0}, ${turnosPorFechaBean?turnosPorFechaBean?.atrasadosPrioridadNormal:0}
                 ]
             }]
           });

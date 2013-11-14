@@ -88,9 +88,12 @@
                                                 <i class="icon-calendar bigger-110 icon-only"></i>
                                             </g:link>                    
                                         </label>
-                                        <!-- Prioridad 
-                                        <i class="message-star icon-star orange2"></i>
-                                        -->
+                                        <g:if test="${tareaInstance.prioridad == "Urgente"}">
+                                            <i class="message-star icon-star red" title="Urgente"></i>   
+                                        </g:if>
+                                        <g:else>  
+                                            <i class="message-star icon-star-empty light-grey" title="Prioridad Normal"></i>        
+                                        </g:else>
                                         <span class="sender" title="Folio del Turno">
                                             <g:link action="show" id="${tareaInstance.id}">
                                                 <span class="label label-success arrowed-in">
@@ -205,9 +208,12 @@
                                                 <i class="icon-calendar bigger-110 icon-only"></i>
                                             </g:link>                    
                                         </label>
-                                        <!-- Prioridad 
-                                        <i class="message-star icon-star orange2"></i>
-                                        -->
+                                        <g:if test="${tareaInstance.prioridad == "Urgente"}">
+                                            <i class="message-star icon-star red" title="Prioridad Urgente"></i>   
+                                        </g:if>
+                                        <g:else>  
+                                            <i class="message-star icon-star-empty light-grey" title="Prioridad Normal"></i>        
+                                        </g:else>
                                         <span class="sender" title="Folio del Turno">
                                             <g:link action="show" id="${tareaInstance.id}">
                                                 <span class="label label-success arrowed-in">
@@ -319,9 +325,12 @@
                                                 <i class="icon-calendar bigger-110 icon-only"></i>
                                             </g:link>                    
                                         </label>
-                                        <!-- Prioridad 
-                                        <i class="message-star icon-star orange2"></i>
-                                        -->
+                                        <g:if test="${tareaInstance.prioridad == "Urgente"}">
+                                            <i class="message-star icon-star red" title="Prioridad Urgente"></i>   
+                                        </g:if>
+                                        <g:else>  
+                                            <i class="message-star icon-star-empty light-grey" title="Prioridad Normal"></i>        
+                                        </g:else>
                                         <span class="sender" title="Folio del Turno">
                                             <g:link action="show" id="${tareaInstance.id}">
                                                 <span class="label label-success arrowed-in">

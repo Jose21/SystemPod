@@ -151,7 +151,7 @@
                 <th><g:message code="tarea.descripcion.label" default="Descripción" /></th>
                 <th><g:message code="tarea.prioridad.label" default="Prioridad" /></th>
                 <th><g:message code="tarea.fechaLimite.label" default="Fecha Límite del Turno" />
-                <th><g:message code="tarea.status.label" default="Imprimir"/></th>
+                <th><g:message code="tarea.label" default="Imprimir"/></th>
             </tr>
             </thead>
             <tbody>
@@ -166,7 +166,7 @@
                         <td>${fieldValue(bean: tareaInstance, field: "descripcion")}</td>
                         <td>${fieldValue(bean: tareaInstance, field: "prioridad")}</td>
                         <td><g:formatDate date="${tareaInstance.fechaLimite}" /></td>
-                        <td style="text-align:center"><g:link class="icon-print bigger-120" action="detalles"  target="_blank" id="${tareaInstance?.id}" /></td>                                     
+                        <td style="text-align:center"><g:link class="icon-print bigger-120" action="detalles"  target="_blank" id="${tareaInstance?.id}" /></td>
                     </tr>
                 </g:each>
             </tbody>
