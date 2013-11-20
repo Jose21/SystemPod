@@ -42,7 +42,6 @@ class ReporteDeTareaController {
     }
     
     def totalDeTurnos () {
-        println "XXXX"+params.barra
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
         
         def turnosPorFechaBean = new TurnosPorFechaBean()
@@ -245,37 +244,5 @@ class ReporteDeTareaController {
         }
         
         [ turnosPorFechaBean : turnosPorFechaBean ]
-    }
-    
-    //Busqueda para generar listado de turnos en Reportes ejecutivos
-    
-    def turnosResueltos(){
-        log.info "Lllamando al metodo turnosResuletos"
-        def resueltosListQuery = Tarea.where {
-            cerrada == true
-        }
-        def resueltosList = resueltosListQuery.list(sort:"id")
-        log.info "Encontrados" + resueltosList.size
-        def respuesta = "{turnosResueltos:"+ (resueltosList as JSON) + "}"
-        log.info "respuesta:" +  respuesta
-        render respuesta
-    }
-    
-    
-    def turnosPendientes(){
-        def tareaInstanceListQuery = Tarea.where {
-            cerrada == false
-        }
-        def tareaInstanceList = tareaInstanceListQuery.list(sort:"id")
-        log.info "Encontrados" + tareaInstanceList
-        //def respuesta = "{\"turnosPendientes\": "+ (pendientesList as JSON) + "}"
-        //log.info "respuesta:" +  respuesta
-        //render respuesta
-        render(
-            view: "totalDeTurnos", 
-            model: [
-                tareaInstanceList : tareaInstanceList      
-            ]
-        )     
     }
 }
