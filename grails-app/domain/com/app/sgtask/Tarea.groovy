@@ -13,6 +13,7 @@ class Tarea implements Comparable {
     Date lastUpdated
     Usuario creadaPor
     Usuario responsable
+    String prioridad
     
     Grupo grupo
     
@@ -30,6 +31,7 @@ class Tarea implements Comparable {
         responsable nullable:true
         convenio nullable:true
         usuariosDeTarea nullable:true
+        prioridad blank:false, inList : ["Normal", "Urgente"]
     }
     
     static mapping = {

@@ -7,6 +7,8 @@ import grails.plugin.asyncmail.AsynchronousMailService
 import com.app.NotificacionesService
 import grails.plugins.springsecurity.Secured
 import com.app.sgcon.Convenio
+import com.app.sgcon.beans.BusquedaBean
+import com.pogos.BusquedaBean
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class TareaController {
@@ -15,6 +17,8 @@ class TareaController {
     def springSecurityService
     AsynchronousMailService asyncMailService
     NotificacionesService notificacionesService
+    def exportService
+    def grailsApplication
     
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -403,4 +407,171 @@ class TareaController {
         def message = "Tienes una nueva tarea asignada."
         [ tareaInstance : Tarea.get(1), message : message, usuarioInstance : springSecurityService.currentUser ]
     }
+    
+    def consultaTarea() {
+        flash.error = null
+        flash.info = null
+        flash.message = null
+        flash.warn = null
+        [porFolioActive:"active"]  
+    }
+    
+    def buscarPorFolio (){
+        flash.warn = null
+        def porFolioActive = null
+        if (params.inActive=="porFolio") {
+            porFolioActive = "active"
+        }        
+        def tareaInstanceList = []
+        def inActive = "active"
+        if(params.id?.isNumber()){
+           tareaInstanceList = Tarea.findAllById(params.id) 
+        }else{
+            flash.warn = "Valor no válido. El campo debe contener sólo Números Enteros."
+        }   
+        session.tareaInstanceList = tareaInstanceList
+        session.inActive = inActive
+        render(
+            view: "consultaTarea", 
+            model: [
+                tareaInstanceList: tareaInstanceList,
+                tareaInstanceTotal: tareaInstanceList.size(),
+                id: params.id,
+                porFolioActive : porFolioActive
+                
+            ]
+        )  
+    }
+    def buscarPorFechaRegistro () {
+        def porFechaRegistroActive = null
+        if (params.inActive=="porFechaRegistro") {
+            porFechaRegistroActive = "active"
+        }        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")       
+        def rangoDeFechaRegistro = null
+        def fechaInicio = null
+        def fechaFin = null
+        def busquedaBean = null
+        def tareaInstanceList = []
+        if (params.rangoDeFechaRegistro != "") {
+            flash.warn = null
+            rangoDeFechaRegistro = params.rangoDeFechaRegistro
+            fechaInicio = sdf.parse(rangoDeFechaRegistro.split("-")[0].trim())
+            fechaFin = sdf.parse(rangoDeFechaRegistro.split("-")[1].trim())
+            busquedaBean = new BusquedaBean()        
+            busquedaBean.fechaInicio = fechaInicio
+            busquedaBean.fechaFin = fechaFin
+            tareaInstanceList = Tarea.findAllByDateCreatedBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin, [sort: "id", order: "asc"])
+        } else {
+            flash.warn = "Debe elegir un rango de fechas válido."
+        }
+        session.tareaInstanceList = tareaInstanceList
+        render(
+            view: "consultaTarea", 
+            model: [
+                tareaInstanceList: tareaInstanceList, 
+                tareaInstanceTotal: tareaInstanceList.size(),
+                busquedaBean : busquedaBean,
+                rangoDeFechaRegistro : params.rangoDeFechaRegistro,
+                porFechaRegistroActive : porFechaRegistroActive
+            ]
+        )
+    }
+    def rangoDeFecha () {
+        def rangoDeFechaActive = null
+        if (params.inActive=="rangoDeFecha") {
+            rangoDeFechaActive = "active"
+        }        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")       
+        def rangoDeFecha = null
+        def fechaInicio = null
+        def fechaFin = null
+        def busquedaBean = null
+        def tareaInstanceList = []        
+        if (params.rangoDeFecha != "") {
+            flash.warn = null
+            rangoDeFecha = params.rangoDeFecha
+            fechaInicio = sdf.parse(rangoDeFecha.split("-")[0].trim())
+            fechaFin = sdf.parse(rangoDeFecha.split("-")[1].trim())
+            busquedaBean = new BusquedaBean()        
+            busquedaBean.fechaInicio = fechaInicio
+            busquedaBean.fechaFin = fechaFin
+            tareaInstanceList = Tarea.findAllByFechaLimiteBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin,, [sort: "id", order: "asc"])
+        } else {
+            flash.warn = "Debe elegir un rango de fechas válido."
+        }
+        session.tareaInstanceList = tareaInstanceList
+        render(
+            view: "consultaTarea", 
+            model: [
+                tareaInstanceList: tareaInstanceList, 
+                tareaInstanceTotal: tareaInstanceList.size(),
+                busquedaBean : busquedaBean,
+                rangoDeFecha : params.rangoDeFecha,
+                rangoDeFechaActive : rangoDeFechaActive
+            ]
+        )
+    }
+    def buscarPorNombreResponsables (){
+        def nombreResponsablesActive = null
+        if (params.inActive=="nombreResponsables") {
+            nombreResponsablesActive = "active"
+        }         
+        def c = Tarea.createCriteria()
+        def tareaInstanceList = c.list {
+            responsable {
+                like("username", "%"+params.username+"%")
+            }
+            order("id", "asc")
+        }
+        session.tareaInstanceList = tareaInstanceList
+        render(
+            view: "consultaTarea", 
+            model: [
+                tareaInstanceList: tareaInstanceList,
+                tareaInstanceTotal: tareaInstanceList.size(),
+                nombreResponsablesActive : nombreResponsablesActive       
+            ]
+        )       
+    }
+    def generarReporte(){
+        def tareaInstanceList = session.tareaInstanceList
+        def inActive = session.inActive
+        log.info "activo:." + session.inActive
+        log.info "total::." + session.tareaInstanceList.size()
+        log.info "params::::::::::::::::"+ params
+        log.info "tareainstance::::::"+ session.tareaInstanceList
+        if (tareaInstanceList.size() != 0) {
+            log.info "despues del if::::::"+ tareaInstanceList
+            flash.warn = null
+            if(params?.format && params.format != "html"){
+                response.contentType = grailsApplication.config.grails.mime.types[params.format]
+                response.setHeader("Content-disposition", "attachment; filename= Turnos.${params.extension}")
+                List fields = ["id", "nombre", "grupo", "dateCreated", "responsable", "descripcion", "prioridad","fechaLimite"]
+                Map labels = ["id": "Número de Turno", "nombre": "Nombre","grupo":"Compartida con","dateCreated":"Fecha de Registro",\
+                              "responsable":"Responsable","descripcion":"Descripción","prioridad":"Prioridad","fechaLimite":"Fecha Limite del Turno"]
+                def upperCase = { domain, value ->
+                    return value.toUpperCase()
+                }
+                Map formatters = [nombre: upperCase]		
+                Map parameters = [title: "Reporte De Turnos", "column.widths": [0.2, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4], "title.font.size":12]
+
+                exportService.export(params.format, response.outputStream, session.tareaInstanceList, fields, labels, formatters, parameters)
+            }
+        }else{
+            log.info "<<<aaaaaaaaaaaaaaaaa" 
+            flash.warn = "No hay datos para generar reporte."
+            
+        }
+        render(
+            view: "consultaTarea", 
+            model: [inActive: inActive, tareaInstanceList: tareaInstanceList ]
+        )  
+    }
+    def detalles(Long id){
+        def tareaInstance = Tarea.get(id)
+        log.info "id de tarea "+ id
+        [ tareaInstance : tareaInstance ]
+    }
+    
 }

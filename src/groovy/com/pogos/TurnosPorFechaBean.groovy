@@ -17,5 +17,21 @@ class TurnosPorFechaBean {
     Integer resueltosTurnados = 0
     Integer pendientesTurnados = 0
     Integer atrasadosTurnados = 0
+    // Prioridad Urgente
+    Integer totalPrioridadUrgente = 0
+    Integer resueltosPrioridadUrgente = 0
+    Integer pendientesPrioridadUrgente = 0
+    Integer atrasadosPrioridadUrgente = 0
+    // Prioridad Normal
+    Integer totalPrioridadNormal = 0
+    Integer resueltosPrioridadNormal = 0
+    Integer pendientesPrioridadNormal = 0
+    Integer atrasadosPrioridadNormal = 0
+    
+    List misTurnos
+    List compartidos
+    List turnados
+    List prioridadUrgente
+    List prioridadNormal
 }
 

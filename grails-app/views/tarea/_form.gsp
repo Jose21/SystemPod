@@ -32,6 +32,16 @@
   </div>
 </div>
 
+<div class="control-group fieldcontain ${hasErrors(bean: tareaInstance, field: 'prioridad', 'error')} required">
+    <label for="prioridad" class="control-label">
+        <g:message code="tarea.prioridad.label" default="Prioridad" />
+        <span class="required-indicator">*</span>
+    </label>
+    <div class="controls">
+        <g:select name="prioridad" from="${tareaInstance.constraints.prioridad.inList}" required="" value="${tareaInstance?.prioridad}" valueMessagePrefix="tarea.prioridad"/>
+    </div>
+</div>
+
 <div class="control-group fieldcontain ${hasErrors(bean: tareaInstance, field: 'grupo', 'error')} required">
   <label for="grupo" class="control-label">
     <g:message code="tarea.grupo.label" default="Grupo" />
