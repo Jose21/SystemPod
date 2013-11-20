@@ -220,15 +220,19 @@
             title: { text: "${conveniosPorFechaBean?conveniosPorFechaBean.title:""}" },
         xAxis: { categories: [ 'Total'] },
         yAxis: { min: 0, title: { text: 'Cantidad de Convenios' } },
-        tooltip: {
-                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
-                footerFormat: '</table>',
-        shared: true,
-        useHTML: true
+        plotOptions: { column: { pointPadding: 0.2, borderWidth: 0,
+         cursor: 'pointer',    
+            point: {
+                    events: {
+                        click: function() {
+                            //alert ('Category: '+ this.category +', value: '+ this.y);
+                            $("#barraConvenios").val(this.category);
+                            document.getElementById("formConvenios").submit();
+                        }
+                    }
+                }
+            }  
         },
-        plotOptions: { column: { pointPadding: 0.2, borderWidth: 0 } },
         series: [{
         name: 'Convenios',
                 data: [ ${conveniosPorFechaBean?conveniosPorFechaBean?.totalConvenios:0}

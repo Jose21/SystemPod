@@ -43,7 +43,7 @@
                                 <g:each in="${turnosPorFechaBean.misTurnos}" status="i" var="misTurnos">
 
                             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                <td style="text-align:center"><g:link action="edit" id="${misTurnos.id}"><span class="badge">${misTurnos?.id}</span></g:link></td>
+                                <td style="text-align:center"><g:link controller="tarea" action="edit" id="${misTurnos.id}"><span class="badge">${misTurnos?.id}</span></g:link></td>
 
                                 <td>${fieldValue(bean: misTurnos, field: "nombre")}</td>
                                 <td>${fieldValue(bean: misTurnos, field: "grupo")}</td>
@@ -59,7 +59,7 @@
                         <tr><th colspan="8">COMPARTIDOS</th></tr>
                                 <g:each in="${turnosPorFechaBean.compartidos}" status="i" var="compartidos">
                             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                <td style="text-align:center"><g:link action="edit" id="${compartidos.id}"><span class="badge">${compartidos?.id}</span></g:link></td>
+                                <td style="text-align:center"><g:link controller="tarea" action="edit" id="${compartidos.id}"><span class="badge">${compartidos?.id}</span></g:link></td>
 
                                 <td>${fieldValue(bean: compartidos, field: "nombre")}</td>
                                 <td>${fieldValue(bean: compartidos, field: "grupo")}</td>
@@ -75,7 +75,7 @@
                         <tr><th colspan="8">TURNADOS</th></tr>
                                 <g:each in="${turnosPorFechaBean.turnados}" status="i" var="turnados">
                             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                <td style="text-align:center"><g:link action="edit" id="${turnados.id}"><span class="badge">${turnados?.id}</span></g:link></td>
+                                <td style="text-align:center"><g:link controller="tarea" action="edit" id="${turnados.id}"><span class="badge">${turnados?.id}</span></g:link></td>
 
                                 <td>${fieldValue(bean: turnados, field: "nombre")}</td>
                                 <td>${fieldValue(bean: turnados, field: "grupo")}</td>
@@ -91,7 +91,7 @@
                         <tr><th colspan="8">PRIORIDAD URGENTE</th></tr>
                                 <g:each in="${turnosPorFechaBean.prioridadUrgente}" status="i" var="prioridadUrgente">
                             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                <td style="text-align:center"><g:link action="edit" id="${prioridadUrgente.id}"><span class="badge">${prioridadUrgente?.id}</span></g:link></td>
+                                <td style="text-align:center"><g:link controller="tarea" action="edit" id="${prioridadUrgente.id}"><span class="badge">${prioridadUrgente?.id}</span></g:link></td>
 
                                 <td>${fieldValue(bean: prioridadUrgente, field: "nombre")}</td>
                                 <td>${fieldValue(bean: prioridadUrgente, field: "grupo")}</td>
@@ -107,7 +107,7 @@
                         <tr><th colspan="8">PRIORIDAD NORMAL</th></tr>
                                 <g:each in="${turnosPorFechaBean.prioridadNormal}" status="i" var="prioridadNormal">
                             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                <td style="text-align:center"><g:link action="edit" id="${prioridadNormal.id}"><span class="badge">${prioridadNormal?.id}</span></g:link></td>
+                                <td style="text-align:center"><g:link controller="tarea" action="edit" id="${prioridadNormal.id}"><span class="badge">${prioridadNormal?.id}</span></g:link></td>
 
                                 <td>${fieldValue(bean: prioridadNormal, field: "nombre")}</td>
                                 <td>${fieldValue(bean: prioridadNormal, field: "grupo")}</td>

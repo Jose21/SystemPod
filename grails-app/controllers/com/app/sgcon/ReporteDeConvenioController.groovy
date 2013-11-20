@@ -37,7 +37,6 @@ class ReporteDeConvenioController {
             def totalConvenios = Convenio.findAllByFechaDeFirmaBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin,, [sort: "id", order: "asc"])
             conveniosPorFechaBean.totalConvenios = totalConvenios.size()
             log.info "Que me trae en mi consulta total " + totalConvenios
-            [ conveniosPorFechaBean : conveniosPorFechaBean ]
             
             //Total de Convenios contraidos por el infonavit
             def totalConveniosContraidos = Convenio.findAllByFechaDeFirmaBetweenAndInstitucionIlike(
@@ -45,7 +44,6 @@ class ReporteDeConvenioController {
             //totalConveniosContraidos = Convenio.findAllByInstitucionIlike("%infonavit%", [sort: "id"])
             conveniosPorFechaBean.totalConveniosContraidos = totalConveniosContraidos.size()
             log.info "Que me trae en mi consulta contraidos" + totalConveniosContraidos
-            [ conveniosPorFechaBean : conveniosPorFechaBean ]
             
             //Total de Convenios NO contraidos por el Infonavit
             def c= Convenio.createCriteria()
@@ -60,12 +58,17 @@ class ReporteDeConvenioController {
             }
             conveniosPorFechaBean.totalConveniosNoContraidos = totalConveniosNoContraidos.size()
             log.info "que me trae wn mi consulta no contraidos::" + totalConveniosNoContraidos
-            [ conveniosPorFechaBean : conveniosPorFechaBean ]
             
             //Titulo para personalizar grafica 
-            
             conveniosPorFechaBean.title ="Resultado Para el Periodo: " + rangoDeFecha
-            [ conveniosPorFechaBean : conveniosPorFechaBean ]
+            
+            if(params.barraConvenios == "Total"){
+                conveniosPorFechaBean.convenios = totalConvenios
+                conveniosPorFechaBean.conveniosContraidos = totalConveniosContraidos
+                conveniosPorFechaBean.conveniosNoContraidos = totalConveniosNoContraidos
+            }
+            
+            [ conveniosPorFechaBean : conveniosPorFechaBean, rangoDeFecha : rangoDeFecha]
             
         } else {
             flash.warn = "Debe elegir un rango de fechas válido."
@@ -80,15 +83,11 @@ class ReporteDeConvenioController {
         //Total de Convenios
         def totalConveniosQuery = Convenio
         def totalConvenios = totalConveniosQuery.list(sort:"id")
-        conveniosPorFechaBean.totalConvenios = totalConvenios.size()
-        log.info "totalde convenios::" + totalConvenios
-        [ conveniosPorFechaBean : conveniosPorFechaBean ]
-        
+        conveniosPorFechaBean.totalConvenios = totalConvenios.size()        
         //Total de Convenios contraidos por el Infonavit
         def totalConveniosContraidos = Convenio.findAllByInstitucionIlike("%infonavit%", [sort: "id"])
         conveniosPorFechaBean.totalConveniosContraidos = totalConveniosContraidos.size()
         log.info "convenios contraidos::" + totalConveniosContraidos
-        [ conveniosPorFechaBean : conveniosPorFechaBean ]
         
         //Total de Convenios NO contraidos por el Infonavit
         def c= Convenio.createCriteria()
@@ -100,12 +99,19 @@ class ReporteDeConvenioController {
         }
         conveniosPorFechaBean.totalConveniosNoContraidos = totalConveniosNoContraidos.size()
         log.info "convenios no contraidos::" + totalConveniosNoContraidos
-        [ conveniosPorFechaBean : conveniosPorFechaBean ]
         
         //Titulo para personalizar grafica 
         def title = "Total de Convenios"
         conveniosPorFechaBean.title = "Total de Convenios"
         log.info "titulo de la grafica::" + title
+        
+        if(params.barraConvenios == "Total"){
+            conveniosPorFechaBean.convenios = totalConvenios
+            conveniosPorFechaBean.conveniosContraidos = totalConveniosContraidos
+            conveniosPorFechaBean.conveniosNoContraidos = totalConveniosNoContraidos
+        }
+        
         [ conveniosPorFechaBean : conveniosPorFechaBean ]
     }
+    
 }
