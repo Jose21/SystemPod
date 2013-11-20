@@ -1,9 +1,11 @@
+
 import com.app.security.Usuario
 import com.app.security.Rol
 import com.app.security.UsuarioRol
 import grails.util.Environment
 import com.app.sgtask.Grupo
 import com.app.sgcon.StatusDelConvenio
+import com.app.sgpod.Delegacion
 import com.app.sgpod.FormatoDeCartaDeInstruccion
 import com.app.sgpod.MotivoDeOtorgamiento
 import com.app.sgpod.MotivoDeRevocacion
@@ -13,7 +15,7 @@ class BootStrap {
     def init = { servletContext ->
         switch (Environment.current) {
         case Environment.DEVELOPMENT :
-                
+                /*
             new Usuario (
                 firstName : "Administrador",
                 lastName : "Del Sistema",
@@ -59,23 +61,6 @@ class BootStrap {
                 passwordExpired : false
             ).save()
                 
-            /*new Persona (
-                nombre : "Administrador Del Sistema",
-                usuario : Usuario.findByUsername("admin")
-            ).save()
-            new Persona (
-                nombre : "Test Uno",
-                usuario : Usuario.findByUsername("test1")
-            ).save()
-            new Persona (
-                nombre : "Test Dos",
-                usuario : Usuario.findByUsername("test2")
-            ).save()
-            new Persona (
-                nombre : "Test Tres",
-                usuario : Usuario.findByUsername("test3")
-            ).save()*/
-                
             new Rol (authority : "ROLE_ADMINISTRADOR").save()
                 
             new UsuarioRol (usuario : Usuario.findByUsername("admin"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
@@ -96,7 +81,25 @@ class BootStrap {
                 
             new MotivoDeOtorgamiento(nombre:"Cambio de Adscripción").save()
             new MotivoDeRevocacion(nombre:"Cambio de Adscripción").save()
-                
+            
+            new Delegacion(nombre:"Mi Delegacion").save()
+            */
+            /*new Persona (
+                nombre : "Administrador Del Sistema",
+                usuario : Usuario.findByUsername("admin")
+            ).save()
+            new Persona (
+                nombre : "Test Uno",
+                usuario : Usuario.findByUsername("test1")
+            ).save()
+            new Persona (
+                nombre : "Test Dos",
+                usuario : Usuario.findByUsername("test2")
+            ).save()
+            new Persona (
+                nombre : "Test Tres",
+                usuario : Usuario.findByUsername("test3")
+            ).save()*/
             break
         case Environment.PRODUCTION :
             /*

@@ -19,6 +19,9 @@ class RevocacionDePoder {
     Date fechaDeRevocacion
     String escrituraPublicaDeRevocacion
     String comentarios
+    CartaDeInstruccion cartaDeInstruccion
+    
+    static hasMany = [ documentos : DocumentoDePoder ]
     
     static constraints = {
         escrituraPublica blank:false
@@ -37,5 +40,8 @@ class RevocacionDePoder {
         fechaDeRevocacion nullable:true
         escrituraPublicaDeRevocacion nullable:true, blank:true
         comentarios nullable:true, blank:true, maxSize:1048576
+        
+        cartaDeInstruccion nullable:true
+        documentos nullable:true
     }
 }

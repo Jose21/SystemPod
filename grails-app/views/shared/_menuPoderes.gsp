@@ -34,6 +34,22 @@
 </div><!--#sidebar-shortcuts-->
 
 <ul class="nav nav-list">  
+    
+    <li class="active open">
+        <a href="#" class="dropdown-toggle">
+            <i class="icon-book"></i>
+            <span class="menu-text">Expedientes</span>
+            <b class="arrow icon-angle-down"></b>
+        </a>
+        <ul class="submenu">
+            <li>
+                <g:link controller="expediente" action="index">
+                    <i class="icon-double-angle-right"></i> Nuevo
+                </g:link>
+            </li>
+        </ul>
+    </li>
+    
     <li class="active open">
         <a href="#" class="dropdown-toggle">
             <i class="icon-book"></i>

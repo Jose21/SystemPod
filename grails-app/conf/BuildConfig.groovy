@@ -67,7 +67,7 @@ grails.project.dependency.resolution = {
         compile ":mail:1.0.1", {
             excludes 'spring-test'
         }
-        compile ":asynchronous-mail:1.0-RC5"
+        compile ":asynchronous-mail:1.0"
         
         compile ":spring-security-core:1.2.7.3"
         compile ":spring-security-ui:0.2"
@@ -82,6 +82,6 @@ grails.project.dependency.resolution = {
 
 forkConfig = [maxMemory: 2048, minMemory: 256, debug: false, maxPerm: 1024]
 grails.project.fork = [   
-   run: forkConfig, // configure settings for the run-app JVM
-   //war: forkConfig, // configure settings for the run-war JVM
+    run: forkConfig, // configure settings for the run-app JVM
+    //war: forkConfig, // configure settings for the run-war JVM
 ]

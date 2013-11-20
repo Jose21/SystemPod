@@ -19,7 +19,10 @@ class OtorgamientoDePoder {
     Date fechaDeOtorgamiento
     String escrituraPublicaDeOtorgamiento
     String comentarios
-
+    CartaDeInstruccion cartaDeInstruccion
+    
+    static hasMany = [ documentos : DocumentoDePoder ]
+    
     static constraints = {
         
         numeroDeFolio blank:false
@@ -39,5 +42,7 @@ class OtorgamientoDePoder {
         escrituraPublicaDeOtorgamiento nullable:true, blank:true
         comentarios nullable:true, blank:true, maxSize:1048576
         
+        cartaDeInstruccion nullable:true
+        documentos nullable:true
     }
 }
