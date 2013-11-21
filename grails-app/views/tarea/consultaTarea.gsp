@@ -28,7 +28,7 @@
                 <li class="${rangoDeFechaActive?:""}">
                     <a data-toggle="tab" href="#porFecha">
                         <i class="icon-calendar bigger-130"></i>
-                        <span class="bigger-110">Por Fecha Limite <span class="badge"></span></span>
+                        <span class="bigger-110">Por Fecha Límite <span class="badge"></span></span>
                     </a>
                 </li>
                 <li class="${nombreResponsablesActive?:""}">
@@ -111,7 +111,7 @@
                                 <label for="usuario" class="control-label">
                                     <g:message code="convenio.usuario.label" default="Nombre" />
                                 </label>
-                                <g:select id="usuario" name="username" from="${com.app.security.Usuario.list()}" optionKey="username" required="" value="${usuarioDeTareaInstance?.username}" noSelection="['':'-Elige Categoria-']" class="many-to-one"/>
+                                <g:select id="usuario" name="username" from="${com.app.security.Usuario.list()}" optionKey="username" required="" value="${usuarioDeTareaInstance?.username}" noSelection="['':'-Elige Categoría-']" class="many-to-one"/>
                                 <g:actionSubmit class="btn btn-primary" action="buscarPorNombreResponsables" value="Buscar" />            
                             </div>
                         </div>
@@ -123,22 +123,22 @@
             <thead>
                 <g:if test="${id}">
                     <tr>
-                        <th colspan="9"  style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR FOLIO: ${id}</th>
+                        <th colspan="9"  style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FOLIO: ${id}</th>
                     </tr>
                 </g:if>
                 <g:if test="${rangoDeFechaRegistro}">
                     <tr>
-                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR FECHA DE REGISTRO: ${rangoDeFechaRegistro}</br></br></th>
+                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FECHA DE REGISTRO: ${rangoDeFechaRegistro}</br></br></th>
                     </tr>
                 </g:if>
                 <g:if test="${rangoDeFecha}">
                     <tr>
-                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR FECHA LIMITE: ${rangoDeFecha}</br></br></th>
+                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FECHA LíMITE: ${rangoDeFecha}</br></br></th>
                     </tr>
                 </g:if>
                 <g:if test="${params.username}">
                     <tr>
-                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR RESPONSABLE: ${params.username}</br></br></th>
+                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR RESPONSABLE: ${params.username}</br></br></th>
                     </tr>
                 </g:if>                
             <br>

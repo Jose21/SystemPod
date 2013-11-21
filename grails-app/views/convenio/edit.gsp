@@ -98,7 +98,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                 <g:hiddenField name="version" value="${convenioInstance?.version}" />
                 <div class="control-group fieldcontain ${hasErrors(bean: convenioInstance, field: 'id', 'error')}">
                     <label for="id" class="control-label">
-                        <g:message code="convenio.id.label" default="Identificador interno" />
+                        <g:message code="convenio.id.label" default="Identificador Interno" />
                     </label>
                     <div class="controls">
                         <span class="badge">${convenioInstance?.id}</span>
@@ -107,7 +107,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                 <g:render template="form"/>
                 <div class="form-actions">
                     <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
-                    <g:actionSubmit class="btn btn-primary" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" />
+                    <!--g:actionSubmit class="btn btn-primary" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" /-->
                 </div>
             </g:form>          
 

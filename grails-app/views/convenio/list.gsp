@@ -31,7 +31,7 @@
                 <li class="${porCategoriaActive?:""}">
                     <a data-toggle="tab" href="#porCategoria">
                         <i class="icon-legal bigger-130"></i>
-                        <span class="bigger-110">Por Categoria <span class="badge"></span></span>
+                        <span class="bigger-110">Por Categoría <span class="badge"></span></span>
                     </a>
                 </li>
                 <li class="${rangoDeFechaActive?:""}">
@@ -106,7 +106,7 @@
                                 <label for="status" class="control-label">
                                     <g:message code="convenio.status.label" default="Status" />
                                 </label>
-                                <g:select id="status" name="nombre" from="${com.app.sgcon.StatusDelConvenio.list()}" optionKey="nombre" required="" value="${statusDelConvenioInstance?.nombre}" noSelection="['':'-Elige Categoria-']" class="many-to-one"/>
+                                <g:select id="status" name="nombre" from="${com.app.sgcon.StatusDelConvenio.list()}" optionKey="nombre" required="" value="${statusDelConvenioInstance?.nombre}" noSelection="['':'-Elige Categoría-']" class="many-to-one"/>
                                 <g:actionSubmit class="btn btn-primary" action="buscarPorCategoria" value="Buscar" />            
                             </div>
                         </div>
@@ -179,32 +179,32 @@
             <thead>
                 <g:if test="${numeroDeConvenio}">
                     <tr>
-                        <th colspan="9"  style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR FOLIO: ${numeroDeConvenio}</th>
+                        <th colspan="9"  style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FOLIO: ${numeroDeConvenio}</th>
                     </tr>
                 </g:if>
                 <g:if test="${rangoDeFechaRegistro}">
                     <tr>
-                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR FECHA DE REGISTRO: ${rangoDeFechaRegistro}</br></br></th>
+                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FECHA DE REGISTRO: ${rangoDeFechaRegistro}</br></br></th>
                     </tr>
                 </g:if>
                 <g:if test="${params.id}">
                     <tr>
-                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR CATEGORIA: ${params.id}</br></br></th>
+                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR CATEGORIA: ${params.id}</br></br></th>
                     </tr>
                 </g:if>
                 <g:if test="${rangoDeFecha}">
                     <tr>
-                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR FECHA DE FIRMA: ${rangoDeFecha}</br></br></th>
+                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FECHA DE FIRMA: ${rangoDeFecha}</br></br></th>
                     </tr>
                 </g:if>
                 <g:if test="${params.nombre}">
                     <tr>
-                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BUSQUEDA POR NOMBRE: ${params.nombre}</br></br></th>
+                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR NOMBRE: ${params.nombre}</br></br></th>
                     </tr>
                 </g:if>                
             <br>
             <tr>
-                <th><g:message code="convenio.id.label"  default="Identificador interno" /></th>
+                <th><g:message code="convenio.id.label"  default="Identificador Interno" /></th>
                 <th><g:message code="convenio.numeroDeConvenio.label" default="Número de Convenio" /></th>
                 <th><g:message code="convenio.objeto.label" default="Objeto" /></th>
                 <th><g:message code="convenio.dateCreated.label" default="Fecha de Registro" /></th>

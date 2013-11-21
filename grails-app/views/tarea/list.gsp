@@ -89,10 +89,10 @@
                                             </g:link>                    
                                         </label>
                                         <g:if test="${tareaInstance.prioridad == "Urgente"}">
-                                            <i class="message-star icon-star red" title="Urgente"></i>   
+                                            <i class="icon-star red" title="Urgente"></i>   
                                         </g:if>
                                         <g:else>  
-                                            <i class="message-star icon-star-empty light-grey" title="Prioridad Normal"></i>        
+                                            <i class="icon-star-empty light-grey" title="Prioridad Normal"></i>        
                                         </g:else>
                                         <span class="sender" title="Folio del Turno">
                                             <g:link action="show" id="${tareaInstance.id}">
@@ -209,10 +209,10 @@
                                             </g:link>                    
                                         </label>
                                         <g:if test="${tareaInstance.prioridad == "Urgente"}">
-                                            <i class="message-star icon-star red" title="Prioridad Urgente"></i>   
+                                            <i class="icon-star red" title="Prioridad Urgente"></i>   
                                         </g:if>
                                         <g:else>  
-                                            <i class="message-star icon-star-empty light-grey" title="Prioridad Normal"></i>        
+                                            <i class="icon-star-empty light-grey" title="Prioridad Normal"></i>        
                                         </g:else>
                                         <span class="sender" title="Folio del Turno">
                                             <g:link action="show" id="${tareaInstance.id}">
@@ -251,8 +251,8 @@
                             <div class="pull-left"> ${sharedTaskTotal} turno(s) en total. </div>
                             <div class="pull-right">
                                 <div class="pagination">
-                                    <g:paginate total="${sharedTaskTotal}" />
-                                </div>
+                                    <g:paginate total="${sharedTaskTotal?:0}" />
+                        </div>
                             </div>
                         </div>
                     </div><!--/.message-container-->
@@ -326,10 +326,10 @@
                                             </g:link>                    
                                         </label>
                                         <g:if test="${tareaInstance.prioridad == "Urgente"}">
-                                            <i class="message-star icon-star red" title="Prioridad Urgente"></i>   
+                                            <i class="icon-star red" title="Prioridad Urgente"></i>   
                                         </g:if>
                                         <g:else>  
-                                            <i class="message-star icon-star-empty light-grey" title="Prioridad Normal"></i>        
+                                            <i class="icon-star-empty light-grey" title="Prioridad Normal"></i>        
                                         </g:else>
                                         <span class="sender" title="Folio del Turno">
                                             <g:link action="show" id="${tareaInstance.id}">
@@ -365,7 +365,7 @@
                             <div class="pull-left"> ${turnadosTotal} turno(s) en total. </div>
                             <div class="pull-right">
                                 <div class="pagination">
-                                    <g:paginate total="${turnadosTotal}" />
+                                    <g:paginate total="${turnadosTotal?:0}" />
                                 </div>
                             </div>
                         </div>

@@ -12,7 +12,7 @@
 
 <div class="control-group fieldcontain ${hasErrors(bean: tareaInstance, field: 'descripcion', 'error')}">
   <label for="descripcion" class="control-label">
-    <g:message code="tarea.descripcion.label" default="Descripcion" />
+    <g:message code="tarea.descripcion.label" default="Descripción" />
 
   </label>
   <div class="controls">
@@ -22,7 +22,7 @@
 
 <div class="control-group fieldcontain ${hasErrors(bean: tareaInstance, field: 'fechaLimite', 'error')}">
   <label for="fechaLimite" class="control-label">
-    <g:message code="tarea.fechaLimite.label" default="Fecha Limite" />
+    <g:message code="tarea.fechaLimite.label" default="Fecha Límite" />
   </label>
   <div class="controls">
     <div class="row-fluid input-append">

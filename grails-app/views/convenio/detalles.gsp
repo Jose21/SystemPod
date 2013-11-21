@@ -75,7 +75,7 @@
                 <tr>
                     <th></th>
                     <th style="text-align:left"><g:message code="convenio.responsables.label" default="Nombre" /></th>
-                    <th style="text-align:left"><g:message code="convenio.responsables.label" default="Institucion" /></th>
+                    <th style="text-align:left"><g:message code="convenio.responsables.label" default="Institución" /></th>
                 </tr>
                 <g:each in ="${convenioInstance.responsables}" var="responsable">
                     <g:if test="${responsable.institucion && responsable.institucion.toUpperCase().contains("INFONAVIT")}">
@@ -101,7 +101,7 @@
                     <tr>
                     <th></th>
                     <th style="text-align:left"><g:message code="convenio.responsables.label" default="Nombre" /></th>
-                    <th style="text-align:left"><g:message code="convenio.responsables.label" default="Institucion" /></th>
+                    <th style="text-align:left"><g:message code="convenio.responsables.label" default="Institución" /></th>
                 </tr>
                     <g:each in ="${convenioInstance.firmantes}" var="firmante">
                         <g:if test="${firmante.institucion && firmante.institucion.toUpperCase().contains("INFONAVIT")}">

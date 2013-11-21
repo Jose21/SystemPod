@@ -9,33 +9,6 @@
         <title><g:message code="default.list.label" args="[entityName]" /></title>
     </head>
     <body>
-        <!--table class="table table-bordered table-striped">
-            <thead>
-            <br>
-            <tr>
-                <th><g:message code="historialDeConvenio.id.label"  default="Identificador interno" /></th>
-                <th><g:message code="historialDeConvenio.campo.label" default="Campo" /></th>
-                <th><g:message code="historialDeConvenio.convenioId.label" default="Id del Convenio" /></th>
-                <th><g:message code="historialDeConvenio.dateCreated.label" default="Fecha de Registro" /></th>
-                <th><g:message code="historialDeConvenio.usuarioId.label" default="Usuario" /></th>
-                <th><g:message code="historialDeConvenio.valorActual.label" default="Modificacion" />
-                <th><g:message code="historialDeConvenio.valorAnterior.label" default="Original" /></th>
-            </tr>
-        </thead>
-        <tbody>
-            <g:each in="${convenioInstanceList}" status="i" var="convenioInstance">
-                <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                    <td>${fieldValue(bean: convenioInstance, field: "id")}</td>
-                    <td>${fieldValue(bean: convenioInstance, field: "campo")}</td>
-                    <td>${fieldValue(bean: convenioInstance, field: "convenioId")}</td>
-                    <td><g:formatDate date="${convenioInstance.dateCreated}" /></td>
-                    <td>${fieldValue(bean: convenioInstance, field: "usuarioId")}</td>
-                    <td>${fieldValue(bean: convenioInstance, field: "valorActual")}</td>
-                    <td>${fieldValue(bean: convenioInstance, field: "valorAnterior")}</td>
-                </tr>
-            </g:each>
-        </tbody>
-    </table-->
         <div id="timeline-1">
             <div class="row-fluid">
                 <div class="offset1 span10">
