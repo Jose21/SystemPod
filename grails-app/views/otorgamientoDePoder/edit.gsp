@@ -31,7 +31,7 @@
                 </div>
             </g:hasErrors>
 
-            <g:form class="form-horizontal" method="post" >
+            <g:form class="form-horizontal" method="post"  enctype="multipart/form-data">
                 <g:hiddenField name="id" value="${otorgamientoDePoderInstance?.id}" />
                 <g:hiddenField name="version" value="${otorgamientoDePoderInstance?.version}" />            
                 <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'id', 'error')}">
@@ -75,10 +75,37 @@
                         <g:textField class="span6" name="comentarios" value="${otorgamientoDePoderInstance?.comentarios}"/>
                     </div>
                 </div>
-                <div class="form-actions">
-                    <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+                <h3 id="bloqueAdjuntarArchivos"  class="header smaller lighter blue">Adjuntar Documentos</h3>
+                <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'documentos', 'error')} ">
+                    <label for="documentos" class="control-label">
+                        <g:hiddenField name="anchor" value="bloqueAdjuntarArchivos"/>
+                        <g:message code="otorgamientoDePoder.documentos.label" default="Documentos" />
+                    </label>
+                    <div class="controls">
+                        <g:each in="${otorgamientoDePoderInstance?.documentos?}" var="d">
+                            <div class="pull-left action-buttons">
+                                <g:link class="red" controller="otorgamientoDePoder" action="deleteArchivo" id ="${d.id}" params="[otorgamientoDePoderId:otorgamientoDePoderInstance?.id, anchor:'bloqueAdjuntarArchivos']">
+                                    <i class="icon-trash bigger-130"></i>
+                                    <i class="icon-caret-right blue"></i>
+                                </g:link>          
+                            </div>
+                            <g:link controller="documentoDePoder" action="downloadArchivo" id="${d.id}">${d?.encodeAsHTML()}</g:link>
+                                <br/>
+                        </g:each>
+                        <br/>
+                        <input type="file" id="archivo" name="archivo" />
+                    </div>
                 </div>
-            </g:form>
-        </div>
-    </body>
+            </div>
+            <div class="form-actions">
+                <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+            </div>
+        </g:form>
+    </div>
+    <script lang="javascript" type="text/javascript">
+        (function($) {
+            $(document).scrollTop( $("#${anchor?:""}").offset().top );
+        })(jQuery);
+    </script>
+</body>
 </html>

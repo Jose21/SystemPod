@@ -15,7 +15,7 @@ class BootStrap {
     def init = { servletContext ->
         switch (Environment.current) {
         case Environment.DEVELOPMENT :
-                /*
+                
             new Usuario (
                 firstName : "Administrador",
                 lastName : "Del Sistema",
@@ -83,7 +83,7 @@ class BootStrap {
             new MotivoDeRevocacion(nombre:"Cambio de Adscripción").save()
             
             new Delegacion(nombre:"Mi Delegacion").save()
-            */
+            
             /*new Persona (
                 nombre : "Administrador Del Sistema",
                 usuario : Usuario.findByUsername("admin")
@@ -102,7 +102,7 @@ class BootStrap {
             ).save()*/
             break
         case Environment.PRODUCTION :
-            /*
+            
             new Usuario (
             firstName : "Administrador",
             lastName : "Del Sistema",
@@ -123,7 +123,7 @@ class BootStrap {
                 
             new StatusDelConvenio(nombre:"En Elaboración").save()
             new StatusDelConvenio(nombre:"Vigente").save()
-             */
+             
             break
         }
     }

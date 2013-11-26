@@ -94,6 +94,7 @@ class NotaController {
         }
 
         notaInstance.properties = params
+        println "f"+ params.archivo
 
         if (!notaInstance.validate()) {
             notaInstance.errors.each {}
@@ -102,7 +103,7 @@ class NotaController {
             render(view: "edit", model: [notaInstance: notaInstance])
             return
         }
-        
+        println "ewfwfwferfrewf"+ params.archivo
         if (params.archivo.getSize()!=0) {            
             def documentoInstance = new Documento(params)
             documentoInstance.nombre = params.archivo.getOriginalFilename()

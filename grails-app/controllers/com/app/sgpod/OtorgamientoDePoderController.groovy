@@ -59,8 +59,8 @@ class OtorgamientoDePoderController {
             redirect(action: "list")
             return
         }
-
-        [otorgamientoDePoderInstance: otorgamientoDePoderInstance]
+        log.info "Edit: anchorpara eliminar->" + params.anchor
+        [otorgamientoDePoderInstance: otorgamientoDePoderInstance, anchor : params.anchor?:""]
     }
 
     def update(Long id, Long version) {
@@ -99,9 +99,18 @@ class OtorgamientoDePoderController {
             render(view: "edit", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])
             return
         }
+         if (params.archivo.getSize()!=0) {            
+            def documentoDePoderInstance = new DocumentoDePoder(params)
+            documentoDePoderInstance.nombre = params.archivo.getOriginalFilename()
+            otorgamientoDePoderInstance.addToDocumentos(documentoDePoderInstance)
+            if (!otorgamientoDePoderInstance.save(flush: true)) {
+                render(view: "create", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])
+                return
+            }
+        }
 
         flash.message = message(code: 'default.updated.message', args: [message(code: 'poder.label', default: 'Poder'), otorgamientoDePoderInstance.id])
-        redirect(action: "edit", id: otorgamientoDePoderInstance.id)
+        redirect(action: "edit", id: otorgamientoDePoderInstance.id, params : [ anchor : params.anchor ])
     }
 
     def delete(Long id) {
@@ -121,5 +130,14 @@ class OtorgamientoDePoderController {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'poder.label', default: 'Poder'), id])
             redirect(action: "show", id: id)
         }
+    }
+    def deleteArchivo(Long id) {
+        def otorgamientoDePoderId = params.otorgamientoDePoderId
+        def otorgamientoDePoder = OtorgamientoDePoder.get (otorgamientoDePoderId)
+        def documentoDePoder = DocumentoDePoder.get(id)
+        otorgamientoDePoder.removeFromDocumentos(documentoDePoder)
+        documentoDePoder.delete()
+        flash.message = "El archivo se ha eliminado satisfactoriamente."
+        redirect(action: "edit", id: otorgamientoDePoderId, params : [ anchor : params.anchor ])
     }
 }

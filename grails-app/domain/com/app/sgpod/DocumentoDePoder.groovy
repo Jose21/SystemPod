@@ -3,7 +3,7 @@ package com.app.sgpod
 class DocumentoDePoder {
 
     String nombre
-    byte[] archivo   
+    byte[] archivo
     
     static constraints = {
         nombre blank:false

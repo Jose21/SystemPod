@@ -50,7 +50,7 @@ class RevocacionDePoderController {
             return
         }
 
-        [revocacionDePoderInstance: revocacionDePoderInstance]
+        [revocacionDePoderInstance: revocacionDePoderInstance, anchor : params.anchor?:""]
     }
 
     def update(Long id, Long version) {
@@ -84,9 +84,19 @@ class RevocacionDePoderController {
             render(view: "edit", model: [revocacionDePoderInstance: revocacionDePoderInstance])
             return
         }
+        
+        if (params.archivo.getSize()!=0) {            
+            def documentoDePoderInstance = new DocumentoDePoder(params)
+            documentoDePoderInstance.nombre = params.archivo.getOriginalFilename()
+            revocacionDePoderInstance.addToDocumentos(documentoDePoderInstance)
+            if (!revocacionDePoderInstance.save(flush: true)) {
+                render(view: "create", model: [revocacionDePoderInstance: revocacionDePoderInstance])
+                return
+            }
+        }
 
         flash.message = message(code: 'default.updated.message', args: [message(code: 'revocacionDePoder.label', default: 'RevocacionDePoder'), revocacionDePoderInstance.id])
-        redirect(action: "edit", id: revocacionDePoderInstance.id)
+        redirect(action: "edit", id: revocacionDePoderInstance.id, params : [ anchor : params.anchor])
     }
 
     def delete(Long id) {
@@ -106,5 +116,14 @@ class RevocacionDePoderController {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'revocacionDePoder.label', default: 'RevocacionDePoder'), id])
             redirect(action: "show", id: id)
         }
+    }
+    def deleteArchivo(Long id) {
+        def revocacionDePoderId = params.revocacionDePoderId
+        def revocacionDePoder = RevocacionDePoder.get (revocacionDePoderId)
+        def documentoDePoder = DocumentoDePoder.get(id)
+        revocacionDePoder.removeFromDocumentos(documentoDePoder)
+        documentoDePoder.delete()
+        flash.message = "El archivo se ha eliminado satisfactoriamente."
+        redirect(action: "edit", id: revocacionDePoderId, params : [ anchor : params.anchor ])
     }
 }
