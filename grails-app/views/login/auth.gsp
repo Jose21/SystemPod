@@ -51,10 +51,10 @@
                 <div class="center">
                   <br/>
                   <h1>
-                    <span class="red">S G C O N</span>
+                    <span class="red" style="font-weight: bold">SGCON</span>
                   </h1>
                   <h3>
-                    <span class="red">Sistema de Gestión de Convenios y Poderes.</span>
+                    <span class="red" style="font-weight: bold">Sistema de Gestión de Convenios y Poderes.</span>
                   </h3>
                 </div>
               </div>
@@ -92,7 +92,7 @@
                             <div class="space"></div>
 
                             <div class="clearfix">
-                              <input type='submit' class="width-35 pull-right btn btn-small btn-danger" id="submit" value='${message(code: "springSecurity.login.button")}'/>
+                              <input type='submit' class="width-35 pull-right btn btn-small btn-danger" id="submit" value='Ingresar'/>
                             </div>
 
                             <div class="space-4"></div>
