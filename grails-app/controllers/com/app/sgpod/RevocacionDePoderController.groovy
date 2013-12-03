@@ -2,7 +2,9 @@ package com.app.sgpod
 
 import java.text.SimpleDateFormat
 import org.springframework.dao.DataIntegrityViolationException
+import grails.plugins.springsecurity.Secured
 
+@Secured(['IS_AUTHENTICATED_FULLY'])
 class RevocacionDePoderController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -125,5 +127,16 @@ class RevocacionDePoderController {
         documentoDePoder.delete()
         flash.message = "El archivo se ha eliminado satisfactoriamente."
         redirect(action: "edit", id: revocacionDePoderId, params : [ anchor : params.anchor ])
+    }
+    def existe(){      
+        def revocacionDePoderInstance = RevocacionDePoder.get(params.id)       
+        def cartaDeInstruccion = CartaDeInstruccionDeRevocacion.findByRevocacionDePoder(revocacionDePoderInstance)
+        if(!cartaDeInstruccion){
+            redirect(controller: "cartaDeInstruccionDeRevocacion", action: "create", params:[id:revocacionDePoderInstance.id])
+            return   
+        }else{
+            redirect(controller: "cartaDeInstruccionDeRevocacion", action: "edit", params:[id:revocacionDePoderInstance.id, revocacionId: revocacionDePoderInstance.id])
+            return   
+        }
     }
 }

@@ -108,7 +108,7 @@ class OtorgamientoDePoderController {
                 return
             }
         }
-
+        
         flash.message = message(code: 'default.updated.message', args: [message(code: 'poder.label', default: 'Poder'), otorgamientoDePoderInstance.id])
         redirect(action: "edit", id: otorgamientoDePoderInstance.id, params : [ anchor : params.anchor ])
     }
@@ -139,5 +139,17 @@ class OtorgamientoDePoderController {
         documentoDePoder.delete()
         flash.message = "El archivo se ha eliminado satisfactoriamente."
         redirect(action: "edit", id: otorgamientoDePoderId, params : [ anchor : params.anchor ])
+    }
+    def existe(){      
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.id)        
+        def cartaDeInstruccion = CartaDeInstruccionDeOtorgamiento.findByOtorgamientoDePoder(otorgamientoDePoderInstance)
+        if(!cartaDeInstruccion){
+            redirect(controller: "cartaDeInstruccionDeOtorgamiento", action: "create", params:[id:otorgamientoDePoderInstance.id])
+            session.otorgamientoDePoderInstance
+            return   
+        }else{
+            redirect(controller: "cartaDeInstruccionDeOtorgamiento", action: "edit", params:[id:otorgamientoDePoderInstance.id, otorgamientoId: otorgamientoDePoderInstance.id])
+            return   
+        }
     }
 }

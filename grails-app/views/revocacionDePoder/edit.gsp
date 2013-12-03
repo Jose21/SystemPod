@@ -8,7 +8,10 @@
     </head>
     <body>
         <div class="page-header position-relative">
-            <h1>Editar: Revocación de Poder</h1>            
+            <h1>Editar: Revocación de Poder</h1>
+            <g:link controller="revocacionDePoder" action="existe" id="${revocacionDePoderInstance?.id}"  class="btn btn-small btn-success tip-bottom">
+                <i class="icon-external-link"></i> Carta de Instrucción
+            </g:link>
         </div>
 
         <div class="container-fluid">

@@ -8,17 +8,12 @@
     </head>
     <body>
         <div class="page-header position-relative">
-            <h1>Editar: Otorgamiento de Poder</h1>    
-            <!--
-            <div class="btn-group">
-                
-                <g:link controller="cartaDeInstruccion" action="exists" id="${otorgamientoDePoderInstance?.id}" params="[ tipo :'otorgamientoDePoder']" class="btn btn-small btn-success tip-bottom">
-                    <i class="icon-external-link"></i> Carta de Instrucción
-                </g:link>
-            </div>
-            -->
+            <h1>Editar: Otorgamiento de Poder</h1>
+            <g:link controller="otorgamientoDePoder" action="existe" id="${otorgamientoDePoderInstance?.id}"  class="btn btn-small btn-success tip-bottom">
+                <i class="icon-external-link"></i> Carta de Instrucción
+            </g:link>
         </div>
-
+        
         <div class="container-fluid">
             <g:render template="/shared/alerts" />
             <br/>

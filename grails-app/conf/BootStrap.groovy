@@ -5,6 +5,7 @@ import com.app.security.UsuarioRol
 import grails.util.Environment
 import com.app.sgtask.Grupo
 import com.app.sgcon.StatusDelConvenio
+import com.app.sgpod.CartaDeInstruccion
 import com.app.sgpod.Delegacion
 import com.app.sgpod.FormatoDeCartaDeInstruccion
 import com.app.sgpod.MotivoDeOtorgamiento
@@ -78,7 +79,7 @@ class BootStrap {
                 fecha:"México, D.F., a XX de XXXX de 2013", 
                 contenido: "<p><strong>Lic. XXXX (Nombre y Apellidos)</strong></p> <p><strong>Notario P&uacute;blico N&uacute;mero XX (N&uacute;mero)</strong></p> <p><strong>Del XXXXXXXXXX</strong></p> <p><strong>PRESENTE</strong></p> <p>&nbsp;</p> <p><strong>Solicito se</strong> elaboren/revoquen <strong>los siguientes poderes con las facultades que se relacionan:</strong></p> <p><strong>1.</strong></p> <p><strong>2.</strong></p> <p>&nbsp;</p> <p><strong>ATENTAMENTE</strong></p> <p>T&iacute;tulo y Nombre: (Mtro. En D. Jos&eacute; Octavio Tinajero Zenil)</p> <p>Puesto: (Subdirector General Jur&iacute;dico)</p>"
             ).save()
-                
+            
             new MotivoDeOtorgamiento(nombre:"Cambio de Adscripción").save()
             new MotivoDeRevocacion(nombre:"Cambio de Adscripción").save()
             
