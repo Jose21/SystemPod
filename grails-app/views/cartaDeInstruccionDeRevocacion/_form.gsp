@@ -31,9 +31,4 @@
           <g:textArea class="ckeditor" name="contenido" cols="40" rows="5" maxlength="1048576" required="" value="${cartaDeInstruccionDeRevocacionInstance?.contenido}"/>
         </div>
 </div>
-
-<div class="controls">
-    <g:hiddenField id="revocacionDePoderId" name="revocacionDePoder.id" required="" value="${revocacionDePoderId}" class="many-to-one"/>
-</div>
-
 <g:javascript src="ckeditor/ckeditor.js"/>

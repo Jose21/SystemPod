@@ -18,6 +18,7 @@ class CartaDeInstruccionDeRevocacionController {
     def create() {
         def revocacionDePoderId = params.id
         def formato = FormatoDeCartaDeInstruccion.get(1)
+        
         def cartaDeInstruccionDeRevocacionInstance = new CartaDeInstruccionDeRevocacion(params)
         cartaDeInstruccionDeRevocacionInstance.registro = formato.registro
         cartaDeInstruccionDeRevocacionInstance.fecha = formato.fecha
@@ -28,13 +29,15 @@ class CartaDeInstruccionDeRevocacionController {
 
     def save() {
         def cartaDeInstruccionDeRevocacionInstance = new CartaDeInstruccionDeRevocacion(params)
+        def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoderId as long)
+        cartaDeInstruccionDeRevocacionInstance.revocacionDePoder = revocacionDePoderInstance
         if (!cartaDeInstruccionDeRevocacionInstance.save(flush: true)) {
             render(view: "create", model: [cartaDeInstruccionDeRevocacionInstance: cartaDeInstruccionDeRevocacionInstance])
             return
         }
 
         flash.message = message(code: 'default.created.message', args: [message(code: 'cartaDeInstruccionDeRevocacion.label', default: 'CartaDeInstruccionDeRevocacion'), cartaDeInstruccionDeRevocacionInstance.id])
-        redirect(controller:"revocacionDePoder", action: "edit", id: cartaDeInstruccionDeRevocacionInstance.id)
+        redirect(controller:"revocacionDePoder", action: "edit", id: revocacionDePoderInstance.id)
     }
 
     def show(Long id) {
@@ -49,7 +52,6 @@ class CartaDeInstruccionDeRevocacionController {
     }
 
     def edit(Long id) {
-        def revocacionDePoderId = params.id
         def cartaDeInstruccionDeRevocacionInstance = CartaDeInstruccionDeRevocacion.get(id)
         if (!cartaDeInstruccionDeRevocacionInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'cartaDeInstruccionDeRevocacion.label', default: 'CartaDeInstruccionDeRevocacion'), id])
@@ -62,6 +64,7 @@ class CartaDeInstruccionDeRevocacionController {
 
     def update(Long id, Long version) {
         def cartaDeInstruccionDeRevocacionInstance = CartaDeInstruccionDeRevocacion.get(id)
+        def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoderId as long)
         if (!cartaDeInstruccionDeRevocacionInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'cartaDeInstruccionDeRevocacion.label', default: 'CartaDeInstruccionDeRevocacion'), id])
             redirect(action: "list")
@@ -86,7 +89,7 @@ class CartaDeInstruccionDeRevocacionController {
         }
 
         flash.message = message(code: 'default.updated.message', args: [message(code: 'cartaDeInstruccionDeRevocacion.label', default: 'CartaDeInstruccionDeRevocacion'), cartaDeInstruccionDeRevocacionInstance.id])
-        redirect(controller:"revocacionDePoder", action: "edit", id: cartaDeInstruccionDeRevocacionInstance.id)
+        redirect(controller:"revocacionDePoder", action: "edit", id: revocacionDePoderInstance.id)
     }
 
     def delete(Long id) {

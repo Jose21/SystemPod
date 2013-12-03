@@ -140,15 +140,14 @@ class OtorgamientoDePoderController {
         flash.message = "El archivo se ha eliminado satisfactoriamente."
         redirect(action: "edit", id: otorgamientoDePoderId, params : [ anchor : params.anchor ])
     }
-    def existe(){      
+    def existe() {
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.id)        
         def cartaDeInstruccion = CartaDeInstruccionDeOtorgamiento.findByOtorgamientoDePoder(otorgamientoDePoderInstance)
-        if(!cartaDeInstruccion){
+        if(!cartaDeInstruccion) {
             redirect(controller: "cartaDeInstruccionDeOtorgamiento", action: "create", params:[id:otorgamientoDePoderInstance.id])
-            session.otorgamientoDePoderInstance
             return   
-        }else{
-            redirect(controller: "cartaDeInstruccionDeOtorgamiento", action: "edit", params:[id:otorgamientoDePoderInstance.id, otorgamientoId: otorgamientoDePoderInstance.id])
+        } else {
+            redirect(controller: "cartaDeInstruccionDeOtorgamiento", action: "edit", params:[id:cartaDeInstruccion.id, otorgamientoDePoderId: otorgamientoDePoderInstance.id])
             return   
         }
     }

@@ -16,28 +16,29 @@ class CartaDeInstruccionDeOtorgamientoController {
     }
 
     def create() {
-        println "pppp: "+ session.otorgamientoDePoderInstance
         def otorgamientoDePoderId = params.id
-        println "eeeeeeeee" + otorgamientoDePoderId
         def formato = FormatoDeCartaDeInstruccion.get(1)
+        
         def cartaDeInstruccionDeOtorgamientoInstance = new CartaDeInstruccionDeOtorgamiento(params)
         cartaDeInstruccionDeOtorgamientoInstance.registro = formato.registro
         cartaDeInstruccionDeOtorgamientoInstance.fecha = formato.fecha
         cartaDeInstruccionDeOtorgamientoInstance.contenido = formato.contenido
+        
         [cartaDeInstruccionDeOtorgamientoInstance: cartaDeInstruccionDeOtorgamientoInstance, otorgamientoDePoderId : otorgamientoDePoderId]
     }
 
     def save() {
-        def idOtorgamiento = params.otorgamientoDePoderId
-        println "weeeeeeee: "+ session.otorgamientoDePoderInstance
         def cartaDeInstruccionDeOtorgamientoInstance = new CartaDeInstruccionDeOtorgamiento(params)
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoderId as long)
+        cartaDeInstruccionDeOtorgamientoInstance.otorgamientoDePoder = otorgamientoDePoderInstance
+        
         if (!cartaDeInstruccionDeOtorgamientoInstance.save(flush: true)) {
             render(view: "create", model: [cartaDeInstruccionDeOtorgamientoInstance: cartaDeInstruccionDeOtorgamientoInstance])
             return
         }
-
+        
         flash.message = message(code: 'default.created.message', args: [message(code: 'cartaDeInstruccionDeOtorgamiento.label', default: 'CartaDeInstruccionDeOtorgamiento'), cartaDeInstruccionDeOtorgamientoInstance.id])
-        redirect(controller:"otorgamientoDePoder", action: "edit", id: cartaDeInstruccionDeOtorgamientoInstance.id)
+        redirect(controller:"otorgamientoDePoder", action: "edit", id: otorgamientoDePoderInstance.id)
     }
 
     def show(Long id) {
@@ -52,7 +53,6 @@ class CartaDeInstruccionDeOtorgamientoController {
     }
 
     def edit(Long id) {
-        def otorgamientoDePoderId = params.id
         def cartaDeInstruccionDeOtorgamientoInstance = CartaDeInstruccionDeOtorgamiento.get(id)
         if (!cartaDeInstruccionDeOtorgamientoInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'cartaDeInstruccionDeOtorgamiento.label', default: 'CartaDeInstruccionDeOtorgamiento'), id])
@@ -60,11 +60,12 @@ class CartaDeInstruccionDeOtorgamientoController {
             return
         }
 
-        [cartaDeInstruccionDeOtorgamientoInstance: cartaDeInstruccionDeOtorgamientoInstance, otorgamientoDePoderId : (params.otorgamientoId)]
+        [cartaDeInstruccionDeOtorgamientoInstance: cartaDeInstruccionDeOtorgamientoInstance, otorgamientoDePoderId : (params.otorgamientoDePoderId)]
     }
 
     def update(Long id, Long version) {
         def cartaDeInstruccionDeOtorgamientoInstance = CartaDeInstruccionDeOtorgamiento.get(id)
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoderId as long)
         if (!cartaDeInstruccionDeOtorgamientoInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'cartaDeInstruccionDeOtorgamiento.label', default: 'CartaDeInstruccionDeOtorgamiento'), id])
             redirect(action: "list")
@@ -82,6 +83,7 @@ class CartaDeInstruccionDeOtorgamientoController {
         }
 
         cartaDeInstruccionDeOtorgamientoInstance.properties = params
+        cartaDeInstruccionDeOtorgamientoInstance.otorgamientoDePoder = otorgamientoDePoderInstance
 
         if (!cartaDeInstruccionDeOtorgamientoInstance.save(flush: true)) {
             render(view: "edit", model: [cartaDeInstruccionDeOtorgamientoInstance: cartaDeInstruccionDeOtorgamientoInstance])
@@ -89,7 +91,7 @@ class CartaDeInstruccionDeOtorgamientoController {
         }
 
         flash.message = message(code: 'default.updated.message', args: [message(code: 'cartaDeInstruccionDeOtorgamiento.label', default: 'CartaDeInstruccionDeOtorgamiento'), cartaDeInstruccionDeOtorgamientoInstance.id])
-        redirect(controller:"otorgamientoDePoder", action: "edit", id: cartaDeInstruccionDeOtorgamientoInstance.id)
+        redirect(controller:"otorgamientoDePoder", action: "edit", id: otorgamientoDePoderInstance.id)
     }
 
     def delete(Long id) {

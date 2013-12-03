@@ -31,8 +31,4 @@
         <g:textArea class="ckeditor" name="contenido" cols="40" rows="5" maxlength="1048576" required="" value="${cartaDeInstruccionDeOtorgamientoInstance?.contenido}"/>
     </div>
 </div>
-<div class="controls">
-    <g:hiddenField id="otorgamientoDePoderId" name="otorgamientoDePoder.id" required="" value="${otorgamientoDePoderId}" class="many-to-one"/>
-</div>
-
 <g:javascript src="ckeditor/ckeditor.js"/>

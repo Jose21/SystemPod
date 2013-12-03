@@ -128,14 +128,15 @@ class RevocacionDePoderController {
         flash.message = "El archivo se ha eliminado satisfactoriamente."
         redirect(action: "edit", id: revocacionDePoderId, params : [ anchor : params.anchor ])
     }
-    def existe(){      
+    
+    def existe() {
         def revocacionDePoderInstance = RevocacionDePoder.get(params.id)       
         def cartaDeInstruccion = CartaDeInstruccionDeRevocacion.findByRevocacionDePoder(revocacionDePoderInstance)
-        if(!cartaDeInstruccion){
+        if(!cartaDeInstruccion) {
             redirect(controller: "cartaDeInstruccionDeRevocacion", action: "create", params:[id:revocacionDePoderInstance.id])
             return   
-        }else{
-            redirect(controller: "cartaDeInstruccionDeRevocacion", action: "edit", params:[id:revocacionDePoderInstance.id, revocacionId: revocacionDePoderInstance.id])
+        } else {
+            redirect(controller: "cartaDeInstruccionDeRevocacion", action: "edit", params:[id:cartaDeInstruccion.id, revocacionId: revocacionDePoderInstance.id])
             return   
         }
     }
