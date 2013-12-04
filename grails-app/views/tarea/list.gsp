@@ -5,7 +5,7 @@
     <head>
         <meta name="layout" content="mainTareas">    
         <g:set var="entityName" value="${message(code: 'tarea.label', default: 'Turno')}" />    
-        <title><g:message code="default.list.label" args="[entityName]" /></title>
+        <title>Lista de Turnos</title>
     </head>
     <body>    
 
@@ -220,9 +220,6 @@
                                                     ${tareaInstance?.id}
                                                 </span>
                                             </g:link>
-                                        </span>
-                                        <span class="time" title="Prioridad" style="width:150px">
-                                            <g:formatDate date="${tareaInstance?.prioridad}" />
                                         </span>
                                         <span class="time" title="Fecha Límite" style="width:150px">
                                             <g:formatDate date="${tareaInstance?.fechaLimite}" />

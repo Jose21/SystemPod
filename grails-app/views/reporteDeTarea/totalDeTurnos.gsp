@@ -49,7 +49,7 @@
                                 <td>${fieldValue(bean: misTurnos, field: "grupo")}</td>
                                 <td><g:formatDate date="${misTurnos.dateCreated}" /></td>
                                 <td>${fieldValue(bean: misTurnos, field: "responsable")}</td>
-                                <td>${fieldValue(bean: misTurnos, field: "descripcion")}</td>
+                                <td>${misTurnos.descripcion}</td>
                                 <td>${fieldValue(bean: misTurnos, field: "prioridad")}</td>
                                 <td><g:formatDate date="${misTurnos.fechaLimite}" /></td>
                             </tr>
@@ -65,7 +65,7 @@
                                 <td>${fieldValue(bean: compartidos, field: "grupo")}</td>
                                 <td><g:formatDate date="${compartidos.dateCreated}" /></td>
                                 <td>${fieldValue(bean: compartidos, field: "responsable")}</td>
-                                <td>${fieldValue(bean: compartidos, field: "descripcion")}</td>
+                                <td>${compartidos.descripcion}</td>
                                 <td>${fieldValue(bean: compartidos, field: "prioridad")}</td>
                                 <td><g:formatDate date="${compartidos.fechaLimite}" /></td>
                             </tr>
@@ -81,7 +81,7 @@
                                 <td>${fieldValue(bean: turnados, field: "grupo")}</td>
                                 <td><g:formatDate date="${turnados.dateCreated}" /></td>
                                 <td>${fieldValue(bean: turnados, field: "responsable")}</td>
-                                <td>${fieldValue(bean: turnados, field: "descripcion")}</td>
+                                <td>${turnados.descripcion}</td>
                                 <td>${fieldValue(bean: turnados, field: "prioridad")}</td>
                                 <td><g:formatDate date="${turnados.fechaLimite}" /></td>
                             </tr>
@@ -97,7 +97,7 @@
                                 <td>${fieldValue(bean: prioridadUrgente, field: "grupo")}</td>
                                 <td><g:formatDate date="${prioridadUrgente.dateCreated}" /></td>
                                 <td>${fieldValue(bean: prioridadUrgente, field: "responsable")}</td>
-                                <td>${fieldValue(bean: prioridadUrgente, field: "descripcion")}</td>
+                                <td>${prioridadUrgente.descripcion}</td>
                                 <td>${fieldValue(bean: prioridadUrgente, field: "prioridad")}</td>
                                 <td><g:formatDate date="${prioridadUrgente.fechaLimite}" /></td>
                             </tr>
@@ -113,7 +113,7 @@
                                 <td>${fieldValue(bean: prioridadNormal, field: "grupo")}</td>
                                 <td><g:formatDate date="${prioridadNormal.dateCreated}" /></td>
                                 <td>${fieldValue(bean: prioridadNormal, field: "responsable")}</td>
-                                <td>${fieldValue(bean: prioridadNormal, field: "descripcion")}</td>
+                                <td>${prioridadNormal.descripcion}</td>
                                 <td>${fieldValue(bean: prioridadNormal, field: "prioridad")}</td>
                                 <td><g:formatDate date="${prioridadNormal.fechaLimite}" /></td>
                             </tr>

@@ -163,7 +163,7 @@
                         <td>${fieldValue(bean: tareaInstance, field: "grupo")}</td>
                         <td><g:formatDate date="${tareaInstance.dateCreated}" /></td>
                         <td>${fieldValue(bean: tareaInstance, field: "responsable")}</td>
-                        <td>${fieldValue(bean: tareaInstance, field: "descripcion")}</td>
+                        <td>${tareaInstance.descripcion}</td>
                         <td>${fieldValue(bean: tareaInstance, field: "prioridad")}</td>
                         <td><g:formatDate date="${tareaInstance.fechaLimite}" /></td>
                         <td style="text-align:center"><g:link class="icon-print bigger-120" action="detalles"  target="_blank" id="${tareaInstance?.id}" /></td>
