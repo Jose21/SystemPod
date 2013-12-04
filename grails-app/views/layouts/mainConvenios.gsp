@@ -238,7 +238,7 @@
                 data: [ ${conveniosPorFechaBean?conveniosPorFechaBean?.totalConvenios:0}
         ]
         }, {
-        name: 'Contraidas por INFONAVIT',
+        name: 'Contraidas por la Institución',
                 data: [ ${conveniosPorFechaBean?conveniosPorFechaBean?.totalConveniosContraidos:0}
         ]
         }, {

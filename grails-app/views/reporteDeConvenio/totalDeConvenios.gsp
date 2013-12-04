@@ -64,7 +64,7 @@
                         </g:each>
                     </g:if>
                     <g:if test="${conveniosPorFechaBean.conveniosContraidos}">
-                        <tr><th colspan="8">CONTRAIDOS POR EL INFONAVIT</th></tr>
+                        <tr><th colspan="8">CONTRAIDOS POR LA INSTITUCION</th></tr>
                                 <g:each in="${conveniosPorFechaBean.conveniosContraidos}" status="i" var="conveniosContraidos">
                             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                                 <td style="text-align:center"><g:link controller="convenio" action="edit" id="${conveniosContraidos.id}"><span class="badge">${conveniosContraidos?.id}</span></g:link></td>
