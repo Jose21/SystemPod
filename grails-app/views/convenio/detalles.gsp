@@ -8,7 +8,7 @@
     <body onload="actualizaReloj()">
         <table  WIDTH="100%">
             <td WIDTH="20%" style="text-align:right">                  
-                <img src="/sgcon/static/images/infonavit.jpg" width="64px" height="64px" />
+                
             </td>
             <td WIDTH="60%"> 
                 <h2 style="text-align:center">Datos del Convenio</h2>
