@@ -53,42 +53,22 @@
     <li class="active open">
         <a href="#" class="dropdown-toggle">
             <i class="icon-book"></i>
-            <span class="menu-text">Otorgamiento</span>
+            <span class="menu-text">Consultas</span>
             <b class="arrow icon-angle-down"></b>
         </a>
         <ul class="submenu">
-            <li>
-                <g:link controller="otorgamientoDePoder" action="create">
-                    <i class="icon-double-angle-right"></i> Nuevo
-                </g:link>
-            </li>
             <li>
                 <g:link controller="otorgamientoDePoder" action="list">
-                    <i class="icon-double-angle-right"></i> Consulta
-                </g:link>
-            </li>
-        </ul>
-    </li>
-
-    <li class="active open">
-        <a href="#" class="dropdown-toggle">
-            <i class="icon-book"></i>
-            <span class="menu-text">Revocación</span>
-            <b class="arrow icon-angle-down"></b>
-        </a>
-        <ul class="submenu">
-            <li>
-                <g:link controller="revocacionDePoder" action="create">
-                    <i class="icon-double-angle-right"></i> Nuevo
+                    <i class="icon-double-angle-right"></i> Otorgamientos
                 </g:link>
             </li>
             <li>
                 <g:link controller="revocacionDePoder" action="list">
-                    <i class="icon-double-angle-right"></i> Consulta
+                    <i class="icon-double-angle-right"></i> Revocaciones
                 </g:link>
             </li>
         </ul>
-    </li>
+    </li>   
 
     <li class="active open">
         <a href="#" class="dropdown-toggle">
