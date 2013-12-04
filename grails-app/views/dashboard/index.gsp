@@ -21,12 +21,6 @@
                     </span>
                 </h4>
                 <div>
-                    <div>
-                        <span class="profile-picture">
-                            <img src="/sgcon/static/images/profile-pic.jpg"/>
-                        </span>
-                        <div class="space-4"></div>
-                    </div>
                     <div class="profile-user-info">
                         <div class="profile-info-row">
                             <div class="profile-info-name"> Nombre(s) </div>
