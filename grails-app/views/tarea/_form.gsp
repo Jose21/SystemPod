@@ -32,6 +32,17 @@
   </div>
 </div>
 
+<div class="control-group fieldcontain ${hasErrors(bean: tareaInstance, field: 'alertaVencimiento', 'error')} required">
+    <label for="alertaVencimiento" class="control-label">
+        <g:message code="tarea.prioridad.label" default="Alerta De Vencimiento" />
+        <span class="required-indicator">*</span>
+    </label>
+    <div class="controls">
+        <g:select name="alertaVencimiento" from="${tareaInstance.constraints.alertaVencimiento.inList}" required="" value="${tareaInstance?.alertaVencimiento}" valueMessagePrefix="tarea.alertaVencimiento"/>
+        <g:message code="tarea.prioridad.label" default=" día(s) con anticipación. " />
+    </div>
+</div>
+
 <div class="control-group fieldcontain ${hasErrors(bean: tareaInstance, field: 'prioridad', 'error')} required">
     <label for="prioridad" class="control-label">
         <g:message code="tarea.prioridad.label" default="Prioridad" />

@@ -85,5 +85,30 @@ class NotificacionesService {
         }
         flag
     }
+    boolean tareaPorVencer(Tarea tareaInstance, Usuario avisarA) {
+        boolean flag = false
+        def emailPattern = /[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})/
+        //def email = params.alertaPorEmail.trim()
+        def email = avisarA.email
+        def message = "SGCon: El turno ${tareaInstance.id} no ha sido atendido."
+        if (email ==~ emailPattern) { 
+            asyncMailService.sendMail {
+                to email
+                subject message
+                html (
+                    view: "/tarea/alertaVencimiento", 
+                    model: [ 
+                        tareaInstance : tareaInstance,
+                        message : "",
+                        usuarioInstance : avisarA
+                    ]
+                )
+            }
+            flag = true
+        } else {
+            flag = false
+        }
+        flag
+    }
 }
 

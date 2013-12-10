@@ -64,6 +64,12 @@
                         <dd><g:fieldValue bean="${tareaInstance}" field="nombre"/></dd>					
                     </dl>
                 </g:if>
+                <g:if test="${tareaInstance?.alertaVencimiento}">
+                    <dl>
+                        <dt><g:message code="tarea.alertaVencimiento.label" default="Alerta de Vencimeinto" /></dt>
+                        <dd><g:fieldValue bean="${tareaInstance}" field="alertaVencimiento"/><g:message code="tarea.alertaVencimiento.label" default=" día(s) con anticipación. " /></dd>
+                    </dl>
+                </g:if>
                 <g:if test="${tareaInstance?.prioridad}">
                     <dl>
                         <dt><g:message code="tarea.prioridad.label" default="Prioridad" /></dt>

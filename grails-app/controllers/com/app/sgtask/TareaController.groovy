@@ -6,6 +6,8 @@ import com.app.security.Usuario
 import grails.plugin.asyncmail.AsynchronousMailService
 import com.app.NotificacionesService
 import grails.plugins.springsecurity.Secured
+import groovy.time.TimeDuration
+import groovy.time.TimeCategory
 import com.app.sgcon.Convenio
 import com.app.sgcon.beans.BusquedaBean
 import com.pogos.BusquedaBean
@@ -27,6 +29,7 @@ class TareaController {
     }
     
     def hoy() {
+        flash.warn = null
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
         
         session.opt = params.action
@@ -74,6 +77,7 @@ class TareaController {
     }
     
     def programadas() {
+        flash.warn = null
         session.opt = params.action
         
         //Mis turnos        
@@ -118,7 +122,7 @@ class TareaController {
     
     def retrasadas () {
         session.opt = params.action
-        
+        flash.warn = null
         //Mis turnos        
         def taskListQuery = Tarea.where {
             fechaLimite < (new Date() - 1) &&
@@ -269,6 +273,15 @@ class TareaController {
             session.idConvenio = null
         }
         def tareaInstance = Tarea.get(id)
+        def fechaHoy = new Date()
+        def fechaLimite = tareaInstance.fechaLimite
+        def alertaVencimiento = tareaInstance.alertaVencimiento
+        TimeDuration tiempo = TimeCategory.minus(fechaLimite, fechaHoy)
+         if(tiempo.days == (alertaVencimiento as int) && (tareaInstance.notas.size() == 0)){
+            flash.warn = "El Turno aun no ha sido Atendido."
+        }else{
+            flash.warn = null 
+        }
         if (!tareaInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'tarea.label', default: 'Turno'), id])
             redirect(action: "list")

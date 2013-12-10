@@ -13,6 +13,7 @@ class Tarea implements Comparable {
     Date lastUpdated
     Usuario creadaPor
     Usuario responsable
+    String alertaVencimiento
     String prioridad
     
     Grupo grupo
@@ -31,6 +32,7 @@ class Tarea implements Comparable {
         responsable nullable:true
         convenio nullable:true
         usuariosDeTarea nullable:true
+        alertaVencimiento blank:false, inList : ["1","2","3","4","5","6","7"]
         prioridad blank:false, inList : ["Normal", "Urgente"]
     }
     

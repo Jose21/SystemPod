@@ -47,6 +47,10 @@
                 <td style="text-align: left">${tareaInstance?.descripcion}</td>
             </tr>
             <tr>
+                <th style="text-align: right"><g:message code="tarea.alertaVencimiento.label" default="Alerta de Vencimiento: " /></th>
+                <td style="text-align: left">${tareaInstance?.alertaVencimiento}<g:message code="tarea.alertaVencimiento.label" default=" día(s) con anticipación. " /></td>
+            </tr>
+            <tr>
                 <th style="text-align: right"><g:message code="tarea.prioridad.label" default="Prioridad: " /></th>
                 <td style="text-align: left">${tareaInstance?.prioridad}</td>
             </tr>
