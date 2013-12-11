@@ -277,8 +277,8 @@ class TareaController {
         def fechaLimite = tareaInstance.fechaLimite
         def alertaVencimiento = tareaInstance.alertaVencimiento
         TimeDuration tiempo = TimeCategory.minus(fechaLimite, fechaHoy)
-         if(tiempo.days == (alertaVencimiento as int) && (tareaInstance.notas.size() == 0)){
-            flash.warn = "El Turno aun no ha sido Atendido."
+        if(tiempo.days == (alertaVencimiento as int) && !tareaInstance.notas){
+            flash.warn = "El Turno aun no ha sido Atendido 1."
         }else{
             flash.warn = null 
         }
@@ -438,7 +438,7 @@ class TareaController {
         def tareaInstanceList = []
         def inActive = "active"
         if(params.id?.isNumber()){
-           tareaInstanceList = Tarea.findAllById(params.id) 
+            tareaInstanceList = Tarea.findAllById(params.id) 
         }else{
             flash.warn = "Valor no válido. El campo debe contener sólo Números Enteros."
         }   

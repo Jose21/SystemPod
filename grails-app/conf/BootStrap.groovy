@@ -20,7 +20,7 @@ class BootStrap {
             new Usuario (
                 firstName : "Administrador",
                 lastName : "Del Sistema",
-                email : "the.real.thom@gmail.com",
+                email : "kokoro.miramar@gmail.com",
                 username : "admin",
                 password : "4dm1n!",
                 enabled : true,
