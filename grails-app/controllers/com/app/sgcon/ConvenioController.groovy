@@ -30,6 +30,8 @@ class ConvenioController {
     }
 
     def create() {
+        flash.warn = null
+        flash.info = null
         [convenioInstance: new Convenio(params)]
     }
 
@@ -86,7 +88,7 @@ class ConvenioController {
         session.idConvenio = null
         def convenioInstance = Convenio.get(id)
         def yesedit = null        
-        if (convenioInstance.nombreDeCopiaElectronica == null){
+        if (convenioInstance.editable == true){
             flash.info = null
             yesedit = true 
         }else{
@@ -214,7 +216,7 @@ class ConvenioController {
         if (personaInstance) {
             convenioInstance.addToResponsables(personaInstance)        
             if (convenioInstance.save(flush:true)) {
-                 historialDeConvenioService.addPersonaToHistorial(personaInstance, convenioInstance, null, null,"Se agregó Responsable")
+                historialDeConvenioService.addPersonaToHistorial(personaInstance, convenioInstance, null, null,"Se agregó Responsable")
                 flash.message = "Se ha agregado un responsable al convenio."
             } else {
                 flash.error = "No se pudo agregar el responsable. Favor de reintentar."
@@ -224,7 +226,7 @@ class ConvenioController {
             if (personaInstance.save(flush:true)) {
                 convenioInstance.addToResponsables(personaInstance)
                 if (convenioInstance.save(flush:true)) {
-                     historialDeConvenioService.addPersonaToHistorial(personaInstance, convenioInstance, null, null,"Se agregó Responsable")
+                    historialDeConvenioService.addPersonaToHistorial(personaInstance, convenioInstance, null, null,"Se agregó Responsable")
                     flash.message = "Se ha agregado un responsable al convenio."
                 } else {
                     flash.error = "No se pudo agregar el responsable. Favor de reintentar."
@@ -240,7 +242,7 @@ class ConvenioController {
         def convenioInstance = Convenio.get(params.convenio.id as long)        
         def personaInstance = Persona.get(params.responsable.id as long)
         convenioInstance.removeFromResponsables(personaInstance)
-         historialDeConvenioService.removePersonaToHistorial(personaInstance, convenioInstance, null, null,"Se eliminó Responsable")
+        historialDeConvenioService.removePersonaToHistorial(personaInstance, convenioInstance, null, null,"Se eliminó Responsable")
         flash.message = "El responsable ha sido eliminado."        
         redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
     }
@@ -252,11 +254,13 @@ class ConvenioController {
             flash.warn = "Debe indicar la ruta de la copia electrónica."
         } else if (f.getSize() >= 52428800) {
             flash.warn = "El archivo debe pesar menos de 50 Mb."
-        } else {               
+        } else {
             def filename = f.getOriginalFilename() 
             def extension = filename.substring(filename.lastIndexOf(".") + 1, filename.size()).toLowerCase()
             def extensionList = getExtensionList()
             if (extensionList.contains(extension)) {
+                //bandera para deshabilitar la edicion.
+                convenioInstance.editable = false
                 convenioInstance.nombreDeCopiaElectronica = filename
                 convenioInstance.copiaElectronica = f.getBytes()
                 if (convenioInstance.save(flash:true)) {
