@@ -9,17 +9,7 @@
     </head>
     <body>
         <div class="page-header position-relative">
-            <h1><g:message code="default.show.label" args="[entityName]" /></h1>
-            <div class="btn-group">
-                <g:link class="btn btn-small tip-bottom" action="index">
-                    <i class="icon-file"></i>
-                    <g:message code="default.list.label" args="[entityName]" />
-                </g:link>
-                <g:link class="btn btn-small tip-bottom" action="create">
-                    <i class="icon-file"></i>
-                    <g:message code="default.new.label" args="[entityName]" />
-                </g:link>
-            </div>
+            <h1>Ver: Otorgamiento De Poder</h1>            
         </div>
 
         <div class="container-fluid">
@@ -31,7 +21,9 @@
                 <g:if test="${otorgamientoDePoderInstance?.numeroDeFolio}">
                     <dl>
                         <dt><g:message code="otorgamientoDePoder.numeroDeFolio.label" default="Número De Folio" /></dt>
-                        <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="numeroDeFolio"/></dd>
+                        <span class="label label-success arrowed-in">                           
+                            ${otorgamientoDePoderInstance?.numeroDeFolio}"
+                        </span>
                     </dl>
                 </g:if>
 
@@ -91,6 +83,13 @@
                     </dl>
                 </g:if>
 
+                <g:if test="${otorgamientoDePoderInstance?.asignar}">
+                    <dl>
+                        <dt><g:message code="otorgamientoDePoder.asignar.label" default="Asignado A" /></dt>
+                        <dd>${otorgamientoDePoderInstance?.asignar?.firstName} ${otorgamientoDePoderInstance?.asignar?.lastName}</dd>
+                    </dl>
+                </g:if>
+
                 <g:if test="${otorgamientoDePoderInstance?.fechaDeOtorgamiento}">
                     <dl>
                         <dt><g:message code="otorgamientoDePoder.fechaDeOtorgamiento.label" default="Fecha De Otorgamiento" /></dt>
@@ -100,7 +99,7 @@
 
                 <g:if test="${otorgamientoDePoderInstance?.escrituraPublicaDeOtorgamiento}">
                     <dl>
-                        <dt><g:message code="otorgamientoDePoder.escrituraPublicaDeOtorgamiento.label" default="Escritura Publica De Otorgamiento" /></dt>
+                        <dt><g:message code="otorgamientoDePoder.escrituraPublicaDeOtorgamiento.label" default="Escritura Pública De Otorgamiento" /></dt>
                         <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="escrituraPublicaDeOtorgamiento"/></dd>
                     </dl>
                 </g:if>
@@ -117,6 +116,9 @@
                 <fieldset class="buttons">
                     <g:hiddenField name="id" value="${otorgamientoDePoderInstance?.id}" />
                     <g:link class="btn btn-primary" action="edit" id="${otorgamientoDePoderInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
+                    <g:link controller="otorgamientoDePoder" action="existe" id="${otorgamientoDePoderInstance?.id}"  class="btn btn-success">
+                        <i class="icon-external-link"></i> Carta de Instrucción
+                    </g:link>
                     <g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
                 </fieldset>
             </g:form>

@@ -9,7 +9,7 @@
     </head>
     <body>
         <div class="page-header position-relative">
-            <h1>Mostrar: Revocación De Poder</h1>            
+            <h1>Ver: Revocación De Poder</h1>            
         </div>
 
         <div class="container-fluid">
@@ -20,7 +20,7 @@
 
                 <g:if test="${revocacionDePoderInstance?.escrituraPublica}">
                     <dl>
-                        <dt><g:message code="revocacionDePoder.escrituraPublica.label" default="Escritura Publica" /></dt>
+                        <dt><g:message code="revocacionDePoder.escrituraPublica.label" default="Escritura Pública" /></dt>
 
                         <dd><g:fieldValue bean="${revocacionDePoderInstance}" field="escrituraPublica"/></dd>
 
@@ -38,7 +38,7 @@
 
                 <g:if test="${revocacionDePoderInstance?.numeroDeNotario}">
                     <dl>
-                        <dt><g:message code="revocacionDePoder.numeroDeNotario.label" default="Numero De Notario" /></dt>
+                        <dt><g:message code="revocacionDePoder.numeroDeNotario.label" default="Número De Notario" /></dt>
 
                         <dd><g:fieldValue bean="${revocacionDePoderInstance}" field="numeroDeNotario"/></dd>
 
@@ -83,7 +83,7 @@
 
                 <g:if test="${revocacionDePoderInstance?.delegacion}">
                     <dl>
-                        <dt><g:message code="revocacionDePoder.delegacion.label" default="Delegacion" /></dt>
+                        <dt><g:message code="revocacionDePoder.delegacion.label" default="Delegación" /></dt>
 
                         <dd><g:fieldValue bean="${revocacionDePoderInstance}" field="delegacion"/></dd>
 
@@ -92,7 +92,7 @@
 
                 <g:if test="${revocacionDePoderInstance?.motivoDeRevocacion}">
                     <dl>
-                        <dt><g:message code="revocacionDePoder.motivoDeRevocacion.label" default="Motivo De Revocacion" /></dt>
+                        <dt><g:message code="revocacionDePoder.motivoDeRevocacion.label" default="Motivo De Revocación" /></dt>
 
                         <dd><g:link controller="motivoDeRevocacion" action="show" id="${revocacionDePoderInstance?.motivoDeRevocacion?.id}">${revocacionDePoderInstance?.motivoDeRevocacion?.encodeAsHTML()}</g:link></dd>
 
@@ -108,9 +108,16 @@
                     </dl>
                 </g:if>
 
+                <g:if test="${revocacionDePoderInstance?.asignar}">
+                    <dl>
+                        <dt><g:message code="revocacionDePoder.asignar.label" default="Asignado A" /></dt>
+                        <dd>${revocacionDePoderInstance?.asignar?.firstName} ${revocacionDePoderInstance?.asignar?.lastName}</dd>
+                    </dl>
+                </g:if>
+
                 <g:if test="${revocacionDePoderInstance?.fechaDeRevocacion}">
                     <dl>
-                        <dt><g:message code="revocacionDePoder.fechaDeRevocacion.label" default="Fecha De Revocacion" /></dt>
+                        <dt><g:message code="revocacionDePoder.fechaDeRevocacion.label" default="Fecha De Revocación" /></dt>
 
                         <dd><g:formatDate date="${revocacionDePoderInstance?.fechaDeRevocacion}" /></dd>
 
@@ -119,7 +126,7 @@
 
                 <g:if test="${revocacionDePoderInstance?.escrituraPublicaDeRevocacion}">
                     <dl>
-                        <dt><g:message code="revocacionDePoder.escrituraPublicaDeRevocacion.label" default="Escritura Publica De Revocacion" /></dt>
+                        <dt><g:message code="revocacionDePoder.escrituraPublicaDeRevocacion.label" default="Escritura Pública De Revocación" /></dt>
 
                         <dd><g:fieldValue bean="${revocacionDePoderInstance}" field="escrituraPublicaDeRevocacion"/></dd>
 
@@ -140,7 +147,11 @@
                 <fieldset class="buttons">
                     <g:hiddenField name="id" value="${revocacionDePoderInstance?.id}" />
                     <g:link class="btn btn-primary" action="edit" id="${revocacionDePoderInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-                    </fieldset>
+                    <g:link controller="revocacionDePoder" action="existe" id="${revocacionDePoderInstance?.id}"  class="btn btn-success">
+                        <i class="icon-external-link"></i> Carta de Instrucción
+                    </g:link>
+                    <g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+                </fieldset>
             </g:form>
         </div>
     </body>

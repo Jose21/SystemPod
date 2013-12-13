@@ -37,8 +37,8 @@ class CartaDeInstruccionDeOtorgamientoController {
             return
         }
         
-        flash.message = message(code: 'default.created.message', args: [message(code: 'cartaDeInstruccionDeOtorgamiento.label', default: 'CartaDeInstruccionDeOtorgamiento'), cartaDeInstruccionDeOtorgamientoInstance.id])
-        redirect(controller:"otorgamientoDePoder", action: "edit", id: otorgamientoDePoderInstance.id)
+        flash.message = message(code: 'default.created.message', args: [message(code: 'cartaDeInstruccionDeOtorgamiento.label', default: 'Carta De Instrucción De Otorgamiento'), cartaDeInstruccionDeOtorgamientoInstance.id])
+        redirect(controller:"otorgamientoDePoder", action: "show", id: otorgamientoDePoderInstance.id)
     }
 
     def show(Long id) {
@@ -90,8 +90,8 @@ class CartaDeInstruccionDeOtorgamientoController {
             return
         }
 
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'cartaDeInstruccionDeOtorgamiento.label', default: 'CartaDeInstruccionDeOtorgamiento'), cartaDeInstruccionDeOtorgamientoInstance.id])
-        redirect(controller:"otorgamientoDePoder", action: "edit", id: otorgamientoDePoderInstance.id)
+        flash.message = message(code: 'default.updated.message', args: [message(code: 'cartaDeInstruccionDeOtorgamiento.label', default: 'Carta De Instrucción De Otorgamiento'), cartaDeInstruccionDeOtorgamientoInstance.id])
+        redirect(controller:"otorgamientoDePoder", action: "show", id: otorgamientoDePoderInstance.id)
     }
 
     def delete(Long id) {

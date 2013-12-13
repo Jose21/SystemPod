@@ -36,8 +36,8 @@ class CartaDeInstruccionDeRevocacionController {
             return
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'cartaDeInstruccionDeRevocacion.label', default: 'CartaDeInstruccionDeRevocacion'), cartaDeInstruccionDeRevocacionInstance.id])
-        redirect(controller:"revocacionDePoder", action: "edit", id: revocacionDePoderInstance.id)
+        flash.message = message(code: 'default.created.message', args: [message(code: 'cartaDeInstruccionDeRevocacion.label', default: 'Carta De Instrucción De Revocación'), cartaDeInstruccionDeRevocacionInstance.id])
+        redirect(controller:"revocacionDePoder", action: "show", id: revocacionDePoderInstance.id)
     }
 
     def show(Long id) {
@@ -88,8 +88,8 @@ class CartaDeInstruccionDeRevocacionController {
             return
         }
 
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'cartaDeInstruccionDeRevocacion.label', default: 'CartaDeInstruccionDeRevocacion'), cartaDeInstruccionDeRevocacionInstance.id])
-        redirect(controller:"revocacionDePoder", action: "edit", id: revocacionDePoderInstance.id)
+        flash.message = message(code: 'default.updated.message', args: [message(code: 'cartaDeInstruccionDeRevocacion.label', default: 'Carta De Instrucción De Revocación'), cartaDeInstruccionDeRevocacionInstance.id])
+        redirect(controller:"revocacionDePoder", action: "show", id: revocacionDePoderInstance.id)
     }
 
     def delete(Long id) {

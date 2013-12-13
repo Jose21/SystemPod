@@ -1,5 +1,7 @@
 package com.app.sgpod
 
+import com.app.security.Usuario
+
 class RevocacionDePoder {
 
     String escrituraPublica
@@ -11,11 +13,13 @@ class RevocacionDePoder {
     String contrato
     String tipoDePoder
     String delegacion
+    Usuario creadaPor
     
     MotivoDeRevocacion motivoDeRevocacion
     String solicitadoPor
     
     //Datos que puede complementar en cualquier momento
+    Usuario asignar
     Date fechaDeRevocacion
     String escrituraPublicaDeRevocacion
     String comentarios
@@ -33,9 +37,12 @@ class RevocacionDePoder {
         contrato blank:false
         tipoDePoder blank:false, inList : ["Interno","Externo"]
         delegacion blank:false
+        creadaPor nullable:false
         
         motivoDeRevocacion nullable:false, maxSize:1048576
         solicitadoPor blank:false
+        
+        asignar nullable:true, blank:true
 
         fechaDeRevocacion nullable:true
         escrituraPublicaDeRevocacion nullable:true, blank:true

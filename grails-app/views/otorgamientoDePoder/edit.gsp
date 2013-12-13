@@ -9,11 +9,8 @@
     <body>
         <div class="page-header position-relative">
             <h1>Editar: Otorgamiento de Poder</h1>
-            <g:link controller="otorgamientoDePoder" action="existe" id="${otorgamientoDePoderInstance?.id}"  class="btn btn-small btn-success tip-bottom">
-                <i class="icon-external-link"></i> Carta de Instrucción
-            </g:link>
         </div>
-        
+
         <div class="container-fluid">
             <g:render template="/shared/alerts" />
             <br/>
@@ -39,6 +36,17 @@
                 </div>
                 <g:render template="form"/>
 
+                <h3 id="bloqueAsignacionExpedientes"  class="header smaller lighter blue">Asignación de Expediente</h3>
+                <br/>
+                <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'asignar', 'error')} required">
+                    <label for="asignar" class="control-label">
+                        <g:message code="otorgamientoDePoder.asignar.label" default="Asignar A" />
+                    </label>
+                    <div class="controls">
+                        <g:select id="asignar" name="asignar.id" from="${com.app.security.Usuario.list()}" optionKey="id"  value="${otorgamientoDePoderInstance?.asignar?.id}" noSelection="['':'-Elige Responsable-']" class="many-to-one"/>
+                    </div>
+                </div>
+                
                 <h3 id="bloqueDatosComplementarios"  class="header smaller lighter blue">Datos Complementarios</h3>
                 <br/>
                 <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'fechaDeOtorgamiento', 'error')} ">
