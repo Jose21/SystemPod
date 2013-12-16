@@ -47,6 +47,12 @@
                             <div class="message-list" id="message-list">
                                 <g:each in="${otorgamientoInstanceList}" status="i" var="otorgamientoInstance">
                                     <div class="message-item message-unread">
+                                        <g:if test="${otorgamientoInstance.asignar == null}">
+                                            <i class=" icon-exclamation-sign red" title="Sin Asignar"></i>   
+                                        </g:if>
+                                        <g:else>  
+                                            <i class=" icon-check-empty light-grey" title="No Atendido"></i>        
+                                        </g:else>
                                         <span class="sender" title="Folio del Expediente">
                                             <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoInstance?.id}">
                                                 <span class="label label-success arrowed-in">
@@ -86,6 +92,12 @@
                             <div class="message-list" id="message-list">
                                 <g:each in="${revocacionInstanceList}" status="i" var="revocacionInstance">
                                     <div class="message-item message-unread">
+                                        <g:if test="${revocacionInstance.asignar == null}">
+                                            <i class=" icon-exclamation-sign red" title="Sin Asignar"></i>   
+                                        </g:if>
+                                        <g:else>  
+                                            <i class=" icon-check-empty light-grey" title="No Atendido"></i>        
+                                        </g:else>
                                         <span class="sender" title="Folio del Expediente">
                                             <g:link controller="revocacionDePoder" action="show" id="${revocacionInstance.id}">
                                                 <span class="label label-success arrowed-in">
