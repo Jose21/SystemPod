@@ -45,6 +45,20 @@
                 </g:link>
                 <br/>
             </g:if>
+            <g:if test="${tareaInstance?.otorgamientoDePoder}">
+                <br/>
+                <g:link class="btn btn-small btn-info btn-block" controller="otorgamientoDePoder" action="edit" id="${tareaInstance?.otorgamientoDePoder.id}">                
+                    El turno está asociado al Otorgamiento de Poder: ${tareaInstance?.otorgamientoDePoder.id} - Número de Folio: ${tareaInstance?.otorgamientoDePoder.numeroDeFolio}
+                </g:link>
+                <br/>
+            </g:if>
+            <g:if test="${tareaInstance?.revocacionDePoder}">
+                <br/>
+                <g:link class="btn btn-small btn-info btn-block" controller="revocacionDePoder" action="edit" id="${tareaInstance?.revocacionDePoder.id}">                
+                    El turno está asociado a la Revocación de Poder: ${tareaInstance?.revocacionDePoder.id} - Escritura Pública: ${tareaInstance?.revocacionDePoder.escrituraPublica}
+                </g:link>
+                <br/>
+            </g:if>
             <br/>
             <g:render template="/shared/alerts" />
             <div class="well">        

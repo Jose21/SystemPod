@@ -1,6 +1,7 @@
 package com.app.sgpod
 
 import com.app.security.Usuario
+import com.app.sgtask.Tarea
 
 class RevocacionDePoder {
 
@@ -25,7 +26,10 @@ class RevocacionDePoder {
     String comentarios
     CartaDeInstruccion cartaDeInstruccion
     
-    static hasMany = [ documentos : DocumentoDePoder ]
+    static hasMany = [ 
+        documentos : DocumentoDePoder,
+        tareas : Tarea
+    ]
     
     static constraints = {
         escrituraPublica blank:false
@@ -50,5 +54,6 @@ class RevocacionDePoder {
         
         cartaDeInstruccion nullable:true
         documentos nullable:true
+        tareas nullable:true
     }
 }

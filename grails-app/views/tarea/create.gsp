@@ -1,4 +1,4 @@
-<%@ page import="com.app.sgtask.Tarea;com.app.sgcon.Convenio" %>
+<%@ page import="com.app.sgtask.Tarea;com.app.sgcon.Convenio;com.app.sgpod.OtorgamientoDePoder;com.app.sgpod.RevocacionDePoder" %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -16,6 +16,20 @@
         <br/>
           <g:link class="btn btn-small btn-info btn-block" controller="convenio" action="edit" id="${Convenio.get(session.idConvenio).id}">
             El turno se asociará al convenio: ${Convenio.get(session.idConvenio).id} - Número de Convenio: ${Convenio.get(session.idConvenio).numeroDeConvenio} - Objeto: ${Convenio.get(session.idConvenio).objeto}
+          </g:link>
+        <br/>
+      </g:if>
+      <g:if test="${session.idOtorgamientoDePoder}">
+        <br/>
+          <g:link class="btn btn-small btn-info btn-block" controller="otorgamientoDePoder" action="edit" id="${OtorgamientoDePoder.get(session.idOtorgamientoDePoder).id}">
+            El turno se asociará al Otorgamiento De Poder: ${OtorgamientoDePoder.get(session.idOtorgamientoDePoder).id} - Número de Folio: ${OtorgamientoDePoder.get(session.idOtorgamientoDePoder).numeroDeFolio}
+          </g:link>
+        <br/>
+      </g:if>
+      <g:if test="${session.idRevocacionDePoder}">
+        <br/>
+          <g:link class="btn btn-small btn-info btn-block" controller="revocacionDePoder" action="edit" id="${RevocacionDePoder.get(session.idRevocacionDePoder).id}">
+            El turno se asociará a la Revocación De Poder: ${RevocacionDePoder.get(session.idRevocacionDePoder).id} - Escritura Pública: ${RevocacionDePoder.get(session.idRevocacionDePoder).escrituraPublica}
           </g:link>
         <br/>
       </g:if>

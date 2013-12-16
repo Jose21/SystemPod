@@ -2,6 +2,8 @@ package com.app.sgtask
 
 import com.app.security.Usuario
 import com.app.sgcon.Convenio
+import com.app.sgpod.OtorgamientoDePoder
+import com.app.sgpod.RevocacionDePoder
 
 class Tarea implements Comparable {
 
@@ -18,7 +20,11 @@ class Tarea implements Comparable {
     
     Grupo grupo
     
-    static belongsTo = [ convenio : Convenio ]
+    static belongsTo = [ 
+        convenio : Convenio,
+        otorgamientoDePoder : OtorgamientoDePoder,
+        revocacionDePoder : RevocacionDePoder
+    ]
     static hasMany = [notas : Nota, usuariosDeTarea : UsuarioDeTarea]
     
     static constraints = {
@@ -31,6 +37,8 @@ class Tarea implements Comparable {
         creadaPor nullable:false
         responsable nullable:true
         convenio nullable:true
+        otorgamientoDePoder nullable:true
+        revocacionDePoder nullable:true
         usuariosDeTarea nullable:true
         alertaVencimiento blank:false, inList : ["1","2","3","4","5","6","7"]
         prioridad blank:false, inList : ["Normal", "Urgente"]
