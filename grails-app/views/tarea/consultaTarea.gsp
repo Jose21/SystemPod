@@ -4,7 +4,7 @@
     <head>
         <meta name="layout" content="mainTareas">    
         <g:set var="entityName" value="${message(code: 'tarea.label', default: 'Turno')}" />    
-        <title><g:message code="default.consultaTarea.label" args="[entityName]" /></title>
+        <title>Busqueda</title>
     </head>
     <body>
         <r:require module="export"/>    

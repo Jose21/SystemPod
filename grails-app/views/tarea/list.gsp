@@ -111,11 +111,11 @@
                                                     ${tareaInstance?.nombre}
                                                 </span>
                                             </g:link>
-                                        </span>
-                                        <span class="summary" title="Grupo">
+                                        </span>                                      
+                                        <span class="summary" title="Dias para Alerta de Vecimiento">
                                             <g:link action="show" id="${tareaInstance.id}">
                                                 <span class="text">
-                                                    ${tareaInstance?.grupo?.nombre}
+                                                    ${tareaInstance?.alertaVencimiento}
                                                 </span>
                                             </g:link>
                                         </span>
@@ -232,10 +232,10 @@
                                                 </span>
                                             </g:link>
                                         </span>
-                                        <span class="summary" title="Grupo">
+                                        <span class="summary" title="Dias para Alerta de Vecimiento">
                                             <g:link action="show" id="${tareaInstance.id}">
                                                 <span class="text">
-                                                    ${tareaInstance?.grupo?.nombre}
+                                                    ${tareaInstance?.alertaVencimiento}
                                                 </span>
                                             </g:link>
                                         </span>
@@ -346,10 +346,17 @@
                                                 </span>
                                             </g:link>
                                         </span>
-                                        <span class="summary" title="Grupo">
+                                        <span class="summary" title="Dias para Alerta de Vecimiento">
                                             <g:link action="show" id="${tareaInstance.id}">
                                                 <span class="text">
-                                                    ${tareaInstance?.grupo?.nombre}
+                                                    ${tareaInstance?.alertaVencimiento}
+                                                </span>
+                                            </g:link>
+                                        </span>
+                                        <span class="summary" title="Responsable">
+                                            <g:link action="show" id="${tareaInstance.id}">
+                                                <span class="text">
+                                                    ${tareaInstance?.responsable.firstName} ${tareaInstance?.responsable.lastName} 
                                                 </span>
                                             </g:link>
                                         </span>

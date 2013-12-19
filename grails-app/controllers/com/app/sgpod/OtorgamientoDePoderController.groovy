@@ -2,8 +2,12 @@ package com.app.sgpod
 
 import java.text.SimpleDateFormat
 import org.springframework.dao.DataIntegrityViolationException
+import grails.plugins.springsecurity.Secured
 
+@Secured(['IS_AUTHENTICATED_FULLY'])
 class OtorgamientoDePoderController {
+    
+    def springSecurityService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -22,7 +26,10 @@ class OtorgamientoDePoderController {
 
     def save() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-      
+        
+        //se agrega el que creó el otorgamiento en la bd
+        params.creadaPor = springSecurityService.currentUser
+        
         if (params.registroDeLaSolicitud) {
             Date registroDeLaSolicitud = sdf.parse(params.registroDeLaSolicitud)
             params.registroDeLaSolicitud = registroDeLaSolicitud
@@ -43,6 +50,11 @@ class OtorgamientoDePoderController {
 
     def show(Long id) {
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)
+        if (!otorgamientoDePoderInstance.asignar){
+            flash.warn = "El expediente aún no esta Asignado."
+        }else{
+            flash.warn = null
+        }
         if (!otorgamientoDePoderInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'poder.label', default: 'Poder'), id])
             redirect(action: "list")

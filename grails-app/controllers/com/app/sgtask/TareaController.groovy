@@ -6,9 +6,13 @@ import com.app.security.Usuario
 import grails.plugin.asyncmail.AsynchronousMailService
 import com.app.NotificacionesService
 import grails.plugins.springsecurity.Secured
+import groovy.time.TimeDuration
+import groovy.time.TimeCategory
 import com.app.sgcon.Convenio
 import com.app.sgcon.beans.BusquedaBean
 import com.pogos.BusquedaBean
+import com.app.sgpod.OtorgamientoDePoder
+import com.app.sgpod.RevocacionDePoder
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class TareaController {
@@ -27,6 +31,7 @@ class TareaController {
     }
     
     def hoy() {
+        flash.warn = null
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
         
         session.opt = params.action
@@ -74,6 +79,7 @@ class TareaController {
     }
     
     def programadas() {
+        flash.warn = null
         session.opt = params.action
         
         //Mis turnos        
@@ -118,7 +124,7 @@ class TareaController {
     
     def retrasadas () {
         session.opt = params.action
-        
+        flash.warn = null
         //Mis turnos        
         def taskListQuery = Tarea.where {
             fechaLimite < (new Date() - 1) &&
@@ -215,6 +221,16 @@ class TareaController {
         } else {
             session.idConvenio = null
         }
+        if (params.idOtorgamientoDePoder) {
+            session.idOtorgamientoDePoder = params.idOtorgamientoDePoder as long
+        } else {
+            session.idOtorgamientoDePoder = null
+        }
+        if (params.idRevocacionDePoder) {
+            session.idRevocacionDePoder = params.idRevocacionDePoder as long
+        } else {
+            session.idRevocacionDePoder = null
+        }
         [tareaInstance: new Tarea(params)]
     }
 
@@ -256,6 +272,16 @@ class TareaController {
             def convenioInstance = Convenio.get(session.idConvenio)
             convenioInstance.addToTareas(tareaInstance).save(flush:true)
         }
+        //Integración con Otorgamiento De Poder
+        if (session.idOtorgamientoDePoder){
+            def otorgamientoDePoderInstance = OtorgamientoDePoder.get(session.idOtorgamientoDePoder)
+            otorgamientoDePoderInstance.addToTareas(tareaInstance).save(flush:true)
+        }
+        //Integración con Revocación De Poder
+        if (session.idRevocacionDePoder){
+            def revocacionDePoderInstance = RevocacionDePoder.get(session.idRevocacionDePoder)
+            revocacionDePoderInstance.addToTareas(tareaInstance).save(flush:true)
+        }
             
         historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "creó un turno")        
         flash.message = message(code: 'default.created.message', args: [message(code: 'tarea.label', default: 'Turno'), tareaInstance.id])
@@ -268,7 +294,26 @@ class TareaController {
         } else {
             session.idConvenio = null
         }
+        if (params.idOtorgamientoDePoder) {
+            session.idOtorgamientoDePoder = params.idOtorgamientoDePoder as long
+        } else {
+            session.idOtorgamientoDePoder = null
+        }
+        if (params.idRevocacionDePoder) {
+            session.idRevocacionDePoder = params.idRevocacionDePoder as long
+        } else {
+            session.idRevocacionDePoder = null
+        }
         def tareaInstance = Tarea.get(id)
+        def fechaHoy = new Date()
+        def fechaLimite = tareaInstance.fechaLimite
+        def alertaVencimiento = tareaInstance.alertaVencimiento
+        TimeDuration tiempo = TimeCategory.minus(fechaLimite, fechaHoy)
+        if(tiempo.days == (alertaVencimiento as int) && !tareaInstance.notas){
+            flash.warn = "El Turno aun no ha sido Atendido."
+        }else{
+            flash.warn = null 
+        }
         if (!tareaInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'tarea.label', default: 'Turno'), id])
             redirect(action: "list")
@@ -425,7 +470,7 @@ class TareaController {
         def tareaInstanceList = []
         def inActive = "active"
         if(params.id?.isNumber()){
-           tareaInstanceList = Tarea.findAllById(params.id) 
+            tareaInstanceList = Tarea.findAllById(params.id) 
         }else{
             flash.warn = "Valor no válido. El campo debe contener sólo Números Enteros."
         }   

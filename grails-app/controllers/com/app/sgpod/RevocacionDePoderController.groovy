@@ -6,6 +6,8 @@ import grails.plugins.springsecurity.Secured
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class RevocacionDePoderController {
+    
+    def springSecurityService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -23,6 +25,9 @@ class RevocacionDePoderController {
     }
 
     def save() {
+        //se agrega el que creó el otorgamiento en la bd
+        params.creadaPor = springSecurityService.currentUser
+        
         def revocacionDePoderInstance = new RevocacionDePoder(params)
         if (!revocacionDePoderInstance.save(flush: true)) {
             render(view: "create", model: [revocacionDePoderInstance: revocacionDePoderInstance])
@@ -35,6 +40,11 @@ class RevocacionDePoderController {
 
     def show(Long id) {
         def revocacionDePoderInstance = RevocacionDePoder.get(id)
+        if (!revocacionDePoderInstance.asignar){
+            flash.warn = "El expediente aún no esta Asignado."
+        }else{
+            flash.warn = null
+        }
         if (!revocacionDePoderInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'revocacionDePoder.label', default: 'RevocacionDePoder'), id])
             redirect(action: "list")

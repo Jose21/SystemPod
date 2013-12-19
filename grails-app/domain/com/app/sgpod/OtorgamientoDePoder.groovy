@@ -1,5 +1,8 @@
 package com.app.sgpod
 
+import com.app.security.Usuario
+import com.app.sgtask.Tarea
+
 class OtorgamientoDePoder {
 
     String numeroDeFolio
@@ -10,18 +13,23 @@ class OtorgamientoDePoder {
     String contrato
     String tipoDePoder
     Delegacion delegacion
-    
+    Usuario creadaPor
+
     String poderSolicitado
     MotivoDeOtorgamiento motivoDeOtorgamiento
     String solicitadoPor
     
     //Datos que puede complementar en cualquier momento
+    Usuario asignar
     Date fechaDeOtorgamiento
     String escrituraPublicaDeOtorgamiento
     String comentarios
     CartaDeInstruccion cartaDeInstruccion
     
-    static hasMany = [ documentos : DocumentoDePoder ]
+    static hasMany = [ 
+        documentos : DocumentoDePoder,
+        tareas : Tarea
+    ]
     
     static constraints = {
         
@@ -33,10 +41,13 @@ class OtorgamientoDePoder {
         contrato blank:false
         tipoDePoder blank:false, inList : ["Interno","Externo"]
         delegacion nullable:false
+        creadaPor nullable:false
         
         poderSolicitado blank:false, maxSize:1048576
         motivoDeOtorgamiento nullable:false, maxSize:1048576
         solicitadoPor blank:false
+        
+        asignar nullable:true, blank:true
         
         fechaDeOtorgamiento nullable:true
         escrituraPublicaDeOtorgamiento nullable:true, blank:true
@@ -44,5 +55,6 @@ class OtorgamientoDePoder {
         
         cartaDeInstruccion nullable:true
         documentos nullable:true
+        tareas nullable:true
     }
 }

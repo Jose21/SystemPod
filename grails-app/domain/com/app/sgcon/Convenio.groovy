@@ -18,6 +18,7 @@ class Convenio {
     Date lastUpdated
     String nombreDeCopiaElectronica
     byte[] copiaElectronica
+    boolean editable = true
     
     Convenio modificaA
     Convenio esModificadoPor
@@ -41,6 +42,7 @@ class Convenio {
         status nullable:false        
         nombreDeCopiaElectronica nullable:true, maxSize:1000
         copiaElectronica nullable:true, maxSize:52428800
+        editable blank:false
         compromisos nullable:true, blank: true, maxSize:1048576
         
         modificaA nullable:true
