@@ -86,34 +86,34 @@ class BootStrap {
             new Delegacion(nombre:"Mi Delegacion").save()
             
             /*new Persona (
-                nombre : "Administrador Del Sistema",
-                usuario : Usuario.findByUsername("admin")
+            nombre : "Administrador Del Sistema",
+            usuario : Usuario.findByUsername("admin")
             ).save()
             new Persona (
-                nombre : "Test Uno",
-                usuario : Usuario.findByUsername("test1")
+            nombre : "Test Uno",
+            usuario : Usuario.findByUsername("test1")
             ).save()
             new Persona (
-                nombre : "Test Dos",
-                usuario : Usuario.findByUsername("test2")
+            nombre : "Test Dos",
+            usuario : Usuario.findByUsername("test2")
             ).save()
             new Persona (
-                nombre : "Test Tres",
-                usuario : Usuario.findByUsername("test3")
+            nombre : "Test Tres",
+            usuario : Usuario.findByUsername("test3")
             ).save()*/
             break
         case Environment.PRODUCTION :
             
             new Usuario (
-            firstName : "Administrador",
-            lastName : "Del Sistema",
-            email : "the.real.thom@gmail.com",
-            username : "admin",
-            password : "4dm1n!",
-            enabled : true,
-            accountExpired : false,
-            accountLocked : false,
-            passwordExpired : false
+                firstName : "Administrador",
+                lastName : "Del Sistema",
+                email : "the.real.thom@gmail.com",
+                username : "admin",
+                password : "4dm1n!",
+                enabled : true,
+                accountExpired : false,
+                accountLocked : false,
+                passwordExpired : false
             ).save()
                 
             new Rol (authority : "ROLE_ADMINISTRADOR").save()
