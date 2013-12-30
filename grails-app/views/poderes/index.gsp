@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta name="layout" content="mainPoderes">    
-        <g:set var="entityName" value="${message(code: 'poder.label', default: 'Turno')}" />    
+        <g:set var="entityName" value="${message(code: 'poder.label', default: 'Poderes')}" />    
         <title>Expedientes</title>
     </head>
     <body>

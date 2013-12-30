@@ -179,30 +179,29 @@
             <thead>
                 <g:if test="${numeroDeConvenio}">
                     <tr>
-                        <th colspan="9"  style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FOLIO: ${numeroDeConvenio}</th>
+                        <th colspan="10"  style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FOLIO: ${numeroDeConvenio}</th>
                     </tr>
                 </g:if>
                 <g:if test="${rangoDeFechaRegistro}">
                     <tr>
-                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FECHA DE REGISTRO: ${rangoDeFechaRegistro}</br></br></th>
+                        <th colspan="10" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FECHA DE REGISTRO: ${rangoDeFechaRegistro}</br></br></th>
                     </tr>
                 </g:if>
                 <g:if test="${params.id}">
                     <tr>
-                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR CATEGORIA: ${params.id}</br></br></th>
+                        <th colspan="10" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR CATEGORIA: ${params.id}</br></br></th>
                     </tr>
                 </g:if>
                 <g:if test="${rangoDeFecha}">
                     <tr>
-                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FECHA DE FIRMA: ${rangoDeFecha}</br></br></th>
+                        <th colspan="10" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FECHA DE FIRMA: ${rangoDeFecha}</br></br></th>
                     </tr>
                 </g:if>
                 <g:if test="${params.nombre}">
                     <tr>
-                        <th colspan="9" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR NOMBRE: ${params.nombre}</br></br></th>
+                        <th colspan="10" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR NOMBRE: ${params.nombre}</br></br></th>
                     </tr>
                 </g:if>                
-            <br>
             <tr>
                 <th><g:message code="convenio.id.label"  default="Identificador Interno" /></th>
                 <th><g:message code="convenio.numeroDeConvenio.label" default="Número de Convenio" /></th>
