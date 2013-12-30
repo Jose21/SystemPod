@@ -13,6 +13,7 @@
         <link href="${resource(dir:'assets/css',file:'bootstrap.min.css')}" rel="stylesheet" />
         <link href="${resource(dir:'assets/css',file:'bootstrap-responsive.min.css')}" rel="stylesheet" />
         <link href="${resource(dir:'assets/css',file:'font-awesome.min.css')}" rel="stylesheet" />
+        <link href="${resource(dir:'assets/css',file:'bootstrap-tag-cloud.css')}" rel="stylesheet"/>        
         <!--[if IE 7]>
           <link rel="stylesheet" href="${resource(dir:'assets/css',file:'font-awesome-ie7.min.css')}" />
         <![endif]-->
@@ -23,14 +24,14 @@
         <link rel="stylesheet" href="${resource(dir:'assets/css',file:'bootstrap-timepicker.css')}" />
         <link rel="stylesheet" href="${resource(dir:'assets/css',file:'daterangepicker.css')}" />
         <link rel="stylesheet" href="${resource(dir:'assets/css',file:'colorpicker.css')}" />
-        <link rel="stylesheet" href="${resource(dir:'assets/css',file:'ace-fonts.css')}" />    
+        <link rel="stylesheet" href="${resource(dir:'assets/css',file:'ace-fonts.css')}" />  
         <link href="${resource(dir:'assets/css',file:'ace.min.css')}" rel="stylesheet" />
         <link href="${resource(dir:'assets/css',file:'ace-responsive.min.css')}" rel="stylesheet" />
-        <link href="${resource(dir:'assets/css',file:'ace-skins.min.css')}" rel="stylesheet" />
+        <link href="${resource(dir:'assets/css',file:'ace-skins.min.css')}" rel="stylesheet" />    
         <!--[if lte IE 8]>
           <link rel="stylesheet" href="${resource(dir:'assets/css',file:'ace-ie.min.css')}" />
         <![endif]-->     
-        <script src="${resource(dir:'assets/js',file:'ace-extra.min.js')}"></script>      
+        <script src="${resource(dir:'assets/js',file:'ace-extra.min.js')}"></script>
 
     <r:require module="jquery"/>
     <r:require module="jquery-ui"/>    
@@ -43,6 +44,12 @@
         <script type="text/javascript">
             try{ace.settings.check('navbar' , 'fixed')}catch(e){}
         </script>
+
+        <script src="${resource(dir:'assets/js',file:'bootstrap-tag.min.js')}"></script>
+        <script src="${resource(dir:'assets/js',file:'jquery.autosize-min.js')}"></script>
+        <script src="${resource(dir:'assets/js',file:'jquery.inputlimiter.1.3.1.min.js')}"></script>
+        <script src="${resource(dir:'assets/js',file:'jquery.maskedinput.min.js')}"></script>
+        <script src="${resource(dir:'assets/js',file:'bootstrap-tag-cloud.js')}"></script>
 
         <div class="navbar-inner">
             <div class="container-fluid">
@@ -178,10 +185,10 @@
     <script src="${resource(dir:'js/modules',file:'exporting.js')}"></script>
 
 
-    <!--ace scripts-->
+<!--ace scripts-->
     <script src="${resource(dir:'assets/js',file:'ace-elements.min.js')}"></script>
-    <script src="${resource(dir:'assets/js',file:'ace.min.js')}"></script>    
-    <script type="text/javascript">      
+    <script src="${resource(dir:'assets/js',file:'ace.min.js')}"></script>
+    <script type="text/javascript">
         (function($) { 
         $.fn.datepicker.dates['es'] = {
         days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"],
@@ -217,21 +224,21 @@
 
         $('#containerTotalDeConvenios').highcharts({
         chart: { type: 'column' },
-            title: { text: "${conveniosPorFechaBean?conveniosPorFechaBean.title:""}" },
+        title: { text: "${conveniosPorFechaBean?conveniosPorFechaBean.title:""}" },
         xAxis: { categories: [ 'Total'] },
         yAxis: { min: 0, title: { text: 'Cantidad de Convenios' } },
         plotOptions: { column: { pointPadding: 0.2, borderWidth: 0,
-         cursor: 'pointer',    
-            point: {
-                    events: {
-                        click: function() {
-                            //alert ('Category: '+ this.category +', value: '+ this.y);
-                            $("#barraConvenios").val(this.category);
-                            document.getElementById("formConvenios").submit();
-                        }
-                    }
-                }
-            }  
+        cursor: 'pointer',    
+        point: {
+        events: {
+        click: function() {
+        //alert ('Category: '+ this.category +', value: '+ this.y);
+        $("#barraConvenios").val(this.category);
+        document.getElementById("formConvenios").submit();
+        }
+        }
+        }
+        }  
         },
         series: [{
         name: 'Convenios',
@@ -247,7 +254,7 @@
         ]
         }]
         });
-        
+
         })(jQuery);
     </script>
     <g:javascript library="application"/>

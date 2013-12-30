@@ -587,6 +587,6 @@ class ConvenioController {
                 convenioInstance : convenioInstance
             ]
         )
-    }     
+    } 
 }
 
