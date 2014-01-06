@@ -56,7 +56,7 @@ grails.project.dependency.resolution = {
 
         compile ":scaffolding:2.0.0"
         
-        compile ":grails-melody:1.47.2"
+        //compile ":grails-melody:1.47.2"
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"
         //runtime ":cached-resources:1.0"
@@ -64,9 +64,10 @@ grails.project.dependency.resolution = {
 
         compile ":jquery-ui:1.8.24"
         compile ":famfamfam:1.0.1"
-        compile ":mail:1.0.1", {
+        /*compile ":mail:1.0.1", {
             excludes 'spring-test'
-        }
+        }*/
+        compile ":mail:1.0.1"
         compile ":asynchronous-mail:1.0"
         
         compile ":spring-security-core:1.2.7.3"
