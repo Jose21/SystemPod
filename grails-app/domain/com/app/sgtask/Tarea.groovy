@@ -17,6 +17,7 @@ class Tarea implements Comparable {
     Usuario responsable
     String alertaVencimiento
     String prioridad
+    String tags
     
     Grupo grupo
     
@@ -42,6 +43,7 @@ class Tarea implements Comparable {
         usuariosDeTarea nullable:true
         alertaVencimiento blank:false, inList : ["1","2","3","4","5","6","7"]
         prioridad blank:false, inList : ["Normal", "Urgente"]
+        tags nullable:true, maxSize:1000
     }
     
     static mapping = {

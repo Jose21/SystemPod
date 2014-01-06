@@ -25,6 +25,7 @@ class RevocacionDePoder {
     String escrituraPublicaDeRevocacion
     String comentarios
     CartaDeInstruccion cartaDeInstruccion
+    String tags
     
     static hasMany = [ 
         documentos : DocumentoDePoder,
@@ -55,5 +56,6 @@ class RevocacionDePoder {
         cartaDeInstruccion nullable:true
         documentos nullable:true
         tareas nullable:true
+        tags nullable:true, maxSize:1000
     }
 }

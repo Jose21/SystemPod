@@ -19,6 +19,7 @@ class Convenio {
     String nombreDeCopiaElectronica
     byte[] copiaElectronica
     boolean editable = true
+    String tags
     
     Convenio modificaA
     Convenio esModificadoPor
@@ -52,6 +53,7 @@ class Convenio {
         responsables nullable: true
         usuariosDeConvenio nullable:true
         tareas nullable:true
+        tags nullable:true, maxSize:1000
        }
     
     String toString () {

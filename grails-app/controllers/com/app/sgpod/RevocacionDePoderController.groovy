@@ -33,6 +33,16 @@ class RevocacionDePoderController {
             render(view: "create", model: [revocacionDePoderInstance: revocacionDePoderInstance])
             return
         }
+        
+        //validacion para la busqueda por tags
+        if(revocacionDePoderInstance.tags){
+            if(revocacionDePoderInstance.tags.endsWith(",")){
+                params.tags = params.tags.substring(0, params.tags.length() -1)
+            }else {
+                revocacionDePoderInstance.tags = revocacionDePoderInstance.tags + "," 
+            }
+        }
+        //end busqueda tags
 
         flash.message = message(code: 'default.created.message', args: [message(code: 'revocacionDePoder.label', default: 'RevocacionDePoder'), revocacionDePoderInstance.id])
         redirect(action: "edit", id: revocacionDePoderInstance.id)
@@ -91,6 +101,16 @@ class RevocacionDePoderController {
             params.fechaDeRevocacion = null
         }
         revocacionDePoderInstance.properties = params
+        
+        //validacion para la busqueda por tags
+        if(revocacionDePoderInstance.tags){
+            if(revocacionDePoderInstance.tags.endsWith(",")){
+                params.tags = params.tags.substring(0, params.tags.length() -1)
+            }else {
+                revocacionDePoderInstance.tags = revocacionDePoderInstance.tags + "," 
+            }
+        }
+        //end busqueda tags
 
         if (!revocacionDePoderInstance.save(flush: true)) {
             render(view: "edit", model: [revocacionDePoderInstance: revocacionDePoderInstance])

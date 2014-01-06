@@ -43,6 +43,17 @@ class OtorgamientoDePoderController {
             render(view: "create", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])
             return
         }
+        
+        //validacion para la busqueda por tags
+        if(otorgamientoDePoderInstance.tags){
+            if(otorgamientoDePoderInstance.tags.endsWith(",")){
+                params.tags = params.tags.substring(0, params.tags.length() -1)
+            }else {
+                otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags + "," 
+            }
+        }
+        //end busqueda tags
+        
 
         flash.message = message(code: 'default.created.message', args: [message(code: 'poder.label', default: 'Poder'), otorgamientoDePoderInstance.id])
         redirect(action: "edit", id: otorgamientoDePoderInstance.id)
@@ -106,6 +117,16 @@ class OtorgamientoDePoderController {
         }
         
         otorgamientoDePoderInstance.properties = params
+        
+        //validacion para la busqueda por tags
+        if(otorgamientoDePoderInstance.tags){
+            if(otorgamientoDePoderInstance.tags.endsWith(",")){
+                params.tags = params.tags.substring(0, params.tags.length() -1)
+            }else {
+                otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags + "," 
+            }
+        }
+        //end busqueda tags
 
         if (!otorgamientoDePoderInstance.save(flush: true)) {
             render(view: "edit", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])

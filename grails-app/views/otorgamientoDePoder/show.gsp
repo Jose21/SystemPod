@@ -9,7 +9,11 @@
     </head>
     <body>
         <div class="page-header position-relative">
-            <h1>Ver: Otorgamiento De Poder</h1>            
+            <h1>Ver: Otorgamiento De Poder</h1>
+            <br/>
+            <g:link class="btn btn-success btn-small tip-bottom" controller="otorgamientoDePoder" action="existe" id="${otorgamientoDePoderInstance?.id}">
+                <i class="icon-external-link"></i> Carta de Instrucción
+            </g:link>
         </div>
 
         <div class="container-fluid">
@@ -115,12 +119,8 @@
             <g:form class="form-actions">
                 <fieldset class="buttons">
                     <g:hiddenField name="id" value="${otorgamientoDePoderInstance?.id}" />
-                    <g:link class="btn btn-primary" action="edit" id="${otorgamientoDePoderInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-                    <g:link controller="otorgamientoDePoder" action="existe" id="${otorgamientoDePoderInstance?.id}"  class="btn btn-success">
-                        <i class="icon-external-link"></i> Carta de Instrucción
-                    </g:link>
-                    <g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-                </fieldset>
+                    <g:link class="btn btn-primary" action="edit" id="${otorgamientoDePoderInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>                    
+                    </fieldset>
             </g:form>
         </div>
     </body>

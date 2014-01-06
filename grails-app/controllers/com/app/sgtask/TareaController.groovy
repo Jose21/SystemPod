@@ -282,6 +282,16 @@ class TareaController {
             def revocacionDePoderInstance = RevocacionDePoder.get(session.idRevocacionDePoder)
             revocacionDePoderInstance.addToTareas(tareaInstance).save(flush:true)
         }
+        
+        //validacion para la busqueda por tags
+        if(tareaInstance.tags){
+            if(tareaInstance.tags.endsWith(",")){
+                params.tags = params.tags.substring(0, params.tags.length() -1)
+            }else {
+                tareaInstance.tags = tareaInstance.tags + "," 
+            }
+        }
+        //end busqueda tags
             
         historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "creó un turno")        
         flash.message = message(code: 'default.created.message', args: [message(code: 'tarea.label', default: 'Turno'), tareaInstance.id])
@@ -359,6 +369,16 @@ class TareaController {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
         params.fechaLimite = params.fechaLimite!=""?sdf.parse(params.fechaLimite):null
         tareaInstance.properties = params
+        
+        //validacion para la busqueda por tags
+        if(tareaInstance.tags){
+            if(tareaInstance.tags.endsWith(",")){
+                params.tags = params.tags.substring(0, params.tags.length() -1)
+            }else {
+                tareaInstance.tags = tareaInstance.tags + "," 
+            }
+        }
+        //end busqueda tags
 
         if (!tareaInstance.save(flush: true)) {
             render(view: "edit", model: [tareaInstance: tareaInstance])
@@ -576,6 +596,28 @@ class TareaController {
                 tareaInstanceList: tareaInstanceList,
                 tareaInstanceTotal: tareaInstanceList.size(),
                 nombreResponsablesActive : nombreResponsablesActive       
+            ]
+        )       
+    }
+    def buscarPorTags () {
+        def porTagsActive = null
+        if (params.inActive == "porTags") {
+            porTagsActive = "active"
+        }
+        def s = params.tags.toString().replaceAll(" ", "")
+        def resultList = s.tokenize(",")
+        def tareaInstanceList =[] 
+        resultList.each{            
+            def results = Tarea.findAllByTagsIlike("%"+it+",%", [sort: "id", order: "asc"])
+            tareaInstanceList = tareaInstanceList + results as Set    
+        }
+        session.tareaInstanceList = tareaInstanceList
+        render(
+            view: "consultaTarea", 
+            model: [
+                tareaInstanceList: tareaInstanceList,
+                tareaInstanceTotal: tareaInstanceList.size(),
+                porTagsActive : porTagsActive       
             ]
         )       
     }

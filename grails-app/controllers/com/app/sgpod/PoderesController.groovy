@@ -13,11 +13,16 @@ class PoderesController {
 
     def index() {
         flash.warn = null
-        //Mis Poderes que tengo asignados, poderes que yo cree y que aun no eh asignado
-        def poderesList1 = OtorgamientoDePoder.findAllByAsignarOrAsignarIsNull(springSecurityService.currentUser)
-        def poderesList2 = RevocacionDePoder.findAllByAsignarOrAsignarIsNull(springSecurityService.currentUser)
-        def poderesList = poderesList1 + poderesList2
-        //Poderes Asignados que yo cree
+        //Mis Poderes:poderes que alguien me asigno o poderes que yo cree y que aun no eh asignado.
+        def poderesList1 = OtorgamientoDePoder.where {
+            (creadaPor == springSecurityService.currentUser &&  asignar == springSecurityService.currentUser) || (creadaPor == springSecurityService.currentUser && asignar == null) || (asignar == springSecurityService.currentUser)
+        }
+        def poderesList2 = RevocacionDePoder.where {
+            (creadaPor == springSecurityService.currentUser &&  asignar == springSecurityService.currentUser) || (creadaPor == springSecurityService.currentUser && asignar == null) || (asignar == springSecurityService.currentUser)
+        }
+     
+        def poderesList = poderesList1.list() + poderesList2.list()
+        //Poderes Asignados: yo cree y asigne a alguien mas.
         //lista de otorgamiento
         def c = OtorgamientoDePoder.createCriteria()
         def asignadosOtorgamiento = c.list {
@@ -157,6 +162,29 @@ class PoderesController {
         )
     }
     
+    def buscarPorTags () {
+        def porTagsActive = null
+        if (params.inActive == "porTags") {
+            porTagsActive = "active"
+        }
+        def s = params.tags.toString().replaceAll(" ", "")
+        def resultList = s.tokenize(",")
+        def otorgamientoDePoderInstanceList =[] 
+        resultList.each{            
+            def results = OtorgamientoDePoder.findAllByTagsIlike("%"+it+",%", [sort: "id", order: "asc"])
+            otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList + results as Set    
+        }
+        session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList
+        render(
+            view: "otorgamientoConsulta", 
+            model: [
+                otorgamientoDePoderInstanceList: otorgamientoDePoderInstanceList,
+                otorgamientoDePoderInstanceTotal: otorgamientoDePoderInstanceList.size(),
+                porTagsActive : porTagsActive       
+            ]
+        )       
+    }
+    
     def buscarNombreApoderadoRevocacion (){
         def nombreApoderadoActive = null
         if (params.inActive=="nombreApoderado") {
@@ -244,6 +272,29 @@ class PoderesController {
         )
     }
     
+    def buscarPorTagsRevocacion () {
+        def porTagsActive = null
+        if (params.inActive == "porTags") {
+            porTagsActive = "active"
+        }
+        def s = params.tags.toString().replaceAll(" ", "")
+        def resultList = s.tokenize(",")
+        def revocacionDePoderInstanceList =[] 
+        resultList.each{            
+            def results = RevocacionDePoder.findAllByTagsIlike("%"+it+",%", [sort: "id", order: "asc"])
+            revocacionDePoderInstanceList = revocacionDePoderInstanceList + results as Set    
+        }
+        session.revocacionDePoderInstanceList = revocacionDePoderInstanceList
+        render(
+            view: "revocacionConsulta", 
+            model: [
+                revocacionDePoderInstanceList: revocacionDePoderInstanceList,
+                revocacionDePoderInstanceTotal: revocacionDePoderInstanceList.size(),
+                porTagsActive : porTagsActive       
+            ]
+        )       
+    }
+    
     def buscarNombreGeneral (){
         def nombreApoderadoActive = null
         if (params.inActive=="nombreApoderado") {
@@ -272,7 +323,6 @@ class PoderesController {
         }
         def revocacionDePoderInstanceList = RevocacionDePoder.findAllBySolicitadoPorIlike("%"+params.solicitadoPor+"%", [sort: "id", order: "asc"])
         def otorgamientoDePoderInstanceList = OtorgamientoDePoder.findAllBySolicitadoPorIlike("%"+params.solicitadoPor+"%", [sort: "id", order: "asc"])
-        def poderesInstanceList = otorgamientoDePoderInstanceList + revocacionDePoderInstanceList
         session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList
         session.revocacionDePoderInstanceList = revocacionDePoderInstanceList
         render(
@@ -283,6 +333,39 @@ class PoderesController {
                 otorgamientoDePoderInstanceTotal : otorgamientoDePoderInstanceList.size(),
                 revocacionDePoderInstanceTotal : revocacionDePoderInstanceList.size(),
                 solicitadoPorActive : solicitadoPorActive       
+            ]
+        )       
+    }
+    
+    def buscarPorTagsGeneral () {
+        def porTagsActive = null
+        if (params.inActive == "porTags") {
+            porTagsActive = "active"
+        }        
+        def s = params.tags.toString().replaceAll(" ", "")
+        def resultList = s.tokenize(",")
+        def otorgamientoDePoderInstanceList =[] 
+        resultList.each{            
+            def results = OtorgamientoDePoder.findAllByTagsIlike("%"+it+",%", [sort: "id", order: "asc"])
+            otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList + results as Set    
+        }
+        def st = params.tags.toString().replaceAll(" ", "")
+        def resultList2 = st.tokenize(",")
+        def revocacionDePoderInstanceList =[] 
+        resultList2.each{            
+            def results2 = RevocacionDePoder.findAllByTagsIlike("%"+it+",%", [sort: "id", order: "asc"])
+            revocacionDePoderInstanceList = revocacionDePoderInstanceList + results2 as Set    
+        }
+        session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList
+        session.revocacionDePoderInstanceList = revocacionDePoderInstanceList
+        render(
+            view: "busquedaGeneral", 
+            model: [
+                otorgamientoDePoderInstanceList: otorgamientoDePoderInstanceList,
+                revocacionDePoderInstanceList : revocacionDePoderInstanceList,
+                otorgamientoDePoderInstanceTotal : otorgamientoDePoderInstanceList.size(),
+                revocacionDePoderInstanceTotal : revocacionDePoderInstanceList.size(),
+                porTagsActive : porTagsActive       
             ]
         )       
     }

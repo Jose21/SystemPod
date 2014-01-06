@@ -116,3 +116,14 @@
         <g:textField class="span6" name="solicitadoPor" required="" value="${otorgamientoDePoderInstance?.solicitadoPor}"/>
     </div>
 </div>
+
+<h3 id="bloqueTags" class="header smaller lighter blue">Agrega palabras clave para búsquedas avanzadas.</h3>
+
+<div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'tags', 'error')}">
+    <label for="tags" class="control-label">
+        <g:message code="otorgamientoDePoder.tags.label" default="Tags" />
+    </label>
+    <div class="controls">
+        <g:textField class="span6" name="tags" value="${otorgamientoDePoderInstance?.tags}"/>
+    </div>
+</div>

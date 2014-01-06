@@ -9,7 +9,7 @@
     </head>
     <body>
         <div class="page-header position-relative">
-            <h1>Mostrar: Turno</h1>
+            <h1>Ver: Turno</h1>
             <br/>
             <g:if test="${tareaInstance?.cerrada == false}">
                 <div class="btn-group">        
@@ -122,6 +122,12 @@
                                     </g:each>
                             </ul>            
                         </dd>
+                    </dl>
+                </g:if>
+                <g:if test="${tareaInstance?.tags}">
+                    <dl>
+                        <dt><g:message code="tarea.tags.label" default="Tags" /></dt>
+                        <dd><g:fieldValue bean="${tareaInstance}" field="tags"/></dd>
                     </dl>
                 </g:if>
                 <g:if test="${tareaInstance?.descripcion}">

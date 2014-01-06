@@ -8,7 +8,7 @@
     </head>
     <body>
         <div class="page-header position-relative">
-            <h1>Poderes</h1>
+            <h1>Bandeja Principal</h1>
         </div><!--/.page-header-->
         <div class="container-fluid">      
             <g:render template="/shared/alerts" />
@@ -24,7 +24,7 @@
                     <li>
                         <a data-toggle="tab" href="#shared">
                             <i class="icon-group bigger-130"></i>
-                            <span class="bigger-110">Asignados <span class="badge">${poderesAsignadosInstanceTotal}</span></span>
+                            <span class="bigger-110">Turnados <span class="badge">${poderesAsignadosInstanceTotal}</span></span>
                         </a>
                     </li>
                 </ul>
@@ -48,10 +48,10 @@
                                 <g:each in="${otorgamientoInstanceList}" status="i" var="otorgamientoInstance">
                                     <div class="message-item message-unread">
                                         <g:if test="${otorgamientoInstance.asignar == null}">
-                                            <i class=" icon-exclamation-sign red" title="Sin Asignar"></i>   
+                                            <i class=" icon-exclamation-sign orange" title="Sin Asignar"></i>   
                                         </g:if>
                                         <g:else>  
-                                            <i class=" icon-check-empty light-grey" title="No Atendido"></i>        
+                                            <i class=" icon-exclamation-sign red" title="No Atendido"></i>        
                                         </g:else>
                                         <span class="sender" title="Folio del Expediente">
                                             <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoInstance?.id}">

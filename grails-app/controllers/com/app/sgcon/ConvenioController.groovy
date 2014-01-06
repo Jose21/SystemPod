@@ -68,6 +68,16 @@ class ConvenioController {
         usuarioDeConvenio.convenio = convenioInstance
         usuarioDeConvenio.save(flush:true)
         
+        //validacion para la busqueda por tags
+        if(convenioInstance.tags){
+            if(convenioInstance.tags.endsWith(",")){
+                params.tags = params.tags.substring(0, params.tags.length() -1)
+            }else {
+                convenioInstance.tags = convenioInstance.tags + "," 
+            }
+        }
+        //end busqueda tags
+        
         flash.message = message(code: 'default.created.message', args: [message(code: 'convenio.label', default: 'Convenio'), convenioInstance.id])
         historialDeConvenioService.addNewConvenioToHistorial(convenioInstance, null, null,"Se creo Convenio")
         redirect(action: "edit", id: convenioInstance.id)
@@ -94,7 +104,7 @@ class ConvenioController {
         }else{
             flash.info= "El convenio no puede editarse porque esta actualmente firmado."   
             yesedit = false
-        }
+        }          
         if (!convenioInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'convenio.label', default: 'Convenio'), id])
             redirect(action: "list")
@@ -137,10 +147,20 @@ class ConvenioController {
             params.vigencia = vigencia
         } else {
             params.vigencia = null
-        }
-                
+        }        
+        
         convenioInstance.properties = params
-         
+        
+       //validacion para la busqueda por tags
+        if(convenioInstance.tags){
+            if(convenioInstance.tags.endsWith(",")){
+                params.tags = params.tags.substring(0, params.tags.length() -1)
+            }else {
+                convenioInstance.tags = convenioInstance.tags + "," 
+            }
+        }
+        //end busqueda tags
+                                                 
         if (convenioInstance.isDirty()) {  
             historialDeConvenioService.agregar(convenioInstance, convenioOriginal, "Se editó el convenio:")
         }
@@ -148,7 +168,7 @@ class ConvenioController {
         if (!convenioInstance.save(flush: true)) {
             render(view: "edit", model: [convenioInstance: convenioInstance])
             return
-        }
+        }                
 
         flash.message = message(code: 'default.updated.message', args: [message(code: 'convenio.label', default: 'Convenio'), convenioInstance.id])
         redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
@@ -465,7 +485,30 @@ class ConvenioController {
                 porFechaRegistroActive : porFechaRegistroActive
             ]
         )
-    }   
+    }
+    
+    def buscarPorTags () {
+        def porTagsActive = null
+        if (params.inActive == "porTags") {
+            porTagsActive = "active"
+        }
+        def s = params.tags.toString().replaceAll(" ", "")
+        def resultList = s.tokenize(",")
+        def convenioInstanceList =[] 
+        resultList.each{            
+            def results = Convenio.findAllByTagsIlike("%"+it+",%", [sort: "id", order: "asc"])
+            convenioInstanceList = convenioInstanceList + results as Set    
+        }
+        session.convenioInstanceList = convenioInstanceList
+        render(
+            view: "list", 
+            model: [
+                convenioInstanceList: convenioInstanceList,
+                convenioInstanceTotal: convenioInstanceList.size(),
+                porTagsActive : porTagsActive       
+            ]
+        )       
+    }
  
     def generarReporte(){
         def convenioInstanceList = session.convenioInstanceList

@@ -4,9 +4,12 @@
     <head>
         <meta name="layout" content="mainPoderes">    
         <g:set var="entityName" value="${message(code: 'poder.label', default: 'Consulta Revocación')}" />    
-        <title>Consulta de Revocación de Poderes</title>
+        <title>Consulta de Revocación</title>
     </head>
     <body>
+        <div class="page-header position-relative">
+            <h1>Consulta de Revocación de Poderes</h1>
+        </div><!--/.page-header-->
     <r:require module="export"/> 
     <div class="container-fluid">      
         <g:render template="/shared/alerts" />
@@ -35,6 +38,12 @@
                     <a data-toggle="tab" href="#porFechaRevocacion">
                         <i class="icon-calendar bigger-130"></i>
                         <span class="bigger-110">Por Fecha de Revocación<span class="badge"></span></span>
+                    </a>
+                </li>
+                <li class="${porTagsActive?:""}">
+                    <a data-toggle="tab" href="#porTags">              
+                        <i class="icon-tag bigger-130"></i>
+                        <span class="bigger-110">Tags<span class="badge"></span></span>
                     </a>
                 </li>
             </ul>
@@ -121,6 +130,26 @@
                 </div>
             </div><!--/.message-container-->
         </div>
+        <div id="porTags" class="tab-pane ${porTagsActive?:""}">  
+            <div class="message-container">
+                <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
+                    <div class="message-bar">
+                    </div>
+                    <g:form method="post">
+                        <g:hiddenField name="inActive" value="porTags"/>
+                        <div class="control-group">
+                            <div class="row-fluid input-prepend">
+                                <label for="tags" class="control-label">
+                                    <g:message code="revocacionDePoder.tags.label" default="Palabra Clave" />
+                                </label>
+                                <g:textField name="tags" required="" value="${revocacionDePoderInstance?.tags}"/>
+                                <g:actionSubmit class="btn btn-primary" action="buscarPorTagsRevocacion" value="Buscar" />
+                            </div>
+                        </div>
+                    </g:form>
+                </div>
+            </div><!--/.message-container-->
+        </div>
 
         <table class="table table-bordered table-striped">
             <thead>
@@ -143,7 +172,12 @@
                     <tr>
                         <th colspan="8" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FECHA DE REGISTRO: ${rangoDeFechaRegistro}</br></br></th>
                     </tr>
-                </g:if>             
+                </g:if> 
+                <g:if test="${params.tags}">
+                    <tr>
+                        <th colspan="10" style="text-align:center;font-size:16px">RESULTADO PARA LA PALABRA: ${params.tags}</br></br></th>
+                    </tr>
+                </g:if>
                 <tr>
                     <th><g:message code="revocacionDePoder.id.label"  default="Identificador Interno" /></th>
                     <th><g:message code="revocacionDePoder.nombre.label" default="Nombre Apoderado" /></th>

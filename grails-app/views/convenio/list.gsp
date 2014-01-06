@@ -43,13 +43,19 @@
                 <li class="${nombreResponsablesActive?:""}">
                     <a data-toggle="tab" href="#nombreResponsables">              
                         <i class="icon-group bigger-130"></i>
-                        <span class="bigger-110">Por Nombre de Responsables <span class="badge"></span></span>
+                        <span class="bigger-110">Nombre de Responsables <span class="badge"></span></span>
                     </a>
                 </li>
                 <li class="${nombreFirmantesActive?:""}">
                     <a data-toggle="tab" href="#nombreFirmantes">              
                         <i class="icon-group bigger-130"></i>
-                        <span class="bigger-110">Por Nombre de Firmantes <span class="badge"></span></span>
+                        <span class="bigger-110">Nombre de Firmantes <span class="badge"></span></span>
+                    </a>
+                </li>
+                <li class="${porTagsActive?:""}">
+                    <a data-toggle="tab" href="#porTags">              
+                        <i class="icon-tag bigger-130"></i>
+                        <span class="bigger-110">Tags<span class="badge"></span></span>
                     </a>
                 </li>
             </ul>
@@ -174,6 +180,26 @@
                 </div>
             </div><!--/.message-container-->
         </div>
+        <div id="porTags" class="tab-pane ${porTagsActive?:""}">  
+            <div class="message-container">
+                <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
+                    <div class="message-bar">
+                    </div>
+                    <g:form method="post">
+                        <g:hiddenField name="inActive" value="porTags"/>
+                        <div class="control-group">
+                            <div class="row-fluid input-prepend">
+                                <label for="tags" class="control-label">
+                                    <g:message code="convenio.tags.label" default="Palabra Clave" />
+                                </label>
+                                <g:textField name="tags" required="" value="${convenioInstance?.tags}"/>
+                                <g:actionSubmit class="btn btn-primary" action="buscarPorTags" value="Buscar" />
+                            </div>
+                        </div>
+                    </g:form>
+                </div>
+            </div><!--/.message-container-->
+        </div>
 
         <table class="table table-bordered table-striped">
             <thead>
@@ -201,7 +227,12 @@
                     <tr>
                         <th colspan="10" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR NOMBRE: ${params.nombre}</br></br></th>
                     </tr>
-                </g:if>                
+                </g:if>
+                <g:if test="${params.tags}">
+                    <tr>
+                        <th colspan="10" style="text-align:center;font-size:16px">RESULTADO PARA LA PALABRA: ${params.tags}</br></br></th>
+                    </tr>
+                </g:if>
             <tr>
                 <th><g:message code="convenio.id.label"  default="Identificador Interno" /></th>
                 <th><g:message code="convenio.numeroDeConvenio.label" default="Número de Convenio" /></th>

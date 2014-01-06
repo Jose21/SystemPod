@@ -100,10 +100,21 @@
   </div>
 </div>
 
-<!--h3 id="bloqueTags" class="header smaller lighter blue">Agrega palabras clave para búsquedas avanzadas.</h3-->	
+<h3 id="bloqueTags" class="header smaller lighter blue">Agrega palabras clave para búsquedas avanzadas.</h3>
+
+<div class="control-group fieldcontain ${hasErrors(bean: convenioInstance, field: 'tags', 'error')}">
+  <label for="tags" class="control-label">
+        <g:message code="convenio.tags.label" default="Tags" />
+  </label>
+  <div class="controls">
+        <g:textArea class="span6" name="tags" maxlength="5000" value="${convenioInstance?.tags}" autocomplete="off"/>
+  </div>
+</div>
+
+	
 <!--div id="tag-success" class="input-append">
-        <input type="text">
-        <button class="btn" type="button"><i class="icon-plus"></i></button>
+    <input type="text" name="tags" id="form-field-tags" placeholder="Ingresa los tags...">
+        <button class="btn" type="button" ><i class="icon-plus"></i></button>
 </div-->
 <!--ul id="tag-cloud"></ul-->
 
