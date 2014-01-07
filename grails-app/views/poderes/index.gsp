@@ -43,41 +43,39 @@
                             </div>
                         </div>
                         <!--Se iteran los otorgamientos de poder-->
-                        <div class="message-list-container">
-                            <div class="message-list" id="message-list">
+                        <table class="box-style" width="100%" border="2">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Número de Folio</th>
+                                    <th scope="col">Nombre del Expediente</th>
+                                    <th scope="col">Solicitado Por</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <g:each in="${otorgamientoInstanceList}" status="i" var="otorgamientoInstance">
-                                    <div class="message-item message-unread">
-                                        <g:if test="${otorgamientoInstance.asignar == null}">
-                                            <i class=" icon-exclamation-sign orange" title="Sin Asignar"></i>   
-                                        </g:if>
-                                        <g:else>  
-                                            <i class=" icon-exclamation-sign red" title="No Atendido"></i>        
-                                        </g:else>
-                                        <span class="sender" title="Folio del Expediente">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td>
+                                            <g:if test="${otorgamientoInstance.asignar == null}">
+                                                <i class=" icon-exclamation-sign orange" title="Sin Asignar"></i>   
+                                            </g:if>
+                                            <g:else>  
+                                                <i class=" icon-exclamation-sign red" title="No Atendido"></i>        
+                                            </g:else>
+                                        </td>
+                                        <td>
                                             <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoInstance?.id}">
-                                                <span class="label label-success arrowed-in">
+                                                <span class="label label-info arrowed-in">
                                                     ${otorgamientoInstance?.id}
                                                 </span>
                                             </g:link>
-                                        </span>
-                                        <span class="sender" title="Nombre del Expediente">
-                                            <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoInstance?.id}">
-                                                <span class="text">
-                                                    ${otorgamientoInstance?.nombre}
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                        <span class="sender" title="Solicitado Por">
-                                            <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoInstance?.id}">
-                                                <span class="text">
-                                                    ${otorgamientoInstance?.solicitadoPor}
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                    </div>
+                                        </td>
+                                        <td>${fieldValue(bean: otorgamientoInstance, field: "nombre")}</td>
+                                        <td>${fieldValue(bean: otorgamientoInstance, field: "solicitadoPor")}</td>
+                                    </tr>
                                 </g:each>
-                            </div>
-                        </div><!--/.message-list-container-->
+                            </tbody>
+                        </table>                       
                         <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
                             <div class="message-bar">
                                 <div class="message-infobar" id="id-message-infobar">
@@ -88,41 +86,39 @@
                             </div>
                         </div>
                         <!--Se iteran las revocaciones de poder-->
-                        <div class="message-list-container">
-                            <div class="message-list" id="message-list">
+                        <table class="box-style" width="100%" border="2">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Nümero de Folio</th>
+                                    <th scope="col">Nombre del Expediente</th>
+                                    <th scope="col">Solicitado Por</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <g:each in="${revocacionInstanceList}" status="i" var="revocacionInstance">
-                                    <div class="message-item message-unread">
-                                        <g:if test="${revocacionInstance.asignar == null}">
-                                            <i class=" icon-exclamation-sign red" title="Sin Asignar"></i>   
-                                        </g:if>
-                                        <g:else>  
-                                            <i class=" icon-check-empty light-grey" title="No Atendido"></i>        
-                                        </g:else>
-                                        <span class="sender" title="Folio del Expediente">
-                                            <g:link controller="revocacionDePoder" action="show" id="${revocacionInstance.id}">
-                                                <span class="label label-success arrowed-in">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td>
+                                            <g:if test="${revocacionInstance.asignar == null}">
+                                                <i class=" icon-exclamation-sign orange" title="Sin Asignar"></i>   
+                                            </g:if>
+                                            <g:else>  
+                                                <i class=" icon-exclamation-sign red" title="No Atendido"></i>        
+                                            </g:else>
+                                        </td>
+                                        <td>
+                                            <g:link controller="revocacionDePoder" action="show" id="${revocacionInstance?.id}">
+                                                <span class="label label-info arrowed-in">
                                                     ${revocacionInstance?.id}
                                                 </span>
                                             </g:link>
-                                        </span>
-                                        <span class="sender" title="Nombre del Expediente">
-                                            <g:link controller="revocacionDePoder" action="show" id="${revocacionInstance?.id}">
-                                                <span class="text">
-                                                    ${revocacionInstance?.nombre}
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                        <span class="sender" title="Solicitado Por">
-                                            <g:link controller="revocacionDePoder" action="show" id="${revocacionInstance?.id}">
-                                                <span class="text">
-                                                    ${revocacionInstance?.solicitadoPor}
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                    </div>
+                                        </td>
+                                        <td>${fieldValue(bean: revocacionInstance, field: "nombre")}</td>
+                                        <td>${fieldValue(bean: revocacionInstance, field: "solicitadoPor")}</td>
+                                    </tr>
                                 </g:each>
-                            </div>
-                        </div><!--/.message-list-container-->
+                            </tbody>
+                        </table>        
 
                         <div class="message-footer clearfix">
                             <div class="pull-left"> ${poderInstanceTotal} expediente(s) en total. </div>
@@ -147,42 +143,41 @@
                             </div>
                         </div>
                         <!--Se iteran los otorgamientos de poder asigandos-->
-                        <div class="message-list-container">
-                            <div class="message-list" id="message-list">
+                        <table class="box-style" width="100%" border="2">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Número de Folio</th>
+                                    <th scope="col">Nombre del Expediente</th>
+                                    <th scope="col">Solicitado Por</th>
+                                    <th scope="col">Asignado a</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <g:each in="${otorgamientoAsignadosInstanceList}" status="i" var="otorgamientoAsignadosInstance">
-                                    <div class="message-item message-unread">
-                                        <span class="sender" title="Folio del Expediente">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td>
+                                            <g:if test="${otorgamientoAsignadosInstance.asignar == null}">
+                                                <i class=" icon-exclamation-sign orange" title="Sin Asignar"></i>   
+                                            </g:if>
+                                            <g:else>  
+                                                <i class=" icon-exclamation-sign red" title="No Atendido"></i>        
+                                            </g:else>
+                                        </td>
+                                        <td>
                                             <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoAsignadosInstance?.id}">
-                                                <span class="label label-success arrowed-in">
+                                                <span class="label label-info arrowed-in">
                                                     ${otorgamientoAsignadosInstance?.id}
                                                 </span>
                                             </g:link>
-                                        </span>
-                                        <span class="sender" title="Nombre del Expediente">
-                                            <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoAsignadosInstance?.id}">
-                                                <span class="text">
-                                                    ${otorgamientoAsignadosInstance?.nombre}
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                        <span class="sender" title="Solicitado Por">
-                                            <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoAsignadosInstance?.id}">
-                                                <span class="text">
-                                                    ${otorgamientoAsignadosInstance?.solicitadoPor}
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                        <span class="sender" title="Asignado A">
-                                            <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoAsignadosInstance?.id}">
-                                                <span class="text">
-                                                    ${otorgamientoAsignadosInstance?.asignar}
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                    </div>
+                                        </td>
+                                        <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "nombre")}</td>
+                                        <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "solicitadoPor")}</td>
+                                        <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "asignar")}</td>
+                                    </tr>
                                 </g:each>
-                            </div>
-                        </div><!--/.message-list-container-->
+                            </tbody>
+                        </table>
                         <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
                             <div class="message-bar">
                                 <div class="message-infobar" id="id-message-infobar">
@@ -193,42 +188,41 @@
                             </div>
                         </div>
                         <!--Se iteran las revocaciones de poder asiganados-->
-                        <div class="message-list-container">
-                            <div class="message-list" id="message-list">
+                        <table class="box-style" width="100%" border="2">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col"> Número de Folio</th>
+                                    <th scope="col">Nombre del Expediente</th>
+                                    <th scope="col">Solicitado Por</th>
+                                    <th scope="col">Asignado a</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <g:each in="${revocacionAsignadosInstanceList}" status="i" var="revocacionAsignadosInstance">
-                                    <div class="message-item message-unread">
-                                        <span class="sender" title="Folio del Expediente">
-                                            <g:link controller="revocacionDePoder" action="show" id="${revocacionAsignadosInstance.id}">
-                                                <span class="label label-success arrowed-in">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td>
+                                            <g:if test="${revocacionAsignadosInstance.asignar == null}">
+                                                <i class=" icon-exclamation-sign orange" title="Sin Asignar"></i>   
+                                            </g:if>
+                                            <g:else>  
+                                                <i class=" icon-exclamation-sign red" title="No Atendido"></i>        
+                                            </g:else>
+                                        </td>
+                                        <td>
+                                            <g:link controller="revocacionDePoder" action="show" id="${revocacionAsignadosInstance?.id}">
+                                                <span class="label label-info arrowed-in">
                                                     ${revocacionAsignadosInstance?.id}
                                                 </span>
                                             </g:link>
-                                        </span>
-                                        <span class="sender" title="Nombre del Expediente">
-                                            <g:link controller="revocacionDePoder" action="show" id="${revocacionAsignadosInstance?.id}">
-                                                <span class="text">
-                                                    ${revocacionAsignadosInstance?.nombre}
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                        <span class="sender" title="Solicitado Por">
-                                            <g:link controller="revocacionDePoder" action="show" id="${revocacionAsignadosInstance?.id}">
-                                                <span class="text">
-                                                    ${revocacionAsignadosInstance?.solicitadoPor}
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                        <span class="sender" title="Asignado A">
-                                            <g:link controller="revocacionDePoder" action="show" id="${revocacionAsignadosInstance?.id}">
-                                                <span class="text">
-                                                    ${revocacionAsignadosInstance?.asignar}
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                    </div>
+                                        </td>
+                                        <td>${fieldValue(bean: revocacionAsignadosInstance, field: "nombre")}</td>
+                                        <td>${fieldValue(bean: revocacionAsignadosInstance, field: "solicitadoPor")}</td>
+                                        <td>${fieldValue(bean: revocacionAsignadosInstance, field: "asignar")}</td>
+                                    </tr>
                                 </g:each>
-                            </div>
-                        </div><!--/.message-list-container-->
+                            </tbody>
+                        </table>
                         <div class="message-footer clearfix">
                             <div class="pull-left"> ${poderesAsignadosInstanceTotal} expediente(s) en total. </div>
                             <div class="pull-right">
@@ -237,10 +231,9 @@
                                 </div>
                             </div>
                         </div>
-                        
                     </div><!--/.message-container-->
                 </div>          
             </div>
-        </div>    
+        </div>
     </body>
 </html>

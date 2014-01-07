@@ -78,58 +78,51 @@
 -->
                             </div>
                         </div>
-
-                        <div class="message-list-container">
-                            <div class="message-list" id="message-list">
+                        <table class="box-style" width="100%" border="2">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Número de Folio</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Fecha Limite</th>
+                                    <th scope="col">Días para Alerta</th>
+                                    <th scope="col">Responsable(s)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <g:each in="${tareaInstanceList}" status="i" var="tareaInstance">
-                                    <div class="message-item message-unread">
-                                        <label class="inline">
-                                            <g:link action="historial" id="${tareaInstance?.id}" class="btn btn-info btn-mini">
-                                                <i class="icon-calendar bigger-110 icon-only"></i>
-                                            </g:link>                    
-                                        </label>
-                                        <g:if test="${tareaInstance.prioridad == "Urgente"}">
-                                            <i class="icon-star red" title="Urgente"></i>   
-                                        </g:if>
-                                        <g:else>  
-                                            <i class="icon-star-empty light-grey" title="Prioridad Normal"></i>        
-                                        </g:else>
-                                        <span class="sender" title="Folio del Turno">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td>
+                                            <label class="inline">
+                                                <g:link action="historial" id="${tareaInstance?.id}" class="btn btn-info btn-mini">
+                                                    <i class="icon-calendar bigger-110 icon-only"></i>
+                                                </g:link>                    
+                                            </label>
+                                            <g:if test="${tareaInstance.prioridad == "Urgente"}">
+                                                <i class="icon-star red" title="Urgente"></i>   
+                                            </g:if>
+                                            <g:else>  
+                                                <i class="icon-star-empty light-grey" title="Prioridad Normal"></i>        
+                                            </g:else>
+                                        </td>
+                                        <td>
                                             <g:link action="show" id="${tareaInstance.id}">
                                                 <span class="label label-success arrowed-in">
                                                     ${tareaInstance?.id}
                                                 </span>
                                             </g:link>
-                                        </span>
-                                        <span class="time" title="Fecha Límite" style="width:150px">
-                                            <g:formatDate date="${tareaInstance?.fechaLimite}" />
-                                        </span>
-
-                                        <span class="summary" title="Título del Turno">
-                                            <g:link action="show" id="${tareaInstance.id}">
-                                                <span class="text">
-                                                    ${tareaInstance?.nombre}
-                                                </span>
-                                            </g:link>
-                                        </span>                                      
-                                        <span class="summary" title="Dias para Alerta de Vecimiento">
-                                            <g:link action="show" id="${tareaInstance.id}">
-                                                <span class="text">
-                                                    ${tareaInstance?.alertaVencimiento}
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                        <span class="summary" title="Responsable">
-                                            <g:link action="show" id="${tareaInstance.id}">
-                                                <span class="text">
-                                                    ${tareaInstance?.responsable.firstName} ${tareaInstance?.responsable.lastName} 
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                    </div>
+                                        </td>
+                                        <td>${fieldValue(bean: tareaInstance, field: "nombre")}</td>
+                                        <td><g:formatDate date="${tareaInstance?.fechaLimite}" /></td>
+                                        <td>${fieldValue(bean: tareaInstance, field: "alertaVencimiento")}</td>
+                                        <td><span class="text">
+                                                ${tareaInstance?.responsable.firstName} ${tareaInstance?.responsable.lastName} 
+                                            </span>
+                                        </td>
+                                    </tr>
                                 </g:each>
-                            </div>
-                        </div><!--/.message-list-container-->
+                            </tbody>
+                        </table>    
 
                         <div class="message-footer clearfix">
                             <div class="pull-left"> ${tareaInstanceTotal} turno(s) en total. </div>
@@ -198,58 +191,57 @@
                   -->
                             </div>
                         </div>
-
-                        <div class="message-list-container">
-                            <div class="message-list" id="message-list">
+                        <table class="box-style" width="100%" border="2">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Número de Folio</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Fecha Limite</th>
+                                    <th scope="col">Días para Alerta</th>
+                                    <th scope="col">Responsable(s)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <g:each in="${sharedTaskList}" status="i" var="tareaInstance">
-                                    <div class="message-item message-unread">
-                                        <label class="inline">
-                                            <g:link action="historial" id="${tareaInstance?.id}" class="btn btn-info btn-mini">
-                                                <i class="icon-calendar bigger-110 icon-only"></i>
-                                            </g:link>                    
-                                        </label>
-                                        <g:if test="${tareaInstance.prioridad == "Urgente"}">
-                                            <i class="icon-star red" title="Prioridad Urgente"></i>   
-                                        </g:if>
-                                        <g:else>  
-                                            <i class="icon-star-empty light-grey" title="Prioridad Normal"></i>        
-                                        </g:else>
-                                        <span class="sender" title="Folio del Turno">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td>
+                                            <label class="inline">
+                                                <g:link action="historial" id="${tareaInstance?.id}" class="btn btn-info btn-mini">
+                                                    <i class="icon-calendar bigger-110 icon-only"></i>
+                                                </g:link>                    
+                                            </label>
+                                            <g:if test="${tareaInstance.prioridad == "Urgente"}">
+                                                <i class="icon-star red" title="Urgente"></i>   
+                                            </g:if>
+                                            <g:else>  
+                                                <i class="icon-star-empty light-grey" title="Prioridad Normal"></i>        
+                                            </g:else>
+                                        </td>
+                                        <td>
                                             <g:link action="show" id="${tareaInstance.id}">
                                                 <span class="label label-success arrowed-in">
                                                     ${tareaInstance?.id}
                                                 </span>
                                             </g:link>
-                                        </span>
-                                        <span class="time" title="Fecha Límite" style="width:150px">
-                                            <g:formatDate date="${tareaInstance?.fechaLimite}" />
-                                        </span>
-
-                                        <span class="summary" title="Título del Turno">
-                                            <g:link action="show" id="${tareaInstance.id}">
-                                                <span class="text">
-                                                    ${tareaInstance?.nombre}
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                        <span class="summary" title="Dias para Alerta de Vecimiento">
-                                            <g:link action="show" id="${tareaInstance.id}">
-                                                <span class="text">
-                                                    ${tareaInstance?.alertaVencimiento}
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                    </div>
+                                        </td>
+                                        <td>${fieldValue(bean: tareaInstance, field: "nombre")}</td>
+                                        <td><g:formatDate date="${tareaInstance?.fechaLimite}" /></td>
+                                        <td>${fieldValue(bean: tareaInstance, field: "alertaVencimiento")}</td>
+                                        <td><span class="text">
+                                                ${tareaInstance?.responsable.firstName} ${tareaInstance?.responsable.lastName} 
+                                            </span>
+                                        </td>
+                                    </tr>
                                 </g:each>
-                            </div>
-                        </div><!--/.message-list-container-->
-
+                            </tbody>
+                        </table>                 
                         <div class="message-footer clearfix">
                             <div class="pull-left"> ${sharedTaskTotal} turno(s) en total. </div>
                             <div class="pull-right">
                                 <div class="pagination">
                                     <g:paginate total="${sharedTaskTotal?:0}" />
-                        </div>
+                                </div>
                             </div>
                         </div>
                     </div><!--/.message-container-->
@@ -262,43 +254,43 @@
                             <div class="message-bar">
                                 <div class="message-infobar" id="id-message-infobar">
                                     <span class="blue bigger-150">
-                                        Turnados
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div class="messagebar-item-right">
-                                    <div class="inline position-relative">
-                                      <!--<a href="#" data-toggle="dropdown" class="dropdown-toggle">
-                                        Ordenar por &nbsp;
-                                        <i class="icon-caret-down bigger-125"></i>
-                                      </a>-->
-
-                                        <ul class="dropdown-menu dropdown-lighter pull-right dropdown-100">
-                                            <li>
-                                                <a href="#">
-                                                    <i class="icon-ok green"></i>
-                                                    Número de turno
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="#">
-                                                    <i class="icon-ok invisible"></i>
-                                                    Fecha
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="#">
-                                                    <i class="icon-ok invisible"></i>
-                                                    Grupo
-                                                </a>
-                                            </li>
-                                        </ul>
+                                      Turnados
+                                        </span>
                                     </div>
                                 </div>
+
+                                <div>
+                                    <div class="messagebar-item-right">
+                                        <div class="inline position-relative">
+                                          <!--<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                                            Ordenar por &nbsp;
+                                            <i class="icon-caret-down bigger-125"></i>
+                                          </a>-->
+
+                                            <ul class="dropdown-menu dropdown-lighter pull-right dropdown-100">
+                                                    <li>
+                                                        <a href="#">
+                                                            <i class="icon-ok green"></i>
+                                                            Número de turno
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="#">
+                                                            <i class="icon-ok invisible"></i>
+                                                            Fecha
+                                                        </a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="#">
+                                                            <i class="icon-ok invisible"></i>
+                                                            Grupo
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
 
                   <!--
                   <div class="nav-search minimized">
@@ -310,73 +302,66 @@
                     </form>
                   </div>
                   -->
-                            </div>
-                        </div>
-
-                        <div class="message-list-container">
-                            <div class="message-list" id="message-list">
-                                <g:each in="${turnadosList}" status="i" var="tareaInstance">
-                                    <div class="message-item message-unread">
-                                        <label class="inline">
-                                            <g:link action="historial" id="${tareaInstance?.id}" class="btn btn-info btn-mini">
-                                                <i class="icon-calendar bigger-110 icon-only"></i>
-                                            </g:link>                    
-                                        </label>
-                                        <g:if test="${tareaInstance.prioridad == "Urgente"}">
-                                            <i class="icon-star red" title="Prioridad Urgente"></i>   
-                                        </g:if>
-                                        <g:else>  
-                                            <i class="icon-star-empty light-grey" title="Prioridad Normal"></i>        
-                                        </g:else>
-                                        <span class="sender" title="Folio del Turno">
-                                            <g:link action="show" id="${tareaInstance.id}">
-                                                <span class="label label-success arrowed-in">
-                                                    ${tareaInstance?.id}
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                        <span class="time" title="Fecha Límite" style="width:150px">
-                                            <g:formatDate date="${tareaInstance?.fechaLimite}" />
-                                        </span>
-
-                                        <span class="summary" title="Título del Turno">
-                                            <g:link action="show" id="${tareaInstance.id}">
-                                                <span class="text">
-                                                    ${tareaInstance?.nombre}
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                        <span class="summary" title="Dias para Alerta de Vecimiento">
-                                            <g:link action="show" id="${tareaInstance.id}">
-                                                <span class="text">
-                                                    ${tareaInstance?.alertaVencimiento}
-                                                </span>
-                                            </g:link>
-                                        </span>
-                                        <span class="summary" title="Responsable">
-                                            <g:link action="show" id="${tareaInstance.id}">
-                                                <span class="text">
-                                                    ${tareaInstance?.responsable.firstName} ${tareaInstance?.responsable.lastName} 
-                                                </span>
-                                            </g:link>
-                                        </span>
                                     </div>
-                                </g:each>
-                            </div>
-                        </div><!--/.message-list-container-->
-
-                        <div class="message-footer clearfix">
-                            <div class="pull-left"> ${turnadosTotal} turno(s) en total. </div>
-                            <div class="pull-right">
-                                <div class="pagination">
-                                    <g:paginate total="${turnadosTotal?:0}" />
                                 </div>
-                            </div>
-                        </div>
-                    </div><!--/.message-container-->
+                                <table class="box-style" width="100%" border="2">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"></th>
+                                            <th scope="col">Número de Folio</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Fecha Limite</th>
+                                            <th scope="col">Días para Alerta</th>
+                                            <th scope="col">Responsable(s)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <g:each in="${turnadosList}" status="i" var="tareaInstance">
+                                            <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                                <td>
+                                                    <label class="inline">
+                                                        <g:link action="historial" id="${tareaInstance?.id}" class="btn btn-info btn-mini">
+                                                            <i class="icon-calendar bigger-110 icon-only"></i>
+                                                        </g:link>                    
+                                                    </label>
+                                                    <g:if test="${tareaInstance.prioridad == "Urgente"}">
+                                                        <i class="icon-star red" title="Urgente"></i>   
+                                                    </g:if>
+                                                    <g:else>  
+                                                        <i class="icon-star-empty light-grey" title="Prioridad Normal"></i>        
+                                                    </g:else>
+                                                </td>
+                                                <td>
+                                                    <g:link action="show" id="${tareaInstance.id}">
+                                                        <span class="label label-success arrowed-in">
+                                                            ${tareaInstance?.id}
+                                                        </span>
+                                                    </g:link>
+                                                </td>
+                                                <td>${fieldValue(bean: tareaInstance, field: "nombre")}</td>
+                                                <td><g:formatDate date="${tareaInstance?.fechaLimite}" /></td>
+                                                <td>${fieldValue(bean: tareaInstance, field: "alertaVencimiento")}</td>
+                                                <td><span class="text">
+                                                        ${tareaInstance?.responsable.firstName} ${tareaInstance?.responsable.lastName} 
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </g:each>
+                                    </tbody>
+                                </table> 
 
-                </div>
-            </div>
-        </div>    
-    </body>
-</html>
+                                <div class="message-footer clearfix">
+                                    <div class="pull-left"> ${turnadosTotal} turno(s) en total. </div>
+                                    <div class="pull-right">
+                                        <div class="pagination">
+                                            <g:paginate total="${turnadosTotal?:0}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!--/.message-container-->
+
+                        </div>
+                    </div>
+                </div>    
+            </body>
+        </html>

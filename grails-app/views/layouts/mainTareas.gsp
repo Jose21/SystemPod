@@ -13,6 +13,7 @@
         <link href="${resource(dir:'assets/css',file:'bootstrap.min.css')}" rel="stylesheet" />
         <link href="${resource(dir:'assets/css',file:'bootstrap-responsive.min.css')}" rel="stylesheet" />
         <link href="${resource(dir:'assets/css',file:'font-awesome.min.css')}" rel="stylesheet" />
+        <link href="${resource(dir:'assets/css',file:'style.css')}" rel="stylesheet" />
         <!--[if IE 7]>
           <link rel="stylesheet" href="${resource(dir:'assets/css',file:'font-awesome-ie7.min.css')}" />
         <![endif]-->

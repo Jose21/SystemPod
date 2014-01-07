@@ -27,6 +27,7 @@
         <link href="${resource(dir:'assets/css',file:'ace.min.css')}" rel="stylesheet" />
         <link href="${resource(dir:'assets/css',file:'ace-responsive.min.css')}" rel="stylesheet" />
         <link href="${resource(dir:'assets/css',file:'ace-skins.min.css')}" rel="stylesheet" />
+        <link href="${resource(dir:'assets/css',file:'style.css')}" rel="stylesheet" />
         <!--[if lte IE 8]>
           <link rel="stylesheet" href="${resource(dir:'assets/css',file:'ace-ie.min.css')}" />
         <![endif]-->     
