@@ -48,7 +48,7 @@
                                 <tr>
                                     <th scope="col"></th>
                                     <th scope="col">Número de Folio</th>
-                                    <th scope="col">Nombre del Expediente</th>
+                                    <th scope="col">Nombre del Apoderado</th>
                                     <th scope="col">Solicitado Por</th>
                                 </tr>
                             </thead>
@@ -90,8 +90,8 @@
                             <thead>
                                 <tr>
                                     <th scope="col"></th>
-                                    <th scope="col">Nümero de Folio</th>
-                                    <th scope="col">Nombre del Expediente</th>
+                                    <th scope="col">Número de Folio</th>
+                                    <th scope="col">Nombre del Apoderado</th>
                                     <th scope="col">Solicitado Por</th>
                                 </tr>
                             </thead>
@@ -146,24 +146,15 @@
                         <table class="box-style" width="100%" border="2">
                             <thead>
                                 <tr>
-                                    <th scope="col"></th>
                                     <th scope="col">Número de Folio</th>
-                                    <th scope="col">Nombre del Expediente</th>
+                                    <th scope="col">Nombre del Apoderado</th>
                                     <th scope="col">Solicitado Por</th>
                                     <th scope="col">Asignado a</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <g:each in="${otorgamientoAsignadosInstanceList}" status="i" var="otorgamientoAsignadosInstance">
-                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                        <td>
-                                            <g:if test="${otorgamientoAsignadosInstance.asignar == null}">
-                                                <i class=" icon-exclamation-sign orange" title="Sin Asignar"></i>   
-                                            </g:if>
-                                            <g:else>  
-                                                <i class=" icon-exclamation-sign red" title="No Atendido"></i>        
-                                            </g:else>
-                                        </td>
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">                                       
                                         <td>
                                             <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoAsignadosInstance?.id}">
                                                 <span class="label label-info arrowed-in">
@@ -191,24 +182,15 @@
                         <table class="box-style" width="100%" border="2">
                             <thead>
                                 <tr>
-                                    <th scope="col"></th>
-                                    <th scope="col"> Número de Folio</th>
-                                    <th scope="col">Nombre del Expediente</th>
+                                    <th scope="col">Número de Folio</th>
+                                    <th scope="col">Nombre del Apoderado</th>
                                     <th scope="col">Solicitado Por</th>
                                     <th scope="col">Asignado a</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <g:each in="${revocacionAsignadosInstanceList}" status="i" var="revocacionAsignadosInstance">
-                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                        <td>
-                                            <g:if test="${revocacionAsignadosInstance.asignar == null}">
-                                                <i class=" icon-exclamation-sign orange" title="Sin Asignar"></i>   
-                                            </g:if>
-                                            <g:else>  
-                                                <i class=" icon-exclamation-sign red" title="No Atendido"></i>        
-                                            </g:else>
-                                        </td>
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">                                       
                                         <td>
                                             <g:link controller="revocacionDePoder" action="show" id="${revocacionAsignadosInstance?.id}">
                                                 <span class="label label-info arrowed-in">
