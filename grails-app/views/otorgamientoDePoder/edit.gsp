@@ -119,14 +119,14 @@
                     <h3>Turnos asociados al Otorgamiento de Poder</h3>
                 </div>
                 <div class="modal-body">     
-                    <g:if test="${otorgamientoDePoderInstance?.tareas.findAll{ it.cerrada == false }}">
+                    <g:if test="${otorgamientoDePoderInstance?.tareas?.findAll{ it.cerrada == false }}">
                         <div class="widget-box">
                             <div class="widget-header widget-header-flat widget-header-small">
                                 <h5><i class="icon-circle"></i>Turnos Abiertos</h5>                    
                             </div>
                             <div class="widget-body">
                                 <div class="widget-main">
-                                    <g:each in="${otorgamientoDePoderInstance?.tareas.findAll{ it.cerrada == false }}" var="tarea">
+                                    <g:each in="${otorgamientoDePoderInstance?.tareas?.findAll{ it.cerrada == false }}" var="tarea">
                                         <g:link class="btn btn-mini btn-info btn-block" controller="tarea" action="show" id="${tarea.id}" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id ]">
                                             <span class="label label-large label-info arrowed-in-right arrowed-in">Turno: ${tarea.id}</span>
                                             ${tarea.nombre}
@@ -136,7 +136,7 @@
                             </div><!--/widget-body-->
                         </div><!--/widget-box-->
                     </g:if>
-                    <g:if test="${otorgamientoDePoderInstance?.tareas.findAll{ it.cerrada == true }}">
+                    <g:if test="${otorgamientoDePoderInstance?.tareas?.findAll{ it.cerrada == true }}">
                         <br/>
                         <div class="widget-box">
                             <div class="widget-header widget-header-flat widget-header-small">
@@ -144,7 +144,7 @@
                             </div>
                             <div class="widget-body">
                                 <div class="widget-main">
-                                    <g:each in="${otorgamientoDePoderInstance?.tareas.findAll{ it.cerrada == true }}" var="tarea">
+                                    <g:each in="${otorgamientoDePoderInstance?.tareas?.findAll{ it.cerrada == true }}" var="tarea">
                                         <g:link class="btn btn-mini btn-light btn-block" controller="tarea" action="show" id="${tarea.id}" params="[ idConvenio : convenioInstance?.id ]">
                                             <span class="label label-large label-light arrowed-in-right arrowed-in">Turno: ${tarea.id}</span>
                                             ${tarea.nombre}
