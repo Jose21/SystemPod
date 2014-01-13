@@ -34,7 +34,7 @@
                 <g:if test="${formatoDeCartaDeInstruccionInstance?.contenido}">
                     <dl>
                         <dt><g:message code="formatoDeCartaDeInstruccion.contenido.label" default="Contenido" /></dt>
-                        <dd class="well"><br/>${formatoDeCartaDeInstruccionInstance.contenido}</dd>
+                        <dd class="well"><br/><%=formatoDeCartaDeInstruccionInstance.contenido%></dd>
                     </dl>
                 </g:if>
                 <g:if test="${formatoDeCartaDeInstruccionInstance?.lastUpdated}">
