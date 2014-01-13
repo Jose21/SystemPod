@@ -25,26 +25,6 @@
         </div>
     </div>
 
-    <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'puesto', 'error')} required">
-        <label for="puesto" class="control-label">
-            <g:message code="otorgamientoDePoder.puesto.label" default="Puesto" />
-            <span class="required-indicator">*</span>
-        </label>
-        <div class="controls">
-            <g:textField class="span6" name="puesto" required="" value="${otorgamientoDePoderInstance?.puesto}"/>
-        </div>
-    </div>
-
-    <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'contrato', 'error')} required">
-        <label for="contrato" class="control-label">
-            <g:message code="otorgamientoDePoder.contrato.label" default="Contrato" />
-            <span class="required-indicator">*</span>
-        </label>
-        <div class="controls">
-            <g:textField class="span6" name="contrato" required="" value="${otorgamientoDePoderInstance?.contrato}"/>
-        </div>
-    </div>
-
     <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'tipoDePoder', 'error')} required">
         <label for="tipoDePoder" class="control-label">
             <g:message code="otorgamientoDePoder.tipoDePoder.label" default="Tipo De Poder" />

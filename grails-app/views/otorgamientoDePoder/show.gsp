@@ -25,7 +25,7 @@
                 <g:if test="${otorgamientoDePoderInstance?.id}">
                     <dl>
                         <dt><g:message code="otorgamientoDePoder.numeroDeFolio.label" default="Número de Folio" /></dt>					
-                        <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="id"/>-O/dd>
+                        <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="id"/>-O</dd>
                     </dl>
                 </g:if>
                 
@@ -47,20 +47,6 @@
                     <dl>
                         <dt><g:message code="otorgamientoDePoder.delegacion.label" default="Delegación" /></dt>
                         <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="delegacion"/></dd>
-                    </dl>
-                </g:if>
-
-                <g:if test="${otorgamientoDePoderInstance?.puesto}">
-                    <dl>
-                        <dt><g:message code="otorgamientoDePoder.puesto.label" default="Puesto" /></dt>
-                        <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="puesto"/></dd>
-                    </dl>
-                </g:if>
-
-                <g:if test="${otorgamientoDePoderInstance?.contrato}">
-                    <dl>
-                        <dt><g:message code="otorgamientoDePoder.contrato.label" default="Contrato" /></dt>
-                        <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="contrato"/></dd>
                     </dl>
                 </g:if>
 

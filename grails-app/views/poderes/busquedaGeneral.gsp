@@ -122,7 +122,6 @@
                 <th><g:message code="otorgamientoDePoder.nombre.label" default="Nombre Apoderado" /></th>
                 <th><g:message code="otorgamientoDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
                 <th><g:message code="otorgamientoDePoder.registroDeLaSolicitud.label" default="Registro De La Solicitud" /></th>
-                <th><g:message code="otorgamientoDePoder.puesto.label" default="Puesto" /></th>
                 <th><g:message code="otorgamientoDePoder.tipoDePoder.label" default="Tipo De Poder" /></th>
                 <th><g:message code="otorgamientoDePoder.delegacion.label" default="Delegación" />
             </tr>
@@ -133,8 +132,7 @@
                         <td style="text-align:center"><g:link controller="otorgamientoDePoder" action="edit" id="${otorgamientoDePoderInstance.id}"><span class="badge">${otorgamientoDePoderInstance?.id}-O</span></g:link></td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "nombre")}</td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "solicitadoPor")}</td>
-                        <td><g:formatDate date="${otorgamientoDePoderInstance.registroDeLaSolicitud}" /></td>
-                        <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "puesto")}</td>
+                        <td><g:formatDate date="${otorgamientoDePoderInstance.registroDeLaSolicitud}" /></td>                        
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "tipoDePoder")}</td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "delegacion")}</td>
                     </tr>
@@ -156,8 +154,7 @@
                 <th><g:message code="revocacionDePoder.nombre.label" default="Nombre Apoderado" /></th>
                 <th><g:message code="revocacionDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
                 <th><g:message code="revocacionDePoder.escrituraPublica.label" default="Escritura Publica" /></th>
-                <th><g:message code="revocacionDePoder.nombreDeNotario.label" default="Nombre De Notario" /></th>
-                <th><g:message code="revocacionDePoder.puesto.label" default="Puesto" /></th>
+                <th><g:message code="revocacionDePoder.nombreDeNotario.label" default="Nombre De Notario" /></th>                
                 <th><g:message code="revocacionDePoder.fechaDeRevocacion.label" default="Fecha de Revocación" /></th>
             </tr>
             </thead>
@@ -168,8 +165,7 @@
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "nombre")}</td>
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "solicitadoPor")}</td>
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "escrituraPublica")}</td>
-                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "nombreDeNotario")}</td>
-                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "puesto")}</td>
+                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "nombreDeNotario")}</td>                        
                         <td><g:formatDate date="${revocacionDePoderInstance.fechaDeRevocacion}" /></td>
                     </tr>
                 </g:each>

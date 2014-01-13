@@ -56,25 +56,7 @@
                         <dd><g:fieldValue bean="${revocacionDePoderInstance}" field="nombre"/></dd>
 
                     </dl>
-                </g:if>
-
-                <g:if test="${revocacionDePoderInstance?.puesto}">
-                    <dl>
-                        <dt><g:message code="revocacionDePoder.puesto.label" default="Puesto" /></dt>
-
-                        <dd><g:fieldValue bean="${revocacionDePoderInstance}" field="puesto"/></dd>
-
-                    </dl>
-                </g:if>
-
-                <g:if test="${revocacionDePoderInstance?.contrato}">
-                    <dl>
-                        <dt><g:message code="revocacionDePoder.contrato.label" default="Contrato" /></dt>
-
-                        <dd><g:fieldValue bean="${revocacionDePoderInstance}" field="contrato"/></dd>
-
-                    </dl>
-                </g:if>
+                </g:if>              
 
                 <g:if test="${revocacionDePoderInstance?.tipoDePoder}">
                     <dl>

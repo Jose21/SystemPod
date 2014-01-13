@@ -183,8 +183,7 @@
                     <th><g:message code="revocacionDePoder.nombre.label" default="Nombre Apoderado" /></th>
                     <th><g:message code="revocacionDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
                     <th><g:message code="revocacionDePoder.escrituraPublica.label" default="Escritura Publica" /></th>
-                    <th><g:message code="revocacionDePoder.nombreDeNotario.label" default="Nombre De Notario" /></th>
-                    <th><g:message code="revocacionDePoder.puesto.label" default="Puesto" /></th>
+                    <th><g:message code="revocacionDePoder.nombreDeNotario.label" default="Nombre De Notario" /></th>                    
                     <th><g:message code="revocacionDePoder.fechaDeRevocacion.label" default="Fecha de Revocación" /></th>
                 </tr>
             </thead>
@@ -195,8 +194,7 @@
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "nombre")}</td>
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "solicitadoPor")}</td>
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "escrituraPublica")}</td>
-                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "nombreDeNotario")}</td>
-                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "puesto")}</td>
+                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "nombreDeNotario")}</td>                        
                         <td><g:formatDate date="${revocacionDePoderInstance.fechaDeRevocacion}" /></td>
                     </tr>
                 </g:each>

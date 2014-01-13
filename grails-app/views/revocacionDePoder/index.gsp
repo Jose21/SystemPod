@@ -28,11 +28,7 @@
 
                         <g:sortableColumn property="notario" title="${message(code: 'revocacionDePoder.notario.label', default: 'Notario')}" />
 
-                        <g:sortableColumn property="nombre" title="${message(code: 'revocacionDePoder.nombre.label', default: 'Nombre')}" />
-
-                        <g:sortableColumn property="puesto" title="${message(code: 'revocacionDePoder.puesto.label', default: 'Puesto')}" />
-
-                        <g:sortableColumn property="contrato" title="${message(code: 'revocacionDePoder.contrato.label', default: 'Contrato')}" />
+                        <g:sortableColumn property="nombre" title="${message(code: 'revocacionDePoder.nombre.label', default: 'Nombre')}" />                        
 
                     </tr>
                 </thead>
@@ -45,11 +41,7 @@
                             <td>${fieldValue(bean: revocacionDePoderInstance, field: "notario")}</td>
 
                             <td>${fieldValue(bean: revocacionDePoderInstance, field: "nombre")}</td>
-
-                            <td>${fieldValue(bean: revocacionDePoderInstance, field: "puesto")}</td>
-
-                            <td>${fieldValue(bean: revocacionDePoderInstance, field: "contrato")}</td>
-
+                           
                         </tr>
                     </g:each>
                 </tbody>

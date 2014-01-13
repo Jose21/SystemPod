@@ -184,8 +184,7 @@
                     <th><g:message code="otorgamientoDePoder.id.label"  default="Número de Folio" /></th>
                 <th><g:message code="otorgamientoDePoder.nombre.label" default="Nombre Apoderado" /></th>
                 <th><g:message code="otorgamientoDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
-                <th><g:message code="otorgamientoDePoder.registroDeLaSolicitud.label" default="Registro De La Solicitud" /></th>
-                <th><g:message code="otorgamientoDePoder.puesto.label" default="Puesto" /></th>
+                <th><g:message code="otorgamientoDePoder.registroDeLaSolicitud.label" default="Registro De La Solicitud" /></th>                
                 <th><g:message code="otorgamientoDePoder.tipoDePoder.label" default="Tipo De Poder" /></th>
                 <th><g:message code="otorgamientoDePoder.delegacion.label" default="Delegación" />
                 </tr>
@@ -196,8 +195,7 @@
                         <td style="text-align:center"><g:link controller="otorgamientoDePoder" action="edit" id="${otorgamientoDePoderInstance.id}"><span class="badge">${otorgamientoDePoderInstance?.id}-O</span></g:link></td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "nombre")}</td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "solicitadoPor")}</td>
-                        <td><g:formatDate date="${otorgamientoDePoderInstance.registroDeLaSolicitud}" /></td>
-                        <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "puesto")}</td>
+                        <td><g:formatDate date="${otorgamientoDePoderInstance.registroDeLaSolicitud}" /></td>                        
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "tipoDePoder")}</td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "delegacion")}</td>
                     </tr>

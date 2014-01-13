@@ -6,8 +6,6 @@ import com.app.sgtask.Tarea
 class Poder {
 
     String nombre
-    String puesto
-    String contrato
     String tipoDePoder
     Delegacion delegacion
     Usuario creadaPor
@@ -25,8 +23,6 @@ class Poder {
     static constraints = {
         
         nombre blank:false
-        puesto blank:false
-        contrato blank:false
         tipoDePoder blank:false, inList : ["Interno","Externo"]
         delegacion nullable:false
         creadaPor nullable:false
