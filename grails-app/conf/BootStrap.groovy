@@ -10,6 +10,7 @@ import com.app.sgpod.Delegacion
 import com.app.sgpod.FormatoDeCartaDeInstruccion
 import com.app.sgpod.MotivoDeOtorgamiento
 import com.app.sgpod.MotivoDeRevocacion
+import com.app.sgpod.Notario
 
 class BootStrap {
 
@@ -125,6 +126,7 @@ class BootStrap {
             new StatusDelConvenio(nombre:"En Elaboración").save()
             new StatusDelConvenio(nombre:"Vigente").save()
              
+            new Notario(nombre:"Juan Pérez", numeroDeNotaria:"Notaría Número 12").save()
             break
         }
     }

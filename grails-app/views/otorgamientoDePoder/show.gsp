@@ -22,15 +22,6 @@
 
             <div class="well">
 
-                <g:if test="${otorgamientoDePoderInstance?.numeroDeFolio}">
-                    <dl>
-                        <dt><g:message code="otorgamientoDePoder.numeroDeFolio.label" default="Número De Folio" /></dt>
-                        <span class="label label-success arrowed-in">                           
-                            ${otorgamientoDePoderInstance?.numeroDeFolio}"
-                        </span>
-                    </dl>
-                </g:if>
-
                 <g:if test="${otorgamientoDePoderInstance?.registroDeLaSolicitud}">
                     <dl>
                         <dt><g:message code="otorgamientoDePoder.registroDeLaSolicitud.label" default="Registro De La Solicitud" /></dt>					

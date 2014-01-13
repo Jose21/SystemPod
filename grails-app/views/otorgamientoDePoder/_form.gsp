@@ -1,15 +1,5 @@
 <%@ page import="com.app.sgpod.OtorgamientoDePoder;java.text.SimpleDateFormat" %>
 
-<div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'numeroDeFolio', 'error')} required">
-    <label for="numeroDeFolio" class="control-label">
-        <g:message code="otorgamientoDePoder.numeroDeFolio.label" default="Numero De Folio" />
-        <span class="required-indicator">*</span>
-    </label>
-    <div class="controls">
-        <g:textField class="span6" name="numeroDeFolio" required="" value="${otorgamientoDePoderInstance?.numeroDeFolio}"/>
-    </div>
-</div>
-
 <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'registroDeLaSolicitud', 'error')} required">
     <label for="registroDeLaSolicitud" class="control-label">
         <g:message code="otorgamientoDePoder.registroDeLaSolicitud.label" default="Registro De Solicitud" />

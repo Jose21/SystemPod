@@ -13,7 +13,7 @@
             <i class="icon-book"></i>
         </g:link>
 
-        <g:link class="btn btn-small btn-purple" controller="otorgamientoDePoder" action="create">
+        <g:link class="btn btn-small btn-purple" controller="poderes" action="index">
             <i class="icon-user"></i>
         </g:link>
     
@@ -89,12 +89,17 @@
             </li>
             <li>
                 <g:link controller="motivoDeOtorgamiento">
-                    <i class="icon-double-angle-right"></i> Motivo de Otorgamiento
+                    <i class="icon-double-angle-right"></i> Motivos de Otorgamiento
                 </g:link>
             </li>
             <li>
                 <g:link controller="motivoDeRevocacion">
-                    <i class="icon-double-angle-right"></i> Motivo de Revocación
+                    <i class="icon-double-angle-right"></i> Motivos de Revocación
+                </g:link>
+            </li>
+            <li>
+                <g:link controller="notario">
+                    <i class="icon-double-angle-right"></i> Notarios
                 </g:link>
             </li>
         </ul>

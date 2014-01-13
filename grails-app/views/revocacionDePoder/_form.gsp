@@ -10,23 +10,22 @@
     </div>
 </div>
 
-<div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'nombreDeNotario', 'error')} required">
-    <label for="nombreDeNotario" class="control-label">
-        <g:message code="revocacionDePoder.nombreDeNotario.label" default="Nombre De Notario" />
+<div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'notario', 'error')} required">
+    <label for="delegacion" class="control-label">
+        <g:message code="revocacionDePoder.notario.label" default="Notario" />
         <span class="required-indicator">*</span>
     </label>
     <div class="controls">
-        <g:textField class="span6" name="nombreDeNotario" required="" value="${revocacionDePoderInstance?.nombreDeNotario}"/>
-    </div>
-</div>
-
-<div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'numeroDeNotario', 'error')} required">
-    <label for="numeroDeNotario" class="control-label">
-        <g:message code="revocacionDePoder.numeroDeNotario.label" default="Numero De Notario" />
-        <span class="required-indicator">*</span>
-    </label>
-    <div class="controls">
-        <g:textField class="span6" name="numeroDeNotario" required="" value="${revocacionDePoderInstance?.numeroDeNotario}"/>
+        <select class="chosen-select" id="notario" name="notario" data-placeholder="Elige un notario..." required="">
+            <g:each in="${com.app.sgpod.Notario.list()}" var="notario">
+                <g:if test="${notario?.id == revocacionDePoderInstance?.notario?.id}">                    
+                    <option value="${notario.id}" selected>${notario.nombre}</option>
+                </g:if>
+                <g:else>
+                    <option value="${notario.id}">${notario.nombre}</option>
+                </g:else>
+            </g:each>
+        </select>
     </div>
 </div>
 
@@ -72,11 +71,20 @@
 
 <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'delegacion', 'error')} required">
     <label for="delegacion" class="control-label">
-        <g:message code="revocacionDePoder.delegacion.label" default="Delegacion" />
+        <g:message code="revocacionDePoder.delegacion.label" default="Delegación" />
         <span class="required-indicator">*</span>
     </label>
     <div class="controls">
-        <g:textField class="span6" name="delegacion" required="" value="${revocacionDePoderInstance?.delegacion}"/>
+        <select class="chosen-select" id="delegacion" name="delegacion" data-placeholder="Elige una delegación..." required="">
+            <g:each in="${com.app.sgpod.Delegacion.list()}" var="delegacion">
+                <g:if test="${delegacion?.id == revocacionDePoderInstance?.delegacion?.id}">                    
+                    <option value="${delegacion.id}" selected>${delegacion.nombre}</option>
+                </g:if>
+                <g:else>
+                    <option value="${delegacion.id}">${delegacion.nombre}</option>
+                </g:else>
+            </g:each>
+        </select>
     </div>
 </div>
 

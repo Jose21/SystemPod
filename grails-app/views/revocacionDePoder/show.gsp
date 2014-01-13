@@ -31,20 +31,11 @@
                     </dl>
                 </g:if>
 
-                <g:if test="${revocacionDePoderInstance?.nombreDeNotario}">
+                <g:if test="${revocacionDePoderInstance?.notario}">
                     <dl>
-                        <dt><g:message code="revocacionDePoder.nombreDeNotario.label" default="Nombre De Notario" /></dt>
+                        <dt><g:message code="revocacionDePoder.notario.label" default="Notario" /></dt>
 
-                        <dd><g:fieldValue bean="${revocacionDePoderInstance}" field="nombreDeNotario"/></dd>
-
-                    </dl>
-                </g:if>
-
-                <g:if test="${revocacionDePoderInstance?.numeroDeNotario}">
-                    <dl>
-                        <dt><g:message code="revocacionDePoder.numeroDeNotario.label" default="Número De Notario" /></dt>
-
-                        <dd><g:fieldValue bean="${revocacionDePoderInstance}" field="numeroDeNotario"/></dd>
+                        <dd><g:fieldValue bean="${revocacionDePoderInstance}" field="notario"/></dd>
 
                     </dl>
                 </g:if>

@@ -5,7 +5,6 @@ import com.app.sgtask.Tarea
 
 class OtorgamientoDePoder extends Poder {
 
-    String numeroDeFolio
     Date registroDeLaSolicitud
 
     String poderSolicitado
@@ -18,7 +17,6 @@ class OtorgamientoDePoder extends Poder {
     String escrituraPublicaDeOtorgamiento      
     
     static constraints = {       
-        numeroDeFolio blank:false
         registroDeLaSolicitud nullable:false
         
         poderSolicitado blank:false, maxSize:1048576
