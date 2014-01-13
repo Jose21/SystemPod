@@ -28,6 +28,6 @@ class OtorgamientoDePoder extends Poder {
     }
     
     String toString() {
-        "${id}o"
+        "${id}-O"
     }
 }

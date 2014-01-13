@@ -29,6 +29,6 @@ class RevocacionDePoder extends Poder{
     }
     
     String toString() {
-        "${id}r"
+        "${id}-R"
     }
 }
