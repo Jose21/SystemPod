@@ -22,14 +22,14 @@
       <g:if test="${session.idOtorgamientoDePoder}">
         <br/>
           <g:link class="btn btn-small btn-info btn-block" controller="otorgamientoDePoder" action="edit" id="${OtorgamientoDePoder.get(session.idOtorgamientoDePoder).id}">
-            El turno se asociará al Otorgamiento De Poder: ${OtorgamientoDePoder.get(session.idOtorgamientoDePoder).id} - Número de Folio: ${OtorgamientoDePoder.get(session.idOtorgamientoDePoder).numeroDeFolio}
+            El turno se asociará al Otorgamiento De Poder: ${OtorgamientoDePoder.get(session.idOtorgamientoDePoder).id}-O
           </g:link>
         <br/>
       </g:if>
       <g:if test="${session.idRevocacionDePoder}">
         <br/>
           <g:link class="btn btn-small btn-info btn-block" controller="revocacionDePoder" action="edit" id="${RevocacionDePoder.get(session.idRevocacionDePoder).id}">
-            El turno se asociará a la Revocación De Poder: ${RevocacionDePoder.get(session.idRevocacionDePoder).id} - Escritura Pública: ${RevocacionDePoder.get(session.idRevocacionDePoder).escrituraPublica}
+            El turno se asociará a la Revocación De Poder: ${RevocacionDePoder.get(session.idRevocacionDePoder).id}-R
           </g:link>
         <br/>
       </g:if>
