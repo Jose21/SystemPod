@@ -37,10 +37,10 @@
                     <g:hiddenField name="version" value="${otorgamientoDePoderInstance?.version}" />            
                     <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'id', 'error')}">
                         <label for="id" class="control-label">
-                            <g:message code="otorgamientoDePoder.id.label" default="Identificador interno" />
+                            <g:message code="otorgamientoDePoder.id.label" default="Número De Folio" />
                         </label>
                         <div class="controls">
-                            <span class="badge">${otorgamientoDePoderInstance?.id}</span>
+                            <span class="badge">${otorgamientoDePoderInstance?.id}-O</span>
                         </div>
                     </div>
                     <g:render template="form"/>

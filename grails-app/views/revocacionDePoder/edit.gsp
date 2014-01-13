@@ -36,6 +36,14 @@
                 <g:form class="form-horizontal" method="post" enctype="multipart/form-data">
                     <g:hiddenField name="id" value="${revocacionDePoderInstance?.id}" />
                     <g:hiddenField name="version" value="${revocacionDePoderInstance?.version}" />
+                    <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'id', 'error')}">
+                        <label for="id" class="control-label">
+                            <g:message code="revocacionDePoderInstance.id.label" default="Número De Folio" />
+                        </label>
+                        <div class="controls">
+                            <span class="badge">${revocacionDePoderInstance?.id}-R</span>
+                        </div>
+                    </div>
                     <g:render template="form"/>
 
                     <h3 id="bloqueAsignacionExpedientes"  class="header smaller lighter blue">Asignación de Expediente</h3>

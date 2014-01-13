@@ -22,8 +22,7 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
-                            <g:sortableColumn property="id" title="${message(code: 'otorgamientoDePoder.id.label', default: 'Identificador')}" />
-                            <g:sortableColumn property="numeroDeFolio" title="${message(code: 'otorgamientoDePoder.numeroDeFolio.label', default: 'Número De Folio')}" />
+                            <g:sortableColumn property="id" title="${message(code: 'otorgamientoDePoder.id.label', default: 'Número de Folio')}" />
                             <g:sortableColumn property="registroDeLaSolicitud" title="${message(code: 'otorgamientoDePoder.registroDeLaSolicitud.label', default: 'Registro De La Solicitud')}" />                
                             <g:sortableColumn property="puesto" title="${message(code: 'otorgamientoDePoder.puesto.label', default: 'Puesto')}" />
                             <g:sortableColumn property="contrato" title="${message(code: 'otorgamientoDePoder.contrato.label', default: 'Contrato')}" />
@@ -34,8 +33,7 @@
                     <tbody>
                         <g:each in="${otorgamientoDePoderInstanceList}" status="i" var="otorgamientoDePoderInstance">
                             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                <td><g:link action="edit" id="${otorgamientoDePoderInstance.id}"><span class="badge">${fieldValue(bean: otorgamientoDePoderInstance, field: "id")}</span></g:link></td>
-                                <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "numeroDeFolio")}</td>
+                                <td><g:link action="edit" id="${otorgamientoDePoderInstance.id}"><span class="badge">${fieldValue(bean: otorgamientoDePoderInstance, field: "id")}-O</span></g:link></td>
                                 <td><g:formatDate date="${otorgamientoDePoderInstance.registroDeLaSolicitud}" /></td>                  
                                 <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "puesto")}</td>
                                 <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "contrato")}</td>

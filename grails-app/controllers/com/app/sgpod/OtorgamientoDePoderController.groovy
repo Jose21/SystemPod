@@ -43,22 +43,15 @@ class OtorgamientoDePoderController {
             params.fechaDeOtorgamiento = fechaDeOtorgamiento
         }
         def otorgamientoDePoderInstance = new OtorgamientoDePoder(params)
+        
+        if(otorgamientoDePoderInstance.tags && !otorgamientoDePoderInstance.tags.endsWith(",")){
+            otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags + "," 
+        }
         if (!otorgamientoDePoderInstance.save(flush: true)) {
             render(view: "create", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])
             return
         }
         
-        //validacion para la busqueda por tags
-        if(otorgamientoDePoderInstance.tags){
-            if(otorgamientoDePoderInstance.tags.endsWith(",")){
-                params.tags = params.tags.substring(0, params.tags.length() -1)
-            }else {
-                otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags + "," 
-            }
-        }
-        //end busqueda tags
-        
-
         flash.message = message(code: 'default.created.message', args: [message(code: 'poder.label', default: 'Poder'), otorgamientoDePoderInstance.id])
         redirect(action: "edit", id: otorgamientoDePoderInstance.id)
     }
@@ -75,7 +68,9 @@ class OtorgamientoDePoderController {
             redirect(action: "list")
             return
         }
-
+        if(otorgamientoDePoderInstance.tags && otorgamientoDePoderInstance.tags.endsWith(",")){              
+            otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.substring(0,otorgamientoDePoderInstance.tags.length()-1)
+        }
         [otorgamientoDePoderInstance: otorgamientoDePoderInstance]
     }
 
@@ -86,7 +81,9 @@ class OtorgamientoDePoderController {
             redirect(action: "list")
             return
         }
-        log.info "Edit: anchorpara eliminar->" + params.anchor
+        if(otorgamientoDePoderInstance.tags && otorgamientoDePoderInstance.tags.endsWith(",")){              
+            otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.substring(0,otorgamientoDePoderInstance.tags.length()-1)
+        }
         [otorgamientoDePoderInstance: otorgamientoDePoderInstance, anchor : params.anchor?:""]
     }
 
@@ -102,7 +99,7 @@ class OtorgamientoDePoderController {
         if (version != null) {
             if (otorgamientoDePoderInstance.version > version) {
                 otorgamientoDePoderInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'poder.label', default: 'Poder')] as Object[],
+                    [message(code: 'poder.label', default: 'Poder')] as Object[],
                           "Another user has updated this Poder while you were editing")
                 render(view: "edit", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])
                 return
@@ -123,12 +120,8 @@ class OtorgamientoDePoderController {
         otorgamientoDePoderInstance.properties = params
         
         //validacion para la busqueda por tags
-        if(otorgamientoDePoderInstance.tags){
-            if(otorgamientoDePoderInstance.tags.endsWith(",")){
-                params.tags = params.tags.substring(0, params.tags.length() -1)
-            }else {
-                otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags + "," 
-            }
+        if(otorgamientoDePoderInstance.tags && !otorgamientoDePoderInstance.tags.endsWith(",")){
+            otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags + "," 
         }
         //end busqueda tags
 
@@ -136,7 +129,7 @@ class OtorgamientoDePoderController {
             render(view: "edit", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])
             return
         }
-         if (params.archivo.getSize()!=0) {            
+        if (params.archivo.getSize()!=0) {            
             def documentoDePoderInstance = new DocumentoDePoder(params)
             documentoDePoderInstance.nombre = params.archivo.getOriginalFilename()
             otorgamientoDePoderInstance.addToDocumentos(documentoDePoderInstance)
@@ -146,6 +139,9 @@ class OtorgamientoDePoderController {
             }
         }
         
+        if(otorgamientoDePoderInstance.tags && otorgamientoDePoderInstance.tags.endsWith(",")){              
+            otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.substring(0,otorgamientoDePoderInstance.tags.length()-1)
+        }
         flash.message = message(code: 'default.updated.message', args: [message(code: 'poder.label', default: 'Poder'), otorgamientoDePoderInstance.id])
         redirect(action: "edit", id: otorgamientoDePoderInstance.id, params : [ anchor : params.anchor ])
     }

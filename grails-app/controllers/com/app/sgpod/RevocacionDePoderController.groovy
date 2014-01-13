@@ -25,24 +25,19 @@ class RevocacionDePoderController {
     }
 
     def save() {
-        //se agrega el que creó el otorgamiento en la bd
+        //se agrega el que creó la revocacion en la bd
         params.creadaPor = springSecurityService.currentUser
         
         def revocacionDePoderInstance = new RevocacionDePoder(params)
+        
+        if(revocacionDePoderInstance.tags && !revocacionDePoderInstance.tags.endsWith(",")){
+            revocacionDePoderInstance.tags = revocacionDePoderInstance.tags + "," 
+        }
+        
         if (!revocacionDePoderInstance.save(flush: true)) {
             render(view: "create", model: [revocacionDePoderInstance: revocacionDePoderInstance])
             return
         }
-        
-        //validacion para la busqueda por tags
-        if(revocacionDePoderInstance.tags){
-            if(revocacionDePoderInstance.tags.endsWith(",")){
-                params.tags = params.tags.substring(0, params.tags.length() -1)
-            }else {
-                revocacionDePoderInstance.tags = revocacionDePoderInstance.tags + "," 
-            }
-        }
-        //end busqueda tags
 
         flash.message = message(code: 'default.created.message', args: [message(code: 'revocacionDePoder.label', default: 'RevocacionDePoder'), revocacionDePoderInstance.id])
         redirect(action: "edit", id: revocacionDePoderInstance.id)
@@ -60,7 +55,9 @@ class RevocacionDePoderController {
             redirect(action: "list")
             return
         }
-
+        if(revocacionDePoderInstance.tags && revocacionDePoderInstance.tags.endsWith(",")){              
+            revocacionDePoderInstance.tags = revocacionDePoderInstance.tags.substring(0,revocacionDePoderInstance.tags.length()-1)
+        }
         [revocacionDePoderInstance: revocacionDePoderInstance]
     }
 
@@ -71,7 +68,9 @@ class RevocacionDePoderController {
             redirect(action: "list")
             return
         }
-
+        if(revocacionDePoderInstance.tags && revocacionDePoderInstance.tags.endsWith(",")){              
+            revocacionDePoderInstance.tags = revocacionDePoderInstance.tags.substring(0,revocacionDePoderInstance.tags.length()-1)
+        }
         [revocacionDePoderInstance: revocacionDePoderInstance, anchor : params.anchor?:""]
     }
 
@@ -87,7 +86,7 @@ class RevocacionDePoderController {
         if (version != null) {
             if (revocacionDePoderInstance.version > version) {
                 revocacionDePoderInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'revocacionDePoder.label', default: 'RevocacionDePoder')] as Object[],
+                    [message(code: 'revocacionDePoder.label', default: 'RevocacionDePoder')] as Object[],
                           "Another user has updated this RevocacionDePoder while you were editing")
                 render(view: "edit", model: [revocacionDePoderInstance: revocacionDePoderInstance])
                 return
@@ -102,19 +101,17 @@ class RevocacionDePoderController {
         }
         revocacionDePoderInstance.properties = params
         
-        //validacion para la busqueda por tags
-        if(revocacionDePoderInstance.tags){
-            if(revocacionDePoderInstance.tags.endsWith(",")){
-                params.tags = params.tags.substring(0, params.tags.length() -1)
-            }else {
-                revocacionDePoderInstance.tags = revocacionDePoderInstance.tags + "," 
-            }
+        if(revocacionDePoderInstance.tags && !revocacionDePoderInstance.tags.endsWith(",")){
+            revocacionDePoderInstance.tags = revocacionDePoderInstance.tags + "," 
         }
-        //end busqueda tags
 
         if (!revocacionDePoderInstance.save(flush: true)) {
             render(view: "edit", model: [revocacionDePoderInstance: revocacionDePoderInstance])
             return
+        }
+        
+        if(revocacionDePoderInstance.tags && revocacionDePoderInstance.tags.endsWith(",")){              
+            revocacionDePoderInstance.tags = revocacionDePoderInstance.tags.substring(0,revocacionDePoderInstance.tags.length()-1)
         }
         
         if (params.archivo.getSize()!=0) {            

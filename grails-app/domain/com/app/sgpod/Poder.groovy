@@ -40,4 +40,8 @@ class Poder {
         tareas nullable:true
         tags nullable:true, maxSize:1000
     }
+    
+    String toString() {
+        "${id}"
+    }
 }

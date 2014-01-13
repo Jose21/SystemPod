@@ -23,7 +23,7 @@
 			<table>
 			<thead>
 					<tr>
-						<g:sortableColumn property="numeroDeFolio" title="${message(code: 'otorgamientoDePoder.numeroDeFolio.label', default: 'Numero De Folio')}" />
+						<g:sortableColumn property="id" title="${message(code: 'otorgamientoDePoder.id.label', default: 'Númeo de Folio')}" />
 						<g:sortableColumn property="registroDeLaSolicitud" title="${message(code: 'otorgamientoDePoder.registroDeLaSolicitud.label', default: 'Registro De La Solicitud')}" />
 						<g:sortableColumn property="puesto" title="${message(code: 'otorgamientoDePoder.puesto.label', default: 'Puesto')}" />
 						<g:sortableColumn property="contrato" title="${message(code: 'otorgamientoDePoder.contrato.label', default: 'Contrato')}" />
@@ -35,7 +35,7 @@
 				<tbody>
 				<g:each in="${otorgamientoDePoderInstanceList}" status="i" var="otorgamientoDePoderInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">					
-						<td><g:link action="show" id="${otorgamientoDePoderInstance.id}">${fieldValue(bean: otorgamientoDePoderInstance, field: "numeroDeFolio")}</g:link></td>					
+						<td><g:link action="show" id="${otorgamientoDePoderInstance.id}">${fieldValue(bean: otorgamientoDePoderInstance, field: "id")}-O</g:link></td>					
 						<td><g:formatDate date="${otorgamientoDePoderInstance.registroDeLaSolicitud}" /></td>							
 						<td>${fieldValue(bean: otorgamientoDePoderInstance, field: "puesto")}</td>
 						<td>${fieldValue(bean: otorgamientoDePoderInstance, field: "contrato")}</td>
