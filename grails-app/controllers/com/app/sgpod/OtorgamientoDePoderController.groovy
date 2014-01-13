@@ -21,6 +21,9 @@ class OtorgamientoDePoderController {
     }
 
     def create() {
+        
+        params.registroDeLaSolicitud = new Date()
+        println "hewdheoi" + params.registroDeLaSolicitud                       
         [otorgamientoDePoderInstance: new OtorgamientoDePoder(params)]
     }
 
@@ -29,6 +32,7 @@ class OtorgamientoDePoderController {
         
         //se agrega el que creó el otorgamiento en la bd
         params.creadaPor = springSecurityService.currentUser
+        //params.registroDeLaSolicitud = new Date()
         
         if (params.registroDeLaSolicitud) {
             Date registroDeLaSolicitud = sdf.parse(params.registroDeLaSolicitud)
