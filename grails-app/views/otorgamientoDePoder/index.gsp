@@ -35,7 +35,7 @@
 				<tbody>
 				<g:each in="${otorgamientoDePoderInstanceList}" status="i" var="otorgamientoDePoderInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">					
-						<td><g:link action="show" id="${otorgamientoDePoderInstance.id}">${fieldValue(bean: otorgamientoDePoderInstance, field: "id")}</g:link></td>					
+						<td><g:link action="show" id="${otorgamientoDePoderInstance.id}">${fieldValue(bean: otorgamientoDePoderInstance, field: "id")}-O</g:link></td>					
 						<td><g:formatDate date="${otorgamientoDePoderInstance.registroDeLaSolicitud}" /></td>							
 						<td>${fieldValue(bean: otorgamientoDePoderInstance, field: "puesto")}</td>
 						<td>${fieldValue(bean: otorgamientoDePoderInstance, field: "contrato")}</td>

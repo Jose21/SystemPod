@@ -26,4 +26,8 @@ class OtorgamientoDePoder extends Poder {
         fechaDeOtorgamiento nullable:true
         escrituraPublicaDeOtorgamiento nullable:true, blank:true        
     }
+    
+    String toString() {
+        "${id}o"
+    }
 }

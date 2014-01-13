@@ -179,7 +179,7 @@
                     </tr>
                 </g:if>
                 <tr>
-                    <th><g:message code="revocacionDePoder.id.label"  default="Identificador Interno" /></th>
+                    <th><g:message code="revocacionDePoder.id.label"  default="Número de Folio" /></th>
                     <th><g:message code="revocacionDePoder.nombre.label" default="Nombre Apoderado" /></th>
                     <th><g:message code="revocacionDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
                     <th><g:message code="revocacionDePoder.escrituraPublica.label" default="Escritura Publica" /></th>
@@ -191,7 +191,7 @@
             <tbody>
                 <g:each in="${revocacionDePoderInstanceList}" status="i" var="revocacionDePoderInstance">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                        <td style="text-align:center"><g:link controller="revocacionDePoder" action="edit" id="${revocacionDePoderInstance.id}"><span class="badge">${revocacionDePoderInstance?.id}</span></g:link></td>
+                        <td style="text-align:center"><g:link controller="revocacionDePoder" action="edit" id="${revocacionDePoderInstance.id}"><span class="badge">${revocacionDePoderInstance?.id}-R</span></g:link></td>
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "nombre")}</td>
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "solicitadoPor")}</td>
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "escrituraPublica")}</td>

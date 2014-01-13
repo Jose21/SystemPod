@@ -22,6 +22,13 @@
 
             <div class="well">
 
+                <g:if test="${otorgamientoDePoderInstance?.id}">
+                    <dl>
+                        <dt><g:message code="otorgamientoDePoder.numeroDeFolio.label" default="Número de Folio" /></dt>					
+                        <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="id"/>-O/dd>
+                    </dl>
+                </g:if>
+                
                 <g:if test="${otorgamientoDePoderInstance?.registroDeLaSolicitud}">
                     <dl>
                         <dt><g:message code="otorgamientoDePoder.registroDeLaSolicitud.label" default="Registro De La Solicitud" /></dt>					

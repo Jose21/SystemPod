@@ -66,7 +66,7 @@
                                         <td>
                                             <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoInstance?.id}">
                                                 <span class="label label-info arrowed-in">
-                                                    ${otorgamientoInstance?.id}
+                                                    ${otorgamientoInstance?.id}-O
                                                 </span>
                                             </g:link>
                                         </td>
@@ -109,7 +109,7 @@
                                         <td>
                                             <g:link controller="revocacionDePoder" action="show" id="${revocacionInstance?.id}">
                                                 <span class="label label-info arrowed-in">
-                                                    ${revocacionInstance?.id}
+                                                    ${revocacionInstance?.id}-R
                                                 </span>
                                             </g:link>
                                         </td>
@@ -158,7 +158,7 @@
                                         <td>
                                             <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoAsignadosInstance?.id}">
                                                 <span class="label label-info arrowed-in">
-                                                    ${otorgamientoAsignadosInstance?.id}
+                                                    ${otorgamientoAsignadosInstance?.id}-O
                                                 </span>
                                             </g:link>
                                         </td>
@@ -194,7 +194,7 @@
                                         <td>
                                             <g:link controller="revocacionDePoder" action="show" id="${revocacionAsignadosInstance?.id}">
                                                 <span class="label label-info arrowed-in">
-                                                    ${revocacionAsignadosInstance?.id}
+                                                    ${revocacionAsignadosInstance?.id}-R
                                                 </span>
                                             </g:link>
                                         </td>

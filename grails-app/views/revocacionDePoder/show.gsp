@@ -22,6 +22,15 @@
 
             <div class="well">
 
+                <g:if test="${revocacionDePoderInstance?.id}">
+                    <dl>
+                        <dt><g:message code="revocacionDePoder.id.label" default="Número de Folio" /></dt>
+
+                        <dd><g:fieldValue bean="${revocacionDePoderInstance}" field="id"/>-R</dd>
+
+                    </dl>
+                </g:if>
+                
                 <g:if test="${revocacionDePoderInstance?.escrituraPublica}">
                     <dl>
                         <dt><g:message code="revocacionDePoder.escrituraPublica.label" default="Escritura Pública" /></dt>

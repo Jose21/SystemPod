@@ -22,7 +22,7 @@
                     <thead>
                         <tr>
 
-                            <g:sortableColumn property="id" title="${message(code: 'revocacionDePoder.id.label', default: 'Identificador')}" />
+                            <g:sortableColumn property="id" title="${message(code: 'revocacionDePoder.id.label', default: 'Número de Folio')}" />
                             
                             <g:sortableColumn property="escrituraPublica" title="${message(code: 'revocacionDePoder.escrituraPublica.label', default: 'Escritura Publica')}" />
 
@@ -40,7 +40,7 @@
                         <g:each in="${revocacionDePoderInstanceList}" status="i" var="revocacionDePoderInstance">
                             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
-                                <td><g:link action="edit" id="${revocacionDePoderInstance.id}"><span class="badge">${fieldValue(bean: revocacionDePoderInstance, field: "id")}</span></g:link></td>
+                                <td><g:link action="edit" id="${revocacionDePoderInstance.id}"><span class="badge">${fieldValue(bean: revocacionDePoderInstance, field: "id")}-R</span></g:link></td>
                                 
                                 <td>${fieldValue(bean: revocacionDePoderInstance, field: "escrituraPublica")}</td>
 

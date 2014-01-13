@@ -40,7 +40,7 @@
                             <g:message code="otorgamientoDePoder.id.label" default="Número De Folio" />
                         </label>
                         <div class="controls">
-                            <span class="badge">${otorgamientoDePoderInstance?.id}</span>
+                            <span class="badge">${otorgamientoDePoderInstance?.id}-O</span>
                         </div>
                     </div>
                     <g:render template="form"/>

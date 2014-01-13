@@ -27,4 +27,8 @@ class RevocacionDePoder extends Poder{
         escrituraPublicaDeRevocacion nullable:true, blank:true
         comentarios nullable:true, blank:true, maxSize:1048576                
     }
+    
+    String toString() {
+        "${id}r"
+    }
 }

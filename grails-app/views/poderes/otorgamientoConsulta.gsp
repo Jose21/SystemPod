@@ -181,10 +181,9 @@
                     </tr>
                 </g:if>
                 <tr>
-                    <th><g:message code="otorgamientoDePoder.id.label"  default="Identificador Interno" /></th>
+                    <th><g:message code="otorgamientoDePoder.id.label"  default="Número de Folio" /></th>
                 <th><g:message code="otorgamientoDePoder.nombre.label" default="Nombre Apoderado" /></th>
                 <th><g:message code="otorgamientoDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
-                <th><g:message code="otorgamientoDePoder.numeroDeFolio.label" default="Número De Folio" /></th>
                 <th><g:message code="otorgamientoDePoder.registroDeLaSolicitud.label" default="Registro De La Solicitud" /></th>
                 <th><g:message code="otorgamientoDePoder.puesto.label" default="Puesto" /></th>
                 <th><g:message code="otorgamientoDePoder.tipoDePoder.label" default="Tipo De Poder" /></th>
@@ -194,10 +193,9 @@
             <tbody>
                 <g:each in="${otorgamientoDePoderInstanceList}" status="i" var="otorgamientoDePoderInstance">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                        <td style="text-align:center"><g:link controller="otorgamientoDePoder" action="edit" id="${otorgamientoDePoderInstance.id}"><span class="badge">${otorgamientoDePoderInstance?.id}</span></g:link></td>
+                        <td style="text-align:center"><g:link controller="otorgamientoDePoder" action="edit" id="${otorgamientoDePoderInstance.id}"><span class="badge">${otorgamientoDePoderInstance?.id}-O</span></g:link></td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "nombre")}</td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "solicitadoPor")}</td>
-                        <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "numeroDeFolio")}</td>
                         <td><g:formatDate date="${otorgamientoDePoderInstance.registroDeLaSolicitud}" /></td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "puesto")}</td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "tipoDePoder")}</td>
