@@ -160,7 +160,7 @@ class PoderesController {
         def resultList = s.tokenize(",")
         def otorgamientoDePoderInstanceList =[] 
         resultList.each{            
-            def results = OtorgamientoDePoder.findAllByTagsIlike("%"+it+",%", [sort: "id", order: "asc"])
+            def results = OtorgamientoDePoder.findAllByTagsIlike("%"+it+"@%", [sort: "id", order: "asc"])
             otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList + results as Set    
         }
         session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList
@@ -276,7 +276,7 @@ class PoderesController {
         def resultList = s.tokenize(",")
         def revocacionDePoderInstanceList =[] 
         resultList.each{            
-            def results = RevocacionDePoder.findAllByTagsIlike("%"+it+",%", [sort: "id", order: "asc"])
+            def results = RevocacionDePoder.findAllByTagsIlike("%"+it+"@%", [sort: "id", order: "asc"])
             revocacionDePoderInstanceList = revocacionDePoderInstanceList + results as Set    
         }
         session.revocacionDePoderInstanceList = revocacionDePoderInstanceList
@@ -353,14 +353,14 @@ class PoderesController {
         def resultList = s.tokenize(",")
         def otorgamientoDePoderInstanceList =[] 
         resultList.each{            
-            def results = OtorgamientoDePoder.findAllByTagsIlike("%"+it+",%", [sort: "id", order: "asc"])
+            def results = OtorgamientoDePoder.findAllByTagsIlike("%"+it+"@%", [sort: "id", order: "asc"])
             otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList + results as Set    
         }
         def st = params.tags.toString().replaceAll(" ", "")
         def resultList2 = st.tokenize(",")
         def revocacionDePoderInstanceList =[] 
         resultList2.each{            
-            def results2 = RevocacionDePoder.findAllByTagsIlike("%"+it+",%", [sort: "id", order: "asc"])
+            def results2 = RevocacionDePoder.findAllByTagsIlike("%"+it+"@%", [sort: "id", order: "asc"])
             revocacionDePoderInstanceList = revocacionDePoderInstanceList + results2 as Set    
         }
         session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList

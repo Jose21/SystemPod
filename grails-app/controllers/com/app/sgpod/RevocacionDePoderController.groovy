@@ -28,12 +28,13 @@ class RevocacionDePoderController {
         //se agrega el que creó la revocacion en la bd
         params.creadaPor = springSecurityService.currentUser
         
-        def revocacionDePoderInstance = new RevocacionDePoder(params)
-        
-        if(revocacionDePoderInstance.tags && !revocacionDePoderInstance.tags.endsWith(",")){
-            revocacionDePoderInstance.tags = revocacionDePoderInstance.tags + "," 
+        //Se cambian las comas por arrobas
+        if(params.tags && !params.tags.endsWith(",")){
+            params.tags = params.tags + "@"
         }
-        
+        params.tags = params.tags.replaceAll(",", "@")        
+        def revocacionDePoderInstance = new RevocacionDePoder(params)
+                        
         if (!revocacionDePoderInstance.save(flush: true)) {
             render(view: "create", model: [revocacionDePoderInstance: revocacionDePoderInstance])
             return
@@ -44,7 +45,7 @@ class RevocacionDePoderController {
     }
 
     def show(Long id) {
-        def revocacionDePoderInstance = RevocacionDePoder.get(id)
+        def revocacionDePoderInstance = RevocacionDePoder.read(id)
         if (!revocacionDePoderInstance.asignar){
             flash.warn = "El expediente aún no esta Asignado."
         }else{
@@ -55,20 +56,22 @@ class RevocacionDePoderController {
             redirect(action: "list")
             return
         }
-        if(revocacionDePoderInstance.tags && revocacionDePoderInstance.tags.endsWith(",")){              
+        revocacionDePoderInstance.tags = revocacionDePoderInstance.tags.replaceAll("@",",")
+        if(revocacionDePoderInstance.tags && revocacionDePoderInstance.tags.endsWith(",")){
             revocacionDePoderInstance.tags = revocacionDePoderInstance.tags.substring(0,revocacionDePoderInstance.tags.length()-1)
         }
         [revocacionDePoderInstance: revocacionDePoderInstance]
     }
 
     def edit(Long id) {
-        def revocacionDePoderInstance = RevocacionDePoder.get(id)
+        def revocacionDePoderInstance = RevocacionDePoder.read(id)
         if (!revocacionDePoderInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'revocacionDePoder.label', default: 'RevocacionDePoder'), id])
             redirect(action: "list")
             return
         }
-        if(revocacionDePoderInstance.tags && revocacionDePoderInstance.tags.endsWith(",")){              
+        revocacionDePoderInstance.tags = revocacionDePoderInstance.tags.replaceAll("@",",")
+        if(revocacionDePoderInstance.tags && revocacionDePoderInstance.tags.endsWith(",")){
             revocacionDePoderInstance.tags = revocacionDePoderInstance.tags.substring(0,revocacionDePoderInstance.tags.length()-1)
         }
         [revocacionDePoderInstance: revocacionDePoderInstance, anchor : params.anchor?:""]
@@ -99,21 +102,19 @@ class RevocacionDePoderController {
         } else {
             params.fechaDeRevocacion = null
         }
+        
+        //validacion para la busqueda por tags
+        if(params.tags && !params.tags.endsWith(",")){
+            params.tags = params.tags + "@" 
+        }
+        params.tags = params.tags.replaceAll(",", "@")
         revocacionDePoderInstance.properties = params
         
-        if(revocacionDePoderInstance.tags && !revocacionDePoderInstance.tags.endsWith(",")){
-            revocacionDePoderInstance.tags = revocacionDePoderInstance.tags + "," 
-        }
-
         if (!revocacionDePoderInstance.save(flush: true)) {
             render(view: "edit", model: [revocacionDePoderInstance: revocacionDePoderInstance])
             return
         }
-        
-        if(revocacionDePoderInstance.tags && revocacionDePoderInstance.tags.endsWith(",")){              
-            revocacionDePoderInstance.tags = revocacionDePoderInstance.tags.substring(0,revocacionDePoderInstance.tags.length()-1)
-        }
-        
+                
         if (params.archivo.getSize()!=0) {            
             def documentoDePoderInstance = new DocumentoDePoder(params)
             documentoDePoderInstance.nombre = params.archivo.getOriginalFilename()
@@ -124,6 +125,11 @@ class RevocacionDePoderController {
             }
         }
 
+        revocacionDePoderInstance = RevocacionDePoder.read(id)
+        revocacionDePoderInstance.tags = revocacionDePoderInstance.tags.replaceAll("@",",")
+        if(revocacionDePoderInstance.tags && revocacionDePoderInstance.tags.endsWith(",")){              
+            revocacionDePoderInstance.tags = revocacionDePoderInstance.tags.substring(0,revocacionDePoderInstance.tags.length()-1)
+        }
         flash.message = message(code: 'default.updated.message', args: [message(code: 'revocacionDePoder.label', default: 'RevocacionDePoder'), revocacionDePoderInstance.id])
         redirect(action: "edit", id: revocacionDePoderInstance.id, params : [ anchor : params.anchor])
     }
