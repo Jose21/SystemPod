@@ -41,22 +41,24 @@ class OtorgamientoDePoderController {
             Date fechaDeOtorgamiento = sdf.parse(params.fechaDeOtorgamiento)
             params.fechaDeOtorgamiento = fechaDeOtorgamiento
         }
-        def otorgamientoDePoderInstance = new OtorgamientoDePoder(params)
         
-        if(otorgamientoDePoderInstance.tags && !otorgamientoDePoderInstance.tags.endsWith(",")){
-            otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags + "," 
+        //Se cambian las comas por arrobas
+        if(params.tags && !params.tags.endsWith(",")){
+            params.tags = params.tags + "@"
         }
+        params.tags = params.tags.replaceAll(",", "@")
+        
+        def otorgamientoDePoderInstance = new OtorgamientoDePoder(params)
         if (!otorgamientoDePoderInstance.save(flush: true)) {
             render(view: "create", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])
             return
         }
-        
         flash.message = message(code: 'default.created.message', args: [message(code: 'poder.label', default: 'Poder'), otorgamientoDePoderInstance.id])
         redirect(action: "edit", id: otorgamientoDePoderInstance.id)
     }
 
     def show(Long id) {
-        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.read(id)
         if (!otorgamientoDePoderInstance.asignar){
             flash.warn = "El expediente aún no esta Asignado."
         }else{
@@ -67,20 +69,22 @@ class OtorgamientoDePoderController {
             redirect(action: "list")
             return
         }
-        if(otorgamientoDePoderInstance.tags && otorgamientoDePoderInstance.tags.endsWith(",")){              
+        otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.replaceAll("@",",")
+        if(otorgamientoDePoderInstance.tags && otorgamientoDePoderInstance.tags.endsWith(",")){
             otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.substring(0,otorgamientoDePoderInstance.tags.length()-1)
         }
         [otorgamientoDePoderInstance: otorgamientoDePoderInstance]
     }
 
     def edit(Long id) {
-        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.read(id)
         if (!otorgamientoDePoderInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'poder.label', default: 'Poder'), id])
             redirect(action: "list")
             return
-        }
-        if(otorgamientoDePoderInstance.tags && otorgamientoDePoderInstance.tags.endsWith(",")){              
+        }   
+        otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.replaceAll("@",",")
+        if(otorgamientoDePoderInstance.tags && otorgamientoDePoderInstance.tags.endsWith(",")){
             otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.substring(0,otorgamientoDePoderInstance.tags.length()-1)
         }
         [otorgamientoDePoderInstance: otorgamientoDePoderInstance, anchor : params.anchor?:""]
@@ -116,14 +120,13 @@ class OtorgamientoDePoderController {
             params.fechaDeOtorgamiento = null
         }
         
-        otorgamientoDePoderInstance.properties = params
-        
         //validacion para la busqueda por tags
-        if(otorgamientoDePoderInstance.tags && !otorgamientoDePoderInstance.tags.endsWith(",")){
-            otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags + "," 
+        if(params.tags && !params.tags.endsWith(",")){
+            params.tags = params.tags + "@" 
         }
+        params.tags = params.tags.replaceAll(",", "@")
         //end busqueda tags
-
+        otorgamientoDePoderInstance.properties = params        
         if (!otorgamientoDePoderInstance.save(flush: true)) {
             render(view: "edit", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])
             return
@@ -137,7 +140,8 @@ class OtorgamientoDePoderController {
                 return
             }
         }
-        
+        otorgamientoDePoderInstance = OtorgamientoDePoder.read(id)
+        otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.replaceAll("@",",")
         if(otorgamientoDePoderInstance.tags && otorgamientoDePoderInstance.tags.endsWith(",")){              
             otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.substring(0,otorgamientoDePoderInstance.tags.length()-1)
         }
