@@ -28,7 +28,7 @@
                         <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="id"/>-O</dd>
                     </dl>
                 </g:if>
-                
+
                 <g:if test="${otorgamientoDePoderInstance?.registroDeLaSolicitud}">
                     <dl>
                         <dt><g:message code="otorgamientoDePoder.registroDeLaSolicitud.label" default="Registro De La Solicitud" /></dt>					
@@ -41,6 +41,11 @@
                         <dt><g:message code="otorgamientoDePoder.tipoDePoder.label" default="Tipo De Poder" /></dt>
                         <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="tipoDePoder"/></dd>
                     </dl>
+                </g:if>              
+
+                <g:if test="${otorgamientoDePoderInstance?.apoderados}">
+                    <dt><g:message code="otorgamientoDePoder.apoderados.label" default="Apoderados" /></dt>           
+                    <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="apoderados.nombre"/></dd>              
                 </g:if>
 
                 <g:if test="${otorgamientoDePoderInstance?.delegacion}">

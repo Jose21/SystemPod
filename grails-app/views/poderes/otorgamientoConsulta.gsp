@@ -28,13 +28,7 @@
                         <i class="icon-home bigger-130"></i>
                         <span class="bigger-110">Por Delegación<span class="badge"></span></span>
                     </a>
-                </li>
-                <li class="${porNombrePoderActive?:""}">
-                    <a data-toggle="tab" href="#porNombrePoder">
-                        <i class="icon-legal bigger-130"></i>
-                        <span class="bigger-110">Por Nombre del Poder <span class="badge"></span></span>
-                    </a>
-                </li>
+                </li>                
                 <li class="${porFechaRegistroActive?:""}">
                     <a data-toggle="tab" href="#porFechaRegistro">
                         <i class="icon-calendar bigger-130"></i>
@@ -60,10 +54,10 @@
                         <g:hiddenField name="inActive" value="nombreApoderado"/>
                         <div class="control-group">
                             <div class="row-fluid input-prepend">
-                                <label for="solicitadoPor" class="control-label">
-                                    <g:message code="otorgamientoDePoder.solicitadoPor.label" default="Nombre" />
+                                <label for="nombre" class="control-label">
+                                    <g:message code="otorgamientoDePoder.apoderados.nombre.label" default="Nombre" />
                                 </label>
-                                <g:textField name="solicitadoPor" required="" value="${otorgamientoDePoderInstance?.solicitadoPor}"/>
+                                <g:textField name="nombre" required="" value="${otorgamientoDePoderInstance?.nombre}"/>
                                 <g:actionSubmit class="btn btn-primary" action="buscarNombreApoderado" value="Buscar" />
                             </div>
                         </div>
@@ -90,27 +84,7 @@
                     </g:form>
                 </div>
             </div><!--/.message-container-->
-        </div>
-        <div id="porNombrePoder" class="tab-pane ${porNombrePoderActive?:""}">  
-            <div class="message-container">
-                <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
-                    <div class="message-bar">
-                    </div>
-                    <g:form method="post">
-                        <g:hiddenField name="inActive" value="porNombrePoder"/>
-                        <div class="control-group">
-                            <div class="row-fluid input-prepend">
-                                <label for="nombre" class="control-label">
-                                    <g:message code="otorgamientoDePoder.nombre.label" default="Nombre" />
-                                </label>
-                                <g:textField name="nombre" required="" value="${otorgamientoDePoderInstance?.nombre}"/>
-                                <g:actionSubmit class="btn btn-primary" action="buscarPorNombrePoder" value="Buscar" />
-                            </div>
-                        </div>
-                    </g:form>
-                </div>
-            </div><!--/.message-container-->
-        </div>
+        </div>        
         <div id="porFechaRegistro" class="tab-pane ${porFechaRegistroActive?:""}">  
             <div class="message-container">
                 <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
@@ -164,12 +138,7 @@
                     <tr>
                         <th colspan="8" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR DELEGACIÓN: ${params.delegacion.nombre}</br></br></th>
                     </tr>
-                </g:if>
-                <g:if test="${params.nombre}">
-                    <tr>
-                        <th colspan="8"  style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR NOMBRE DEL PODER: ${params.nombre}</th>
-                    </tr>
-                </g:if>
+                </g:if>                
                 <g:if test="${rangoDeFechaRegistro}">
                     <tr>
                         <th colspan="8" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FECHA DE REGISTRO: ${rangoDeFechaRegistro}</br></br></th>
@@ -182,7 +151,7 @@
                 </g:if>
                 <tr>
                     <th><g:message code="otorgamientoDePoder.id.label"  default="Número de Folio" /></th>
-                <th><g:message code="otorgamientoDePoder.nombre.label" default="Nombre Apoderado" /></th>
+                <th><g:message code="otorgamientoDePoder.apoderados.nombre.label" default="Nombre Apoderado" /></th>
                 <th><g:message code="otorgamientoDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
                 <th><g:message code="otorgamientoDePoder.registroDeLaSolicitud.label" default="Registro De La Solicitud" /></th>                
                 <th><g:message code="otorgamientoDePoder.tipoDePoder.label" default="Tipo De Poder" /></th>
@@ -193,7 +162,7 @@
                 <g:each in="${otorgamientoDePoderInstanceList}" status="i" var="otorgamientoDePoderInstance">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                         <td style="text-align:center"><g:link controller="otorgamientoDePoder" action="edit" id="${otorgamientoDePoderInstance.id}"><span class="badge">${otorgamientoDePoderInstance?.id}-O</span></g:link></td>
-                        <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "nombre")}</td>
+                        <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "apoderados.nombre")}</td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "solicitadoPor")}</td>
                         <td><g:formatDate date="${otorgamientoDePoderInstance.registroDeLaSolicitud}" /></td>                        
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "tipoDePoder")}</td>

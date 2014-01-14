@@ -183,4 +183,36 @@ class OtorgamientoDePoderController {
             return   
         }
     }
+    def addApoderado () {
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoder.id as long)
+        def apoderadoInstance = Apoderado.findByNombre(params."apoderado")
+        if (apoderadoInstance) {
+            otorgamientoDePoderInstance.addToApoderados(apoderadoInstance)
+            if (otorgamientoDePoderInstance.save(flush:true)) {                
+                flash.message = "Se ha agregado apoderado a la solicitud."
+            } else {
+                flash.error = "No se pudo agregar el apoderado. Favor de reintentar."
+            }
+        } else {
+            apoderadoInstance = new Apoderado(nombre:params."apoderado")
+            if (apoderadoInstance.save(flush:true)) {  
+                otorgamientoDePoderInstance.addToApoderados(apoderadoInstance)
+                if (otorgamientoDePoderInstance.save(flush:true)) {                    
+                    flash.message = "Se ha agregado apoderado a la solicitud."
+                } else {
+                    flash.error = "No se pudo agregar el apoderado. Favor de reintentar."
+                }                
+            } else {
+                flash.error = "No se pudo agregar el apoderado. Favor de reintentar."
+            }
+        }
+        redirect(action: "edit", id: otorgamientoDePoderInstance.id, params : [anchor : params.anchor])
+    }
+    def removeApoderado () {
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoder.id as long)        
+        def apoderadoInstance = Apoderado.get(params.apoderado.id as long)
+        otorgamientoDePoderInstance.removeFromApoderados(apoderadoInstance)        
+        flash.message = "El firmante ha sido eliminado."        
+        redirect(action: "edit", id: otorgamientoDePoderInstance.id, params : [ anchor : params.anchor ])
+    }        
 }

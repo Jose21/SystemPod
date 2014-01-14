@@ -29,16 +29,6 @@
     </div>
 </div>
 
-<div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'nombre', 'error')} required">
-    <label for="nombre" class="control-label">
-        <g:message code="revocacionDePoder.nombre.label" default="Nombre (Apoderado)" />
-        <span class="required-indicator">*</span>
-    </label>
-    <div class="controls">
-        <g:textField class="span6" name="nombre" required="" value="${revocacionDePoderInstance?.nombre}"/>
-    </div>
-</div>
-
 <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'tipoDePoder', 'error')} required">
     <label for="tipoDePoder" class="control-label">
         <g:message code="revocacionDePoder.tipoDePoder.label" default="Tipo De Poder" />

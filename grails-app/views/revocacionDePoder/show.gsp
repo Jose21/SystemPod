@@ -49,7 +49,7 @@
                     </dl>
                 </g:if>
 
-                <g:if test="${revocacionDePoderInstance?.nombre}">
+                <g:if test="${revocacionDePoderInstance.apoderados?.nombre}">
                     <dl>
                         <dt><g:message code="revocacionDePoder.nombre.label" default="Nombre" /></dt>
 

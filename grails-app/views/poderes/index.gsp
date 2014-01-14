@@ -70,7 +70,7 @@
                                                 </span>
                                             </g:link>
                                         </td>
-                                        <td>${fieldValue(bean: otorgamientoInstance, field: "nombre")}</td>
+                                        <td>${fieldValue(bean: otorgamientoInstance, field: "apoderados.nombre")}</td>
                                         <td>${fieldValue(bean: otorgamientoInstance, field: "solicitadoPor")}</td>
                                     </tr>
                                 </g:each>
@@ -113,7 +113,7 @@
                                                 </span>
                                             </g:link>
                                         </td>
-                                        <td>${fieldValue(bean: revocacionInstance, field: "nombre")}</td>
+                                        <td>${fieldValue(bean: revocacionInstance, field: "apoderados.nombre")}</td>
                                         <td>${fieldValue(bean: revocacionInstance, field: "solicitadoPor")}</td>
                                     </tr>
                                 </g:each>
@@ -162,7 +162,7 @@
                                                 </span>
                                             </g:link>
                                         </td>
-                                        <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "nombre")}</td>
+                                        <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "apoderados.nombre")}</td>
                                         <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "solicitadoPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "asignar")}</td>
                                     </tr>
@@ -198,7 +198,7 @@
                                                 </span>
                                             </g:link>
                                         </td>
-                                        <td>${fieldValue(bean: revocacionAsignadosInstance, field: "nombre")}</td>
+                                        <td>${fieldValue(bean: revocacionAsignadosInstance, field: "apoderados.nombre")}</td>
                                         <td>${fieldValue(bean: revocacionAsignadosInstance, field: "solicitadoPor")}</td>
                                         <td>${fieldValue(bean: revocacionAsignadosInstance, field: "asignar")}</td>
                                     </tr>

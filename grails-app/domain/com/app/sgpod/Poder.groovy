@@ -5,7 +5,6 @@ import com.app.sgtask.Tarea
 
 class Poder {
 
-    String nombre
     String tipoDePoder
     Delegacion delegacion
     Usuario creadaPor
@@ -17,12 +16,12 @@ class Poder {
     
     static hasMany = [ 
         documentos : DocumentoDePoder,
-        tareas : Tarea
+        tareas : Tarea,
+        apoderados : Apoderado
     ]
     
     static constraints = {
         
-        nombre blank:false
         tipoDePoder blank:false, inList : ["Interno","Externo"]
         delegacion nullable:false
         creadaPor nullable:false
@@ -35,6 +34,7 @@ class Poder {
         documentos nullable:true
         tareas nullable:true
         tags nullable:true, maxSize:1000
+        apoderados nullable:true
     }
     
     String toString() {

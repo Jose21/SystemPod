@@ -23,7 +23,7 @@
 			<table>
 			<thead>
 					<tr>
-						<g:sortableColumn property="id" title="${message(code: 'otorgamientoDePoder.id.label', default: 'Númeo de Folio')}" />
+						<g:sortableColumn property="id" title="${message(code: 'otorgamientoDePoder.id.label', default: 'Número de Folio')}" />
 						<g:sortableColumn property="registroDeLaSolicitud" title="${message(code: 'otorgamientoDePoder.registroDeLaSolicitud.label', default: 'Registro De La Solicitud')}" />						
                                                 <g:sortableColumn property="tipoDePoder" title="${message(code: 'otorgamientoDePoder.tipoDePoder.label', default: 'Tipo De Poder')}" />					
 						<g:sortableColumn property="delegacion" title="${message(code: 'otorgamientoDePoder.delegacion.label', default: 'Delegacion')}" />

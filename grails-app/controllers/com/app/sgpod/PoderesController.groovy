@@ -74,7 +74,13 @@ class PoderesController {
         if (params.inActive=="nombreApoderado") {
             nombreApoderadoActive = "active"
         }
-        def otorgamientoDePoderInstanceList = OtorgamientoDePoder.findAllBySolicitadoPorIlike("%"+params.solicitadoPor+"%", [sort: "id", order: "asc"])
+        def r = OtorgamientoDePoder.createCriteria()
+        def otorgamientoDePoderInstanceList = r.list {
+            apoderados {
+                like("nombre", "%"+params.nombre+"%")
+            }
+            order("id", "asc")
+        }        
         session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList
         render(
             view: "otorgamientoConsulta", 
@@ -107,24 +113,7 @@ class PoderesController {
                 porDelegacionActive : porDelegacionActive       
             ]
         )       
-    }
-    
-    def buscarPorNombrePoder (){
-        def porNombrePoderActive = null
-        if (params.inActive=="porNombrePoder") {
-            porNombrePoderActive = "active"
-        }
-        def otorgamientoDePoderInstanceList = OtorgamientoDePoder.findAllByNombreIlike("%"+params.nombre+"%", [sort: "id", order: "asc"])
-        session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList
-        render(
-            view: "otorgamientoConsulta", 
-            model: [
-                otorgamientoDePoderInstanceList: otorgamientoDePoderInstanceList,
-                otorgamientoDePoderInstanceTotal: otorgamientoDePoderInstanceList.size(),
-                porNombrePoderActive : porNombrePoderActive       
-            ]
-        )       
-    }
+    }       
     
     def buscarPorFechaRegistro () {
         def porFechaRegistroActive = null
@@ -190,7 +179,13 @@ class PoderesController {
         if (params.inActive=="nombreApoderado") {
             nombreApoderadoActive = "active"
         }
-        def revocacionDePoderInstanceList = RevocacionDePoder.findAllBySolicitadoPorIlike("%"+params.nombre+"%", [sort: "id", order: "asc"])
+        def s = RevocacionDePoder.createCriteria()
+        def revocacionDePoderInstanceList = s.list {
+            apoderados {
+                like("nombre", "%"+params.nombre+"%")
+            }
+            order("id", "asc")
+        } 
         session.revocacionDePoderInstanceList = revocacionDePoderInstanceList
         render(
             view: "revocacionConsulta", 
@@ -300,8 +295,20 @@ class PoderesController {
         if (params.inActive=="nombreApoderado") {
             nombreApoderadoActive = "active"
         }
-        def revocacionDePoderInstanceList = RevocacionDePoder.findAllByNombreIlike("%"+params.nombre+"%", [sort: "id", order: "asc"])
-        def otorgamientoDePoderInstanceList = OtorgamientoDePoder.findAllByNombreIlike("%"+params.nombre+"%", [sort: "id", order: "asc"])
+        def a = OtorgamientoDePoder.createCriteria()
+        def otorgamientoDePoderInstanceList = a.list {
+            apoderados {
+                like("nombre", "%"+params.nombre+"%")
+            }
+            order("id", "asc")
+        }
+         def b = RevocacionDePoder.createCriteria()
+        def revocacionDePoderInstanceList = b.list {
+            apoderados {
+                like("nombre", "%"+params.nombre+"%")
+            }
+            order("id", "asc")
+        }         
         session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList
         session.revocacionDePoderInstanceList = revocacionDePoderInstanceList
         render(

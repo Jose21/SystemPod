@@ -60,7 +60,7 @@
                         <div class="control-group">
                             <div class="row-fluid input-prepend">
                                 <label for="nombre" class="control-label">
-                                    <g:message code="revocacionDePoder.nombre.label" default="Nombre" />
+                                    <g:message code="revocacionDePoder.apoderados.nombre.label" default="Nombre" />
                                 </label>
                                 <g:textField name="nombre" required="" value="${revocacionDePoderInstance?.nombre}"/>
                                 <g:actionSubmit class="btn btn-primary" action="buscarNombreApoderadoRevocacion" value="Buscar" />

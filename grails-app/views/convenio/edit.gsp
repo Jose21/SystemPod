@@ -213,7 +213,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                         <tr>
                             <td colspan="4">                  
                                 <g:hiddenField name="anchor" value="bloqueFirmantes" />
-                                <g:textField class="span6 deshabilitable"  name="firmante" value="" autocomplete="off"/>
+                                <g:textField class="span6"  name="firmante" value="" autocomplete="off"/>
                             </td>
                             <td>
                                 <g:hiddenField name="convenio.id" value="${convenioInstance?.id}"/>
@@ -328,7 +328,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                         <tr>
                             <td colspan="4">
                                 <g:hiddenField name="anchor" value="bloqueResponsables" />
-                                <g:textField class="span6 deshabilitable" name="responsable" value="" autocomplete="off"/>
+                                <g:textField class="span6" name="responsable" value="" autocomplete="off"/>
                             </td>
                             <td>
                                 <g:hiddenField name="convenio.id" value="${convenioInstance?.id}"/>
