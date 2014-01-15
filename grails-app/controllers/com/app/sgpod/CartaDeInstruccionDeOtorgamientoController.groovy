@@ -1,5 +1,7 @@
 package com.app.sgpod
 
+
+import com.app.security.Usuario
 import org.springframework.dao.DataIntegrityViolationException
 
 class CartaDeInstruccionDeOtorgamientoController {
@@ -30,8 +32,10 @@ class CartaDeInstruccionDeOtorgamientoController {
     def save() {
         def cartaDeInstruccionDeOtorgamientoInstance = new CartaDeInstruccionDeOtorgamiento(params)
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoderId as long)
+        otorgamientoDePoderInstance.asignar = Usuario.get(params.asignar.id as long)
+        otorgamientoDePoderInstance.save()        
         cartaDeInstruccionDeOtorgamientoInstance.otorgamientoDePoder = otorgamientoDePoderInstance
-        
+                
         if (!cartaDeInstruccionDeOtorgamientoInstance.save(flush: true)) {
             render(view: "create", model: [cartaDeInstruccionDeOtorgamientoInstance: cartaDeInstruccionDeOtorgamientoInstance])
             return

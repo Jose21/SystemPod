@@ -10,25 +10,6 @@
     </div>
 </div>
 
-<div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'notario', 'error')} required">
-    <label for="delegacion" class="control-label">
-        <g:message code="revocacionDePoder.notario.label" default="Notario" />
-        <span class="required-indicator">*</span>
-    </label>
-    <div class="controls">
-        <select class="chosen-select" id="notario" name="notario" data-placeholder="Elige un notario..." required="">
-            <g:each in="${com.app.sgpod.Notario.list()}" var="notario">
-                <g:if test="${notario?.id == revocacionDePoderInstance?.notario?.id}">                    
-                    <option value="${notario.id}" selected>${notario.nombre}</option>
-                </g:if>
-                <g:else>
-                    <option value="${notario.id}">${notario.nombre}</option>
-                </g:else>
-            </g:each>
-        </select>
-    </div>
-</div>
-
 <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'tipoDePoder', 'error')} required">
     <label for="tipoDePoder" class="control-label">
         <g:message code="revocacionDePoder.tipoDePoder.label" default="Tipo De Poder" />

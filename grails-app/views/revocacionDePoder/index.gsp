@@ -26,7 +26,6 @@
 
                         <g:sortableColumn property="escrituraPublica" title="${message(code: 'revocacionDePoder.escrituraPublica.label', default: 'Escritura Publica')}" />
 
-                        <g:sortableColumn property="notario" title="${message(code: 'revocacionDePoder.notario.label', default: 'Notario')}" />
 
                         <g:sortableColumn property="nombre" title="${message(code: 'revocacionDePoder.nombre.label', default: 'Nombre')}" />                        
 
@@ -37,8 +36,6 @@
                         <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
                             <td><g:link action="show" id="${revocacionDePoderInstance.id}">${fieldValue(bean: revocacionDePoderInstance, field: "escrituraPublica")}</g:link></td>
-
-                            <td>${fieldValue(bean: revocacionDePoderInstance, field: "notario")}</td>
 
                             <td>${fieldValue(bean: revocacionDePoderInstance, field: "nombre")}</td>
                            

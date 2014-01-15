@@ -26,7 +26,6 @@
                             
                             <g:sortableColumn property="escrituraPublica" title="${message(code: 'revocacionDePoder.escrituraPublica.label', default: 'Escritura Publica')}" />
 
-                            <g:sortableColumn property="notario" title="${message(code: 'revocacionDePoder.notario.label', default: 'Notario')}" />
 
                             <g:sortableColumn property="nombre" title="${message(code: 'revocacionDePoder.nombre.label', default: 'Nombre')}" />
                             
@@ -39,8 +38,6 @@
                                 <td><g:link action="edit" id="${revocacionDePoderInstance.id}"><span class="badge">${fieldValue(bean: revocacionDePoderInstance, field: "id")}-R</span></g:link></td>
                                 
                                 <td>${fieldValue(bean: revocacionDePoderInstance, field: "escrituraPublica")}</td>
-
-                                <td>${fieldValue(bean: revocacionDePoderInstance, field: "notario")}</td>
 
                                 <td>${fieldValue(bean: revocacionDePoderInstance, field: "nombre")}</td>                                
 

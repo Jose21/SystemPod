@@ -6,7 +6,6 @@ import com.app.sgtask.Tarea
 class RevocacionDePoder extends Poder{
 
     String escrituraPublica
-    Notario notario
     
     MotivoDeRevocacion motivoDeRevocacion
     String solicitadoPor
@@ -18,7 +17,6 @@ class RevocacionDePoder extends Poder{
     
     static constraints = {
         escrituraPublica blank:false
-        notario nullable:false
         
         motivoDeRevocacion nullable:false, maxSize:1048576
         solicitadoPor blank:false

@@ -38,16 +38,7 @@
                         <dd><g:fieldValue bean="${revocacionDePoderInstance}" field="escrituraPublica"/></dd>
 
                     </dl>
-                </g:if>
-
-                <g:if test="${revocacionDePoderInstance?.notario}">
-                    <dl>
-                        <dt><g:message code="revocacionDePoder.notario.label" default="Notario" /></dt>
-
-                        <dd><g:fieldValue bean="${revocacionDePoderInstance}" field="notario"/></dd>
-
-                    </dl>
-                </g:if>
+                </g:if>                
 
                 <g:if test="${revocacionDePoderInstance.apoderados?.nombre}">
                     <dl>

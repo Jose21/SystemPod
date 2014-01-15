@@ -44,18 +44,7 @@
                             <span class="badge">${revocacionDePoderInstance?.id}-R</span>
                         </div>
                     </div>
-                    <g:render template="form"/>
-
-                    <h3 id="bloqueAsignacionExpedientes"  class="header smaller lighter blue">Asignación de Expediente</h3>
-                    <br/>
-                    <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'asignar', 'error')} required">
-                        <label for="asignar" class="control-label">
-                            <g:message code="revocacionDePoder.asignar.label" default="Asignar A" />
-                        </label>
-                        <div class="controls">
-                            <g:select id="asignar" name="asignar.id" from="${com.app.security.Usuario.list()}" optionKey="id"  value="${revocacionDePoderInstance?.asignar?.id}" noSelection="['':'-Elige Responsable-']" class="many-to-one"/>
-                        </div>
-                    </div>
+                    <g:render template="form"/>                   
 
                     <br/>
                     <h3 id="bloqueDatosComplementarios"  class="header smaller lighter blue">Datos Complementarios</h3>

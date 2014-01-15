@@ -1,6 +1,7 @@
 package com.app.sgpod
 
 import org.springframework.dao.DataIntegrityViolationException
+import com.app.security.Usuario
 
 class CartaDeInstruccionDeRevocacionController {
 
@@ -30,6 +31,8 @@ class CartaDeInstruccionDeRevocacionController {
     def save() {
         def cartaDeInstruccionDeRevocacionInstance = new CartaDeInstruccionDeRevocacion(params)
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoderId as long)
+        revocacionDePoderInstance.asignar = Usuario.get(params.asignar.id as long)
+        revocacionDePoderInstance.save() 
         cartaDeInstruccionDeRevocacionInstance.revocacionDePoder = revocacionDePoderInstance
         if (!cartaDeInstruccionDeRevocacionInstance.save(flush: true)) {
             render(view: "create", model: [cartaDeInstruccionDeRevocacionInstance: cartaDeInstruccionDeRevocacionInstance])
