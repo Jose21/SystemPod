@@ -238,7 +238,7 @@
         }).next().on(ace.click_event, function(){
         $(this).prev().focus();
         });
-        $('#rangoDeFechaRegistro').daterangepicker({ 
+        $('#rangoDeFechaOtorgamiento').daterangepicker({ 
         format: 'DD/MM/YYYY',
         locale: 'es'
         }

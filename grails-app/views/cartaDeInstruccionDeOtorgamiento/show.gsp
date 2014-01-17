@@ -42,9 +42,7 @@
                 <g:if test="${cartaDeInstruccionDeOtorgamientoInstance?.contenido}">
                     <dl>
                         <dt><g:message code="cartaDeInstruccionDeOtorgamiento.contenido.label" default="Contenido" /></dt>
-
-                        <dd class="well"><br/>${cartaDeInstruccionDeOtorgamientoInstance.contenido}</dd>
-
+                        <dd class="well"><br/><%=cartaDeInstruccionDeOtorgamientoInstance?.contenido%></dd>
                     </dl>
                 </g:if>
 
@@ -58,13 +56,16 @@
                 </g:if>
 
             </div>
-            <g:form class="form-actions">
-                <fieldset class="buttons">
+            <!--g:form class="form-actions"-->
+                <!--fieldset class="buttons">
                     <g:hiddenField name="id" value="${cartaDeInstruccionDeOtorgamientoInstance?.id}" />
                     <g:hiddenField name="otorgamientoDePoder" value="${otorgamientoDePoderInstance?.id}"/>
                     <g:link class="btn btn-primary" action="edit" id="${cartaDeInstruccionDeOtorgamientoInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-                </fieldset>
-            </g:form>
-        </div>
-    </body>
-</html>
+                </fieldset-->
+            <!--/g:form-->
+                <div class="form-actions">
+                    <g:link class="btn btn-primary btn-mini" action="regresar" id="${cartaDeInstruccionDeOtorgamientoInstance?.id}">Regresar</g:link>
+                </div>
+            </div>
+        </body>
+    </html>

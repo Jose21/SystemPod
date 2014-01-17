@@ -10,6 +10,7 @@ class Poder {
     Usuario creadaPor
     
     Usuario asignar
+    Usuario asignadaPor
     String comentarios
     CartaDeInstruccion cartaDeInstruccion
     String tags
@@ -29,7 +30,7 @@ class Poder {
         comentarios nullable:true, blank:true, maxSize:1048576
         
         asignar nullable:true, blank:true
-        
+        asignadaPor nullable:true, blank:true
         cartaDeInstruccion nullable:true
         documentos nullable:true
         tareas nullable:true

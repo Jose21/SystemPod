@@ -235,6 +235,16 @@ class TareaController {
     }
 
     def save() {
+        if(session.idOtorgamientoDePoder){
+            params.fechaLimite = null
+            params.prioridad = "Normal"
+            params.alertaVencimiento = "0"
+            params.grupo = Grupo.get(1 as long)
+            def responsable = Usuario.get(session.idOtorgamientoDePoder as long)
+            params.responsable = responsable            
+            
+        }
+        
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date fechaLimite = null
         if (params.fechaLimite != "") {
@@ -274,7 +284,7 @@ class TareaController {
         }
         //Integración con Otorgamiento De Poder
         if (session.idOtorgamientoDePoder){
-            def otorgamientoDePoderInstance = OtorgamientoDePoder.get(session.idOtorgamientoDePoder)
+            def otorgamientoDePoderInstance = OtorgamientoDePoder.get(session.idOtorgamientoDePoder)            
             otorgamientoDePoderInstance.addToTareas(tareaInstance).save(flush:true)
         }
         //Integración con Revocación De Poder
@@ -292,11 +302,16 @@ class TareaController {
             }
         }
         //end busqueda tags
-            
-        historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "creó un turno")        
-        flash.message = message(code: 'default.created.message', args: [message(code: 'tarea.label', default: 'Turno'), tareaInstance.id])
-        redirect(action: "show", id: tareaInstance.id)
-    }
+        
+        if(!session.idOtorgamientoDePoder){            
+            historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "creó un turno")        
+            flash.message = message(code: 'default.created.message', args: [message(code: 'tarea.label', default: 'Turno'), tareaInstance.id])
+            redirect(action: "show", id: tareaInstance.id)        
+        }else{            
+            flash.info = "Se ha enviado la Nofificacion al Solicitante."
+            redirect(controller: "otorgamientoDePoder", action: "show", id: session.idOtorgamientoDePoder)            
+        }
+    }    
 
     def show(Long id) {
         if (params.idConvenio) {
@@ -315,15 +330,21 @@ class TareaController {
             session.idRevocacionDePoder = null
         }
         def tareaInstance = Tarea.get(id)
-        def fechaHoy = new Date()
-        def fechaLimite = tareaInstance.fechaLimite
-        def alertaVencimiento = tareaInstance.alertaVencimiento
-        TimeDuration tiempo = TimeCategory.minus(fechaLimite, fechaHoy)
-        if(tiempo.days == (alertaVencimiento as int) && !tareaInstance.notas){
-            flash.warn = "El Turno aun no ha sido Atendido."
-        }else{
-            flash.warn = null 
+        
+        if(!session.idOtorgamientoDePoder){
+            if(tareaInstance.fechaLimite){
+                def fechaHoy = new Date()
+                def fechaLimite = tareaInstance.fechaLimite
+                def alertaVencimiento = tareaInstance.alertaVencimiento
+                TimeDuration tiempo = TimeCategory.minus(fechaLimite, fechaHoy)
+                if(tiempo.days == (alertaVencimiento as int) && !tareaInstance.notas){
+                    flash.warn = "El Turno aun no ha sido Atendido."
+                }else{
+                    flash.warn = null 
+                }  
+            }
         }
+        
         if (!tareaInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'tarea.label', default: 'Turno'), id])
             redirect(action: "list")

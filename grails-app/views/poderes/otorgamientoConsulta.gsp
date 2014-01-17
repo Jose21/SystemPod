@@ -29,10 +29,10 @@
                         <span class="bigger-110">Por Delegación<span class="badge"></span></span>
                     </a>
                 </li>                
-                <li class="${porFechaRegistroActive?:""}">
-                    <a data-toggle="tab" href="#porFechaRegistro">
+                <li class="${porFechaOtorgamientoActive?:""}">
+                    <a data-toggle="tab" href="#porFechaOtorgamiento">
                         <i class="icon-calendar bigger-130"></i>
-                        <span class="bigger-110">Por Fecha de Registro <span class="badge"></span></span>
+                        <span class="bigger-110">Por Fecha de Otorgamiento <span class="badge"></span></span>
                     </a>
                 </li>
                 <li class="${porTagsActive?:""}">
@@ -85,20 +85,20 @@
                 </div>
             </div><!--/.message-container-->
         </div>        
-        <div id="porFechaRegistro" class="tab-pane ${porFechaRegistroActive?:""}">  
+        <div id="porFechaOtorgamiento" class="tab-pane ${porFechaOtorgamientoActive?:""}">  
             <div class="message-container">
                 <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
                     <div class="message-bar">
                     </div>
                     <g:form method="post">
-                        <g:hiddenField name="inActive" value="porFechaRegistro"/>
+                        <g:hiddenField name="inActive" value="porFechaOtorgamiento"/>
                         <div class="control-group">
                             <div class="row-fluid input-prepend">
                                 <span class="add-on">
                                     <i class="icon-calendar"></i>
                                 </span>
-                                <input class="span5" type="text" name="rangoDeFechaRegistro" id="rangoDeFechaRegistro" value="${rangoDeFechaRegistro?rangoDeFechaRegistro:""}" readonly="true" />
-                                <g:actionSubmit class="btn btn-primary" action="buscarPorFechaRegistro" value="Buscar" />
+                                <input class="span5" type="text" name="rangoDeFechaOtorgamiento" id="rangoDeFechaOtorgamiento" value="${rangoDeFechaOtorgamiento?rangoDeFechaOtorgamiento:""}" readonly="true" />
+                                <g:actionSubmit class="btn btn-primary" action="buscarPorFechaOtorgamiento" value="Buscar" />
                             </div>
                         </div>
                     </g:form>
@@ -151,7 +151,7 @@
                 </g:if>
                 <tr>
                     <th><g:message code="otorgamientoDePoder.id.label"  default="Número de Folio" /></th>
-                <th><g:message code="otorgamientoDePoder.apoderados.nombre.label" default="Nombre Apoderado" /></th>
+                <th><g:message code="otorgamientoDePoder.apoderados.nombre.label" default="Nombre Apoderado(s)" /></th>
                 <th><g:message code="otorgamientoDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
                 <th><g:message code="otorgamientoDePoder.registroDeLaSolicitud.label" default="Registro De La Solicitud" /></th>                
                 <th><g:message code="otorgamientoDePoder.tipoDePoder.label" default="Tipo De Poder" /></th>
@@ -161,8 +161,13 @@
             <tbody>
                 <g:each in="${otorgamientoDePoderInstanceList}" status="i" var="otorgamientoDePoderInstance">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                        <td style="text-align:center"><g:link controller="otorgamientoDePoder" action="edit" id="${otorgamientoDePoderInstance.id}"><span class="badge">${otorgamientoDePoderInstance?.id}-O</span></g:link></td>
-                        <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "apoderados.nombre")}</td>
+                        <td style="text-align:center"><g:link controller="otorgamientoDePoder" action="edit" id="${otorgamientoDePoderInstance.id}"><span class="badge">${otorgamientoDePoderInstance?.id}-O</span></g:link></td>                        
+                        <td>
+                            <g:each in ="${otorgamientoDePoderInstance.apoderados}" var="apoderado">
+                                ${apoderado.nombre}
+                                <br>
+                            </g:each>
+                        </td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "solicitadoPor")}</td>
                         <td><g:formatDate date="${otorgamientoDePoderInstance.registroDeLaSolicitud}" /></td>                        
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "tipoDePoder")}</td>

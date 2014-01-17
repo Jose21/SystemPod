@@ -3,6 +3,7 @@ package com.app.sgpod
 import java.text.SimpleDateFormat
 import org.springframework.dao.DataIntegrityViolationException
 import grails.plugins.springsecurity.Secured
+import com.app.security.Usuario
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class OtorgamientoDePoderController {
@@ -58,12 +59,7 @@ class OtorgamientoDePoderController {
     }
 
     def show(Long id) {
-        def otorgamientoDePoderInstance = OtorgamientoDePoder.read(id)
-        if (!otorgamientoDePoderInstance.asignar){
-            flash.warn = "El expediente aún no esta Asignado."
-        }else{
-            flash.warn = null
-        }
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.read(id)        
         if (!otorgamientoDePoderInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'poder.label', default: 'Poder'), id])
             redirect(action: "list")
@@ -75,7 +71,16 @@ class OtorgamientoDePoderController {
                 otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.substring(0,otorgamientoDePoderInstance.tags.length()-1)
             }
         }
-        [otorgamientoDePoderInstance: otorgamientoDePoderInstance]
+                
+        def cartaDeInstruccionDeOtorgamiento = CartaDeInstruccionDeOtorgamiento.get(otorgamientoDePoderInstance.id as long)
+        //println "cartadeIntruccion: "+ cartaDeInstruccionDeOtorgamiento
+        
+        if(cartaDeInstruccionDeOtorgamiento == null){
+        
+            [otorgamientoDePoderInstance: otorgamientoDePoderInstance]
+        }else{
+            [otorgamientoDePoderInstance: otorgamientoDePoderInstance, idCartaDeInstruccion : cartaDeInstruccionDeOtorgamiento.id]               
+        }
     }
 
     def edit(Long id) {
@@ -90,7 +95,7 @@ class OtorgamientoDePoderController {
             if(otorgamientoDePoderInstance.tags && otorgamientoDePoderInstance.tags.endsWith(",")){
                 otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.substring(0,otorgamientoDePoderInstance.tags.length()-1)
             }
-        }
+        }        
         [otorgamientoDePoderInstance: otorgamientoDePoderInstance, anchor : params.anchor?:""]
     }
 
@@ -117,13 +122,16 @@ class OtorgamientoDePoderController {
             Date registroDeLaSolicitud = sdf.parse(params.registroDeLaSolicitud)
             params.registroDeLaSolicitud = registroDeLaSolicitud
         }
+        //se reasigna al admin cuando se envia la copia electronica
         if (params.fechaDeOtorgamiento) {
             Date fechaDeOtorgamiento = sdf.parse(params.fechaDeOtorgamiento)
             params.fechaDeOtorgamiento = fechaDeOtorgamiento
+            otorgamientoDePoderInstance.asignar = Usuario.get(1 as long)
+            otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser            
         } else {
             params.fechaDeOtorgamiento = null
         }
-        
+        //end
         //validacion para la busqueda por tags
         if(params.tags && !params.tags.endsWith(",")){
             params.tags = params.tags + "@" 
@@ -149,8 +157,14 @@ class OtorgamientoDePoderController {
         if(otorgamientoDePoderInstance.tags && otorgamientoDePoderInstance.tags.endsWith(",")){              
             otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.substring(0,otorgamientoDePoderInstance.tags.length()-1)
         }
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'poder.label', default: 'Poder'), otorgamientoDePoderInstance.id])
-        redirect(action: "edit", id: otorgamientoDePoderInstance.id, params : [ anchor : params.anchor ])
+        //se cambia redireccionamiento cuando se envia la copia de escritura al solicitante
+        if (params.fechaDeOtorgamiento != null) {
+            flash.message = "Se ha enviado con éxito la copia de Escritura al Adminstrador"
+            redirect(controller:"poderes", action: "index")            
+        }else{            
+            flash.message = message(code: 'default.updated.message', args: [message(code: 'poder.label', default: 'Poder'), otorgamientoDePoderInstance.id])
+            redirect(action: "edit", id: otorgamientoDePoderInstance.id, params : [ anchor : params.anchor ])
+        }
     }
 
     def delete(Long id) {
@@ -222,5 +236,25 @@ class OtorgamientoDePoderController {
         otorgamientoDePoderInstance.removeFromApoderados(apoderadoInstance)        
         flash.message = "El firmante ha sido eliminado."        
         redirect(action: "edit", id: otorgamientoDePoderInstance.id, params : [ anchor : params.anchor ])
-    }        
+    }
+    def asignarA(){
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.idOtorgamientoDePoder as long)
+        otorgamientoDePoderInstance.asignar = Usuario.get(1 as long)
+        otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+        otorgamientoDePoderInstance.save()
+        flash.message = "Se ha enviado con éxito la Solicitud."        
+        redirect(controller: "poderes", action: "index")
+    }
+    
+    def entregarCopiaSolicitante(){
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.idOtorgamientoDePoder as long)        
+        otorgamientoDePoderInstance.asignar = otorgamientoDePoderInstance.creadaPor
+        otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+        //se calcula la fecha de vencimiento sumando el periodo de 730 dias que es el perido de 2 años
+        otorgamientoDePoderInstance.fechaVencimiento = otorgamientoDePoderInstance.fechaDeOtorgamiento + 730        
+        //end
+        otorgamientoDePoderInstance.save()
+        flash.message = "Se ha enviado con éxito la Copia Electrónica."        
+        redirect(controller: "poderes", action: "index")
+    }
 }

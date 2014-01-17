@@ -14,7 +14,8 @@ class OtorgamientoDePoder extends Poder {
     //Datos que puede complementar en cualquier momento
     
     Date fechaDeOtorgamiento
-    String escrituraPublicaDeOtorgamiento      
+    String escrituraPublicaDeOtorgamiento
+    Date fechaVencimiento
     
     static constraints = {       
         registroDeLaSolicitud nullable:false
@@ -24,7 +25,8 @@ class OtorgamientoDePoder extends Poder {
         solicitadoPor blank:false
         
         fechaDeOtorgamiento nullable:true
-        escrituraPublicaDeOtorgamiento nullable:true, blank:true        
+        escrituraPublicaDeOtorgamiento nullable:true, blank:true
+        fechaVencimiento nullable:true
     }
     
     String toString() {

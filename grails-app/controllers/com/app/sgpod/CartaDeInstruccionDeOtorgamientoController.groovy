@@ -5,6 +5,8 @@ import com.app.security.Usuario
 import org.springframework.dao.DataIntegrityViolationException
 
 class CartaDeInstruccionDeOtorgamientoController {
+    
+    def springSecurityService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -32,7 +34,11 @@ class CartaDeInstruccionDeOtorgamientoController {
     def save() {
         def cartaDeInstruccionDeOtorgamientoInstance = new CartaDeInstruccionDeOtorgamiento(params)
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoderId as long)
-        otorgamientoDePoderInstance.asignar = Usuario.get(params.asignar.id as long)
+        println "a quien se lo estoy asignando: "+ params.asignar.id
+        def usuarioInstance = Usuario.get(params.asignar.id as long)
+        otorgamientoDePoderInstance.asignar = usuarioInstance
+        otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+        //otorgamientoDePoderInstance.cartaDeInstruccion = cartaDeInstruccionDeOtorgamientoInstance
         otorgamientoDePoderInstance.save()        
         cartaDeInstruccionDeOtorgamientoInstance.otorgamientoDePoder = otorgamientoDePoderInstance
                 
@@ -41,8 +47,8 @@ class CartaDeInstruccionDeOtorgamientoController {
             return
         }
         
-        flash.message = message(code: 'default.created.message', args: [message(code: 'cartaDeInstruccionDeOtorgamiento.label', default: 'Carta De Instrucción De Otorgamiento'), cartaDeInstruccionDeOtorgamientoInstance.id])
-        redirect(controller:"otorgamientoDePoder", action: "show", id: otorgamientoDePoderInstance.id)
+        flash.message = "Se ha enviado la Carta de Instrucción al Notario Asignado."
+        redirect(controller:"poderes", action: "index")
     }
 
     def show(Long id) {
@@ -115,5 +121,10 @@ class CartaDeInstruccionDeOtorgamientoController {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'cartaDeInstruccionDeOtorgamiento.label', default: 'CartaDeInstruccionDeOtorgamiento'), id])
             redirect(action: "show", id: id)
         }
+    }
+    def regresar(Long id) {
+        def cartaDeInstruccionDeOtorgamientoInstance = CartaDeInstruccionDeOtorgamiento.get(id)
+        def otorgamientoDePoderInstance = cartaDeInstruccionDeOtorgamientoInstance.otorgamientoDePoder
+        redirect(controller:"otorgamientoDePoder", action: "show", id: otorgamientoDePoderInstance.id)
     }
 }

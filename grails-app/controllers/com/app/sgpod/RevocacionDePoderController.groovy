@@ -70,9 +70,11 @@ class RevocacionDePoderController {
             redirect(action: "list")
             return
         }
-        revocacionDePoderInstance.tags = revocacionDePoderInstance.tags.replaceAll("@",",")
-        if(revocacionDePoderInstance.tags && revocacionDePoderInstance.tags.endsWith(",")){
-            revocacionDePoderInstance.tags = revocacionDePoderInstance.tags.substring(0,revocacionDePoderInstance.tags.length()-1)
+        if(revocacionDePoderInstance.tags){
+            revocacionDePoderInstance.tags = revocacionDePoderInstance.tags.replaceAll("@",",")
+            if(revocacionDePoderInstance.tags && revocacionDePoderInstance.tags.endsWith(",")){
+                revocacionDePoderInstance.tags = revocacionDePoderInstance.tags.substring(0,revocacionDePoderInstance.tags.length()-1)
+            }
         }
         [revocacionDePoderInstance: revocacionDePoderInstance, anchor : params.anchor?:""]
     }

@@ -19,23 +19,46 @@ class PoderesController {
         }
         def poderesList2 = RevocacionDePoder.where {
             (creadaPor == springSecurityService.currentUser &&  asignar == springSecurityService.currentUser) || (creadaPor == springSecurityService.currentUser && asignar == null) || (asignar == springSecurityService.currentUser)
-        }
-     
+        }    
         def poderesList = poderesList1.list() + poderesList2.list()
+        
         //Poderes Asignados: yo cree y asigne a alguien mas.
         //lista de otorgamiento
         def c = OtorgamientoDePoder.createCriteria()
         def asignadosOtorgamiento = c.list {
-            eq ("creadaPor", springSecurityService.currentUser)
+            eq ("asignadaPor", springSecurityService.currentUser)
             ne ("asignar", springSecurityService.currentUser)
         } 
         //lista de revocacion
         def d = RevocacionDePoder.createCriteria()
         def asignadosRevocacion = d.list {
-            eq ("creadaPor", springSecurityService.currentUser)
+            eq ("asignadaPor", springSecurityService.currentUser)
             ne ("asignar", springSecurityService.currentUser)
         } 
         def poderesAsignadosList = asignadosOtorgamiento + asignadosRevocacion
+        
+        //Poderes que están por vencer
+        def listaPoderes = OtorgamientoDePoder.list()
+        
+        def poderCriticoList = []
+        def poderSemicriticoList = []        
+        def poderNoCritico = []
+        listaPoderes.each {poder ->
+            if(poder.fechaVencimiento){
+                def fechaHoy = new Date()                
+                def fechaVencimiento = poder.fechaVencimiento                
+                def diasParaVencimiento = fechaVencimiento - fechaHoy                
+                if(diasParaVencimiento <= 10){
+                    poderCriticoList.add(poder)
+                }else if(diasParaVencimiento <= 15 && diasParaVencimiento > 10 ){
+                    poderSemicriticoList.add(poder)
+                }else{
+                    poderNoCritico.add(poder)
+                }                                
+            }            
+        }
+        def poderesPorVencerList = poderCriticoList + poderSemicriticoList
+        
         render (
             view: "index", 
             model: [
@@ -44,7 +67,10 @@ class PoderesController {
                 poderInstanceTotal: poderesList.size(),
                 otorgamientoAsignadosInstanceList:asignadosOtorgamiento,
                 revocacionAsignadosInstanceList : asignadosRevocacion,
-                poderesAsignadosInstanceTotal : poderesAsignadosList.size()
+                poderesAsignadosInstanceTotal : poderesAsignadosList.size(),
+                poderCriticoInstanceList : poderCriticoList,
+                poderSemicriticoInstanceList : poderSemicriticoList,
+                poderesPorVencerTotal : poderesPorVencerList.size()
             ]
         )
     }
@@ -115,26 +141,26 @@ class PoderesController {
         )       
     }       
     
-    def buscarPorFechaRegistro () {
-        def porFechaRegistroActive = null
-        if (params.inActive=="porFechaRegistro") {
-            porFechaRegistroActive = "active"
+    def buscarPorFechaOtorgamiento () {
+        def porFechaOtorgamientoActive = null
+        if (params.inActive=="porFechaOtorgamiento") {
+            porFechaOtorgamientoActive = "active"
         }        
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")       
-        def rangoDeFechaRegistro = null
+        def rangoDeFechaOtorgamiento = null
         def fechaInicio = null
         def fechaFin = null
         def busquedaBean = null
         def otorgamientoDePoderInstanceList = []
-        if (params.rangoDeFechaRegistro != "") {
+        if (params.rangoDeFechaOtorgamiento != "") {
             flash.warn = null
-            rangoDeFechaRegistro = params.rangoDeFechaRegistro
-            fechaInicio = sdf.parse(rangoDeFechaRegistro.split("-")[0].trim())
-            fechaFin = sdf.parse(rangoDeFechaRegistro.split("-")[1].trim())
+            rangoDeFechaOtorgamiento = params.rangoDeFechaOtorgamiento
+            fechaInicio = sdf.parse(rangoDeFechaOtorgamiento.split("-")[0].trim())
+            fechaFin = sdf.parse(rangoDeFechaOtorgamiento.split("-")[1].trim())
             busquedaBean = new BusquedaBean()        
             busquedaBean.fechaInicio = fechaInicio
             busquedaBean.fechaFin = fechaFin
-            otorgamientoDePoderInstanceList = OtorgamientoDePoder.findAllByRegistroDeLaSolicitudBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin, [sort: "id", order: "asc"])
+            otorgamientoDePoderInstanceList = OtorgamientoDePoder.findAllByFechaDeOtorgamientoBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin, [sort: "id", order: "asc"])
         } else {
             flash.warn = "Debe elegir un rango de fechas válido."
         }
@@ -145,8 +171,8 @@ class PoderesController {
                 otorgamientoDePoderInstanceList: otorgamientoDePoderInstanceList,
                 otorgamientoDePoderInstanceTotal: otorgamientoDePoderInstanceList.size(),
                 busquedaBean : busquedaBean,
-                rangoDeFechaRegistro : params.rangoDeFechaRegistro,
-                porFechaRegistroActive : porFechaRegistroActive
+                rangoDeFechaOtorgamiento : params.rangoDeFechaOtorgamiento,
+                porFechaOtorgamientoActive : porFechaOtorgamientoActive
             ]
         )
     }
@@ -302,7 +328,7 @@ class PoderesController {
             }
             order("id", "asc")
         }
-         def b = RevocacionDePoder.createCriteria()
+        def b = RevocacionDePoder.createCriteria()
         def revocacionDePoderInstanceList = b.list {
             apoderados {
                 like("nombre", "%"+params.nombre+"%")

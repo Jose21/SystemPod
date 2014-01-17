@@ -48,7 +48,7 @@
             <g:if test="${tareaInstance?.otorgamientoDePoder}">
                 <br/>
                 <g:link class="btn btn-small btn-info btn-block" controller="otorgamientoDePoder" action="edit" id="${tareaInstance?.otorgamientoDePoder.id}">                
-                    El turno está asociado al Otorgamiento de Poder: ${tareaInstance?.otorgamientoDePoder.id} - Número de Folio: ${tareaInstance?.otorgamientoDePoder.numeroDeFolio}
+                    El turno está asociado al Otorgamiento de Poder: ${tareaInstance?.otorgamientoDePoder.id}
                 </g:link>
                 <br/>
             </g:if>

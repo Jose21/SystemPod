@@ -28,40 +28,40 @@ class BootStrap {
                 accountExpired : false,
                 accountLocked : false,
                 passwordExpired : false
-            ).save()            
+            ).save()
             new Usuario (
-                firstName : "Test",
+                firstName : "Solicitante",
+                lastName : "Uno",
+                email : "the_real_thom@hotmail.com",
+                username : "solicitante1",
+                password : "solicitante1",
+                enabled : true,
+                accountExpired : false,
+                accountLocked : false,
+                passwordExpired : false
+            ).save()
+            new Usuario (
+                firstName : "Notario",
                 lastName : "Uno",
                 email : "kokoro.miramar@gmail.com",
-                username : "test1",
-                password : "test1",
+                username : "notario1",
+                password : "notario1",
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
                 passwordExpired : false
             ).save()                                
             new Usuario (
-                firstName : "Test",
+                firstName : "Notario",
                 lastName : "Dos",
                 email : "tomas_mp@yahoo.com.mx",
-                username : "test2",
-                password : "test2",
+                username : "notario2",
+                password : "notario2",
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
                 passwordExpired : false
-            ).save()
-            new Usuario (
-                firstName : "Test",
-                lastName : "Tres",
-                email : "the_real_thom@hotmail.com",
-                username : "test3",
-                password : "test3",
-                enabled : true,
-                accountExpired : false,
-                accountLocked : false,
-                passwordExpired : false
-            ).save()
+            ).save()            
                 
             new Rol (authority : "ROLE_ADMINISTRADOR").save()
                 

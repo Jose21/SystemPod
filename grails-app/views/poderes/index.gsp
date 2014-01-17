@@ -24,7 +24,13 @@
                     <li>
                         <a data-toggle="tab" href="#shared">
                             <i class="icon-group bigger-130"></i>
-                            <span class="bigger-110">Turnados <span class="badge">${poderesAsignadosInstanceTotal}</span></span>
+                            <span class="bigger-110">Enviados <span class="badge">${poderesAsignadosInstanceTotal}</span></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#expired">
+                            <i class="icon-info-sign bigger-130"></i>
+                            <span class="bigger-110">Poderes por Vencer <span class="badge">${poderesPorVencerTotal}</span></span>
                         </a>
                     </li>
                 </ul>
@@ -47,9 +53,9 @@
                             <thead>
                                 <tr>
                                     <th scope="col"></th>
-                                    <th scope="col">Número de Folio</th>
-                                    <th scope="col">Nombre del Apoderado</th>
-                                    <th scope="col">Solicitado Por</th>
+                                    <th scope="col">Número de Solicitud</th>
+                                    <th scope="col">Asignado Por</th>
+                                    <th scope="col">Creado Por</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -70,8 +76,8 @@
                                                 </span>
                                             </g:link>
                                         </td>
-                                        <td>${fieldValue(bean: otorgamientoInstance, field: "apoderados.nombre")}</td>
-                                        <td>${fieldValue(bean: otorgamientoInstance, field: "solicitadoPor")}</td>
+                                        <td>${fieldValue(bean: otorgamientoInstance, field: "asignadaPor")}</td>
+                                        <td>${fieldValue(bean: otorgamientoInstance, field: "creadaPor")}</td>
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -90,9 +96,9 @@
                             <thead>
                                 <tr>
                                     <th scope="col"></th>
-                                    <th scope="col">Número de Folio</th>
-                                    <th scope="col">Nombre del Apoderado</th>
-                                    <th scope="col">Solicitado Por</th>
+                                    <th scope="col">Número de Solicitud</th>
+                                    <th scope="col">Asignado Por</th>
+                                    <th scope="col">Creada Por</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -113,8 +119,8 @@
                                                 </span>
                                             </g:link>
                                         </td>
-                                        <td>${fieldValue(bean: revocacionInstance, field: "apoderados.nombre")}</td>
-                                        <td>${fieldValue(bean: revocacionInstance, field: "solicitadoPor")}</td>
+                                        <td>${fieldValue(bean: revocacionInstance, field: "asignadaPor")}</td>
+                                        <td>${fieldValue(bean: revocacionInstance, field: "creadaPor")}</td>
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -146,9 +152,9 @@
                         <table class="box-style" width="100%" border="2">
                             <thead>
                                 <tr>
-                                    <th scope="col">Número de Folio</th>
-                                    <th scope="col">Nombre del Apoderado</th>
-                                    <th scope="col">Solicitado Por</th>
+                                    <th scope="col">Número de Solicitud</th>
+                                    <th scope="col">Asignado Por</th>
+                                    <th scope="col">Creada Por</th>
                                     <th scope="col">Asignado a</th>
                                 </tr>
                             </thead>
@@ -162,8 +168,8 @@
                                                 </span>
                                             </g:link>
                                         </td>
-                                        <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "apoderados.nombre")}</td>
-                                        <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "solicitadoPor")}</td>
+                                        <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "asignadaPor")}</td>
+                                        <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "creadaPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "asignar")}</td>
                                     </tr>
                                 </g:each>
@@ -182,9 +188,9 @@
                         <table class="box-style" width="100%" border="2">
                             <thead>
                                 <tr>
-                                    <th scope="col">Número de Folio</th>
-                                    <th scope="col">Nombre del Apoderado</th>
-                                    <th scope="col">Solicitado Por</th>
+                                    <th scope="col">Número de Solicitud</th>
+                                    <th scope="col">Asignado Por</th>
+                                    <th scope="col">Creada Por</th>
                                     <th scope="col">Asignado a</th>
                                 </tr>
                             </thead>
@@ -198,8 +204,8 @@
                                                 </span>
                                             </g:link>
                                         </td>
-                                        <td>${fieldValue(bean: revocacionAsignadosInstance, field: "apoderados.nombre")}</td>
-                                        <td>${fieldValue(bean: revocacionAsignadosInstance, field: "solicitadoPor")}</td>
+                                        <td>${fieldValue(bean: revocacionAsignadosInstance, field: "asignadaPor")}</td>
+                                        <td>${fieldValue(bean: revocacionAsignadosInstance, field: "creadaPor")}</td>
                                         <td>${fieldValue(bean: revocacionAsignadosInstance, field: "asignar")}</td>
                                     </tr>
                                 </g:each>
@@ -214,7 +220,75 @@
                             </div>
                         </div>
                     </div><!--/.message-container-->
-                </div>          
+                </div>
+                <div id="expired" class="tab-pane">  
+                    <div class="message-container">
+                        <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
+                            <div class="message-bar">
+                                <div class="message-infobar" id="id-message-infobar">
+                                    <span class="blue bigger-130">
+                                        Poderes que están por Vencerse.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <table class="box-style" width="100%" border="2">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Número de Solicitud</th>
+                                    <th scope="col">Asignado Por</th>
+                                    <th scope="col">Creado Por</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--Se iteran los poderes criticos de poder-->
+                                <g:each in="${poderCriticoInstanceList}" status="i" var="otorgamientoInstance">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td>
+                                            <span class="label label-important arrowed-in">Critico</span>
+                                        </td>
+                                        <td>
+                                            <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoInstance?.id}">
+                                                <span class="label label-info arrowed-in">
+                                                    ${otorgamientoInstance?.id}-O
+                                                </span>
+                                            </g:link>
+                                        </td>
+                                        <td>${fieldValue(bean: otorgamientoInstance, field: "asignadaPor")}</td>
+                                        <td>${fieldValue(bean: otorgamientoInstance, field: "creadaPor")}</td>
+                                    </tr>
+                                </g:each>
+                                <!--Se iteran los poderes semi-criticos de poder-->
+                                <g:each in="${poderSemicriticoInstanceList}" status="i" var="otorgamientoInstance">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td>
+                                            <span class="label label-warning">Semi-Critico</span>
+                                        </td>
+                                        <td>
+                                            <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoInstance?.id}">
+                                                <span class="label label-info arrowed-in">
+                                                    ${otorgamientoInstance?.id}-O
+                                                </span>
+                                            </g:link>
+                                        </td>
+                                        <td>${fieldValue(bean: otorgamientoInstance, field: "asignadaPor")}</td>
+                                        <td>${fieldValue(bean: otorgamientoInstance, field: "creadaPor")}</td>
+                                    </tr>
+                                </g:each>
+                            </tbody>
+                        </table>                                                                       
+                        <div class="message-footer clearfix">
+                            <div class="pull-left"> ${poderesPorVencerTotal} expediente(s) en total. </div>
+                            <div class="pull-right">
+                                <div class="pagination">
+                                    <g:paginate total="${poderesPorVencerTotal}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--/.message-container-->
+                </div>
             </div>
         </div>
     </body>

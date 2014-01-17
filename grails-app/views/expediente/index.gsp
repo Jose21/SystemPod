@@ -10,7 +10,7 @@
     <body>
         <div class="page-header position-relative">
             <h1>
-                Crear Nuevo Expediente
+                Crear Nueva Solicitud
                 <small>
                     <i class="icon-double-angle-right"></i>
                     Elige el Tipo de Poder
