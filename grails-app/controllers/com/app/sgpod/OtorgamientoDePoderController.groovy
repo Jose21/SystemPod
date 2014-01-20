@@ -34,6 +34,9 @@ class OtorgamientoDePoderController {
         //se agrega el que creó el otorgamiento en la bd
         params.creadaPor = springSecurityService.currentUser
         
+        //se agrega el reponsable para envio de notificaciones
+        params.responsable = Usuario.get(1 as long) 
+        
         if (params.registroDeLaSolicitud) {
             Date registroDeLaSolicitud = sdf.parse(params.registroDeLaSolicitud)
             params.registroDeLaSolicitud = registroDeLaSolicitud

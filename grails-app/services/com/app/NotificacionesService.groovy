@@ -3,6 +3,7 @@ package com.app
 import grails.plugin.asyncmail.AsynchronousMailService
 import com.app.sgtask.Tarea
 import com.app.security.Usuario
+import com.app.sgpod.OtorgamientoDePoder
 
 class NotificacionesService {
 
@@ -99,6 +100,31 @@ class NotificacionesService {
                     view: "/tarea/alertaVencimiento", 
                     model: [ 
                         tareaInstance : tareaInstance,
+                        message : "",
+                        usuarioInstance : avisarA
+                    ]
+                )
+            }
+            flag = true
+        } else {
+            flag = false
+        }
+        flag
+    }
+    boolean poderPorVencer(OtorgamientoDePoder otorgamientoDePoderInstance, Usuario avisarA) {
+        boolean flag = false
+        def emailPattern = /[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})/
+        //def email = params.alertaPorEmail.trim()
+        def email = avisarA.email
+        def message = "SGCon: El Otorgamiento de Poder ${otorgamientoDePoderInstance.id}-O está por expirar."
+        if (email ==~ emailPattern) { 
+            asyncMailService.sendMail {
+                to email
+                subject message
+                html (
+                    view: "/otorgamientoDePoder/alertaVencimiento", 
+                    model: [ 
+                        otorgamientoDePoder : otorgamientoDePoderInstance,
                         message : "",
                         usuarioInstance : avisarA
                     ]

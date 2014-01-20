@@ -7,6 +7,7 @@ import groovy.time.TimeCategory
 import com.app.sgtask.Tarea
 import com.app.NotificacionesService
 import com.app.security.Usuario
+import com.app.sgpod.OtorgamientoDePoder
 
 class SendNotificationJob {
 
@@ -22,6 +23,7 @@ class SendNotificationJob {
 
     def execute() {
         log.info "Inicializando trabajo de Notificaciones..."
+        //NOTIFICACIONES DEL MÓDULO DE TAREAS
         def fechaHoy = new Date()
         def tareaList = Tarea.list()
         def enviarCorreo = null
@@ -58,6 +60,27 @@ class SendNotificationJob {
                 println "No se envia correo electronico porque es una tarea de otorgamiento de poder"
             }
         }
+        //NOTIFICACIONES EN EL MÓDULO DE PODERES
+        //Poderes que están por vencer
+        def listaPoderes = OtorgamientoDePoder.list()       
+        def poderCriticoList = []
+        def poderSemicriticoList = []        
+        listaPoderes.each {otorgamientoDePoder ->
+            if(otorgamientoDePoder.fechaVencimiento){                
+                def fechaVencimiento = otorgamientoDePoder.fechaVencimiento                
+                def diasParaVencimiento = fechaVencimiento - fechaHoy                
+                if(diasParaVencimiento <= 10){
+                    poderCriticoList.add(otorgamientoDePoder)
+                    notificacionesService.poderPorVencer(otorgamientoDePoder, otorgamientoDePoder.responsable)
+                    log.info "se envia correo critico"
+                }else if(diasParaVencimiento <= 15 && diasParaVencimiento > 10 ){
+                    poderSemicriticoList.add(otorgamientoDePoder)
+                    notificacionesService.poderPorVencer(otorgamientoDePoder, otorgamientoDePoder.responsable)
+                    log.info "se envia correo semi-critico"
+                }
+                log.info "no se envia correo poderes"
+            }            
+        }               
         log.info "Envío de Notificaciones Finalizado."
     }
 }

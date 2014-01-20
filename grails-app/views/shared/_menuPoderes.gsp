@@ -97,11 +97,6 @@
                     <i class="icon-double-angle-right"></i> Motivos de Revocación
                 </g:link>
             </li>
-            <li>
-                <g:link controller="notario">
-                    <i class="icon-double-angle-right"></i> Notarios
-                </g:link>
-            </li>
         </ul>
     </li>
     <!--<li>

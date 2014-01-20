@@ -11,31 +11,25 @@
         <div class="page-header position-relative">
             <h1>Ver: Solicitud de Otorgamiento de Poder</h1>
             <br/>            
-            <div class="btn-group">
-                <g:if test="${!idCartaDeInstruccion}"> 
-                    <g:link class="btn btn-success btn-small tip-bottom" controller="otorgamientoDePoder" action="existe" id="${otorgamientoDePoderInstance?.id}">
-                        <i class="icon-external-link"></i> Aceptar Solicitud
-                    </g:link>
-                    <g:link controller="tarea" action="create" class="btn btn-small btn-inverse tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id ]">
-                        <i class="icon-external-link"></i> Rechazar Solicitud
-                    </g:link>
-                    <a class="btn btn-small btn-purple tip-bottom" href="#tareasAsociadas" data-toggle="modal">
-                        <i class="icon-comments"></i> Notificaciones
-                    </a>
-                </g:if>
-                <g:if test="${idCartaDeInstruccion && !otorgamientoDePoderInstance.fechaVencimiento }">    
-                    <g:link controller="cartaDeInstruccionDeOtorgamiento" action="show" class="btn btn-small btn-info tip-bottom" params="[ id : idCartaDeInstruccion]">
-                        <i class="icon-external-link"></i> Ver Carta de Instrucción
-                    </g:link>
-                    <g:link  action="edit" class="btn btn-small btn-warning tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]">
-                        <i class="icon-external-link"></i> Enviar Copia Electronica
-                    </g:link>
-                </g:if>
-                <g:if test="${otorgamientoDePoderInstance.documentos && (otorgamientoDePoderInstance.creadaPor != otorgamientoDePoderInstance.asignar) }">
-                    <g:link  action="entregarCopiaSolicitante" class="btn btn-small btn-info tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id]">
-                        <i class="icon-external-link"></i> Enviar Copia al Solicitante
-                    </g:link>                    
-                </g:if>
+            <div class="btn-group"> 
+                <g:link class="btn btn-success btn-small tip-bottom" controller="otorgamientoDePoder" action="existe" id="${otorgamientoDePoderInstance?.id}">
+                    <i class="icon-external-link"></i> Aceptar Solicitud
+                </g:link>
+                <g:link controller="tarea" action="create" class="btn btn-small btn-inverse tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id ]">
+                    <i class="icon-external-link"></i> Rechazar Solicitud
+                </g:link>
+                <a class="btn btn-small btn-purple tip-bottom" href="#tareasAsociadas" data-toggle="modal">
+                    <i class="icon-comments"></i> Notificaciones
+                </a>  
+                <g:link controller="cartaDeInstruccionDeOtorgamiento" action="show" class="btn btn-small btn-info tip-bottom" params="[ id : idCartaDeInstruccion]">
+                    <i class="icon-external-link"></i> Ver Carta de Instrucción
+                </g:link>
+                <g:link  action="edit" class="btn btn-small btn-warning tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]">
+                    <i class="icon-external-link"></i> Enviar Copia Electronica
+                </g:link>                
+                <g:link  action="entregarCopiaSolicitante" class="btn btn-small btn-info tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id]">
+                    <i class="icon-external-link"></i> Enviar Copia al Solicitante
+                </g:link>                    
             </div>
         </div>
 

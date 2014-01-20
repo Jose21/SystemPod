@@ -14,6 +14,7 @@ class Poder {
     String comentarios
     CartaDeInstruccion cartaDeInstruccion
     String tags
+    Usuario responsable
     
     static hasMany = [ 
         documentos : DocumentoDePoder,
@@ -36,6 +37,7 @@ class Poder {
         tareas nullable:true
         tags nullable:true, maxSize:1000
         apoderados nullable:true
+        responsable nullable:true,blank:true
     }
     
     String toString() {
