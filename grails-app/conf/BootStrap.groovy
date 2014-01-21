@@ -6,10 +6,12 @@ import grails.util.Environment
 import com.app.sgtask.Grupo
 import com.app.sgcon.StatusDelConvenio
 import com.app.sgpod.CartaDeInstruccion
+import com.app.sgpod.CategoriaDeTipoDePoder
 import com.app.sgpod.Delegacion
 import com.app.sgpod.FormatoDeCartaDeInstruccion
 import com.app.sgpod.MotivoDeOtorgamiento
 import com.app.sgpod.MotivoDeRevocacion
+import com.app.sgpod.TipoDePoder
 
 
 class BootStrap {
@@ -85,6 +87,24 @@ class BootStrap {
             new MotivoDeRevocacion(nombre:"Cambio de Adscripción").save()
             
             new Delegacion(nombre:"Mi Delegacion").save()
+            
+            new TipoDePoder(nombre:"INTERNO").save()
+            new TipoDePoder(nombre:"EXTERNO").save()
+            new TipoDePoder(nombre:"ESPECIAL").save()
+            
+            new CategoriaDeTipoDePoder(nombre:"Modelo-A1.-Pleitos y Cobranzas con falcultades para cancelar hipotecas", tipoDePoder: TipoDePoder.get(1)).save()
+            new CategoriaDeTipoDePoder(nombre:"Modelo-A2.-DELEGADOS", tipoDePoder: TipoDePoder.get(1)).save()
+            new CategoriaDeTipoDePoder(nombre:"Modelo-A3.-Gerente de CESI",  tipoDePoder: TipoDePoder.get(1)).save()
+            new CategoriaDeTipoDePoder(nombre:"Modelo-A4.-Gerente y Subgerente de Cobranza", tipoDePoder: TipoDePoder.get(1)).save()
+            new CategoriaDeTipoDePoder(nombre:"Modelo-A5.-Facultades Amplias",  tipoDePoder: TipoDePoder.get(1)).save()
+            new CategoriaDeTipoDePoder(nombre:"Modelo-A6.-Gerente Jurídico",  tipoDePoder: TipoDePoder.get(1)).save()
+            new CategoriaDeTipoDePoder(nombre:"Modelo-B1.-Pleitos y Cobranzas con facultades para transigir", tipoDePoder: TipoDePoder.get(2)).save()
+            new CategoriaDeTipoDePoder(nombre:"Modelo-B2.-Pleitos y Cobranzas para representar al apoderante en materia laboral", tipoDePoder: TipoDePoder.get(2)).save()
+            new CategoriaDeTipoDePoder(nombre:"Modelo-C1.-Pleitos y Cobranzas", tipoDePoder: TipoDePoder.get(3)).save()
+            new CategoriaDeTipoDePoder(nombre:"Modelo-C2.-Pleitos y Cobranzas y facultades para titular", tipoDePoder: TipoDePoder.get(3)).save()
+            new CategoriaDeTipoDePoder(nombre:"Modelo-C3.-Especiales", tipoDePoder: TipoDePoder.get(3)).save()
+            
+            
             
             /*new Persona (
             nombre : "Administrador Del Sistema",

@@ -34,7 +34,7 @@ class CartaDeInstruccionDeOtorgamientoController {
     def save() {
         def cartaDeInstruccionDeOtorgamientoInstance = new CartaDeInstruccionDeOtorgamiento(params)
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoderId as long)
-        println "a quien se lo estoy asignando: "+ params.asignar.id
+        //println "a quien se lo estoy asignando: "+ params.asignar.id
         def usuarioInstance = Usuario.get(params.asignar.id as long)
         otorgamientoDePoderInstance.asignar = usuarioInstance
         otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser

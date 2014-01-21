@@ -53,10 +53,12 @@
                     </dl>
                 </g:if>
 
-                <g:if test="${otorgamientoDePoderInstance?.tipoDePoder}">
+                <g:if test="${otorgamientoDePoderInstance?.categoriaDeTipoDePoder}">
                     <dl>
-                        <dt><g:message code="otorgamientoDePoder.tipoDePoder.label" default="Tipo De Poder" /></dt>
-                        <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="tipoDePoder"/></dd>
+                        <dt><g:message code="otorgamientoDePoder.categoriaDeTipoDePoder.tipoDePoder.label" default="Tipo De Poder" /></dt>
+                        <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="categoriaDeTipoDePoder.tipoDePoder.nombre"/></dd>
+                        <dt><g:message code="otorgamientoDePoder.categoriaDeTipoDePoder.label" default="Categoria" /></dt>
+                        <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="categoriaDeTipoDePoder.nombre"/></dd>
                     </dl>
                 </g:if>              
 
@@ -84,8 +86,8 @@
                 <g:if test="${otorgamientoDePoderInstance?.motivoDeOtorgamiento}">
                     <dl>
                         <dt><g:message code="otorgamientoDePoder.motivoDeOtorgamiento.label" default="Motivo De Otorgamiento" /></dt>
-                        <dd><g:link controller="motivoDeOtorgamiento" action="show" id="${otorgamientoDePoderInstance?.motivoDeOtorgamiento?.id}">${otorgamientoDePoderInstance?.motivoDeOtorgamiento?.encodeAsHTML()}</g:link></dd>
-                        </dl>
+                        <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="motivoDeOtorgamiento"/></dd>
+                    </dl>
                 </g:if>
 
                 <g:if test="${otorgamientoDePoderInstance?.solicitadoPor}">

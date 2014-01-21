@@ -78,7 +78,7 @@ class OtorgamientoDePoderController {
         def cartaDeInstruccionDeOtorgamiento = CartaDeInstruccionDeOtorgamiento.get(otorgamientoDePoderInstance.id as long)
         //println "cartadeIntruccion: "+ cartaDeInstruccionDeOtorgamiento
         
-        if(cartaDeInstruccionDeOtorgamiento == null){
+        if(!cartaDeInstruccionDeOtorgamiento){
         
             [otorgamientoDePoderInstance: otorgamientoDePoderInstance]
         }else{
@@ -155,10 +155,12 @@ class OtorgamientoDePoderController {
                 return
             }
         }
-        otorgamientoDePoderInstance = OtorgamientoDePoder.read(id)
-        otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.replaceAll("@",",")
-        if(otorgamientoDePoderInstance.tags && otorgamientoDePoderInstance.tags.endsWith(",")){              
-            otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.substring(0,otorgamientoDePoderInstance.tags.length()-1)
+        if(params.tags){
+            otorgamientoDePoderInstance = OtorgamientoDePoder.read(id)
+            otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.replaceAll("@",",")
+            if(otorgamientoDePoderInstance.tags && otorgamientoDePoderInstance.tags.endsWith(",")){              
+                otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.substring(0,otorgamientoDePoderInstance.tags.length()-1)
+            }
         }
         //se cambia redireccionamiento cuando se envia la copia de escritura al solicitante
         if (params.fechaDeOtorgamiento != null) {

@@ -12,13 +12,26 @@
     </div>
 </div>
 
-<div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'tipoDePoder', 'error')} required">
-    <label for="tipoDePoder" class="control-label">
-        <g:message code="otorgamientoDePoder.tipoDePoder.label" default="Tipo De Poder" />
+<div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'categoriaDeTipoDePoder', 'error')} required">
+    <label for="categoriaDeTipoDePoder" class="control-label">
+        <g:message code="otorgamientoDePoder.categoriaDeTipoDePoder.label" default="Tipo de Poder" />
         <span class="required-indicator">*</span>
     </label>
     <div class="controls">
-        <g:select name="tipoDePoder" from="${otorgamientoDePoderInstance.constraints.tipoDePoder.inList}" required="" value="${otorgamientoDePoderInstance?.tipoDePoder}" valueMessagePrefix="otorgamientoDePoder.tipoDePoder"/>
+        <g:select class="chosen-select" optionKey="id" optionValue="nombre" name="tipoDePoder.id" id="tipoDePoder.nombre" from="${com.app.sgpod.TipoDePoder.list()}"
+            value="${otorgamientoDePoderInstance?.categoriaDeTipoDePoder?.tipoDePoder?.id}"
+            noSelection="['':'Elige un tipo de poder']"
+            onchange="${remoteFunction(
+            controller:'tipoDePoder', 
+            action:'ajaxGetCategorias', 
+            params:'\'tipoDePoder.id=\' + this.value', 
+            update:'categoriaSelection'
+        )}"/>
+    </div>
+    <div class="controls" id="categoriaSelection" >
+        <select class="chosen-select" data-placeholder="Elige una categoria...">
+            <option>${otorgamientoDePoderInstance?.categoriaDeTipoDePoder?.nombre}</option>
+        </select>
     </div>
 </div>
 
