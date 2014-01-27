@@ -2,6 +2,7 @@ package com.app.sgpod
 
 import java.text.SimpleDateFormat
 import org.springframework.dao.DataIntegrityViolationException
+import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
@@ -20,8 +21,23 @@ class RevocacionDePoderController {
         [revocacionDePoderInstanceList: RevocacionDePoder.list(params), revocacionDePoderInstanceTotal: RevocacionDePoder.count()]
     }
 
-    def create() {
-        [revocacionDePoderInstance: new RevocacionDePoder(params)]
+    def create() {        
+        def datosDelOtorgamiento = OtorgamientoDePoder.findByEscrituraPublica(params.escrituraPublica)        
+        if(!datosDelOtorgamiento?.escrituraPublica){
+            flash.warn = "No se ha encontrado una solicitud de Otorgamiento de Poder"
+        }
+        
+        def revocacionDePoderInstance = new RevocacionDePoder(params)
+        revocacionDePoderInstance.escrituraPublica = datosDelOtorgamiento?.escrituraPublica
+        revocacionDePoderInstance.categoriaDeTipoDePoder = datosDelOtorgamiento?.categoriaDeTipoDePoder
+        revocacionDePoderInstance.delegacion = datosDelOtorgamiento?.delegacion
+        revocacionDePoderInstance.solicitadoPor = datosDelOtorgamiento?.solicitadoPor
+        revocacionDePoderInstance.fechaDeRevocacion = datosDelOtorgamiento?.fechaVencimiento
+        revocacionDePoderInstance.comentarios = datosDelOtorgamiento?.comentarios
+        revocacionDePoderInstance.documentos = datosDelOtorgamiento?.documentos
+        revocacionDePoderInstance.apoderados = datosDelOtorgamiento?.apoderados
+        
+        [revocacionDePoderInstance: revocacionDePoderInstance, otorgamientoDePoderId : datosDelOtorgamiento?.id]        
     }
 
     def save() {
@@ -33,7 +49,23 @@ class RevocacionDePoderController {
             params.tags = params.tags + "@"
         }
         params.tags = params.tags.replaceAll(",", "@")        
-        def revocacionDePoderInstance = new RevocacionDePoder(params)
+        def revocacionDePoderInstance = new RevocacionDePoder(params)        
+        
+        params.each(){
+            if (it.key.startsWith('apoderado')){                
+                def apoderadoId = it.key.replace("apoderado","")                 
+                def apoderadoInstance = Apoderado.get(apoderadoId as long)
+                revocacionDePoderInstance.addToApoderados(apoderadoInstance)
+            }
+        }
+        
+        params.each(){
+            if (it.key.startsWith('documento')){                
+                def documentoId = it.key.replace("documento","")                 
+                def documentoInstance = DocumentoDePoder.get(documentoId as long)
+                revocacionDePoderInstance.addToDocumentos(documentoInstance)
+            }
+        }
                         
         if (!revocacionDePoderInstance.save(flush: true)) {
             render(view: "create", model: [revocacionDePoderInstance: revocacionDePoderInstance])
@@ -174,5 +206,34 @@ class RevocacionDePoderController {
             redirect(controller: "cartaDeInstruccionDeRevocacion", action: "edit", params:[id:cartaDeInstruccion.id, revocacionId: revocacionDePoderInstance.id])
             return   
         }
+    }
+    
+    def ajaxFinder() {
+        def found = null
+        if (params.term) {            
+            def term = params.term
+            found = OtorgamientoDePoder.withCriteria {
+                ilike 'escrituraPublica', '%' + term + '%'
+            }
+        }
+        render (found?.'escrituraPublica' as JSON)
+    }
+    
+    def buscarEscrituraPublica(){        
+        def datosDelOtorgamiento = OtorgamientoDePoder.findByEscrituraPublica(params.escrituraPublica)                
+        def revocacionDePoderInstance = new RevocacionDePoder(params)
+        revocacionDePoderInstance.escrituraPublica = datosDelOtorgamiento.escrituraPublica
+        revocacionDePoderInstance.categoriaDeTipoDePoder = datosDelOtorgamiento.categoriaDeTipoDePoder
+        revocacionDePoderInstance.delegacion = datosDelOtorgamiento.delegacion
+        
+        [revocacionDePoderInstance: revocacionDePoderInstance, otorgamientoDePoderId : datosDelOtorgamiento?.id]
+    }
+    
+    def removeApoderado () {
+        def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)        
+        def apoderadoInstance = Apoderado.get(params.apoderado.id as long)
+        revocacionDePoderInstance.removeFromApoderados(apoderadoInstance)        
+        flash.message = "El apoderado fue omitido"        
+        redirect(action: "edit", id: revocacionDePoderInstance.id)
     }
 }

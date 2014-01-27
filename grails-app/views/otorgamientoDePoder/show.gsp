@@ -111,10 +111,10 @@
                     </dl>
                 </g:if>
 
-                <g:if test="${otorgamientoDePoderInstance?.escrituraPublicaDeOtorgamiento}">
+                <g:if test="${otorgamientoDePoderInstance?.escrituraPublica}">
                     <dl>
-                        <dt><g:message code="otorgamientoDePoder.escrituraPublicaDeOtorgamiento.label" default="Escritura Pública De Otorgamiento" /></dt>
-                        <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="escrituraPublicaDeOtorgamiento"/></dd>
+                        <dt><g:message code="otorgamientoDePoder.escrituraPublica.label" default="Escritura Pública De Otorgamiento" /></dt>
+                        <dd><g:fieldValue bean="${otorgamientoDePoderInstance}" field="escrituraPublica"/></dd>
                     </dl>
                 </g:if>
 

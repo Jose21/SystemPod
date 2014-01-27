@@ -15,11 +15,11 @@ class MotivoDeRevocacionController {
         [motivoDeRevocacionInstanceList: MotivoDeRevocacion.list(params), motivoDeRevocacionInstanceTotal: MotivoDeRevocacion.count()]
     }
 
-    def create() {
+    def create() {        
         [motivoDeRevocacionInstance: new MotivoDeRevocacion(params)]
     }
 
-    def save() {
+    def save() {        
         def motivoDeRevocacionInstance = new MotivoDeRevocacion(params)
         if (!motivoDeRevocacionInstance.save(flush: true)) {
             render(view: "create", model: [motivoDeRevocacionInstance: motivoDeRevocacionInstance])
@@ -98,5 +98,16 @@ class MotivoDeRevocacionController {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'motivoDeRevocacion.label', default: 'MotivoDeRevocacion'), id])
             redirect(action: "show", id: id)
         }
+    }
+    def nuevoMotivoDeRevocacion() {
+        def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)
+         def motivoDeRevocacionInstance = new MotivoDeRevocacion(params)
+        if (!motivoDeRevocacionInstance.save(flush: true)) {
+            redirect(controller:"revocacionDePoder", action: "edit", id: revocacionDePoderInstance.id)
+            return
+        }
+        
+        flash.message = message(code: 'default.updated.message', args: [message(code: 'revocacionDePoder.label', default: 'Motivo de Revocación'), revocacionDePoderInstance.id])
+        redirect(controller:"revocacionDePoder", action: "edit", id: params.revocacionDePoder.id, params : [ anchor : params.anchor ])                
     }
 }

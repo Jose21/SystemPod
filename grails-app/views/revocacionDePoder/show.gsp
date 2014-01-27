@@ -99,16 +99,7 @@
                         <dd><g:formatDate date="${revocacionDePoderInstance?.fechaDeRevocacion}" /></dd>
 
                     </dl>
-                </g:if>
-
-                <g:if test="${revocacionDePoderInstance?.escrituraPublicaDeRevocacion}">
-                    <dl>
-                        <dt><g:message code="revocacionDePoder.escrituraPublicaDeRevocacion.label" default="Escritura Pública De Revocación" /></dt>
-
-                        <dd><g:fieldValue bean="${revocacionDePoderInstance}" field="escrituraPublicaDeRevocacion"/></dd>
-
-                    </dl>
-                </g:if>
+                </g:if>               
 
                 <g:if test="${revocacionDePoderInstance?.comentarios}">
                     <dl>

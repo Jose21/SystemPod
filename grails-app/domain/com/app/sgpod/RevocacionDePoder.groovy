@@ -4,26 +4,19 @@ import com.app.security.Usuario
 import com.app.sgtask.Tarea
 
 class RevocacionDePoder extends Poder{
-
-    String escrituraPublica
+    
     
     MotivoDeRevocacion motivoDeRevocacion
-    String solicitadoPor
-    
-    //Datos que puede complementar en cualquier momento
-    
+    String solicitadoPor    
+    //Datos que puede complementar en cualquier momento    
     Date fechaDeRevocacion
-    String escrituraPublicaDeRevocacion
+    String tipoDeRevocacion
     
-    static constraints = {
-        escrituraPublica blank:false
-        
-        motivoDeRevocacion nullable:false, maxSize:1048576
-        solicitadoPor blank:false
-        
+    static constraints = {                
+        motivoDeRevocacion nullable:true, maxSize:1048576
+        solicitadoPor blank:false        
         fechaDeRevocacion nullable:true
-        escrituraPublicaDeRevocacion nullable:true, blank:true
-        comentarios nullable:true, blank:true, maxSize:1048576                
+        tipoDeRevocacion blank:false, inList : ["Total", "Parcial"]
     }
     
     String toString() {

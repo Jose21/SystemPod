@@ -135,12 +135,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'escrituraPublicaDeOtorgamiento', 'error')} ">
-                        <label for="escrituraPublicaDeOtorgamiento" class="control-label">
-                            <g:message code="otorgamientoDePoder.escrituraPublicaDeOtorgamiento.label" default="Escritura Publica De Otorgamiento" />
+                    <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'escrituraPublica', 'error')} ">
+                        <label for="escrituraPublica" class="control-label">
+                            <g:message code="otorgamientoDePoder.escrituraPublica.label" default="Escritura Pública" />
                         </label>
                         <div class="controls">
-                            <g:textField class="span6" name="escrituraPublicaDeOtorgamiento" value="${otorgamientoDePoderInstance?.escrituraPublicaDeOtorgamiento}"/>
+                            <g:textField class="span6" name="escrituraPublica" value="${otorgamientoDePoderInstance?.escrituraPublica}"/>
                         </div>
                     </div>
                     <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'comentarios', 'error')} ">

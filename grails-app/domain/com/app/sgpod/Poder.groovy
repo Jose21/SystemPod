@@ -8,6 +8,7 @@ class Poder {
     CategoriaDeTipoDePoder categoriaDeTipoDePoder
     Delegacion delegacion
     Usuario creadaPor
+    String escrituraPublica
     
     Usuario asignar
     Usuario asignadaPor
@@ -27,6 +28,7 @@ class Poder {
         categoriaDeTipoDePoder blank:false
         delegacion nullable:false
         creadaPor nullable:false
+        escrituraPublica nullable:true, blank:true
         
         comentarios nullable:true, blank:true, maxSize:1048576
         

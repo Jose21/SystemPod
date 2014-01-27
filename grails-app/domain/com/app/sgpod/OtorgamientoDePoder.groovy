@@ -13,8 +13,7 @@ class OtorgamientoDePoder extends Poder {
     
     //Datos que puede complementar en cualquier momento
     
-    Date fechaDeOtorgamiento
-    String escrituraPublicaDeOtorgamiento
+    Date fechaDeOtorgamiento    
     Date fechaVencimiento
     
     static constraints = {       
@@ -24,8 +23,7 @@ class OtorgamientoDePoder extends Poder {
         motivoDeOtorgamiento nullable:false, maxSize:1048576
         solicitadoPor blank:false
         
-        fechaDeOtorgamiento nullable:true
-        escrituraPublicaDeOtorgamiento nullable:true, blank:true
+        fechaDeOtorgamiento nullable:true       
         fechaVencimiento nullable:true
     }
     
