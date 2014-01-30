@@ -34,9 +34,11 @@
                     </g:if>
                 </sec:ifAnyGranted>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR, ROLE_PODERES_NOTARIO">
-                <g:link controller="cartaDeInstruccionDeOtorgamiento" action="show" class="btn btn-small btn-info tip-bottom" params="[ id : idCartaDeInstruccion]">
-                    <i class="icon-external-link"></i> Ver Carta de Instrucción
-                </g:link>
+                    <g:if test="${cartaDeInstruccion}">
+                        <g:link controller="cartaDeInstruccionDeOtorgamiento" action="show" class="btn btn-small btn-info tip-bottom" params="[ id : cartaDeInstruccion.id]">
+                            <i class="icon-external-link"></i> Ver Carta de Instrucción
+                        </g:link>
+                    </g:if>
                 </sec:ifAnyGranted>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_NOTARIO">
                     <g:if test="${!otorgamientoDePoderInstance.documentos}">

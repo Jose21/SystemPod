@@ -6,6 +6,8 @@ import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import com.app.security.Usuario
 import com.app.sgtask.Documento
+import com.app.security.Rol
+import com.app.security.UsuarioRol
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class RevocacionDePoderController {
@@ -300,6 +302,10 @@ class RevocacionDePoderController {
     def asignarA(){
         def revocacionDePoderInstance = RevocacionDePoder.get(params.idRevocacionDePoder as long)
         revocacionDePoderInstance.asignar = Usuario.get(1 as long)
+        def usuarioAdministradorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_ADMINISTRADOR")).collect {it.usuario}        
+        usuarioAdministradorPoderes.each{
+            revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
+        }
         revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
         revocacionDePoderInstance.save()
         flash.message = "Se ha enviado con éxito la Solicitud."        

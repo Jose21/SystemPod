@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat
 import org.springframework.dao.DataIntegrityViolationException
 import grails.plugins.springsecurity.Secured
 import com.app.security.Usuario
+import com.app.security.Rol
+import com.app.security.UsuarioRol
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class OtorgamientoDePoderController {
@@ -34,8 +36,11 @@ class OtorgamientoDePoderController {
         //se agrega el que creó el otorgamiento en la bd
         params.creadaPor = springSecurityService.currentUser
         
-        //se agrega el reponsable para envio de notificaciones
-        params.responsable = Usuario.get(1 as long) 
+        //se agrega el reponsable para envio de notificaciones        
+        def usuarioAdministradorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_ADMINISTRADOR")).collect {it.usuario}        
+        usuarioAdministradorPoderes.each{
+            params.responsable = Usuario.get(it.id as long)   
+        } 
         
         if (params.registroDeLaSolicitud) {
             Date registroDeLaSolicitud = sdf.parse(params.registroDeLaSolicitud)
@@ -79,15 +84,10 @@ class OtorgamientoDePoderController {
         if(otorgamientoDePoderInstance.asignar != springSecurityService.currentUser){
             ocultarBoton = true
         }               
-                
-        def cartaDeInstruccionDeOtorgamiento = CartaDeInstruccionDeOtorgamiento.get(otorgamientoDePoderInstance.id as long)        
+                        
+        def cartaDeInstruccion = CartaDeInstruccionDeOtorgamiento.findByOtorgamientoDePoder(otorgamientoDePoderInstance)
         
-        if(!cartaDeInstruccionDeOtorgamiento){
-        
-            [otorgamientoDePoderInstance: otorgamientoDePoderInstance]
-        }else{
-            [otorgamientoDePoderInstance: otorgamientoDePoderInstance, idCartaDeInstruccion : cartaDeInstruccionDeOtorgamiento.id, ocultarBoton:ocultarBoton ]               
-        }
+        [otorgamientoDePoderInstance: otorgamientoDePoderInstance, cartaDeInstruccion : cartaDeInstruccion, ocultarBoton:ocultarBoton ]                       
     }
 
     def edit(Long id) {
@@ -133,7 +133,10 @@ class OtorgamientoDePoderController {
         if (params.fechaDeOtorgamiento) {
             Date fechaDeOtorgamiento = sdf.parse(params.fechaDeOtorgamiento)
             params.fechaDeOtorgamiento = fechaDeOtorgamiento
-            otorgamientoDePoderInstance.asignar = Usuario.get(1 as long)
+            def usuarioAdministradorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_ADMINISTRADOR")).collect {it.usuario}        
+            usuarioAdministradorPoderes.each{
+                otorgamientoDePoderInstance.asignar = Usuario.get(it.id as long)   
+            } 
             otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser            
         } else {
             params.fechaDeOtorgamiento = null
@@ -250,7 +253,10 @@ class OtorgamientoDePoderController {
     }
     def asignarA(){
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.idOtorgamientoDePoder as long)
-        otorgamientoDePoderInstance.asignar = Usuario.get(1 as long)
+        def usuarioAdministradorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_ADMINISTRADOR")).collect {it.usuario}        
+        usuarioAdministradorPoderes.each{
+            otorgamientoDePoderInstance.asignar = Usuario.get(it.id as long)   
+        }        
         otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
         otorgamientoDePoderInstance.save()
         flash.message = "Se ha enviado con éxito la Solicitud."        

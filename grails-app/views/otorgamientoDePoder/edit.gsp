@@ -8,7 +8,7 @@
     </head>
     <body>
         <div class="content-header">
-            <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINITRADOR, ROLE_PODERES_SOLICITANTE">
+            <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR, ROLE_PODERES_SOLICITANTE">
             <div class="page-header position-relative">                
                 <h1>Solicitud de Otorgamiento de Poder
                     <small>
@@ -38,7 +38,7 @@
                     </div>
                 </g:hasErrors>
 
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINITRADOR, ROLE_PODERES_SOLICITANTE">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR, ROLE_PODERES_SOLICITANTE">
                 <h3 id="bloqueApoderados"  class="header smaller lighter blue">Agregar Apoderados</h3>       
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -113,7 +113,7 @@
                 <g:form class="form-horizontal" method="post"  enctype="multipart/form-data">
                     <g:hiddenField name="id" value="${otorgamientoDePoderInstance?.id}" />
                     <g:hiddenField name="version" value="${otorgamientoDePoderInstance?.version}" />
-                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINITRADOR, ROLE_PODERES_SOLICITANTE">
+                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR, ROLE_PODERES_SOLICITANTE">
                     <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'id', 'error')}">
                         <label for="id" class="control-label">
                             <g:message code="otorgamientoDePoder.id.label" default="Número De Folio" />

@@ -4,6 +4,8 @@ import org.springframework.dao.DataIntegrityViolationException
 import grails.plugins.springsecurity.Secured
 import com.app.sgpod.RevocacionDePoder
 import com.app.security.Usuario
+import com.app.security.Rol
+import com.app.security.UsuarioRol
 
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
@@ -53,8 +55,11 @@ class NotaController {
         }                
         //integracion con poderes
         if (session.revocacionDePoderId) {
-            def revocacionDePoderInstance = RevocacionDePoder.get(session.revocacionDePoderId)
-            revocacionDePoderInstance.asignar = Usuario.get(1 as long)
+            def revocacionDePoderInstance = RevocacionDePoder.get(session.revocacionDePoderId)            
+            def usuarioAdministradorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_ADMINISTRADOR")).collect {it.usuario}        
+                usuarioAdministradorPoderes.each{
+                    revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
+                }     
             revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
             revocacionDePoderInstance.addToNotas(notaInstance).save(flush:true)
         }

@@ -54,6 +54,7 @@
                         <table class="box-style" width="100%" border="2">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th scope="col">Número de Solicitud</th>
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creado Por</th>
@@ -61,7 +62,8 @@
                             </thead>
                             <tbody>
                                 <g:each in="${otorgamientoInstanceList}" status="i" var="otorgamientoInstance">
-                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">                                        
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td></td>
                                         <td>
                                             <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoInstance?.id}">
                                                 <span class="label label-info arrowed-in">
@@ -88,6 +90,7 @@
                         <table class="box-style" width="100%" border="2">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th scope="col">Número de Solicitud</th>
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
@@ -95,7 +98,8 @@
                             </thead>
                             <tbody>
                                 <g:each in="${revocacionInstanceList}" status="i" var="revocacionInstance">
-                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">                                        
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td></td>
                                         <td>
                                             <g:link controller="revocacionDePoder" action="show" id="${revocacionInstance?.id}">
                                                 <span class="label label-info arrowed-in">
@@ -136,6 +140,7 @@
                         <table class="box-style" width="100%" border="2">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th scope="col">Número de Solicitud</th>
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
@@ -144,7 +149,8 @@
                             </thead>
                             <tbody>
                                 <g:each in="${otorgamientoAsignadosInstanceList}" status="i" var="otorgamientoAsignadosInstance">
-                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">                                       
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td></td>
                                         <td>
                                             <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoAsignadosInstance?.id}">
                                                 <span class="label label-info arrowed-in">
@@ -172,6 +178,7 @@
                         <table class="box-style" width="100%" border="2">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th scope="col">Número de Solicitud</th>
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
@@ -180,7 +187,8 @@
                             </thead>
                             <tbody>
                                 <g:each in="${revocacionAsignadosInstanceList}" status="i" var="revocacionAsignadosInstance">
-                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">                                       
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td></td>
                                         <td>
                                             <g:link controller="revocacionDePoder" action="show" id="${revocacionAsignadosInstance?.id}">
                                                 <span class="label label-info arrowed-in">
@@ -222,6 +230,7 @@
                         <table class="box-style" width="100%" border="2">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th scope="col"></th>
                                     <th scope="col">Número de Solicitud</th>
                                     <th scope="col">Asignado Por</th>
@@ -232,6 +241,7 @@
                                 <!--Se iteran los poderes criticos de poder-->
                                 <g:each in="${poderCriticoInstanceList}" status="i" var="otorgamientoInstance">
                                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td></td>
                                         <td>
                                             <span class="label label-important arrowed-in">Critico</span>
                                         </td>

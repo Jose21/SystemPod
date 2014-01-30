@@ -41,9 +41,16 @@
                         <g:select id="asignar" name="asignar.id" from="${usuarios}" optionKey="id"  value="${otorgamientoDePoderInstance?.asignar?.id}" noSelection="['':'-Elige Responsable-']" class="many-to-one"/>
                     </div>
                 </div>
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES">
                 <div class="form-actions">
-                    <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');"/>
+                    <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}"/>
                 </div>
+                </sec:ifAnyGranted>
+                <sec:ifAnyGranted roles="ROLE_PODERES_ADMINISTRADOR">
+                <div class="form-actions">
+                    <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.label', default: 'Enviar')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');"/>
+                </div>
+                </sec:ifAnyGranted>
             </g:form>
 
         </div>
