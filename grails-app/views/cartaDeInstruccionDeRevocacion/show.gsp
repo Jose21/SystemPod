@@ -43,7 +43,7 @@
                     <dl>
                         <dt><g:message code="cartaDeInstruccionDeRevocacion.contenido.label" default="Contenido" /></dt>
 
-                        <dd class="well"><br/>${cartaDeInstruccionDeRevocacionInstance.contenido}</dd
+                        <dd class="well"><br/><%=cartaDeInstruccionDeRevocacionInstance?.contenido%></dd
 
                     </dl>
                 </g:if>
@@ -58,12 +58,15 @@
                 </g:if>
 
             </div>
-            <g:form class="form-actions">
-                <fieldset class="buttons">
+            <!--g:form class="form-actions"-->
+                <!--fieldset class="buttons">
                     <g:hiddenField name="id" value="${cartaDeInstruccionDeRevocacionInstance?.id}" />
                     <g:hiddenField name="revocacionDePoder" value="${revocacionDePoderInstance?.id}"/>
-                </fieldset>
-            </g:form>
-        </div>
-    </body>
-</html>
+                </fieldset-->
+            <!--/g:form-->
+                <div class="form-actions">
+                    <g:link class="btn btn-primary btn-mini" action="regresar" id="${cartaDeInstruccionDeRevocacionInstance?.id}">Regresar</g:link>
+                </div>
+            </div>
+        </body>
+    </html>

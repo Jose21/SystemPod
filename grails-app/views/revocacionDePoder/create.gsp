@@ -8,12 +8,11 @@
     </head>
     <body>
         <div class="page-header position-relative">
-            <h1>Nuevo: Revocación de Poder</h1>            
+            <h1>Nuevo: Solicitud de Revocación de Poder</h1>            
         </div>
 
         <div class="container-fluid">
             <g:render template="/shared/alerts" />
-            <br/>
 
             <g:hasErrors bean="${revocacionDePoderInstance}">
                 <div class="alert alert-block alert-warning">            
@@ -21,7 +20,8 @@
                         - <g:message error="${error}"/> <br/>
                     </g:eachError>
                 </div>
-            </g:hasErrors>            
+            </g:hasErrors>
+            <h3 id="busquedaPorEscrituraPublica"  class="header smaller lighter blue">Búsqueda por Escritura Pública</h3>
             <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'escrituraPublica', 'error')} required">
                 <label for="escrituraPublica" class="control-label">
                     <g:message code="revocacionDePoder.escrituraPublica.label" default="Escritura Publica" />
@@ -36,7 +36,8 @@
                     </g:form>
                 </div>
             </div>
-            <g:form class="form-horizontal" action="save" >
+            <h3 id="FinBusquedaPorEscrituraPublica"  class="header smaller lighter blue"></h3>
+            <g:form class="form-horizontal" action="save" enctype="multipart/form-data">
                 <g:render template="form"/>
                 <div class="form-actions">
                     <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />

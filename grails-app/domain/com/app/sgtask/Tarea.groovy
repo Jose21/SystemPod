@@ -41,7 +41,7 @@ class Tarea implements Comparable {
         otorgamientoDePoder nullable:true
         revocacionDePoder nullable:true
         usuariosDeTarea nullable:true
-        alertaVencimiento blank:false, inList : ["1","2","3","4","5","6","7"]
+        alertaVencimiento blank:false, inList : ["0","1","2","3","4","5","6","7"]
         prioridad blank:false, inList : ["Normal", "Urgente"]
         tags nullable:true, maxSize:1000
     }

@@ -1,10 +1,20 @@
 <%@ page import="com.app.sgpod.RevocacionDePoder;java.text.SimpleDateFormat" %>
 
-
-<g:hiddenField name="escrituraPublica" value="${revocacionDePoderInstance?.escrituraPublica}"/>
 <g:each in="${revocacionDePoderInstance.apoderados}" status="i" var="apoderado">            
     <g:hiddenField name="apoderado${apoderado.id}" value="${apoderado.id}"/>            
 </g:each>
+
+<g:hiddenField name="agregarApoderado" value="${revocacionDePoderInstance?.agregarApoderado}"/>
+
+<div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'escrituraPublica', 'error')} required">
+    <label for="escrituraPublica" class="control-label">
+        <g:message code="revocacionDePoder.escrituraPublica.label" default="Escritura Publica" />
+        <span class="required-indicator">*</span>
+    </label>
+    <div class="controls">
+        <g:textField class="span4" name="escrituraPublica" required="" value="${revocacionDePoderInstance?.escrituraPublica}"/>                
+    </div>
+</div>
 
 <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'tipoDeRevocacion', 'error')} required">
     <label for="tipoDeRevocacion" class="control-label">
@@ -12,7 +22,10 @@
         <span class="required-indicator">*</span>
     </label>
     <div class="controls">
-        <g:select name="tipoDeRevocacion" from="${revocacionDePoderInstance.constraints.tipoDeRevocacion.inList}" required="" value="${revocacionDePoderInstance?.tipoDeRevocacion}" valueMessagePrefix="revocacionDePoder.tipoDeRevocacion"/>
+        <g:select name="tipoDeRevocacion" from="${revocacionDePoderInstance.constraints.tipoDeRevocacion.inList}" required=""
+                  noSelection="['':'Elige un tipo de revocación']"
+                  value="${revocacionDePoderInstance?.tipoDeRevocacion}"
+                  valueMessagePrefix="revocacionDePoder.tipoDeRevocacion"/>
     </div>
 </div>
 
@@ -64,7 +77,7 @@ update:'categoriaSelection'
         <span class="required-indicator">*</span>
     </label>
     <div class="controls">
-        <g:textField  class="span6" name="solicitadoPor"  value="${revocacionDePoderInstance?.solicitadoPor}" readonly="readonly"/>
+        <g:textField  class="span6" name="solicitadoPor"  value="${revocacionDePoderInstance?.solicitadoPor}"/>
     </div>
 </div>
 
@@ -72,10 +85,12 @@ update:'categoriaSelection'
     <label for="fechaDeRevocacion" class="control-label">
         <g:message code="revocacionDePoder.fechaDeRevocacion.label" default="Fecha De Revocación" />
     </label>
-    <div class="controls">
-        <div class="row-fluid input-append">           
-            <!--g:formatDate format="dd-MM-yyyy" date="${revocacionDePoderInstance?.fechaDeRevocacion}"/-->
-            <g:textField  name="fechaDeRevocacion" required="" value="${revocacionDePoderInstance?.fechaDeRevocacion}" readonly="readonly"/>
+    <div class="controls">          
+        <div class="row-fluid input-append">
+            <input readonly="readonly" class="span6 date-picker" id="fechaDeRevocacion" type="text" value="${revocacionDePoderInstance?.fechaDeRevocacion?(new SimpleDateFormat("dd/MM/yyyy")).format(revocacionDePoderInstance?.fechaDeRevocacion):""}" data-date-format="dd/mm/yyyy" name="fechaDeRevocacion" />      
+            <span class="add-on">
+                <i class="icon-calendar"></i>
+            </span>
         </div>
     </div>
 </div> 
@@ -85,7 +100,7 @@ update:'categoriaSelection'
         <g:message code="revocacionDePoder.comentarios.label" default="Comentarios" />
     </label>
     <div class="controls">
-        <g:textArea  class="span6" name="comentarios" cols="40" rows="5" maxlength="1048576" value="${revocacionDePoderInstance?.comentarios}" readonly="readonly"/>
+        <g:textArea  class="span6" name="comentarios" cols="40" rows="5" maxlength="1048576" value="${revocacionDePoderInstance?.comentarios}"/>
     </div>
 </div>
 
@@ -107,7 +122,7 @@ update:'categoriaSelection'
             <br/>
         </g:each>
         <br/>
-        <input type="file" id="archivo" name="archivo" disabled="disabled"/>
+        <input type="file" id="archivo" name="archivo"/>
     </div>
 </div>
 

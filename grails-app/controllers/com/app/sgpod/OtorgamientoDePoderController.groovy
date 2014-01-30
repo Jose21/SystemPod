@@ -74,15 +74,19 @@ class OtorgamientoDePoderController {
                 otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.substring(0,otorgamientoDePoderInstance.tags.length()-1)
             }
         }
+        //parametro para ocualtar botones
+        def ocultarBoton = false
+        if(otorgamientoDePoderInstance.asignar != springSecurityService.currentUser){
+            ocultarBoton = true
+        }               
                 
-        def cartaDeInstruccionDeOtorgamiento = CartaDeInstruccionDeOtorgamiento.get(otorgamientoDePoderInstance.id as long)
-        //println "cartadeIntruccion: "+ cartaDeInstruccionDeOtorgamiento
+        def cartaDeInstruccionDeOtorgamiento = CartaDeInstruccionDeOtorgamiento.get(otorgamientoDePoderInstance.id as long)        
         
         if(!cartaDeInstruccionDeOtorgamiento){
         
             [otorgamientoDePoderInstance: otorgamientoDePoderInstance]
         }else{
-            [otorgamientoDePoderInstance: otorgamientoDePoderInstance, idCartaDeInstruccion : cartaDeInstruccionDeOtorgamiento.id]               
+            [otorgamientoDePoderInstance: otorgamientoDePoderInstance, idCartaDeInstruccion : cartaDeInstruccionDeOtorgamiento.id, ocultarBoton:ocultarBoton ]               
         }
     }
 
@@ -139,7 +143,9 @@ class OtorgamientoDePoderController {
         if(params.tags && !params.tags.endsWith(",")){
             params.tags = params.tags + "@" 
         }
-        params.tags = params.tags.replaceAll(",", "@")
+        if(params.tags){
+            params.tags = params.tags.replaceAll(",", "@")
+        }
         //end busqueda tags
         otorgamientoDePoderInstance.properties = params        
         if (!otorgamientoDePoderInstance.save(flush: true)) {
@@ -164,7 +170,7 @@ class OtorgamientoDePoderController {
         }
         //se cambia redireccionamiento cuando se envia la copia de escritura al solicitante
         if (params.fechaDeOtorgamiento != null) {
-            flash.message = "Se ha enviado con éxito la copia de Escritura al Adminstrador"
+            flash.message = "Se ha enviado con éxito la copia de Escritura al Administrador"
             redirect(controller:"poderes", action: "index")            
         }else{            
             flash.message = message(code: 'default.updated.message', args: [message(code: 'poder.label', default: 'Poder'), otorgamientoDePoderInstance.id])

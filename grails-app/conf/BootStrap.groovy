@@ -21,6 +21,17 @@ class BootStrap {
         case Environment.DEVELOPMENT :
                 
             new Usuario (
+                firstName : "Claudia",
+                lastName : "Luna",
+                email : "j230589t@hotmail.com",
+                username : "claudia.luna",
+                password : "claudia",
+                enabled : true,
+                accountExpired : false,
+                accountLocked : false,
+                passwordExpired : false
+            ).save()
+            new Usuario (
                 firstName : "Administrador",
                 lastName : "Del Sistema",
                 email : "kokoro.miramar@gmail.com",
@@ -66,11 +77,16 @@ class BootStrap {
             ).save()            
                 
             new Rol (authority : "ROLE_ADMINISTRADOR").save()
+            new Rol (authority : "ROLE_PODERES").save()
+            new Rol (authority : "ROLE_PODERES_ADMINISTRADOR").save()
+            new Rol (authority : "ROLE_PODERES_NOTARIO").save()
+            new Rol (authority : "ROLE_PODERES_SOLICITANTE").save()
                 
             new UsuarioRol (usuario : Usuario.findByUsername("admin"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
-            new UsuarioRol (usuario : Usuario.findByUsername("test1"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
-            new UsuarioRol (usuario : Usuario.findByUsername("test2"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
-            new UsuarioRol (usuario : Usuario.findByUsername("test3"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
+            new UsuarioRol (usuario : Usuario.findByUsername("claudia.luna"), rol : Rol.findByAuthority("ROLE_PODERES_ADMINISTRADOR")).save()
+            new UsuarioRol (usuario : Usuario.findByUsername("solicitante1"), rol : Rol.findByAuthority("ROLE_PODERES_SOLICITANTE")).save()
+            new UsuarioRol (usuario : Usuario.findByUsername("notario1"), rol : Rol.findByAuthority("ROLE_PODERES_NOTARIO")).save()
+            new UsuarioRol (usuario : Usuario.findByUsername("notario2"), rol : Rol.findByAuthority("ROLE_PODERES_NOTARIO")).save()
                 
             new Grupo(nombre:"Sin Categoría", descripcion: "asd").save()
                 

@@ -3,6 +3,9 @@ package com.app.sgpod
 
 import com.app.security.Usuario
 import org.springframework.dao.DataIntegrityViolationException
+import com.app.security.Rol
+import com.app.security.Usuario
+import com.app.security.UsuarioRol
 
 class CartaDeInstruccionDeOtorgamientoController {
     
@@ -23,22 +26,22 @@ class CartaDeInstruccionDeOtorgamientoController {
         def otorgamientoDePoderId = params.id
         def formato = FormatoDeCartaDeInstruccion.get(1)
         
+        def usuarios = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_NOTARIO")).collect {it.usuario}
+                
         def cartaDeInstruccionDeOtorgamientoInstance = new CartaDeInstruccionDeOtorgamiento(params)
         cartaDeInstruccionDeOtorgamientoInstance.registro = formato.registro
         cartaDeInstruccionDeOtorgamientoInstance.fecha = formato.fecha
         cartaDeInstruccionDeOtorgamientoInstance.contenido = formato.contenido
         
-        [cartaDeInstruccionDeOtorgamientoInstance: cartaDeInstruccionDeOtorgamientoInstance, otorgamientoDePoderId : otorgamientoDePoderId]
+        [cartaDeInstruccionDeOtorgamientoInstance: cartaDeInstruccionDeOtorgamientoInstance, otorgamientoDePoderId : otorgamientoDePoderId, usuarios:usuarios]
     }
 
     def save() {
         def cartaDeInstruccionDeOtorgamientoInstance = new CartaDeInstruccionDeOtorgamiento(params)
-        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoderId as long)
-        //println "a quien se lo estoy asignando: "+ params.asignar.id
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoderId as long)        
         def usuarioInstance = Usuario.get(params.asignar.id as long)
         otorgamientoDePoderInstance.asignar = usuarioInstance
-        otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
-        //otorgamientoDePoderInstance.cartaDeInstruccion = cartaDeInstruccionDeOtorgamientoInstance
+        otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser        
         otorgamientoDePoderInstance.save()        
         cartaDeInstruccionDeOtorgamientoInstance.otorgamientoDePoder = otorgamientoDePoderInstance
                 

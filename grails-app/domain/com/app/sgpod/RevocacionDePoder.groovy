@@ -11,12 +11,14 @@ class RevocacionDePoder extends Poder{
     //Datos que puede complementar en cualquier momento    
     Date fechaDeRevocacion
     String tipoDeRevocacion
+    boolean agregarApoderado = true
     
     static constraints = {                
         motivoDeRevocacion nullable:true, maxSize:1048576
         solicitadoPor blank:false        
         fechaDeRevocacion nullable:true
         tipoDeRevocacion blank:false, inList : ["Total", "Parcial"]
+        agregarApoderado blank:false
     }
     
     String toString() {

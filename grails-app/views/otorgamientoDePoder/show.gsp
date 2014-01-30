@@ -11,25 +11,47 @@
         <div class="page-header position-relative">
             <h1>Ver: Solicitud de Otorgamiento de Poder</h1>
             <br/>            
-            <div class="btn-group"> 
-                <g:link class="btn btn-success btn-small tip-bottom" controller="otorgamientoDePoder" action="existe" id="${otorgamientoDePoderInstance?.id}">
-                    <i class="icon-external-link"></i> Aceptar Solicitud
-                </g:link>
-                <g:link controller="tarea" action="create" class="btn btn-small btn-inverse tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id ]">
-                    <i class="icon-external-link"></i> Rechazar Solicitud
-                </g:link>
-                <a class="btn btn-small btn-purple tip-bottom" href="#tareasAsociadas" data-toggle="modal">
-                    <i class="icon-comments"></i> Notificaciones
-                </a>  
+            <div class="btn-group">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR">
+                    <g:if test="${!otorgamientoDePoderInstance.documentos && ocultarBoton != true}">
+                        <g:link class="btn btn-success btn-small tip-bottom" controller="otorgamientoDePoder" action="existe" id="${otorgamientoDePoderInstance?.id}">
+                            <i class="icon-external-link"></i> Aceptar Solicitud
+                        </g:link>
+                    </g:if>
+                </sec:ifAnyGranted>
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR">
+                    <g:if test="${!otorgamientoDePoderInstance.documentos && ocultarBoton != true}">
+                        <g:link controller="tarea" action="create" class="btn btn-small btn-inverse tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id ]">
+                            <i class="icon-external-link"></i> Rechazar Solicitud
+                        </g:link>
+                    </g:if>
+                </sec:ifAnyGranted>
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR, ROLE_PODERES_SOLICITANTE">
+                    <g:if test="${otorgamientoDePoderInstance.tareas && !otorgamientoDePoderInstance.documentos}">
+                        <a class="btn btn-small btn-purple tip-bottom" href="#tareasAsociadas" data-toggle="modal">
+                            <i class="icon-comments"></i> Notificaciones
+                        </a>
+                    </g:if>
+                </sec:ifAnyGranted>
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR, ROLE_PODERES_NOTARIO">
                 <g:link controller="cartaDeInstruccionDeOtorgamiento" action="show" class="btn btn-small btn-info tip-bottom" params="[ id : idCartaDeInstruccion]">
                     <i class="icon-external-link"></i> Ver Carta de Instrucción
                 </g:link>
-                <g:link  action="edit" class="btn btn-small btn-warning tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]">
-                    <i class="icon-external-link"></i> Enviar Copia Electronica
-                </g:link>                
-                <g:link  action="entregarCopiaSolicitante" class="btn btn-small btn-info tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id]">
-                    <i class="icon-external-link"></i> Enviar Copia al Solicitante
-                </g:link>                    
+                </sec:ifAnyGranted>
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_NOTARIO">
+                    <g:if test="${!otorgamientoDePoderInstance.documentos}">
+                        <g:link  action="edit" class="btn btn-small btn-warning tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]">
+                            <i class="icon-external-link"></i> Enviar Copia Electronica
+                        </g:link>
+                    </g:if>
+                </sec:ifAnyGranted>
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR">
+                    <g:if test="${otorgamientoDePoderInstance.documentos && ocultarBoton == false}">
+                        <g:link  action="entregarCopiaSolicitante" class="btn btn-small btn-purple tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+                            <i class="icon-external-link"></i> Enviar Copia al Solicitante
+                        </g:link>
+                    </g:if>
+                </sec:ifAnyGranted>
             </div>
         </div>
 

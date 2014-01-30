@@ -2,6 +2,9 @@ package com.app.sgtask
 
 import org.springframework.dao.DataIntegrityViolationException
 import grails.plugins.springsecurity.Secured
+import com.app.sgpod.RevocacionDePoder
+import com.app.security.Usuario
+
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class NotaController {
@@ -21,22 +24,39 @@ class NotaController {
     }
 
     def create() {
-        session.tareaId = params.tareaId
+        if(params.tareaId){
+            session.tareaId = params.tareaId as long
+        }else{
+            session.tareaId = null
+        }
+        if(params.revocacionDePoderId){
+            session.revocacionDePoderId = params.revocacionDePoderId as long  
+        }else{
+            session.revocacionDePoderId = null
+        }
         [notaInstance: new Nota(params)]
     }
 
     def save() {
-        def tareaId = session.tareaId
         params.agregadaPor = springSecurityService.currentUser
         def notaInstance = new Nota(params)
-        notaInstance.tarea = Tarea.get(params.tarea as long)
-        
-        if (!notaInstance.validate()) {
-            notaInstance.errors.each {}
-        }
-        if (!notaInstance.save(flush: true)) {
-            render(view: "create", model: [notaInstance: notaInstance])
-            return
+        if(session.tareaId){
+            def tareaId = session.tareaId                   
+            notaInstance.tarea = Tarea.get(params.tarea as long)
+            if (!notaInstance.validate()) {
+                notaInstance.errors.each {}
+            }
+            if (!notaInstance.save(flush: true)) {
+                render(view: "create", model: [notaInstance: notaInstance])
+                return
+            }
+        }                
+        //integracion con poderes
+        if (session.revocacionDePoderId) {
+            def revocacionDePoderInstance = RevocacionDePoder.get(session.revocacionDePoderId)
+            revocacionDePoderInstance.asignar = Usuario.get(1 as long)
+            revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
+            revocacionDePoderInstance.addToNotas(notaInstance).save(flush:true)
         }
         if (params.archivo.getSize()!=0) {            
             def documentoInstance = new Documento(params)
@@ -47,9 +67,14 @@ class NotaController {
                 return
             }
         }
-        historialDeTareaService.agregar(notaInstance.tarea, springSecurityService.currentUser, "agregó una nota")
-        flash.message = message(code: 'default.created.message', args: [message(code: 'nota.label', default: 'Nota'), notaInstance.id])
-        redirect(controller:"tarea", action: "show", id: tareaId)
+        if(!session.revocacionDePoderId){
+            historialDeTareaService.agregar(notaInstance.tarea, springSecurityService.currentUser, "agregó una nota")
+            flash.message = message(code: 'default.created.message', args: [message(code: 'nota.label', default: 'Nota'), notaInstance.id])
+            redirect(controller:"tarea", action: "show", id: session.tareaId)
+        }else{
+            flash.info = "Se ha enviado el Testimonio al Administrador."
+            redirect(controller: "poderes", action: "index") 
+        }                
     }
 
     def show(Long id) {
@@ -102,8 +127,7 @@ class NotaController {
         if (!notaInstance.save(flush: true)) {
             render(view: "edit", model: [notaInstance: notaInstance])
             return
-        }
-        println "ewfwfwferfrewf"+ params.archivo
+        }        
         if (params.archivo.getSize()!=0) {            
             def documentoInstance = new Documento(params)
             documentoInstance.nombre = params.archivo.getOriginalFilename()

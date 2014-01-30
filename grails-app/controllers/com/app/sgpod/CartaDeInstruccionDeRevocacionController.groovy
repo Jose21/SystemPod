@@ -2,8 +2,12 @@ package com.app.sgpod
 
 import org.springframework.dao.DataIntegrityViolationException
 import com.app.security.Usuario
+import com.app.security.Rol
+import com.app.security.UsuarioRol
 
 class CartaDeInstruccionDeRevocacionController {
+    
+    def springSecurityService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -20,18 +24,21 @@ class CartaDeInstruccionDeRevocacionController {
         def revocacionDePoderId = params.id
         def formato = FormatoDeCartaDeInstruccion.get(1)
         
+        def usuarios = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_NOTARIO")).collect {it.usuario}
+        
         def cartaDeInstruccionDeRevocacionInstance = new CartaDeInstruccionDeRevocacion(params)
         cartaDeInstruccionDeRevocacionInstance.registro = formato.registro
         cartaDeInstruccionDeRevocacionInstance.fecha = formato.fecha
         cartaDeInstruccionDeRevocacionInstance.contenido = formato.contenido
         
-        [cartaDeInstruccionDeRevocacionInstance: cartaDeInstruccionDeRevocacionInstance, revocacionDePoderId : revocacionDePoderId]
+        [cartaDeInstruccionDeRevocacionInstance: cartaDeInstruccionDeRevocacionInstance, revocacionDePoderId : revocacionDePoderId, usuarios:usuarios]
     }
 
     def save() {
         def cartaDeInstruccionDeRevocacionInstance = new CartaDeInstruccionDeRevocacion(params)
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoderId as long)
         revocacionDePoderInstance.asignar = Usuario.get(params.asignar.id as long)
+        revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
         revocacionDePoderInstance.save() 
         cartaDeInstruccionDeRevocacionInstance.revocacionDePoder = revocacionDePoderInstance
         if (!cartaDeInstruccionDeRevocacionInstance.save(flush: true)) {
@@ -39,8 +46,8 @@ class CartaDeInstruccionDeRevocacionController {
             return
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'cartaDeInstruccionDeRevocacion.label', default: 'Carta De Instrucción De Revocación'), cartaDeInstruccionDeRevocacionInstance.id])
-        redirect(controller:"revocacionDePoder", action: "show", id: revocacionDePoderInstance.id)
+        flash.message = "Se ha enviado la Carta de Instrucción al Notario Asignado."
+        redirect(controller:"poderes", action: "index")
     }
 
     def show(Long id) {
@@ -112,5 +119,10 @@ class CartaDeInstruccionDeRevocacionController {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'cartaDeInstruccionDeRevocacion.label', default: 'CartaDeInstruccionDeRevocacion'), id])
             redirect(action: "show", id: id)
         }
+    }
+    def regresar(Long id) {
+        def cartaDeInstruccionDeRevocacionInstance = CartaDeInstruccionDeRevocacion.get(id)
+        def revocacionDePoderInstance = cartaDeInstruccionDeRevocacionInstance.revocacionDePoder
+        redirect(controller:"revocacionDePoder", action: "show", id: revocacionDePoderInstance.id)
     }
 }

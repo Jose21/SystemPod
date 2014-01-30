@@ -9,20 +9,23 @@
     <body>
         <div class="content-header">
             <div class="page-header position-relative">
-                <h1>Editar: Revocación de Poder</h1>
-                <div class="btn-group">
-                    <g:link controller="tarea" action="create" class="btn btn-small btn-inverse tip-bottom" params="[ idRevocacionDePoder : revocacionDePoderInstance?.id ]">
-                        <i class="icon-external-link"></i> Asociar Turno
-                    </g:link>
-                    <a class="btn btn-small btn-purple tip-bottom" href="#tareasAsociadas" data-toggle="modal">
-                        <i class="icon-comments"></i> Turnos Asociados
-                    </a>
-                </div>
+                <h1>Solicitud de Revocación de Poder
+                    <small>
+                        <i class="icon-double-angle-right"></i>
+                        Agregue los Apoderados y Elija un Motivo de Revocación para poder Enviar la Solicitud.
+                    </small>
+                </h1>
+                <g:if test="${revocacionDePoderInstance.motivoDeRevocacion && revocacionDePoderInstance.apoderados}">
+                    <div class="btn-group">                    
+                        <g:link action="asignarA" class="btn btn-small btn-warning tip-bottom" params="[ idRevocacionDePoder : revocacionDePoderInstance?.id ]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+                            <i class="icon-envelope-alt"></i> Enviar Solicitud
+                        </g:link>    
+                    </div>
+                </g:if>
             </div>
 
             <div class="container-fluid">
-                <g:render template="/shared/alerts" />
-                <br/>
+                <g:render template="/shared/alerts" />                
 
                 <g:hasErrors bean="${revocacionDePoderInstance}">
                     <div class="alert alert-block alert-warning">            
@@ -32,7 +35,7 @@
                     </div>
                 </g:hasErrors>
 
-                <g:if test="${revocacionDePoderInstance.tipoDeRevocacion == "Parcial"}">
+                <g:if test="${revocacionDePoderInstance.tipoDeRevocacion == "Parcial" && revocacionDePoderInstance.apoderados && revocacionDePoderInstance.agregarApoderado != true}">
                     <h3 id="bloqueApoderados"  class="header smaller lighter blue">Elimine los Apoderados a quien desee omitir en esta  Solicitud.</h3>       
 
                     <table class="table table-bordered table-striped">
@@ -70,7 +73,7 @@
                         </tbody>
                     </table>
                 </g:if>
-                <g:else>
+                <g:if test="${revocacionDePoderInstance.tipoDeRevocacion == "Total" && revocacionDePoderInstance.apoderados && revocacionDePoderInstance.agregarApoderado != true}">
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -92,21 +95,82 @@
                         </tbody>
                     </table>
 
-                </g:else>
+                </g:if>
+                <g:if test="${revocacionDePoderInstance.agregarApoderado == true}">
+                    <h3 id="bloqueApoderados"  class="header smaller lighter blue">Agregar Apoderados</h3>       
+
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <g:if test="${revocacionDePoderInstance.apoderados}">
+                                    <th>Nombre</th>
+                                    <th>Puesto</th>                
+                                    <th>Institución</th>
+                                    <th>Email</th>
+                                    </g:if>
+                                    <g:else>
+                                    <th colspan="4">Nombre</th>
+                                    </g:else>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <g:each in="${revocacionDePoderInstance.apoderados}" status="i" var="apoderado">            
+                                <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                    <td>                    
+                                        <div id="editarApoderadoModal${i}" class="modal hide" style="width:600px;">
+                                            <div class="modal-header">
+                                                <button data-dismiss="modal" class="close" type="button">×</button>
+                                                <h3>Editar Datos del Apoderado</h3>
+                                            </div>
+                                            <div class="modal-body">
+                                                <g:form class="form-horizontal" controller="apoderado" method="post">
+                                                    <g:hiddenField name="anchor" value="bloqueApoderados" />
+                                                    <g:hiddenField name="revocacionDePoder.id" value="${revocacionDePoderInstance?.id}" />
+                                                    <g:hiddenField name="id" value="${apoderado?.id}" />
+                                                    <g:hiddenField name="version" value="${apoderado?.version}" />
+                                                    <g:render template="/apoderado/itForm" bean="${apoderado}"/>            
+                                                    <div class="form-actions">
+                                                        <g:actionSubmit class="btn btn-primary" action="updateIt" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+                                                    </div>
+                                                </g:form>
+                                            </div>
+                                        </div>
+                                        <a href="#editarApoderadoModal${i}" data-toggle="modal">
+                                            <i class="icon-edit bigger-110"></i>
+                                        </a>
+                                        ${apoderado.nombre}</td>
+                                    <td>${apoderado.puesto}</td>
+                                    <td>${apoderado.institucion}</td>
+                                    <td>${apoderado.email}</td>
+                                    <td>
+                                        <g:form class="form-horizontal" controller="revocacionDePoder" method="post" >
+                                            <!--g:hiddenField name="anchor" value="bloqueApoderado" /-->
+                                            <g:hiddenField name="revocacionDePoder.id" value="${revocacionDePoderInstance?.id}" />
+                                            <g:hiddenField name="apoderado.id" value="${apoderado?.id}" />
+                                            <g:actionSubmit class="btn btn-danger btn-mini" action="removeApoderado" value="Quitar" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+                                        </g:form>
+                                    </td>
+                                </tr>            
+                            </g:each>        
+                            <g:form controller="revocacionDePoder" method="post">
+                                <tr>
+                                    <td colspan="4">                  
+                                        <!--g:hiddenField name="anchor" value="bloqueApoderados" /-->
+                                        <g:textField class="span6"  name="apoderado" value="" autocomplete="off"/>
+                                    </td>
+                                    <td>
+                                        <g:hiddenField name="revocacionDePoder.id" value="${revocacionDePoderInstance?.id}"/>
+                                        <g:actionSubmit class="btn btn-primary btn-mini" action="addApoderado" value="Agregar" />
+                                    </td>
+                                </tr>
+                            </g:form>
+                        </tbody>
+                    </table>
+                </g:if>
 
 
                 <g:form class="form-horizontal" method="post" enctype="multipart/form-data">
-                    <g:hiddenField name="id" value="${revocacionDePoderInstance?.id}" />
-                    <g:hiddenField name="version" value="${revocacionDePoderInstance?.version}" />
-                    <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'id', 'error')}">
-                        <label for="id" class="control-label">
-                            <g:message code="revocacionDePoderInstance.id.label" default="Número De Folio" />
-                        </label>
-                        <div class="controls">
-                            <span class="badge">${revocacionDePoderInstance?.id}-R</span>
-                        </div>
-                    </div>
-                    <g:render template="form"/>                                       
                     <h3 id="bloqueDatosComplementarios"  class="header smaller lighter blue">Datos Complementarios</h3>
                     <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'motivoDeRevocacion', 'error')} required">
                         <label for="motivoDeRevocacion" class="control-label">
@@ -119,7 +183,19 @@
                                 <i class="icon-plus"></i>
                             </span>        
                         </div>    
-                    </div>                                        
+                    </div>
+                    <h3 id="finBloqueDatosComplementarios"  class="header smaller lighter blue"></h3>
+                    <g:hiddenField name="id" value="${revocacionDePoderInstance?.id}" />
+                    <g:hiddenField name="version" value="${revocacionDePoderInstance?.version}" />
+                    <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'id', 'error')}">
+                        <label for="id" class="control-label">
+                            <g:message code="revocacionDePoderInstance.id.label" default="Número De Folio" />
+                        </label>
+                        <div class="controls">
+                            <span class="badge">${revocacionDePoderInstance?.id}-R</span>
+                        </div>
+                    </div>
+                    <g:render template="form"/>                                                                                                   
                     <div class="form-actions">
                         <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
                     </div>

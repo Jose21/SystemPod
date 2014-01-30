@@ -247,7 +247,7 @@ class TareaController {
         
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date fechaLimite = null
-        if (params.fechaLimite != "") {
+        if (params.fechaLimite) {
             fechaLimite = sdf.parse(params.fechaLimite)
         }
         params.fechaLimite = fechaLimite

@@ -2,6 +2,7 @@ package com.app.sgpod
 
 import com.app.security.Usuario
 import com.app.sgtask.Tarea
+import com.app.sgtask.Nota
 
 class Poder {
 
@@ -20,7 +21,8 @@ class Poder {
     static hasMany = [ 
         documentos : DocumentoDePoder,
         tareas : Tarea,
-        apoderados : Apoderado
+        apoderados : Apoderado,
+        notas : Nota
     ]
     
     static constraints = {
@@ -40,6 +42,7 @@ class Poder {
         tags nullable:true, maxSize:1000
         apoderados nullable:true
         responsable nullable:true,blank:true
+        notas nullable:true
     }
     
     String toString() {

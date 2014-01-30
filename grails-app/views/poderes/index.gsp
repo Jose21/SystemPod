@@ -27,12 +27,14 @@
                             <span class="bigger-110">Enviados <span class="badge">${poderesAsignadosInstanceTotal}</span></span>
                         </a>
                     </li>
+                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR">
                     <li>
                         <a data-toggle="tab" href="#expired">
                             <i class="icon-info-sign bigger-130"></i>
                             <span class="bigger-110">Poderes por Vencer <span class="badge">${poderesPorVencerTotal}</span></span>
                         </a>
                     </li>
+                    </sec:ifAnyGranted>
                 </ul>
             </div>
             <!--PENDIENTES-->
@@ -52,7 +54,6 @@
                         <table class="box-style" width="100%" border="2">
                             <thead>
                                 <tr>
-                                    <th scope="col"></th>
                                     <th scope="col">Número de Solicitud</th>
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creado Por</th>
@@ -60,15 +61,7 @@
                             </thead>
                             <tbody>
                                 <g:each in="${otorgamientoInstanceList}" status="i" var="otorgamientoInstance">
-                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                        <td>
-                                            <g:if test="${otorgamientoInstance.asignar == null}">
-                                                <i class=" icon-exclamation-sign orange" title="Sin Asignar"></i>   
-                                            </g:if>
-                                            <g:else>  
-                                                <i class=" icon-exclamation-sign red" title="No Atendido"></i>        
-                                            </g:else>
-                                        </td>
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">                                        
                                         <td>
                                             <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoInstance?.id}">
                                                 <span class="label label-info arrowed-in">
@@ -95,7 +88,6 @@
                         <table class="box-style" width="100%" border="2">
                             <thead>
                                 <tr>
-                                    <th scope="col"></th>
                                     <th scope="col">Número de Solicitud</th>
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
@@ -103,15 +95,7 @@
                             </thead>
                             <tbody>
                                 <g:each in="${revocacionInstanceList}" status="i" var="revocacionInstance">
-                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                        <td>
-                                            <g:if test="${revocacionInstance.asignar == null}">
-                                                <i class=" icon-exclamation-sign orange" title="Sin Asignar"></i>   
-                                            </g:if>
-                                            <g:else>  
-                                                <i class=" icon-exclamation-sign red" title="No Atendido"></i>        
-                                            </g:else>
-                                        </td>
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">                                        
                                         <td>
                                             <g:link controller="revocacionDePoder" action="show" id="${revocacionInstance?.id}">
                                                 <span class="label label-info arrowed-in">
@@ -184,7 +168,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!--Se iteran las revocaciones de poder asiganados-->
+                        <!--Se iteran las revocaciones de poder asignados-->
                         <table class="box-style" width="100%" border="2">
                             <thead>
                                 <tr>
@@ -221,6 +205,8 @@
                         </div>
                     </div><!--/.message-container-->
                 </div>
+                <!--Bandeja de Poderes por vencer -->
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR">
                 <div id="expired" class="tab-pane">  
                     <div class="message-container">
                         <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
@@ -289,6 +275,7 @@
                         </div>
                     </div><!--/.message-container-->
                 </div>
+                </sec:ifAnyGranted>
             </div>
         </div>
     </body>

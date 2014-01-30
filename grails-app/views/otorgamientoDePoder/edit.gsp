@@ -8,21 +8,23 @@
     </head>
     <body>
         <div class="content-header">
-            <div class="page-header position-relative">
+            <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINITRADOR, ROLE_PODERES_SOLICITANTE">
+            <div class="page-header position-relative">                
                 <h1>Solicitud de Otorgamiento de Poder
                     <small>
                         <i class="icon-double-angle-right"></i>
                         Agregar Apoderados y Enviar Solicitud.
                     </small>
-                </h1>
-                <g:if test="${otorgamientoDePoderInstance.apoderados}">
-                    <div class="btn-group">                    
-                        <g:link action="asignarA" class="btn btn-small btn-warning tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id ]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
-                            <i class="icon-envelope-alt"></i> Enviar Solicitud
-                        </g:link>    
-                    </div>
-                </g:if>
+                </h1>                
+                    <g:if test="${otorgamientoDePoderInstance.apoderados}">
+                        <div class="btn-group">                    
+                            <g:link action="asignarA" class="btn btn-small btn-warning tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id ]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+                                <i class="icon-envelope-alt"></i> Enviar Solicitud
+                            </g:link>    
+                        </div>
+                    </g:if>                
             </div>
+            </sec:ifAnyGranted>
 
             <div class="container-fluid">
                 <g:render template="/shared/alerts" />
@@ -36,8 +38,8 @@
                     </div>
                 </g:hasErrors>
 
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINITRADOR, ROLE_PODERES_SOLICITANTE">
                 <h3 id="bloqueApoderados"  class="header smaller lighter blue">Agregar Apoderados</h3>       
-
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -106,10 +108,12 @@
                         </g:form>
                     </tbody>
                 </table>
+                </sec:ifAnyGranted>
 
                 <g:form class="form-horizontal" method="post"  enctype="multipart/form-data">
                     <g:hiddenField name="id" value="${otorgamientoDePoderInstance?.id}" />
-                    <g:hiddenField name="version" value="${otorgamientoDePoderInstance?.version}" />            
+                    <g:hiddenField name="version" value="${otorgamientoDePoderInstance?.version}" />
+                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINITRADOR, ROLE_PODERES_SOLICITANTE">
                     <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'id', 'error')}">
                         <label for="id" class="control-label">
                             <g:message code="otorgamientoDePoder.id.label" default="Número De Folio" />
@@ -118,9 +122,11 @@
                             <span class="badge">${otorgamientoDePoderInstance?.id}-O</span>
                         </div>
                     </div>
-                    <g:render template="form"/>                                        
-
-                    <h3 id="bloqueDatosComplementarios"  class="header smaller lighter blue">Datos Complementarios</h3>
+                    <g:render template="form"/>
+                    </sec:ifAnyGranted>
+                    
+                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_NOTARIO">
+                    <h3 id="bloqueDatosComplementarios"  class="header smaller lighter blue"></h3>
                     <br/>
                     <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'fechaDeOtorgamiento', 'error')} ">
                         <label for="fechaDeOtorgamiento" class="control-label">
@@ -172,10 +178,18 @@
                             <input type="file" id="archivo" name="archivo" />
                         </div>
                     </div>
+                    </sec:ifAnyGranted>
                 </div>
-                <div class="form-actions">
-                    <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
-                </div>
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR, ROLE_PODERES_SOLICITANTE">
+                    <div class="form-actions">
+                        <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+                    </div>
+                </sec:ifAnyGranted>
+                <sec:ifAnyGranted roles="ROLE_PODERES_NOTARIO">
+                    <div class="form-actions">
+                        <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.label', default: 'Enviar')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');"/>
+                    </div>
+                </sec:ifAnyGranted>
             </g:form>                        
         </div>
         <script lang="javascript" type="text/javascript">

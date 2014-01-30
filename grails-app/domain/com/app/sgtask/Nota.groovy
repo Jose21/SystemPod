@@ -1,6 +1,8 @@
 package com.app.sgtask
 
+
 import com.app.security.Usuario
+import com.app.sgpod.Poder
 
 class Nota {
 
@@ -10,7 +12,7 @@ class Nota {
     Date lastUpdated
     Usuario agregadaPor
     
-    static belongsTo = [ tarea : Tarea ]
+    static belongsTo = [ tarea : Tarea, poder : Poder ]
     
     static hasMany = [ documentos : Documento ]
     
@@ -20,6 +22,7 @@ class Nota {
         tarea nullable:true
         documentos nullable:true
         agregadaPor nullable:false
+        poder nullable:true
     }
     
     static mapping = {
