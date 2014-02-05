@@ -12,7 +12,7 @@
                 <h1>Solicitud de Revocación de Poder
                     <small>
                         <i class="icon-double-angle-right"></i>
-                        Agregue los Apoderados y Elija un Motivo de Revocación para poder Enviar la Solicitud.
+                        Agregue los Apoderados y Seleccione un Motivo de Revocación para Enviar la Solicitud.
                     </small>
                 </h1>
                 <g:if test="${revocacionDePoderInstance.motivoDeRevocacion && revocacionDePoderInstance.apoderados}">

@@ -15,7 +15,7 @@
         </g:link>
     </sec:ifAnyGranted>
     
-    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE">
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE, ROLE_PODERES_GESTOR">
         <g:link class="btn btn-small btn-purple" controller="poderes" action="index">
             <i class="icon-user"></i>
         </g:link>

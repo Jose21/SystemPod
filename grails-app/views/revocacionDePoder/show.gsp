@@ -11,14 +11,14 @@
         <div class="page-header position-relative">
             <h1>Solicitud de Revocación De Poder</h1>
             <div class="btn-group">
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
                     <g:if test="${!cartaDeInstruccion}">
                         <g:link class="btn btn-success btn-small tip-bottom" controller="revocacionDePoder" action="existe" id="${revocacionDePoderInstance?.id}">
                             <i class="icon-external-link"></i> Crear Carta de Instrucción
                         </g:link>
                     </g:if>
                 </sec:ifAnyGranted>                
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR, ROLE_PODERES_NOTARIO">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_NOTARIO">
                     <g:if test="${cartaDeInstruccion}">
                         <g:link controller="revocacionDePoder" action="existeCarta" class="btn btn-small btn-info tip-bottom" id="${revocacionDePoderInstance?.id}">
                             <i class="icon-external-link"></i> Ver Carta de Instrucción
@@ -32,10 +32,17 @@
                         </g:link>
                     </g:if>
                 </sec:ifAnyGranted>
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
                     <g:if test="${cartaDeInstruccion && ocultarBoton != true}">
                         <g:link  action="entregarCopiaSolicitante" class="btn btn-small btn-purple tip-bottom" params="[ idRevocacionDePoder : revocacionDePoderInstance?.id]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
                             <i class="icon-external-link"></i> Enviar Copia al Solicitante
+                        </g:link>
+                    </g:if>
+                </sec:ifAnyGranted>
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_GESTOR">
+                    <g:if test="${ocultarBoton != true}">
+                        <g:link action="turnarResolvedor" class="btn btn-small btn-info tip-bottom" params="[ id : revocacionDePoderInstance?.id]">
+                            <i class="icon-external-link"></i> Turnar a Resolvedor
                         </g:link>
                     </g:if>
                 </sec:ifAnyGranted>

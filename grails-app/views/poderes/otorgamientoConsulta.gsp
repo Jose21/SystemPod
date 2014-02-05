@@ -129,7 +129,7 @@
 
         <table class="table table-bordered table-striped">
             <thead>
-                <g:if test="${params.solicitadoPor}">
+                <g:if test="${params.nombre}">
                     <tr>
                         <th colspan="8"  style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR NOMBRE DEL APODERADO: ${params.solicitadoPor}</th>
                     </tr>
@@ -154,7 +154,8 @@
                 <th><g:message code="otorgamientoDePoder.apoderados.nombre.label" default="Nombre Apoderado(s)" /></th>
                 <th><g:message code="otorgamientoDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
                 <th><g:message code="otorgamientoDePoder.registroDeLaSolicitud.label" default="Registro De La Solicitud" /></th>                
-                <th><g:message code="otorgamientoDePoder.tipoDePoder.label" default="Tipo De Poder" /></th>
+                <th><g:message code="otorgamientoDePoder.categoriaDeTipoDePoder.tipoDePoder.label" default="Tipo De Poder" /></th>
+                <th><g:message code="otorgamientoDePoder.categoriaDeTipoDePoder.label" default="Categoria" /></th>
                 <th><g:message code="otorgamientoDePoder.delegacion.label" default="Delegación" />
                 </tr>
             </thead>
@@ -169,8 +170,9 @@
                             </g:each>
                         </td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "solicitadoPor")}</td>
-                        <td><g:formatDate date="${otorgamientoDePoderInstance.registroDeLaSolicitud}" /></td>                        
-                        <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "tipoDePoder")}</td>
+                        <td><g:formatDate date="${otorgamientoDePoderInstance.registroDeLaSolicitud}" /></td>
+                        <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "categoriaDeTipoDePoder.tipoDePoder.nombre")}</td>
+                        <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "categoriaDeTipoDePoder.nombre")}</td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "delegacion")}</td>
                     </tr>
                 </g:each>

@@ -302,8 +302,8 @@ class RevocacionDePoderController {
     def asignarA(){
         def revocacionDePoderInstance = RevocacionDePoder.get(params.idRevocacionDePoder as long)
         revocacionDePoderInstance.asignar = Usuario.get(1 as long)
-        def usuarioAdministradorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_ADMINISTRADOR")).collect {it.usuario}        
-        usuarioAdministradorPoderes.each{
+        def usuarioGestorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_GESTOR")).collect {it.usuario}        
+        usuarioGestorPoderes.each{
             revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
         }
         revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
@@ -318,6 +318,17 @@ class RevocacionDePoderController {
         
         revocacionDePoderInstance.save()
         flash.message = "Se ha enviado con éxito la Copia Electrónica."        
+        redirect(controller: "poderes", action: "index")
+    }
+    def turnarResolvedor(){
+        def revocacionDePoderInstance = RevocacionDePoder.get(params.id as long)
+        def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}        
+        usuarioResolvedorPoderes.each{
+            revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
+        }        
+        revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
+        revocacionDePoderInstance.save()
+        flash.message = "Se ha turnado con éxito la Solicitud."        
         redirect(controller: "poderes", action: "index")
     }
 }

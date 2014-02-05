@@ -14,7 +14,7 @@
                 <i class="icon-book"></i>
             </g:link>
         </sec:ifAnyGranted>
-        <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE">
+        <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE, ROLE_PODERES_GESTOR">
             <g:link class="btn btn-small btn-purple" controller="poderes" action="index">
                 <i class="icon-user"></i>
             </g:link>
@@ -46,7 +46,7 @@
         </g:link> 
     </li>
     </sec:ifAnyGranted>
-    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE">
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE, ROLE_PODERES_GESTOR">
     <li>
         <g:link controller="poderes" action="index">
             <i class="icon-key"></i>
@@ -62,7 +62,7 @@
         </g:link> 
     </li>
     </sec:ifAnyGranted>
-    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS, ROLE_PODERES, ROLE_TAREAS, ROLE_ADMINISTRADOR_PODERES">
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS, ROLE_PODERES, ROLE_TAREAS, ROLE_PODERES_RESOLVEDOR">
     <li>
         <g:link controller="user">
             <i class="icon-lock"></i>

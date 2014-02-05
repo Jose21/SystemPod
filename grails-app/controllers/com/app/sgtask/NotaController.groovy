@@ -56,8 +56,8 @@ class NotaController {
         //integracion con poderes
         if (session.revocacionDePoderId) {
             def revocacionDePoderInstance = RevocacionDePoder.get(session.revocacionDePoderId)            
-            def usuarioAdministradorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_ADMINISTRADOR")).collect {it.usuario}        
-                usuarioAdministradorPoderes.each{
+            def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}        
+                usuarioResolvedorPoderes.each{
                     revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
                 }     
             revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
@@ -77,7 +77,7 @@ class NotaController {
             flash.message = message(code: 'default.created.message', args: [message(code: 'nota.label', default: 'Nota'), notaInstance.id])
             redirect(controller:"tarea", action: "show", id: session.tareaId)
         }else{
-            flash.info = "Se ha enviado el Testimonio al Administrador."
+            flash.info = "Se ha enviado el Testimonio al Usuario Resolvedor."
             redirect(controller: "poderes", action: "index") 
         }                
     }

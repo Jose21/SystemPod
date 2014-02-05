@@ -21,17 +21,31 @@
                             <span class="bigger-110">Pendientes <span class="badge">${poderInstanceTotal}</span></span>
                         </a>
                     </li>
+                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_GESTOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE">
                     <li>
                         <a data-toggle="tab" href="#shared">
                             <i class="icon-group bigger-130"></i>
                             <span class="bigger-110">Enviados <span class="badge">${poderesAsignadosInstanceTotal}</span></span>
                         </a>
                     </li>
-                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR">
+                    </sec:ifAnyGranted>
+                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
                     <li>
                         <a data-toggle="tab" href="#expired">
                             <i class="icon-info-sign bigger-130"></i>
                             <span class="bigger-110">Poderes por Vencer <span class="badge">${poderesPorVencerTotal}</span></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#enviadoNotario">
+                            <i class="icon-exchange bigger-130"></i>
+                            <span class="bigger-110">Enviados al Notario <span class="badge">${enviadosNotarioTotal}</span></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#enviadoSolicitante">
+                            <i class="icon-exchange bigger-130"></i>
+                            <span class="bigger-110">Enviados al Solicitante <span class="badge">${enviadosSolicitanteTotal}</span></span>
                         </a>
                     </li>
                     </sec:ifAnyGranted>
@@ -124,7 +138,8 @@
                         </div>
                     </div><!--/.message-container-->
                 </div>
-                                      <!-- PODERES QUE ME ASIGNARON  -->
+                                      <!-- SOLICITUDES QUE ENVIE  -->
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_GESTOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE">    
                 <div id="shared" class="tab-pane">
                     <div class="message-container">
                         <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
@@ -213,8 +228,9 @@
                         </div>
                     </div><!--/.message-container-->
                 </div>
+                </sec:ifAnyGranted>
                 <!--Bandeja de Poderes por vencer -->
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
                 <div id="expired" class="tab-pane">  
                     <div class="message-container">
                         <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
@@ -280,6 +296,184 @@
                             <div class="pull-right">
                                 <div class="pagination">
                                     <g:paginate total="${poderesPorVencerTotal}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--/.message-container-->
+                </div>                
+                <!-- SOLICITUDES QUE ENVIO USUARIO RESOLVEDOR AL NOTARIO  -->
+                <div id="enviadoNotario" class="tab-pane">
+                    <div class="message-container">
+                        <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
+                            <div class="message-bar">
+                                <div class="message-infobar" id="id-message-infobar">
+                                    <span class="blue bigger-130">
+                                        Expedientes: Otorgamiento de Poder.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Se iteran los otorgamientos de poder enviados al notario-->
+                        <table class="box-style" width="100%" border="2">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th scope="col">Número de Solicitud</th>
+                                    <th scope="col">Asignado Por</th>
+                                    <th scope="col">Creada Por</th>
+                                    <th scope="col">Asignado a</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <g:each in="${otorgamientosEnviadosNotarioInstanceList}" status="i" var="otorgamientoAsignadosNotarioInstance">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td></td>
+                                        <td>
+                                            <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoAsignadosNotarioInstance?.id}">
+                                                <span class="label label-info arrowed-in">
+                                                    ${otorgamientoAsignadosNotarioInstance?.id}-O
+                                                </span>
+                                            </g:link>
+                                        </td>
+                                        <td>${fieldValue(bean: otorgamientoAsignadosNotarioInstance, field: "asignadaPor")}</td>
+                                        <td>${fieldValue(bean: otorgamientoAsignadosNotarioInstance, field: "creadaPor")}</td>
+                                        <td>${fieldValue(bean: otorgamientoAsignadosNotarioInstance, field: "asignar")}</td>
+                                    </tr>
+                                </g:each>
+                            </tbody>
+                        </table>
+                        <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
+                            <div class="message-bar">
+                                <div class="message-infobar" id="id-message-infobar">
+                                    <span class="blue bigger-130">
+                                        Expedientes: Revocación de Poder.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Se iteran las revocaciones de poder asignados-->
+                        <table class="box-style" width="100%" border="2">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th scope="col">Número de Solicitud</th>
+                                    <th scope="col">Asignado Por</th>
+                                    <th scope="col">Creada Por</th>
+                                    <th scope="col">Asignado a</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <g:each in="${revocacionesEnviadosNotarioInstanceList}" status="i" var="revocacionAsignadosSolicitanteInstance">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td></td>
+                                        <td>
+                                            <g:link controller="revocacionDePoder" action="show" id="${revocacionAsignadosSolicitanteInstance?.id}">
+                                                <span class="label label-info arrowed-in">
+                                                    ${revocacionAsignadosSolicitanteInstance?.id}-R
+                                                </span>
+                                            </g:link>
+                                        </td>
+                                        <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "asignadaPor")}</td>
+                                        <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "creadaPor")}</td>
+                                        <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "asignar")}</td>
+                                    </tr>
+                                </g:each>
+                            </tbody>
+                        </table>
+                        <div class="message-footer clearfix">
+                            <div class="pull-left"> ${enviadosNotarioTotal} expediente(s) en total. </div>
+                            <div class="pull-right">
+                                <div class="pagination">
+                                    <g:paginate total="${enviadosNotarioTotal}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--/.message-container-->
+                </div>
+                <!-- SOLICITUDES QUE ENVIO USUARIO RESOLVEDOR AL SOLICITANTE  -->
+                <div id="enviadoSolicitante" class="tab-pane">
+                    <div class="message-container">
+                        <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
+                            <div class="message-bar">
+                                <div class="message-infobar" id="id-message-infobar">
+                                    <span class="blue bigger-130">
+                                        Expedientes: Otorgamiento de Poder.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Se iteran los otorgamientos de poder enviados al notario-->
+                        <table class="box-style" width="100%" border="2">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th scope="col">Número de Solicitud</th>
+                                    <th scope="col">Asignado Por</th>
+                                    <th scope="col">Creada Por</th>
+                                    <th scope="col">Asignado a</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <g:each in="${otorgamientosEnviadosSolicitanteInstanceList}" status="i" var="otorgamientoAsignadosSolicitanteInstance">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td></td>
+                                        <td>
+                                            <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoAsignadosSolicitanteInstance?.id}">
+                                                <span class="label label-info arrowed-in">
+                                                    ${otorgamientoAsignadosSolicitanteInstance?.id}-O
+                                                </span>
+                                            </g:link>
+                                        </td>
+                                        <td>${fieldValue(bean: otorgamientoAsignadosSolicitanteInstance, field: "asignadaPor")}</td>
+                                        <td>${fieldValue(bean: otorgamientoAsignadosSolicitanteInstance, field: "creadaPor")}</td>
+                                        <td>${fieldValue(bean: otorgamientoAsignadosSolicitanteInstance, field: "asignar")}</td>
+                                    </tr>
+                                </g:each>
+                            </tbody>
+                        </table>
+                        <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
+                            <div class="message-bar">
+                                <div class="message-infobar" id="id-message-infobar">
+                                    <span class="blue bigger-130">
+                                        Expedientes: Revocación de Poder.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Se iteran las revocaciones de poder asignados-->
+                        <table class="box-style" width="100%" border="2">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th scope="col">Número de Solicitud</th>
+                                    <th scope="col">Asignado Por</th>
+                                    <th scope="col">Creada Por</th>
+                                    <th scope="col">Asignado a</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <g:each in="${revocacionesEnviadosSolicitanteInstanceList}" status="i" var="revocacionAsignadosSolicitanteInstance">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td></td>
+                                        <td>
+                                            <g:link controller="revocacionDePoder" action="show" id="${revocacionAsignadosSolicitanteInstance?.id}">
+                                                <span class="label label-info arrowed-in">
+                                                    ${revocacionAsignadosSolicitanteInstance?.id}-R
+                                                </span>
+                                            </g:link>
+                                        </td>
+                                        <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "asignadaPor")}</td>
+                                        <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "creadaPor")}</td>
+                                        <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "asignar")}</td>
+                                    </tr>
+                                </g:each>
+                            </tbody>
+                        </table>
+                        <div class="message-footer clearfix">
+                            <div class="pull-left"> ${enviadosSolicitanteTotal} expediente(s) en total. </div>
+                            <div class="pull-right">
+                                <div class="pagination">
+                                    <g:paginate total="${enviadosSolicitanteTotal}" />
                                 </div>
                             </div>
                         </div>

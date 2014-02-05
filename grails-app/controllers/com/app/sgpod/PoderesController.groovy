@@ -4,6 +4,9 @@ import org.springframework.dao.DataIntegrityViolationException
 import java.text.SimpleDateFormat
 import com.pogos.BusquedaBean
 import grails.plugins.springsecurity.Secured
+import com.app.security.Usuario
+import com.app.security.Rol
+import com.app.security.UsuarioRol
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class PoderesController {
@@ -37,6 +40,60 @@ class PoderesController {
         } 
         def poderesAsignadosList = asignadosOtorgamiento + asignadosRevocacion
         
+        //lista de enviados al notario por parte del usuario resolvedor
+        //solicitudes de otorgamiento        
+        def usuarioNotario = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_NOTARIO")).collect {it.usuario}
+        def enviadosOtorgamientosNotario = null
+        def enviadosRevocacionesNotario = null
+        def enviados = []
+        def enviados2 = []
+        usuarioNotario.each{
+            def usuarioInstance = Usuario.get(it.id as long)            
+            def e = OtorgamientoDePoder.createCriteria()
+            enviadosOtorgamientosNotario = e.list{
+                eq ("asignadaPor", springSecurityService.currentUser)
+                eq ("asignar", usuarioInstance)
+            }
+            enviados = enviados + enviadosOtorgamientosNotario
+            //solicitudes de revocacion
+            def f = RevocacionDePoder.createCriteria()                           
+            enviadosRevocacionesNotario = f.list{
+                eq ("asignadaPor", springSecurityService.currentUser)
+                eq ("asignar", usuarioInstance)
+            }
+            enviados2 = enviados2 + enviadosRevocacionesNotario
+        }        
+        enviadosOtorgamientosNotario = enviados
+        enviadosRevocacionesNotario = enviados2        
+        def enviadosNotarioList = enviadosOtorgamientosNotario + enviadosRevocacionesNotario         
+        
+        //lista de enviados al solicitante por parte del usuario resolvedor
+        //solicitudes de otorgamiento        
+        def usuarioSolicitante = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_SOLICITANTE")).collect {it.usuario}
+        def enviadosOtorgamientosSolicitante = null
+        def enviadosRevocacionesSolicitante = null
+        def enviados3 = []
+        def enviados4 = []
+        usuarioSolicitante.each{
+            def usuarioSolicitanteInstance = Usuario.get(it.id as long)            
+            def g = OtorgamientoDePoder.createCriteria()
+            enviadosOtorgamientosSolicitante = g.list{
+                eq ("asignadaPor", springSecurityService.currentUser)
+                eq ("asignar", usuarioSolicitanteInstance)
+            }
+            enviados3 = enviados3 + enviadosOtorgamientosSolicitante
+            //solicitudes de revocacion
+            def h = RevocacionDePoder.createCriteria()
+            enviadosRevocacionesSolicitante = h.list{
+                eq ("asignadaPor", springSecurityService.currentUser)
+                eq ("asignar", usuarioSolicitanteInstance)
+            }
+            enviados4 = enviados4 + enviadosRevocacionesSolicitante
+        }
+        enviadosOtorgamientosSolicitante = enviados3
+        enviadosRevocacionesSolicitante = enviados4        
+        def enviadosSolicitanteList = enviadosOtorgamientosSolicitante + enviadosRevocacionesSolicitante
+        
         //Poderes que están por vencer
         def listaPoderes = OtorgamientoDePoder.list()
         
@@ -68,6 +125,12 @@ class PoderesController {
                 otorgamientoAsignadosInstanceList:asignadosOtorgamiento,
                 revocacionAsignadosInstanceList : asignadosRevocacion,
                 poderesAsignadosInstanceTotal : poderesAsignadosList.size(),
+                otorgamientosEnviadosNotarioInstanceList : enviadosOtorgamientosNotario,
+                revocacionesEnviadosNotarioInstanceList : enviadosRevocacionesNotario,
+                enviadosNotarioTotal : enviadosNotarioList.size(),                
+                otorgamientosEnviadosSolicitanteInstanceList : enviadosOtorgamientosSolicitante,
+                revocacionesEnviadosSolicitanteInstanceList : enviadosRevocacionesSolicitante,
+                enviadosSolicitanteTotal : enviadosSolicitanteList.size(),
                 poderCriticoInstanceList : poderCriticoList,
                 poderSemicriticoInstanceList : poderSemicriticoList,
                 poderesPorVencerTotal : poderesPorVencerList.size()

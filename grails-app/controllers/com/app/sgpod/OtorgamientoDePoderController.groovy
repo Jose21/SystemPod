@@ -37,8 +37,8 @@ class OtorgamientoDePoderController {
         params.creadaPor = springSecurityService.currentUser
         
         //se agrega el reponsable para envio de notificaciones        
-        def usuarioAdministradorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_ADMINISTRADOR")).collect {it.usuario}        
-        usuarioAdministradorPoderes.each{
+        def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}        
+        usuarioResolvedorPoderes.each{
             params.responsable = Usuario.get(it.id as long)   
         } 
         
@@ -129,12 +129,12 @@ class OtorgamientoDePoderController {
             Date registroDeLaSolicitud = sdf.parse(params.registroDeLaSolicitud)
             params.registroDeLaSolicitud = registroDeLaSolicitud
         }
-        //se reasigna al admin cuando se envia la copia electronica
+        //se reasigna al resolvedor cuando se envia la copia electronica
         if (params.fechaDeOtorgamiento) {
             Date fechaDeOtorgamiento = sdf.parse(params.fechaDeOtorgamiento)
             params.fechaDeOtorgamiento = fechaDeOtorgamiento
-            def usuarioAdministradorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_ADMINISTRADOR")).collect {it.usuario}        
-            usuarioAdministradorPoderes.each{
+            def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}        
+            usuarioResolvedorPoderes.each{
                 otorgamientoDePoderInstance.asignar = Usuario.get(it.id as long)   
             } 
             otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser            
@@ -173,7 +173,7 @@ class OtorgamientoDePoderController {
         }
         //se cambia redireccionamiento cuando se envia la copia de escritura al solicitante
         if (params.fechaDeOtorgamiento != null) {
-            flash.message = "Se ha enviado con éxito la copia de Escritura al Administrador"
+            flash.message = "Se ha enviado con éxito la copia de Escritura al Resolvedor"
             redirect(controller:"poderes", action: "index")            
         }else{            
             flash.message = message(code: 'default.updated.message', args: [message(code: 'poder.label', default: 'Poder'), otorgamientoDePoderInstance.id])
@@ -253,8 +253,8 @@ class OtorgamientoDePoderController {
     }
     def asignarA(){
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.idOtorgamientoDePoder as long)
-        def usuarioAdministradorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_ADMINISTRADOR")).collect {it.usuario}        
-        usuarioAdministradorPoderes.each{
+        def usuarioGestorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_GESTOR")).collect {it.usuario}        
+        usuarioGestorPoderes.each{
             otorgamientoDePoderInstance.asignar = Usuario.get(it.id as long)   
         }        
         otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
@@ -272,6 +272,18 @@ class OtorgamientoDePoderController {
         //end
         otorgamientoDePoderInstance.save()
         flash.message = "Se ha enviado con éxito la Copia Electrónica."        
+        redirect(controller: "poderes", action: "index")
+    }
+    
+    def turnarResolvedor(){
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.id as long)
+        def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}        
+        usuarioResolvedorPoderes.each{
+            otorgamientoDePoderInstance.asignar = Usuario.get(it.id as long)   
+        }        
+        otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+        otorgamientoDePoderInstance.save()
+        flash.message = "Se ha turnado con éxito la Solicitud."        
         redirect(controller: "poderes", action: "index")
     }
 }

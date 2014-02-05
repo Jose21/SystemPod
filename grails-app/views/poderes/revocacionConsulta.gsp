@@ -182,19 +182,22 @@
                     <th><g:message code="revocacionDePoder.id.label"  default="Número de Folio" /></th>
                     <th><g:message code="revocacionDePoder.nombre.label" default="Nombre Apoderado" /></th>
                     <th><g:message code="revocacionDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
-                    <th><g:message code="revocacionDePoder.escrituraPublica.label" default="Escritura Publica" /></th>
-                    <th><g:message code="revocacionDePoder.nombreDeNotario.label" default="Nombre De Notario" /></th>                    
+                    <th><g:message code="revocacionDePoder.escrituraPublica.label" default="Escritura Publica" /></th>                    
                     <th><g:message code="revocacionDePoder.fechaDeRevocacion.label" default="Fecha de Revocación" /></th>
                 </tr>
             </thead>
             <tbody>
                 <g:each in="${revocacionDePoderInstanceList}" status="i" var="revocacionDePoderInstance">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                        <td style="text-align:center"><g:link controller="revocacionDePoder" action="edit" id="${revocacionDePoderInstance.id}"><span class="badge">${revocacionDePoderInstance?.id}-R</span></g:link></td>
-                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "nombre")}</td>
+                        <td style="text-align:center"><g:link controller="revocacionDePoder" action="edit" id="${revocacionDePoderInstance.id}"><span class="badge">${revocacionDePoderInstance?.id}-R</span></g:link></td>                        
+                        <td>
+                            <g:each in ="${revocacionDePoderInstance.apoderados}" var="apoderado">
+                                ${apoderado.nombre}
+                                <br>
+                            </g:each>
+                        </td>
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "solicitadoPor")}</td>
-                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "escrituraPublica")}</td>
-                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "nombreDeNotario")}</td>                        
+                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "escrituraPublica")}</td>                        
                         <td><g:formatDate date="${revocacionDePoderInstance.fechaDeRevocacion}" /></td>
                     </tr>
                 </g:each>
