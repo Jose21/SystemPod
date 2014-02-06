@@ -72,21 +72,53 @@
                                     <th scope="col">Número de Solicitud</th>
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creado Por</th>
+                                    <th scope="col">Fecha de Envío</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <g:each in="${otorgamientoInstanceList}" status="i" var="otorgamientoInstance">
+                                <g:each in="${otorgamientosRojosList}" status="i" var="otorgamientoInstance">
                                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                                         <td></td>
                                         <td>
                                             <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoInstance?.id}">
-                                                <span class="label label-info arrowed-in">
+                                                <span class="label label-important arrowed-in">
                                                     ${otorgamientoInstance?.id}-O
                                                 </span>
                                             </g:link>
                                         </td>
                                         <td>${fieldValue(bean: otorgamientoInstance, field: "asignadaPor")}</td>
-                                        <td>${fieldValue(bean: otorgamientoInstance, field: "creadaPor")}</td>
+                                        <td>${fieldValue(bean: otorgamientoInstance, field: "creadaPor")}</td>                                        
+                                        <td><g:formatDate date="${otorgamientoInstance?.fechaDeEnvio}" /></td>
+                                    </tr>
+                                </g:each>
+                                <g:each in="${otorgamientosAmarillosList}" status="i" var="otorgamientoInstance">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td></td>
+                                        <td>
+                                            <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoInstance?.id}">
+                                                <span class="label label-warning arrowed-in">
+                                                    ${otorgamientoInstance?.id}-O
+                                                </span>
+                                            </g:link>
+                                        </td>
+                                        <td>${fieldValue(bean: otorgamientoInstance, field: "asignadaPor")}</td>
+                                        <td>${fieldValue(bean: otorgamientoInstance, field: "creadaPor")}</td>                                        
+                                        <td><g:formatDate date="${otorgamientoInstance?.fechaDeEnvio}" /></td>
+                                    </tr>
+                                </g:each>
+                                <g:each in="${otorgamientosVerdesList}" status="i" var="otorgamientoInstance">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td></td>
+                                        <td>
+                                            <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoInstance?.id}">
+                                                <span class="label label-success arrowed-in">
+                                                    ${otorgamientoInstance?.id}-O
+                                                </span>
+                                            </g:link>
+                                        </td>
+                                        <td>${fieldValue(bean: otorgamientoInstance, field: "asignadaPor")}</td>
+                                        <td>${fieldValue(bean: otorgamientoInstance, field: "creadaPor")}</td>                                        
+                                        <td><g:formatDate date="${otorgamientoInstance?.fechaDeEnvio}" /></td>
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -108,21 +140,53 @@
                                     <th scope="col">Número de Solicitud</th>
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
+                                    <th scope="col">Fecha de Envío</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <g:each in="${revocacionInstanceList}" status="i" var="revocacionInstance">
+                                <g:each in="${revocacionesRojosList}" status="i" var="revocacionInstance">
                                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                                         <td></td>
                                         <td>
                                             <g:link controller="revocacionDePoder" action="show" id="${revocacionInstance?.id}">
-                                                <span class="label label-info arrowed-in">
+                                                <span class="label label-danger arrowed-in">
                                                     ${revocacionInstance?.id}-R
                                                 </span>
                                             </g:link>
                                         </td>
                                         <td>${fieldValue(bean: revocacionInstance, field: "asignadaPor")}</td>
                                         <td>${fieldValue(bean: revocacionInstance, field: "creadaPor")}</td>
+                                        <td><g:formatDate date="${revocacionInstance?.fechaDeEnvio}" /></td>
+                                    </tr>
+                                </g:each>
+                                <g:each in="${revocacionesAmarillosList}" status="i" var="revocacionInstance">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td></td>
+                                        <td>
+                                            <g:link controller="revocacionDePoder" action="show" id="${revocacionInstance?.id}">
+                                                <span class="label label-warning arrowed-in">
+                                                    ${revocacionInstance?.id}-R
+                                                </span>
+                                            </g:link>
+                                        </td>
+                                        <td>${fieldValue(bean: revocacionInstance, field: "asignadaPor")}</td>
+                                        <td>${fieldValue(bean: revocacionInstance, field: "creadaPor")}</td>
+                                        <td><g:formatDate date="${revocacionInstance?.fechaDeEnvio}" /></td>
+                                    </tr>
+                                </g:each>
+                                <g:each in="${revocacionesVerdesList}" status="i" var="revocacionInstance">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td></td>
+                                        <td>
+                                            <g:link controller="revocacionDePoder" action="show" id="${revocacionInstance?.id}">
+                                                <span class="label label-success arrowed-in">
+                                                    ${revocacionInstance?.id}-R
+                                                </span>
+                                            </g:link>
+                                        </td>
+                                        <td>${fieldValue(bean: revocacionInstance, field: "asignadaPor")}</td>
+                                        <td>${fieldValue(bean: revocacionInstance, field: "creadaPor")}</td>
+                                        <td><g:formatDate date="${revocacionInstance?.fechaDeEnvio}" /></td>
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -160,6 +224,7 @@
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
                                     <th scope="col">Asignado a</th>
+                                    <th scope="col">Fecha de Envío</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -176,6 +241,7 @@
                                         <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "asignadaPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "creadaPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "asignar")}</td>
+                                        <td><g:formatDate date="${otorgamientoAsignadosInstance?.fechaDeEnvio}" /></td>
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -198,6 +264,7 @@
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
                                     <th scope="col">Asignado a</th>
+                                    <th scope="col">Fecha de Envío</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -214,6 +281,7 @@
                                         <td>${fieldValue(bean: revocacionAsignadosInstance, field: "asignadaPor")}</td>
                                         <td>${fieldValue(bean: revocacionAsignadosInstance, field: "creadaPor")}</td>
                                         <td>${fieldValue(bean: revocacionAsignadosInstance, field: "asignar")}</td>
+                                        <td><g:formatDate date="${revocacionAsignadosInstance?.fechaDeEnvio}" /></td>
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -251,6 +319,7 @@
                                     <th scope="col">Número de Solicitud</th>
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creado Por</th>
+                                    <th scope="col">Fecha de Envío</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -270,6 +339,7 @@
                                         </td>
                                         <td>${fieldValue(bean: otorgamientoInstance, field: "asignadaPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoInstance, field: "creadaPor")}</td>
+                                        <td><g:formatDate date="${otorgamientoInstance?.fechaDeEnvio}" /></td>
                                     </tr>
                                 </g:each>
                                 <!--Se iteran los poderes semi-criticos de poder-->
@@ -287,6 +357,7 @@
                                         </td>
                                         <td>${fieldValue(bean: otorgamientoInstance, field: "asignadaPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoInstance, field: "creadaPor")}</td>
+                                        <td><g:formatDate date="${otorgamientoInstance?.fechaDeEnvio}" /></td>
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -322,6 +393,7 @@
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
                                     <th scope="col">Asignado a</th>
+                                    <th scope="col">Fecha de Envío</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -338,6 +410,7 @@
                                         <td>${fieldValue(bean: otorgamientoAsignadosNotarioInstance, field: "asignadaPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoAsignadosNotarioInstance, field: "creadaPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoAsignadosNotarioInstance, field: "asignar")}</td>
+                                        <td><g:formatDate date="${otorgamientoAsignadosNotarioInstance?.fechaDeEnvio}" /></td>
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -360,6 +433,7 @@
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
                                     <th scope="col">Asignado a</th>
+                                    <th scope="col">Fecha de Envío</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -376,6 +450,7 @@
                                         <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "asignadaPor")}</td>
                                         <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "creadaPor")}</td>
                                         <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "asignar")}</td>
+                                        <td><g:formatDate date="${revocacionAsignadosSolicitanteInstance?.fechaDeEnvio}" /></td>
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -411,6 +486,7 @@
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
                                     <th scope="col">Asignado a</th>
+                                    <th scope="col">Fecha de Envío</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -427,6 +503,7 @@
                                         <td>${fieldValue(bean: otorgamientoAsignadosSolicitanteInstance, field: "asignadaPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoAsignadosSolicitanteInstance, field: "creadaPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoAsignadosSolicitanteInstance, field: "asignar")}</td>
+                                        <td><g:formatDate date="${otorgamientoAsignadosSolicitanteInstance?.fechaDeEnvio}" /></td>
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -449,6 +526,7 @@
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
                                     <th scope="col">Asignado a</th>
+                                    <th scope="col">Fecha de Envío</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -465,6 +543,7 @@
                                         <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "asignadaPor")}</td>
                                         <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "creadaPor")}</td>
                                         <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "asignar")}</td>
+                                        <td><g:formatDate date="${revocacionAsignadosSolicitanteInstance?.fechaDeEnvio}" /></td>
                                     </tr>
                                 </g:each>
                             </tbody>

@@ -63,6 +63,13 @@
 
                     </dl>
                 </g:if>
+                
+                <g:if test="${revocacionDePoderInstance?.fechaDeEnvio}">
+                    <dl>
+                        <dt><g:message code="revocacionDePoder.fechaDeEnvio.label" default="Fecha de Envío" /></dt>					
+                        <dd><g:formatDate date="${revocacionDePoderInstance?.fechaDeEnvio}" /></dd>					
+                    </dl>
+                </g:if>
 
                 <g:if test="${revocacionDePoderInstance?.escrituraPublica}">
                     <dl>

@@ -83,6 +83,13 @@
                         <dd><g:formatDate date="${otorgamientoDePoderInstance?.registroDeLaSolicitud}" /></dd>					
                     </dl>
                 </g:if>
+                
+                <g:if test="${otorgamientoDePoderInstance?.fechaDeEnvio}">
+                    <dl>
+                        <dt><g:message code="otorgamientoDePoder.fechaDeEnvio.label" default="Fecha de Envío" /></dt>					
+                        <dd><g:formatDate date="${otorgamientoDePoderInstance?.fechaDeEnvio}" /></dd>					
+                    </dl>
+                </g:if>
 
                 <g:if test="${otorgamientoDePoderInstance?.categoriaDeTipoDePoder}">
                     <dl>

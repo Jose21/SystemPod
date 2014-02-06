@@ -25,6 +25,41 @@ class PoderesController {
         }    
         def poderesList = poderesList1.list() + poderesList2.list()
         
+        def otorgamientosRojosList = []
+        def otorgamientosAmarillosList = []
+        def otorgamientosVerdesList = []
+        poderesList1.each {poder ->
+            if(poder.fechaDeEnvio){
+                def fechaHoy = new Date()                
+                def fechaDeEnvio = poder.fechaDeEnvio                
+                def diasPosteriores = fechaHoy - fechaDeEnvio                 
+                if(diasPosteriores <= 3){
+                    otorgamientosVerdesList.add(poder)
+                }else if(diasPosteriores <= 5 && diasPosteriores > 3){
+                    otorgamientosAmarillosList.add(poder)
+                }else if(diasPosteriores > 5){
+                    otorgamientosRojosList.add(poder)
+                }                                
+            }            
+        }        
+        def revocacionesRojosList = []
+        def revocacionesAmarillosList = []
+        def revocacionesVerdesList = []
+        poderesList2.each {poder ->
+            if(poder.fechaDeEnvio){
+                def fechaHoy = new Date()                
+                def fechaDeEnvio = poder.fechaDeEnvio                
+                def diasPosteriores = fechaHoy - fechaDeEnvio                
+                if(diasPosteriores <= 3){
+                    revocacionesVerdesList.add(poder)
+                }else if(diasPosteriores <= 5 && diasPosteriores > 3){
+                    revocacionesAmarillosList.add(poder)
+                }else{
+                    revocacionesRojosList.add(poder)
+                }                                
+            }            
+        }
+        
         //Poderes Asignados: yo cree y asigne a alguien mas.
         //lista de otorgamiento
         def c = OtorgamientoDePoder.createCriteria()
@@ -119,9 +154,13 @@ class PoderesController {
         render (
             view: "index", 
             model: [
-                otorgamientoInstanceList:poderesList1,
-                revocacionInstanceList:poderesList2,
-                poderInstanceTotal: poderesList.size(),
+                otorgamientosRojosList : otorgamientosRojosList,
+                otorgamientosAmarillosList : otorgamientosAmarillosList,
+                otorgamientosVerdesList : otorgamientosVerdesList,
+                revocacionesRojosList : revocacionesRojosList,
+                revocacionesAmarillosList : revocacionesAmarillosList,
+                revocacionesVerdesList : revocacionesVerdesList,
+                poderInstanceTotal: poderesList.size(),                
                 otorgamientoAsignadosInstanceList:asignadosOtorgamiento,
                 revocacionAsignadosInstanceList : asignadosRevocacion,
                 poderesAsignadosInstanceTotal : poderesAsignadosList.size(),

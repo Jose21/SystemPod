@@ -61,6 +61,7 @@ class NotaController {
                     revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
                 }     
             revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
+            revocacionDePoderInstance.fechaDeEnvio = new Date()
             revocacionDePoderInstance.addToNotas(notaInstance).save(flush:true)
         }
         if (params.archivo.getSize()!=0) {            

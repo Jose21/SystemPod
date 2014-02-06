@@ -307,6 +307,7 @@ class RevocacionDePoderController {
             revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
         }
         revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
+        revocacionDePoderInstance.fechaDeEnvio = new Date()
         revocacionDePoderInstance.save()
         flash.message = "Se ha enviado con éxito la Solicitud."        
         redirect(controller: "poderes", action: "index")
@@ -315,7 +316,7 @@ class RevocacionDePoderController {
         def revocacionDePoderInstance = RevocacionDePoder.get(params.idRevocacionDePoder as long)        
         revocacionDePoderInstance.asignar = revocacionDePoderInstance.creadaPor
         revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
-        
+        revocacionDePoderInstance.fechaDeEnvio = new Date()
         revocacionDePoderInstance.save()
         flash.message = "Se ha enviado con éxito la Copia Electrónica."        
         redirect(controller: "poderes", action: "index")
@@ -327,6 +328,7 @@ class RevocacionDePoderController {
             revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
         }        
         revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
+        revocacionDePoderInstance.fechaDeEnvio = new Date()
         revocacionDePoderInstance.save()
         flash.message = "Se ha turnado con éxito la Solicitud."        
         redirect(controller: "poderes", action: "index")

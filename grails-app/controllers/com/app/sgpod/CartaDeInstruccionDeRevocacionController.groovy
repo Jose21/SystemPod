@@ -39,6 +39,7 @@ class CartaDeInstruccionDeRevocacionController {
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoderId as long)
         revocacionDePoderInstance.asignar = Usuario.get(params.asignar.id as long)
         revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
+        revocacionDePoderInstance.fechaDeEnvio = new Date()
         revocacionDePoderInstance.save() 
         cartaDeInstruccionDeRevocacionInstance.revocacionDePoder = revocacionDePoderInstance
         if (!cartaDeInstruccionDeRevocacionInstance.save(flush: true)) {

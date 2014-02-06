@@ -17,6 +17,7 @@ class Poder {
     CartaDeInstruccion cartaDeInstruccion
     String tags
     Usuario responsable
+    Date fechaDeEnvio
     
     static hasMany = [ 
         documentos : DocumentoDePoder,
@@ -43,6 +44,7 @@ class Poder {
         apoderados nullable:true
         responsable nullable:true,blank:true
         notas nullable:true
+        fechaDeEnvio nullable:true
     }
     
     String toString() {

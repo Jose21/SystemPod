@@ -67,6 +67,8 @@ class OtorgamientoDePoderController {
     }
 
     def show(Long id) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        
         def otorgamientoDePoderInstance = OtorgamientoDePoder.read(id)        
         if (!otorgamientoDePoderInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'poder.label', default: 'Poder'), id])
@@ -83,8 +85,8 @@ class OtorgamientoDePoderController {
         def ocultarBoton = false
         if(otorgamientoDePoderInstance.asignar != springSecurityService.currentUser){
             ocultarBoton = true
-        }               
-                        
+        }
+                              
         def cartaDeInstruccion = CartaDeInstruccionDeOtorgamiento.findByOtorgamientoDePoder(otorgamientoDePoderInstance)
         
         [otorgamientoDePoderInstance: otorgamientoDePoderInstance, cartaDeInstruccion : cartaDeInstruccion, ocultarBoton:ocultarBoton ]                       
@@ -137,7 +139,8 @@ class OtorgamientoDePoderController {
             usuarioResolvedorPoderes.each{
                 otorgamientoDePoderInstance.asignar = Usuario.get(it.id as long)   
             } 
-            otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser            
+            otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+            otorgamientoDePoderInstance.fechaDeEnvio = new Date()
         } else {
             params.fechaDeOtorgamiento = null
         }
@@ -258,6 +261,7 @@ class OtorgamientoDePoderController {
             otorgamientoDePoderInstance.asignar = Usuario.get(it.id as long)   
         }        
         otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+        otorgamientoDePoderInstance.fechaDeEnvio = new Date()
         otorgamientoDePoderInstance.save()
         flash.message = "Se ha enviado con éxito la Solicitud."        
         redirect(controller: "poderes", action: "index")
@@ -270,6 +274,7 @@ class OtorgamientoDePoderController {
         //se calcula la fecha de vencimiento sumando el periodo de 730 dias que es el perido de 2 años
         otorgamientoDePoderInstance.fechaVencimiento = otorgamientoDePoderInstance.fechaDeOtorgamiento + 730        
         //end
+        otorgamientoDePoderInstance.fechaDeEnvio = new Date()
         otorgamientoDePoderInstance.save()
         flash.message = "Se ha enviado con éxito la Copia Electrónica."        
         redirect(controller: "poderes", action: "index")
@@ -282,6 +287,7 @@ class OtorgamientoDePoderController {
             otorgamientoDePoderInstance.asignar = Usuario.get(it.id as long)   
         }        
         otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+        otorgamientoDePoderInstance.fechaDeEnvio = new Date()
         otorgamientoDePoderInstance.save()
         flash.message = "Se ha turnado con éxito la Solicitud."        
         redirect(controller: "poderes", action: "index")
