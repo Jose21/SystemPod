@@ -3,6 +3,7 @@ package com.app.sgtask
 import org.springframework.dao.DataIntegrityViolationException
 import grails.plugins.springsecurity.Secured
 import com.app.sgpod.RevocacionDePoder
+import com.app.sgpod.OtorgamientoDePoder
 import com.app.security.Usuario
 import com.app.security.Rol
 import com.app.security.UsuarioRol
@@ -36,6 +37,11 @@ class NotaController {
         }else{
             session.revocacionDePoderId = null
         }
+        if(params.otorgamientoDePoderId){
+            session.otorgamientoDePoderId = params.otorgamientoDePoderId as long  
+        }else{
+            session.otorgamientoDePoderId = null
+        }
         [notaInstance: new Nota(params)]
     }
 
@@ -53,7 +59,8 @@ class NotaController {
                 return
             }
         }                
-        //integracion con poderes
+        //integracion con poderes //revocacion de poder
+        //enviar copia electrónica
         if (session.revocacionDePoderId) {
             def revocacionDePoderInstance = RevocacionDePoder.get(session.revocacionDePoderId)            
             def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}        
@@ -64,6 +71,12 @@ class NotaController {
             revocacionDePoderInstance.fechaDeEnvio = new Date()
             revocacionDePoderInstance.addToNotas(notaInstance).save(flush:true)
         }
+        //integracion con otorgamiento de poder
+        //notificacion al enviar un documento físico
+        if (session.otorgamientoDePoderId) {
+            def otorgamientoDePoderInstance = OtorgamientoDePoder.get(session.otorgamientoDePoderId)                                                
+            otorgamientoDePoderInstance.addToNotas(notaInstance).save(flush:true)
+        }
         if (params.archivo.getSize()!=0) {            
             def documentoInstance = new Documento(params)
             documentoInstance.nombre = params.archivo.getOriginalFilename()
@@ -73,14 +86,17 @@ class NotaController {
                 return
             }
         }
-        if(!session.revocacionDePoderId){
+        if(session.otorgamientoDePoderId){
+            flash.info = "Se ha enviado la Notificación al Solicitante."
+            redirect(controller: "poderes", action: "index") 
+        }else if(session.revocacionDePoderId){
+            flash.info = "Se ha enviado el Testimonio al Usuario Resolvedor."
+            redirect(controller: "poderes", action: "index") 
+        }else{
             historialDeTareaService.agregar(notaInstance.tarea, springSecurityService.currentUser, "agregó una nota")
             flash.message = message(code: 'default.created.message', args: [message(code: 'nota.label', default: 'Nota'), notaInstance.id])
             redirect(controller:"tarea", action: "show", id: session.tareaId)
-        }else{
-            flash.info = "Se ha enviado el Testimonio al Usuario Resolvedor."
-            redirect(controller: "poderes", action: "index") 
-        }                
+        }              
     }
 
     def show(Long id) {

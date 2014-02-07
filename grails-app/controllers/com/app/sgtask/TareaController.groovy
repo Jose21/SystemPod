@@ -284,12 +284,14 @@ class TareaController {
         }
         //Integración con Otorgamiento De Poder
         if (session.idOtorgamientoDePoder){
-            def otorgamientoDePoderInstance = OtorgamientoDePoder.get(session.idOtorgamientoDePoder)            
+            def otorgamientoDePoderInstance = OtorgamientoDePoder.get(session.idOtorgamientoDePoder)
+            otorgamientoDePoderInstance.asignar = otorgamientoDePoderInstance.creadaPor
+            otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
             otorgamientoDePoderInstance.addToTareas(tareaInstance).save(flush:true)
         }
         //Integración con Revocación De Poder
         if (session.idRevocacionDePoder){
-            def revocacionDePoderInstance = RevocacionDePoder.get(session.idRevocacionDePoder)
+            def revocacionDePoderInstance = RevocacionDePoder.get(session.idRevocacionDePoder)            
             revocacionDePoderInstance.addToTareas(tareaInstance).save(flush:true)
         }
         
@@ -309,7 +311,7 @@ class TareaController {
             redirect(action: "show", id: tareaInstance.id)        
         }else{            
             flash.info = "Se ha enviado la Nofificacion al Solicitante."
-            redirect(controller: "otorgamientoDePoder", action: "show", id: session.idOtorgamientoDePoder)            
+            redirect(controller: "poderes", action: "index", id: session.idOtorgamientoDePoder)            
         }
     }    
 

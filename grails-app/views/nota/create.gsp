@@ -13,6 +13,11 @@
                 <h1>Enviar Testimonio de Escritura Pública</h1>
                 <br/>
             </g:if>
+            <g:if test="${session.otorgamientoDePoderId}">
+                <br/>
+                <h1>Notificación de Envio de Documento Físico</h1>
+                <br/>
+            </g:if>
             <g:else>
                 <h1>Crear: Nota</h1>
             </g:else>
@@ -33,12 +38,12 @@
             <g:form class="form-horizontal" action="save" enctype="multipart/form-data">
                 <g:hiddenField name="tarea" id="tarea.id" value="${session.tareaId}"/>
                 <g:render template="form"/>
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES">
                 <div class="form-actions">
                     <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />
                 </div>
                 </sec:ifAnyGranted>
-                <sec:ifAnyGranted roles="ROLE_PODERES_NOTARIO">
+                <sec:ifAnyGranted roles="ROLE_PODERES_NOTARIO, ROLE_PODERES_RESOLVEDOR">
                 <div class="form-actions">
                     <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.label', default: 'Enviar')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
                 </div>

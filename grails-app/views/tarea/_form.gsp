@@ -1,20 +1,34 @@
 <%@ page import="com.app.sgtask.Tarea;java.text.SimpleDateFormat" %>
 
 <div class="control-group fieldcontain ${hasErrors(bean: tareaInstance, field: 'nombre', 'error')} required">
-    <label for="nombre" class="control-label">
-        <g:message code="tarea.nombre.label" default="Nombre" />
-        <span class="required-indicator">*</span>
-    </label>
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES">
+        <label for="nombre" class="control-label">
+            <g:message code="tarea.nombre.label" default="Nombre" />
+            <span class="required-indicator">*</span>
+        </label>
+    </sec:ifAnyGranted>
+    <sec:ifAnyGranted roles="ROLE_PODERES_RESOLVEDOR">
+        <label for="nombre" class="control-label">
+            <g:message code="tarea.nombre.label" default="Título" />
+            <span class="required-indicator">*</span>
+        </label>
+    </sec:ifAnyGranted>
     <div class="controls">
         <g:textField name="nombre" class="span6" maxlength="140" required="" value="${tareaInstance?.nombre}"/>
     </div>
 </div>
 
 <div class="control-group fieldcontain ${hasErrors(bean: tareaInstance, field: 'descripcion', 'error')}">
-    <label for="descripcion" class="control-label">
-        <g:message code="tarea.descripcion.label" default="Descripción" />
-
-    </label>
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES">
+        <label for="descripcion" class="control-label">
+            <g:message code="tarea.descripcion.label" default="Descripción" />
+        </label>
+    </sec:ifAnyGranted>
+    <sec:ifAnyGranted roles="ROLE_PODERES_RESOLVEDOR">
+        <label for="descripcion" class="control-label">
+            <g:message code="tarea.descripcion.label" default="Motivos" />
+        </label>
+    </sec:ifAnyGranted>
     <div class="controls">
         <g:textArea name="descripcion" class="ckeditor" maxlength="10240" value="${tareaInstance?.descripcion}"/>
     </div>

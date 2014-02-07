@@ -53,9 +53,16 @@
                 
                   <g:form class="form-horizontal" action="save" >
                 <g:render template="form"/>
-                <div class="form-actions">
-                    <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />
-                </div>
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES">
+                    <div class="form-actions">
+                        <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />
+                    </div>
+                </sec:ifAnyGranted>
+                <sec:ifAnyGranted roles="ROLE_PODERES_RESOLVEDOR">
+                    <div class="form-actions">
+                        <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.label', default: 'Enviar')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+                    </div>
+                </sec:ifAnyGranted>
             </g:form>
         
         </div>

@@ -29,13 +29,7 @@
                         </a>
                     </li>
                     </sec:ifAnyGranted>
-                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
-                    <li>
-                        <a data-toggle="tab" href="#expired">
-                            <i class="icon-info-sign bigger-130"></i>
-                            <span class="bigger-110">Poderes por Vencer <span class="badge">${poderesPorVencerTotal}</span></span>
-                        </a>
-                    </li>
+                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">                    
                     <li>
                         <a data-toggle="tab" href="#enviadoNotario">
                             <i class="icon-exchange bigger-130"></i>
@@ -46,6 +40,12 @@
                         <a data-toggle="tab" href="#enviadoSolicitante">
                             <i class="icon-exchange bigger-130"></i>
                             <span class="bigger-110">Enviados al Solicitante <span class="badge">${enviadosSolicitanteTotal}</span></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#expired">
+                            <i class="icon-info-sign bigger-130"></i>
+                            <span class="bigger-110">Poderes por Vencer <span class="badge">${poderesPorVencerTotal}</span></span>
                         </a>
                     </li>
                     </sec:ifAnyGranted>
@@ -223,7 +223,7 @@
                                     <th scope="col">Número de Solicitud</th>
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
-                                    <th scope="col">Asignado a</th>
+                                    <th scope="col">Enviado a</th>
                                     <th scope="col">Fecha de Envío</th>
                                 </tr>
                             </thead>
@@ -263,7 +263,7 @@
                                     <th scope="col">Número de Solicitud</th>
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
-                                    <th scope="col">Asignado a</th>
+                                    <th scope="col">Enviado a</th>
                                     <th scope="col">Fecha de Envío</th>
                                 </tr>
                             </thead>
@@ -392,7 +392,7 @@
                                     <th scope="col">Número de Solicitud</th>
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
-                                    <th scope="col">Asignado a</th>
+                                    <th scope="col">Enviado a</th>
                                     <th scope="col">Fecha de Envío</th>
                                 </tr>
                             </thead>
@@ -432,7 +432,7 @@
                                     <th scope="col">Número de Solicitud</th>
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
-                                    <th scope="col">Asignado a</th>
+                                    <th scope="col">Enviado a</th>
                                     <th scope="col">Fecha de Envío</th>
                                 </tr>
                             </thead>
@@ -485,7 +485,7 @@
                                     <th scope="col">Número de Solicitud</th>
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
-                                    <th scope="col">Asignado a</th>
+                                    <th scope="col">Enviado a</th>
                                     <th scope="col">Fecha de Envío</th>
                                 </tr>
                             </thead>
@@ -525,7 +525,7 @@
                                     <th scope="col">Número de Solicitud</th>
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
-                                    <th scope="col">Asignado a</th>
+                                    <th scope="col">Enviado a</th>
                                     <th scope="col">Fecha de Envío</th>
                                 </tr>
                             </thead>

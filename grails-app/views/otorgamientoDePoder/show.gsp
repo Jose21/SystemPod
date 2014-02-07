@@ -13,26 +13,19 @@
             <br/>            
             <div class="btn-group">
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
-                    <g:if test="${!otorgamientoDePoderInstance.documentos && ocultarBoton != true}">
+                    <g:if test="${!otorgamientoDePoderInstance.documentos && ocultarBoton != true && !otorgamientoDePoderInstance.tareas}">
                         <g:link class="btn btn-success btn-small tip-bottom" action="existe" id="${otorgamientoDePoderInstance?.id}">
                             <i class="icon-external-link"></i> Aceptar Solicitud
                         </g:link>
                     </g:if>
                 </sec:ifAnyGranted>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
-                    <g:if test="${!otorgamientoDePoderInstance.documentos && ocultarBoton != true}">
-                        <g:link controller="tarea" action="create" class="btn btn-small btn-inverse tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id ]">
+                    <g:if test="${!otorgamientoDePoderInstance.documentos && !otorgamientoDePoderInstance.tareas}">
+                        <g:link controller="tarea" action="create" class="btn btn-small btn-danger tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id ]">
                             <i class="icon-external-link"></i> Rechazar Solicitud
                         </g:link>
                     </g:if>
-                </sec:ifAnyGranted>
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE">
-                    <g:if test="${otorgamientoDePoderInstance.tareas && !otorgamientoDePoderInstance.documentos}">
-                        <a class="btn btn-small btn-purple tip-bottom" href="#tareasAsociadas" data-toggle="modal">
-                            <i class="icon-comments"></i> Notificaciones
-                        </a>
-                    </g:if>
-                </sec:ifAnyGranted>
+                </sec:ifAnyGranted>                
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_NOTARIO">
                     <g:if test="${cartaDeInstruccion}">
                         <g:link controller="cartaDeInstruccionDeOtorgamiento" action="show" class="btn btn-small btn-info tip-bottom" params="[ id : cartaDeInstruccion.id]">
@@ -53,10 +46,15 @@
                             <i class="icon-external-link"></i> Enviar Copia al Solicitante
                         </g:link>
                     </g:if>
+                    <g:if test="${otorgamientoDePoderInstance.documentos && ocultarBoton == true && !otorgamientoDePoderInstance.notas}">                        
+                        <g:link  controller="nota" action="create" class="btn btn-small btn-yellow tip-bottom" params="[ otorgamientoDePoderId : otorgamientoDePoderInstance?.id]">
+                            <i class="icon-external-link"></i> Notificar Envio de Documento Físico
+                        </g:link>
+                    </g:if>   
                 </sec:ifAnyGranted>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_GESTOR">
                     <g:if test="${ocultarBoton != true}">
-                        <g:link action="turnarResolvedor" class="btn btn-small btn-info tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]">
+                        <g:link action="turnarResolvedor" class="btn btn-small btn-info tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
                             <i class="icon-external-link"></i> Turnar a Resolvedor
                         </g:link>
                     </g:if>
@@ -187,6 +185,86 @@
                         </tbody>
                     </table>
                 </g:if>
+                <g:if test="${otorgamientoDePoderInstance?.notas}">
+                    <div class="widget-box ">
+                        <div class="widget-header">
+                            <h4 class="lighter smaller">
+                                <i class="icon-comment blue"></i>
+                                Notificación de Envío de Documento Físico
+                            </h4>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main no-padding">
+                                <div class="dialogs">                
+                                <g:each var="nota" in="${otorgamientoDePoderInstance?.notas.sort { it.dateCreated }}">
+                                    <div class="itemdiv dialogdiv">                                            
+                                        <div class="body">
+                                            <div class="time">                        
+                                                <span>Agregada Por: ${nota?.agregadaPor?.firstName} ${nota?.agregadaPor?.lastName}</span><br/>
+                                                <i class="icon-time"></i>
+                                                <span class="green">Fecha de Creación: <g:formatDate date="${nota?.dateCreated}" type="datetime" style="MEDIUM"/></span>                                                    
+                                            </div>
+
+                                            <div class="name">
+                                                Título: ${nota.titulo}
+                                            </div>
+                                            <div class="text">
+                                                Descripcion: <%=nota.descripcion%>
+                                                <g:if test="${nota.documentos}">
+                                                    Archivos adjuntos<br/>
+                                                    <g:each in="${nota.documentos}" var="documento">                            
+                                                        <g:link controller="documento" action="downloadArchivo" id ="${documento.id}">
+                                                            --${documento.nombre} 
+                                                        </g:link><br/>
+                                                    </g:each>
+                                                </g:if>                                                
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </g:each>
+                                </div>
+                            </div><!--/widget-main-->
+                        </div><!--/widget-body-->
+                    </div><!--/widget-box-->
+                </g:if>
+                <g:if test="${otorgamientoDePoderInstance?.tareas}">
+                    <div class="widget-box ">
+                        <div class="widget-header">
+                            <h4 class="lighter smaller">
+                                <i class="icon-comment blue"></i>
+                                Notificación de Rechazo
+                            </h4>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main no-padding">
+                                <div class="dialogs">                
+                                <g:each var="tarea" in="${otorgamientoDePoderInstance?.tareas.sort { it.dateCreated }}">
+                                    <div class="itemdiv dialogdiv">                                            
+                                        <div class="body">
+                                            <div class="time">                        
+                                                <span>Enviada Por: ${tarea?.creadaPor?.firstName} ${tarea?.creadaPor?.lastName}</span><br/>
+                                                <i class="icon-time"></i>
+                                                <span class="green">Fecha de Envío: <g:formatDate date="${tarea?.dateCreated}" type="datetime" style="MEDIUM"/></span>                                                    
+                                            </div>
+
+                                            <div class="name">
+                                                Título: ${tarea?.nombre}
+                                            </div>
+                                            <div class="text">
+                                                Motivos: <%=tarea?.descripcion%>                                                                                              
+                                            </div>
+                                        </div>
+                                    </div>
+                                </g:each>
+                                </div>
+                            </div><!--/widget-main-->
+                        </div><!--/widget-body-->
+                    </div><!--/widget-box-->
+                </g:if>	
+                
 
             </div>
             <!--g:form class="form-actions"-->
@@ -194,50 +272,7 @@
                     <g:hiddenField name="id" value="${otorgamientoDePoderInstance?.id}" />
                     <g:link class="btn btn-primary" action="edit" id="${otorgamientoDePoderInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>                    
                     </fieldset-->
-            <!--/g:form-->
-            <div id="tareasAsociadas" class="modal hide" style="width:600px;">
-                <div class="modal-header">
-                    <button data-dismiss="modal" class="close" type="button">×</button>
-                    <h3>Notificaciones asociados al Otorgamiento de Poder</h3>
-                </div>
-                <div class="modal-body">     
-                    <g:if test="${otorgamientoDePoderInstance?.tareas?.findAll{ it.cerrada == false }}">
-                        <div class="widget-box">
-                            <div class="widget-header widget-header-flat widget-header-small">
-                                <h5><i class="icon-circle"></i>Notificaciones Activas</h5>                    
-                            </div>
-                            <div class="widget-body">
-                                <div class="widget-main">
-                                    <g:each in="${otorgamientoDePoderInstance?.tareas?.findAll{ it.cerrada == false }}" var="tarea">
-                                        <g:link class="btn btn-mini btn-info btn-block" controller="tarea" action="show" id="${tarea.id}" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id ]">
-                                            <span class="label label-large label-info arrowed-in-right arrowed-in">Turno: ${tarea.id}</span>
-                                            ${tarea.nombre}
-                                        </g:link></br>
-                                    </g:each>
-                                </div><!--/widget-main-->
-                            </div><!--/widget-body-->
-                        </div><!--/widget-box-->
-                    </g:if>
-                    <g:if test="${otorgamientoDePoderInstance?.tareas?.findAll{ it.cerrada == true }}">
-                        <br/>
-                        <div class="widget-box">
-                            <div class="widget-header widget-header-flat widget-header-small">
-                                <h5><i class="icon-circle"></i>Notificaciones Expiradas</h5>                    
-                            </div>
-                            <div class="widget-body">
-                                <div class="widget-main">
-                                    <g:each in="${otorgamientoDePoderInstance?.tareas?.findAll{ it.cerrada == true }}" var="tarea">
-                                        <g:link class="btn btn-mini btn-light btn-block" controller="tarea" action="show" id="${tarea.id}" params="[ idConvenio : convenioInstance?.id ]">
-                                            <span class="label label-large label-light arrowed-in-right arrowed-in">Turno: ${tarea.id}</span>
-                                            ${tarea.nombre}
-                                        </g:link></br>
-                                    </g:each>
-                                </div><!--/widget-main-->
-                            </div><!--/widget-body-->
-                        </div><!--/widget-box-->
-                    </g:if>
-                </div>
-            </div>
+            <!--/g:form-->            
         </div>
     </body>
 </html>
