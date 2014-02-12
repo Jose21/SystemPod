@@ -41,7 +41,7 @@
                 </sec:ifAnyGranted>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_GESTOR">
                     <g:if test="${ocultarBoton != true}">
-                        <g:link action="turnarResolvedor" class="btn btn-small btn-info tip-bottom" params="[ id : revocacionDePoderInstance?.id]">
+                        <g:link action="turnarResolvedor" class="btn btn-small btn-info tip-bottom" params="[ id : revocacionDePoderInstance?.id]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
                             <i class="icon-external-link"></i> Turnar a Resolvedor
                         </g:link>
                     </g:if>
@@ -78,7 +78,14 @@
                         <dd><g:fieldValue bean="${revocacionDePoderInstance}" field="escrituraPublica"/></dd>
 
                     </dl>
-                </g:if>                             
+                </g:if>
+
+                <g:if test="${revocacionDePoderInstance?.apoderadosEliminar}">
+                    <dt><g:message code="revocacionDePoder.apoderadosEliminar.label" default="Apoderados a quien se revoca poder" /></dt>
+                    <g:each in="${revocacionDePoderInstance.apoderadosEliminar}" var="a">
+                        <dd>- ${a?.nombre.encodeAsHTML()}</dd>
+                    </g:each>                    
+                </g:if>
 
                 <g:if test="${revocacionDePoderInstance?.categoriaDeTipoDePoder}">
                     <dl>

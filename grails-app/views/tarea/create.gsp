@@ -10,7 +10,7 @@
         <div class="page-header position-relative">
             <g:if test="${session.idOtorgamientoDePoder}">
                 <br/>
-                    <h1>Crear Notificación</h1>
+                    <h1>Crear Notificación de Rechazo</h1>
                 <br/>
             </g:if>
             <g:else><h1>Crear: Turno</h1></g:else>

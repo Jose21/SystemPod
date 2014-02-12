@@ -86,10 +86,19 @@ class OtorgamientoDePoderController {
         if(otorgamientoDePoderInstance.asignar != springSecurityService.currentUser){
             ocultarBoton = true
         }
+        //banderas para saber si ya fueron vistos los documentos por el usuario solicitante
+        if(otorgamientoDePoderInstance.creadaPor == springSecurityService.currentUser && otorgamientoDePoderInstance.documentos){
+            otorgamientoDePoderInstance.voBoCopiaElectronica = true
+            otorgamientoDePoderInstance.save()
+        }
+        if(otorgamientoDePoderInstance.creadaPor == springSecurityService.currentUser && otorgamientoDePoderInstance.notas){
+            otorgamientoDePoderInstance.voBoDocumentoFisico = true
+            otorgamientoDePoderInstance.save()
+        }
                               
         def cartaDeInstruccion = CartaDeInstruccionDeOtorgamiento.findByOtorgamientoDePoder(otorgamientoDePoderInstance)
         
-        [otorgamientoDePoderInstance: otorgamientoDePoderInstance, cartaDeInstruccion : cartaDeInstruccion, ocultarBoton:ocultarBoton ]                       
+        [otorgamientoDePoderInstance: otorgamientoDePoderInstance, cartaDeInstruccion : cartaDeInstruccion, ocultarBoton:ocultarBoton]                       
     }
 
     def edit(Long id) {
@@ -158,13 +167,15 @@ class OtorgamientoDePoderController {
             render(view: "edit", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])
             return
         }
-        if (params.archivo.getSize()!=0) {            
-            def documentoDePoderInstance = new DocumentoDePoder(params)
-            documentoDePoderInstance.nombre = params.archivo.getOriginalFilename()
-            otorgamientoDePoderInstance.addToDocumentos(documentoDePoderInstance)
-            if (!otorgamientoDePoderInstance.save(flush: true)) {
-                render(view: "create", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])
-                return
+        if(params.archivo){
+            if (params.archivo.getSize()!=0) {            
+                def documentoDePoderInstance = new DocumentoDePoder(params)
+                documentoDePoderInstance.nombre = params.archivo.getOriginalFilename()
+                otorgamientoDePoderInstance.addToDocumentos(documentoDePoderInstance)
+                if (!otorgamientoDePoderInstance.save(flush: true)) {
+                    render(view: "create", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])
+                    return
+                }
             }
         }
         if(params.tags){
@@ -227,6 +238,7 @@ class OtorgamientoDePoderController {
         def apoderadoInstance = Apoderado.findByNombre(params."apoderado")
         if (apoderadoInstance) {
             otorgamientoDePoderInstance.addToApoderados(apoderadoInstance)
+            otorgamientoDePoderInstance.addToApoderadosVigentes(apoderadoInstance)
             if (otorgamientoDePoderInstance.save(flush:true)) {                
                 flash.message = "Se ha agregado apoderado a la solicitud."
             } else {
@@ -236,6 +248,7 @@ class OtorgamientoDePoderController {
             apoderadoInstance = new Apoderado(nombre:params."apoderado")
             if (apoderadoInstance.save(flush:true)) {  
                 otorgamientoDePoderInstance.addToApoderados(apoderadoInstance)
+                otorgamientoDePoderInstance.addToApoderadosVigentes(apoderadoInstance)
                 if (otorgamientoDePoderInstance.save(flush:true)) {                    
                     flash.message = "Se ha agregado apoderado a la solicitud."
                 } else {
@@ -250,7 +263,8 @@ class OtorgamientoDePoderController {
     def removeApoderado () {
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoder.id as long)        
         def apoderadoInstance = Apoderado.get(params.apoderado.id as long)
-        otorgamientoDePoderInstance.removeFromApoderados(apoderadoInstance)        
+        otorgamientoDePoderInstance.removeFromApoderados(apoderadoInstance)
+        otorgamientoDePoderInstance.removeFromApoderadosVigentes(apoderadoInstance)
         flash.message = "El firmante ha sido eliminado."        
         redirect(action: "edit", id: otorgamientoDePoderInstance.id, params : [ anchor : params.anchor ])
     }

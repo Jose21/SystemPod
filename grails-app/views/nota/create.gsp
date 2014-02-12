@@ -18,9 +18,9 @@
                 <h1>Notificación de Envio de Documento Físico</h1>
                 <br/>
             </g:if>
-            <g:else>
+            <g:if test="${!session.revocacionDePoderId && !session.otorgamientoDePoderId}">
                 <h1>Crear: Nota</h1>
-            </g:else>
+            </g:if>
         </div>
 
         <div class="container-fluid">

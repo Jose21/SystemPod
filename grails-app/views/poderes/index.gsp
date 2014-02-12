@@ -78,7 +78,11 @@
                             <tbody>
                                 <g:each in="${otorgamientosRojosList}" status="i" var="otorgamientoInstance">
                                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                        <td></td>
+                                        <td>
+                                            <g:if test="${otorgamientoInstance.notas}">
+                                                <i class=" icon-exclamation-sign red"></i>   
+                                            </g:if>                                            
+                                        </td>
                                         <td>
                                             <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoInstance?.id}">
                                                 <span class="label label-important arrowed-in">
@@ -88,12 +92,16 @@
                                         </td>
                                         <td>${fieldValue(bean: otorgamientoInstance, field: "asignadaPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoInstance, field: "creadaPor")}</td>                                        
-                                        <td><g:formatDate date="${otorgamientoInstance?.fechaDeEnvio}" /></td>
+                                        <td><g:formatDate date="${otorgamientoInstance?.fechaDeEnvio}" /></td>                                        
                                     </tr>
                                 </g:each>
                                 <g:each in="${otorgamientosAmarillosList}" status="i" var="otorgamientoInstance">
                                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                        <td></td>
+                                        <td>
+                                            <g:if test="${otorgamientoInstance.notas}">
+                                                <i class=" icon-exclamation-sign red"></i>   
+                                            </g:if>                                            
+                                        </td>
                                         <td>
                                             <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoInstance?.id}">
                                                 <span class="label label-warning arrowed-in">
@@ -103,12 +111,16 @@
                                         </td>
                                         <td>${fieldValue(bean: otorgamientoInstance, field: "asignadaPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoInstance, field: "creadaPor")}</td>                                        
-                                        <td><g:formatDate date="${otorgamientoInstance?.fechaDeEnvio}" /></td>
+                                        <td><g:formatDate date="${otorgamientoInstance?.fechaDeEnvio}" /></td>                                        
                                     </tr>
                                 </g:each>
                                 <g:each in="${otorgamientosVerdesList}" status="i" var="otorgamientoInstance">
                                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                        <td></td>
+                                        <td>
+                                            <g:if test="${otorgamientoInstance.notas}">
+                                                <i class=" icon-exclamation-sign red"></i>   
+                                            </g:if>                                            
+                                        </td>
                                         <td>
                                             <g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoInstance?.id}">
                                                 <span class="label label-success arrowed-in">
@@ -118,7 +130,7 @@
                                         </td>
                                         <td>${fieldValue(bean: otorgamientoInstance, field: "asignadaPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoInstance, field: "creadaPor")}</td>                                        
-                                        <td><g:formatDate date="${otorgamientoInstance?.fechaDeEnvio}" /></td>
+                                        <td><g:formatDate date="${otorgamientoInstance?.fechaDeEnvio}" /></td>                                        
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -345,6 +357,7 @@
                                 <!--Se iteran los poderes semi-criticos de poder-->
                                 <g:each in="${poderSemicriticoInstanceList}" status="i" var="otorgamientoInstance">
                                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td></td>
                                         <td>
                                             <span class="label label-warning">Semi-Critico</span>
                                         </td>
@@ -486,7 +499,9 @@
                                     <th scope="col">Asignado Por</th>
                                     <th scope="col">Creada Por</th>
                                     <th scope="col">Enviado a</th>
-                                    <th scope="col">Fecha de Envío</th>
+                                    <th scope="col">Fecha de Envío</th>                                    
+                                    <th scope="col" align="center">Cop. Electronica</th>                                    
+                                    <th scope="col" align="center">Doc. Físico</th>                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -504,6 +519,22 @@
                                         <td>${fieldValue(bean: otorgamientoAsignadosSolicitanteInstance, field: "creadaPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoAsignadosSolicitanteInstance, field: "asignar")}</td>
                                         <td><g:formatDate date="${otorgamientoAsignadosSolicitanteInstance?.fechaDeEnvio}" /></td>
+                                        <td align="center">
+                                            <g:if test="${otorgamientoAsignadosSolicitanteInstance.voBoCopiaElectronica == true && otorgamientoAsignadosSolicitanteInstance.documentos}">
+                                                <i class=" icon-eye-open"></i>   
+                                            </g:if>
+                                            <g:else>
+                                                <i class=" icon-eye-close"></i>
+                                            </g:else>
+                                        </td>
+                                        <td align="center">
+                                            <g:if test="${otorgamientoAsignadosSolicitanteInstance.voBoDocumentoFisico == true && otorgamientoAsignadosSolicitanteInstance.notas}">
+                                                <i class=" icon-eye-open"></i>   
+                                            </g:if>
+                                            <g:else>
+                                                <i class=" icon-eye-close"></i>
+                                            </g:else>
+                                        </td>
                                     </tr>
                                 </g:each>
                             </tbody>

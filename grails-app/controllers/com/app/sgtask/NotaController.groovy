@@ -62,7 +62,12 @@ class NotaController {
         //integracion con poderes //revocacion de poder
         //enviar copia electrónica
         if (session.revocacionDePoderId) {
-            def revocacionDePoderInstance = RevocacionDePoder.get(session.revocacionDePoderId)            
+            def revocacionDePoderInstance = RevocacionDePoder.get(session.revocacionDePoderId)
+            //se eliminan los apoderados de la solicitud en la variable apoderadosVigentes de OtorgamientoDePoder
+            def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(revocacionDePoderInstance.escrituraPublica)
+            otorgamientoDePoderInstance.apoderadosVigentes = otorgamientoDePoderInstance.apoderadosVigentes - revocacionDePoderInstance.apoderadosEliminar
+            otorgamientoDePoderInstance.save()
+            
             def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}        
                 usuarioResolvedorPoderes.each{
                     revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   

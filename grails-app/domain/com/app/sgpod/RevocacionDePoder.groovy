@@ -13,12 +13,17 @@ class RevocacionDePoder extends Poder{
     String tipoDeRevocacion
     boolean agregarApoderado = true
     
+    static hasMany = [         
+        apoderadosEliminar : Apoderado       
+    ]
+    
     static constraints = {                
-        motivoDeRevocacion nullable:true, maxSize:1048576
+        motivoDeRevocacion nullable:false
         solicitadoPor blank:false        
         fechaDeRevocacion nullable:true
         tipoDeRevocacion blank:false, inList : ["Total", "Parcial"]
         agregarApoderado blank:false
+        apoderadosEliminar nullable:true
     }
     
     String toString() {

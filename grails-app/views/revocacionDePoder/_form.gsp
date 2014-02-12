@@ -6,15 +6,7 @@
 
 <g:hiddenField name="agregarApoderado" value="${revocacionDePoderInstance?.agregarApoderado}"/>
 
-<div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'escrituraPublica', 'error')} required">
-    <label for="escrituraPublica" class="control-label">
-        <g:message code="revocacionDePoder.escrituraPublica.label" default="Escritura Publica" />
-        <span class="required-indicator">*</span>
-    </label>
-    <div class="controls">
-        <g:textField class="span4" name="escrituraPublica" required="" value="${revocacionDePoderInstance?.escrituraPublica}"/>                
-    </div>
-</div>
+<h3 id="bloqueDatosComplementarios"  class="header smaller lighter blue">Datos Complementarios</h3>
 
 <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'tipoDeRevocacion', 'error')} required">
     <label for="tipoDeRevocacion" class="control-label">
@@ -26,6 +18,30 @@
                   noSelection="['':'Elige un tipo de revocación']"
                   value="${revocacionDePoderInstance?.tipoDeRevocacion}"
                   valueMessagePrefix="revocacionDePoder.tipoDeRevocacion"/>
+    </div>
+</div>
+
+<div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'motivoDeRevocacion', 'error')} required">
+    <label for="motivoDeRevocacion" class="control-label">
+        <g:message code="revocacionDePoder.motivoDeRevocacion.label" default="Motivo De Revocación" />
+        <span class="required-indicator">*</span>
+    </label>
+    <div class="controls">
+        <g:select readonly="readonly" noSelection="['':'Elige una opción']" id="motivoDeRevocacion" name="motivoDeRevocacion.id"
+                  from="${com.app.sgpod.MotivoDeRevocacion.list()}" optionKey="id" required="" 
+                  value="${revocacionDePoderInstance?.motivoDeRevocacion?.id}" class="many-to-one" required="" />               
+    </div>    
+</div>
+
+<h3 id="bloqueDatosComplementarios"  class="header smaller lighter blue"></h3>
+
+<div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'escrituraPublica', 'error')} required">
+    <label for="escrituraPublica" class="control-label">
+        <g:message code="revocacionDePoder.escrituraPublica.label" default="Escritura Publica" />
+        <span class="required-indicator">*</span>
+    </label>
+    <div class="controls">
+        <g:textField class="span4" name="escrituraPublica" required="" value="${revocacionDePoderInstance?.escrituraPublica}"/>                
     </div>
 </div>
 

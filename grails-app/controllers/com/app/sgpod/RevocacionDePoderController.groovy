@@ -31,6 +31,8 @@ class RevocacionDePoderController {
         if(params.escrituraPublica){
             if(!datosDelOtorgamiento?.escrituraPublica){
                 flash.warn = "No se ha encontrado una solicitud de Otorgamiento de Poder. >> Intente de nuevo o complemente los datos manualmente."
+            }else if (!datosDelOtorgamiento?.apoderadosVigentes){
+                flash.warn = "El poder asociado al Número de Escritura Pública esta totalmente Revocado."
             }else{
                 
                 revocacionDePoderInstance.escrituraPublica = datosDelOtorgamiento?.escrituraPublica
@@ -40,7 +42,7 @@ class RevocacionDePoderController {
                 revocacionDePoderInstance.fechaDeRevocacion = datosDelOtorgamiento?.fechaVencimiento
                 revocacionDePoderInstance.comentarios = datosDelOtorgamiento?.comentarios
                 revocacionDePoderInstance.documentos = datosDelOtorgamiento?.documentos
-                revocacionDePoderInstance.apoderados = datosDelOtorgamiento?.apoderados
+                revocacionDePoderInstance.apoderados = datosDelOtorgamiento?.apoderadosVigentes
                 revocacionDePoderInstance.agregarApoderado = false
             }
         }
@@ -267,12 +269,39 @@ class RevocacionDePoderController {
         [revocacionDePoderInstance: revocacionDePoderInstance, otorgamientoDePoderId : datosDelOtorgamiento?.id]
     }
     
-    def removeApoderado () {
+    def enviarSolicitud () {
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)        
-        def apoderadoInstance = Apoderado.get(params.apoderado.id as long)
-        revocacionDePoderInstance.removeFromApoderados(apoderadoInstance)        
-        flash.message = "El apoderado fue omitido"        
-        redirect(action: "edit", id: revocacionDePoderInstance.id)
+        if(revocacionDePoderInstance?.tipoDeRevocacion == "Parcial"){
+       
+            def apoderadoSelects = params.list('apoderadoList')        
+            def selectedApoderados = Apoderado.getAll(apoderadoSelects)            
+            def listaInicialDeApoderados = revocacionDePoderInstance.apoderados              
+          
+            def lista2 = listaInicialDeApoderados - selectedApoderados            
+            //se agregar los apoderados que se van a eliminar a la solicitud                
+            selectedApoderados.each(){ it ->                                                
+                revocacionDePoderInstance.addToApoderadosEliminar(it)           
+            }
+            // se quitan de la lista los apoderados que se eliminan
+            lista2.each(){ it ->                                                
+                revocacionDePoderInstance.removeFromApoderados(it)            
+            }
+        }else{
+            revocacionDePoderInstance.apoderados.each{ it ->
+                revocacionDePoderInstance.addToApoderadosEliminar(it)
+            }            
+        }
+                
+        def usuarioGestorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_GESTOR")).collect {it.usuario}        
+        usuarioGestorPoderes.each{
+            revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
+        }
+        revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
+        revocacionDePoderInstance.fechaDeEnvio = new Date()
+        revocacionDePoderInstance.save()
+        flash.message = "Se ha enviado con éxito la Solicitud."
+        
+        redirect(controller: "poderes", action: "index")        
     }
     def addApoderado () {
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)

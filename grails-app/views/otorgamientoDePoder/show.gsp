@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta name="layout" content="mainPoderes">
-        <g:set var="entityName" value="${message(code: 'otorgamientoDePoder.label', default: 'Otorgamiento De Poder')}" />
+        <g:set var="entityName" value="${message(code: 'otorgamientoDePoder.label', default: 'Otorgamiento De Poder')}"/>
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -20,7 +20,7 @@
                     </g:if>
                 </sec:ifAnyGranted>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
-                    <g:if test="${!otorgamientoDePoderInstance.documentos && !otorgamientoDePoderInstance.tareas}">
+                    <g:if test="${!otorgamientoDePoderInstance.documentos && !otorgamientoDePoderInstance.tareas && ocultarBoton != true}">
                         <g:link controller="tarea" action="create" class="btn btn-small btn-danger tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id ]">
                             <i class="icon-external-link"></i> Rechazar Solicitud
                         </g:link>
@@ -47,7 +47,7 @@
                         </g:link>
                     </g:if>
                     <g:if test="${otorgamientoDePoderInstance.documentos && ocultarBoton == true && !otorgamientoDePoderInstance.notas}">                        
-                        <g:link  controller="nota" action="create" class="btn btn-small btn-yellow tip-bottom" params="[ otorgamientoDePoderId : otorgamientoDePoderInstance?.id]">
+                        <g:link  controller="nota" action="create" class="btn btn-small btn-purple tip-bottom" params="[ otorgamientoDePoderId : otorgamientoDePoderInstance?.id]">
                             <i class="icon-external-link"></i> Notificar Envio de Documento Físico
                         </g:link>
                     </g:if>   
@@ -197,7 +197,7 @@
                         <div class="widget-body">
                             <div class="widget-main no-padding">
                                 <div class="dialogs">                
-                                <g:each var="nota" in="${otorgamientoDePoderInstance?.notas.sort { it.dateCreated }}">
+                                <g:each var="nota" in="${otorgamientoDePoderInstance?.notas?.sort { it.dateCreated }}">
                                     <div class="itemdiv dialogdiv">                                            
                                         <div class="body">
                                             <div class="time">                        
@@ -207,15 +207,15 @@
                                             </div>
 
                                             <div class="name">
-                                                Título: ${nota.titulo}
+                                                Título: ${nota?.titulo}
                                             </div>
                                             <div class="text">
-                                                Descripcion: <%=nota.descripcion%>
-                                                <g:if test="${nota.documentos}">
+                                                Descripcion: <%=nota?.descripcion%>
+                                                <g:if test="${nota?.documentos}">
                                                     Archivos adjuntos<br/>
-                                                    <g:each in="${nota.documentos}" var="documento">                            
-                                                        <g:link controller="documento" action="downloadArchivo" id ="${documento.id}">
-                                                            --${documento.nombre} 
+                                                    <g:each in="${nota?.documentos}" var="documento">                            
+                                                        <g:link controller="documento" action="downloadArchivo" id ="${documento?.id}">
+                                                            --${documento?.nombre} 
                                                         </g:link><br/>
                                                     </g:each>
                                                 </g:if>                                                
