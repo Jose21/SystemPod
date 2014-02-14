@@ -232,8 +232,7 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th scope="col">Número de Solicitud</th>
-                                    <th scope="col">Asignado Por</th>
+                                    <th scope="col">Número de Solicitud</th>                                    
                                     <th scope="col">Creada Por</th>
                                     <th scope="col">Enviado a</th>
                                     <th scope="col">Fecha de Envío</th>
@@ -249,8 +248,7 @@
                                                     ${otorgamientoAsignadosInstance?.id}-O
                                                 </span>
                                             </g:link>
-                                        </td>
-                                        <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "asignadaPor")}</td>
+                                        </td>                                        
                                         <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "creadaPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoAsignadosInstance, field: "asignar")}</td>
                                         <td><g:formatDate date="${otorgamientoAsignadosInstance?.fechaDeEnvio}" /></td>
@@ -272,8 +270,7 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th scope="col">Número de Solicitud</th>
-                                    <th scope="col">Asignado Por</th>
+                                    <th scope="col">Número de Solicitud</th>                                    
                                     <th scope="col">Creada Por</th>
                                     <th scope="col">Enviado a</th>
                                     <th scope="col">Fecha de Envío</th>
@@ -289,8 +286,7 @@
                                                     ${revocacionAsignadosInstance?.id}-R
                                                 </span>
                                             </g:link>
-                                        </td>
-                                        <td>${fieldValue(bean: revocacionAsignadosInstance, field: "asignadaPor")}</td>
+                                        </td>                                        
                                         <td>${fieldValue(bean: revocacionAsignadosInstance, field: "creadaPor")}</td>
                                         <td>${fieldValue(bean: revocacionAsignadosInstance, field: "asignar")}</td>
                                         <td><g:formatDate date="${revocacionAsignadosInstance?.fechaDeEnvio}" /></td>
@@ -328,8 +324,7 @@
                                 <tr>
                                     <th></th>
                                     <th scope="col"></th>
-                                    <th scope="col">Número de Solicitud</th>
-                                    <th scope="col">Asignado Por</th>
+                                    <th scope="col">Número de Solicitud</th>                                    
                                     <th scope="col">Creado Por</th>
                                     <th scope="col">Fecha de Envío</th>
                                 </tr>
@@ -348,8 +343,7 @@
                                                     ${otorgamientoInstance?.id}-O
                                                 </span>
                                             </g:link>
-                                        </td>
-                                        <td>${fieldValue(bean: otorgamientoInstance, field: "asignadaPor")}</td>
+                                        </td>                                        
                                         <td>${fieldValue(bean: otorgamientoInstance, field: "creadaPor")}</td>
                                         <td><g:formatDate date="${otorgamientoInstance?.fechaDeEnvio}" /></td>
                                     </tr>
@@ -367,8 +361,7 @@
                                                     ${otorgamientoInstance?.id}-O
                                                 </span>
                                             </g:link>
-                                        </td>
-                                        <td>${fieldValue(bean: otorgamientoInstance, field: "asignadaPor")}</td>
+                                        </td>                                        
                                         <td>${fieldValue(bean: otorgamientoInstance, field: "creadaPor")}</td>
                                         <td><g:formatDate date="${otorgamientoInstance?.fechaDeEnvio}" /></td>
                                     </tr>
@@ -402,8 +395,7 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th scope="col">Número de Solicitud</th>
-                                    <th scope="col">Asignado Por</th>
+                                    <th scope="col">Número de Solicitud</th>                                    
                                     <th scope="col">Creada Por</th>
                                     <th scope="col">Enviado a</th>
                                     <th scope="col">Fecha de Envío</th>
@@ -419,8 +411,7 @@
                                                     ${otorgamientoAsignadosNotarioInstance?.id}-O
                                                 </span>
                                             </g:link>
-                                        </td>
-                                        <td>${fieldValue(bean: otorgamientoAsignadosNotarioInstance, field: "asignadaPor")}</td>
+                                        </td>                                        
                                         <td>${fieldValue(bean: otorgamientoAsignadosNotarioInstance, field: "creadaPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoAsignadosNotarioInstance, field: "asignar")}</td>
                                         <td><g:formatDate date="${otorgamientoAsignadosNotarioInstance?.fechaDeEnvio}" /></td>
@@ -442,8 +433,7 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th scope="col">Número de Solicitud</th>
-                                    <th scope="col">Asignado Por</th>
+                                    <th scope="col">Número de Solicitud</th>                                    
                                     <th scope="col">Creada Por</th>
                                     <th scope="col">Enviado a</th>
                                     <th scope="col">Fecha de Envío</th>
@@ -459,8 +449,7 @@
                                                     ${revocacionAsignadosSolicitanteInstance?.id}-R
                                                 </span>
                                             </g:link>
-                                        </td>
-                                        <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "asignadaPor")}</td>
+                                        </td>                                        
                                         <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "creadaPor")}</td>
                                         <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "asignar")}</td>
                                         <td><g:formatDate date="${revocacionAsignadosSolicitanteInstance?.fechaDeEnvio}" /></td>
@@ -495,13 +484,12 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th scope="col">Número de Solicitud</th>
-                                    <th scope="col">Asignado Por</th>
+                                    <th scope="col">Número de Solicitud</th>                                    
                                     <th scope="col">Creada Por</th>
                                     <th scope="col">Enviado a</th>
                                     <th scope="col">Fecha de Envío</th>                                    
-                                    <th scope="col" align="center">Cop. Electronica</th>                                    
-                                    <th scope="col" align="center">Doc. Físico</th>                                    
+                                    <th scope="col" align="center">Copia Electronica</th>                                    
+                                    <th scope="col" align="center">Documento Físico</th>                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -514,25 +502,24 @@
                                                     ${otorgamientoAsignadosSolicitanteInstance?.id}-O
                                                 </span>
                                             </g:link>
-                                        </td>
-                                        <td>${fieldValue(bean: otorgamientoAsignadosSolicitanteInstance, field: "asignadaPor")}</td>
+                                        </td>                                        
                                         <td>${fieldValue(bean: otorgamientoAsignadosSolicitanteInstance, field: "creadaPor")}</td>
                                         <td>${fieldValue(bean: otorgamientoAsignadosSolicitanteInstance, field: "asignar")}</td>
                                         <td><g:formatDate date="${otorgamientoAsignadosSolicitanteInstance?.fechaDeEnvio}" /></td>
                                         <td align="center">
                                             <g:if test="${otorgamientoAsignadosSolicitanteInstance.voBoCopiaElectronica == true && otorgamientoAsignadosSolicitanteInstance.documentos}">
-                                                <i class=" icon-eye-open"></i>   
+                                                <i class="icon-check bigger-160"></i>   
                                             </g:if>
                                             <g:else>
-                                                <i class=" icon-eye-close"></i>
+                                                <i class="icon-check-empty bigger-160"></i>
                                             </g:else>
                                         </td>
                                         <td align="center">
                                             <g:if test="${otorgamientoAsignadosSolicitanteInstance.voBoDocumentoFisico == true && otorgamientoAsignadosSolicitanteInstance.notas}">
-                                                <i class=" icon-eye-open"></i>   
+                                                <i class="icon-check bigger-160"></i>   
                                             </g:if>
                                             <g:else>
-                                                <i class=" icon-eye-close"></i>
+                                                <i class="icon-check-empty bigger-160"></i>
                                             </g:else>
                                         </td>
                                     </tr>
@@ -553,8 +540,7 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th scope="col">Número de Solicitud</th>
-                                    <th scope="col">Asignado Por</th>
+                                    <th scope="col">Número de Solicitud</th>                                    
                                     <th scope="col">Creada Por</th>
                                     <th scope="col">Enviado a</th>
                                     <th scope="col">Fecha de Envío</th>
@@ -570,8 +556,7 @@
                                                     ${revocacionAsignadosSolicitanteInstance?.id}-R
                                                 </span>
                                             </g:link>
-                                        </td>
-                                        <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "asignadaPor")}</td>
+                                        </td>                                        
                                         <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "creadaPor")}</td>
                                         <td>${fieldValue(bean: revocacionAsignadosSolicitanteInstance, field: "asignar")}</td>
                                         <td><g:formatDate date="${revocacionAsignadosSolicitanteInstance?.fechaDeEnvio}" /></td>

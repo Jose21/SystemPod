@@ -305,5 +305,10 @@ class OtorgamientoDePoderController {
         otorgamientoDePoderInstance.save()
         flash.message = "Se ha turnado con éxito la Solicitud."        
         redirect(controller: "poderes", action: "index")
+    }    
+    
+    def imprimir(Long id){
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)
+        [ otorgamientoDePoderInstance : otorgamientoDePoderInstance ]
     }
 }
