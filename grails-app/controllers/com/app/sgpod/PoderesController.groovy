@@ -25,6 +25,8 @@ class PoderesController {
         }    
         def poderesList = poderesList1.list() + poderesList2.list()
         
+        def parameters = ConfigurarParametro.get(1 as long)        
+        
         def otorgamientosRojosList = []
         def otorgamientosAmarillosList = []
         def otorgamientosVerdesList = []
@@ -33,11 +35,11 @@ class PoderesController {
                 def fechaHoy = new Date()                
                 def fechaDeEnvio = poder.fechaDeEnvio                
                 def diasPosteriores = fechaHoy - fechaDeEnvio                 
-                if(diasPosteriores <= 3){
+                if(diasPosteriores <= parameters.estadoCriticoSolicitud){
                     otorgamientosVerdesList.add(poder)
-                }else if(diasPosteriores <= 5 && diasPosteriores > 3){
+                }else if(diasPosteriores <= parameters.estadoSemiSolicitud && diasPosteriores > parameters.estadoCriticoSolicitud){
                     otorgamientosAmarillosList.add(poder)
-                }else if(diasPosteriores > 5){
+                }else if(diasPosteriores > parameters.estadoSemiSolicitud){
                     otorgamientosRojosList.add(poder)
                 }                                
             }            
@@ -140,9 +142,9 @@ class PoderesController {
                 def fechaHoy = new Date()                
                 def fechaVencimiento = poder.fechaVencimiento                
                 def diasParaVencimiento = fechaVencimiento - fechaHoy                
-                if(diasParaVencimiento <= 10){
+                if(diasParaVencimiento <= parameters.estadoCriticoPoder){
                     poderCriticoList.add(poder)
-                }else if(diasParaVencimiento <= 15 && diasParaVencimiento > 10 ){
+                }else if(diasParaVencimiento <= parameters.estadoSemiPoder && diasParaVencimiento > parameters.estadoCriticoPoder ){
                     poderSemicriticoList.add(poder)
                 }else{
                     poderNoCritico.add(poder)

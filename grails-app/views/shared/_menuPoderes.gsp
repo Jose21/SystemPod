@@ -63,7 +63,7 @@
     </li>
     </sec:ifAnyGranted>
     
-    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR, ROLE_PODERES_SOLICITANTE">
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE">
     <li class="active open">
         <a href="#" class="dropdown-toggle">
             <i class="icon-book"></i>
@@ -80,7 +80,7 @@
     </li>
     </sec:ifAnyGranted>
     
-    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_ADMINISTRADOR">
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
     <li class="active open">
         <a href="#" class="dropdown-toggle">
             <i class="icon-folder-close"></i>
@@ -106,6 +106,11 @@
             <li>
                 <g:link controller="motivoDeRevocacion">
                     <i class="icon-double-angle-right"></i> Motivos de Revocación
+                </g:link>
+            </li>
+            <li>
+                <g:link controller="configurarParametro" action="edit" id="1">
+                    <i class="icon-double-angle-right"></i> Configuración de Parametros
                 </g:link>
             </li>
         </ul>

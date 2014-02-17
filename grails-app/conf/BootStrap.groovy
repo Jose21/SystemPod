@@ -7,6 +7,7 @@ import com.app.sgtask.Grupo
 import com.app.sgcon.StatusDelConvenio
 import com.app.sgpod.CartaDeInstruccion
 import com.app.sgpod.CategoriaDeTipoDePoder
+import com.app.sgpod.ConfigurarParametro
 import com.app.sgpod.Delegacion
 import com.app.sgpod.FormatoDeCartaDeInstruccion
 import com.app.sgpod.MotivoDeOtorgamiento
@@ -165,7 +166,11 @@ class BootStrap {
             new CategoriaDeTipoDePoder(nombre:"Modelo-C3.-Especiales", tipoDePoder: TipoDePoder.get(3)).save()
             
             
-            
+            new ConfigurarParametro(
+            estadoCriticoPoder:"3", estadoSemiPoder:"5",
+            estadoCriticoSolicitud:"10", estadoSemiSolicitud:"15"
+            ).save()
+                                    
             /*new Persona (
             nombre : "Administrador Del Sistema",
             usuario : Usuario.findByUsername("admin")

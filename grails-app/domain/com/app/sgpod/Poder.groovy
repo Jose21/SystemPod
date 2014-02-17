@@ -31,7 +31,7 @@ class Poder {
         categoriaDeTipoDePoder blank:false
         delegacion nullable:false
         creadaPor nullable:false
-        escrituraPublica nullable:true, blank:true
+        escrituraPublica nullable:true, blank:true, unique:true
         
         comentarios nullable:true, blank:true, maxSize:1048576
         

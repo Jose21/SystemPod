@@ -64,18 +64,21 @@ class SendNotificationJob {
         //Poderes que están por vencer
         def listaPoderes = OtorgamientoDePoder.list()       
         def poderCriticoList = []
-        def poderSemicriticoList = []        
+        def poderSemicriticoList = []
+        def parameters = ConfigurarParametro.get(1 as long)
         listaPoderes.each {otorgamientoDePoder ->
             if(otorgamientoDePoder.fechaVencimiento){                
                 def fechaVencimiento = otorgamientoDePoder.fechaVencimiento                
                 def diasParaVencimiento = fechaVencimiento - fechaHoy                
-                if(diasParaVencimiento <= 10){
+                if(diasParaVencimiento <= parameters.estadoCriticoPoder){
                     poderCriticoList.add(otorgamientoDePoder)
                     notificacionesService.poderPorVencer(otorgamientoDePoder, otorgamientoDePoder.responsable)
+                    notificacionesService.poderPorVencer(otorgamientoDePoder, otorgamientoDePoder.creadaPor)
                     log.info "se envia correo critico"
-                }else if(diasParaVencimiento <= 15 && diasParaVencimiento > 10 ){
+                }else if(diasParaVencimiento <= parameters.estadoSemiPoder && diasParaVencimiento > parameters.estadoCriticoPoder ){
                     poderSemicriticoList.add(otorgamientoDePoder)
                     notificacionesService.poderPorVencer(otorgamientoDePoder, otorgamientoDePoder.responsable)
+                    notificacionesService.poderPorVencer(otorgamientoDePoder, otorgamientoDePoder.creadaPor)
                     log.info "se envia correo semi-critico"
                 }
                 log.info "no se envia correo poderes"
