@@ -19,13 +19,13 @@
     </label>
     <div class="controls">
         <g:select class="chosen-select" optionKey="id" optionValue="nombre" name="tipoDePoder.id" id="tipoDePoder.nombre" from="${com.app.sgpod.TipoDePoder.list()}"
-            value="${otorgamientoDePoderInstance?.categoriaDeTipoDePoder?.tipoDePoder?.id}"
+        value="${otorgamientoDePoderInstance?.categoriaDeTipoDePoder?.tipoDePoder?.id}"
             noSelection="['':'Elige un tipo de poder']"
-            onchange="${remoteFunction(
-            controller:'tipoDePoder', 
-            action:'ajaxGetCategorias', 
-            params:'\'tipoDePoder.id=\' + this.value', 
-            update:'categoriaSelection'
+        onchange="${remoteFunction(
+        controller:'tipoDePoder', 
+        action:'ajaxGetCategorias', 
+        params:'\'tipoDePoder.id=\' + this.value', 
+        update:'categoriaSelection'
         )}"/>
     </div>
     <div class="controls" id="categoriaSelection" >
@@ -33,6 +33,10 @@
             <option>${otorgamientoDePoderInstance?.categoriaDeTipoDePoder?.nombre}</option>
         </select>
     </div>
+</div>
+
+<div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'poderSolicitado', 'error')} required" id="ocultar">
+    <g:hiddenField name="poderSolicitado" value="${otorgamientoDePoderInstance?.poderSolicitado}"/>
 </div>
 
 <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'delegacion', 'error')} required">
@@ -51,16 +55,6 @@
                 </g:else>
             </g:each>
         </select>
-    </div>
-</div>
-
-<div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'poderSolicitado', 'error')} required">
-    <label for="poderSolicitado" class="control-label">
-        <g:message code="otorgamientoDePoder.poderSolicitado.label" default="Poder Solicitado" />
-        <span class="required-indicator">*</span>
-    </label>
-    <div class="controls">
-        <g:textArea class="span6" name="poderSolicitado" cols="40" rows="5" maxlength="1048576" required="" value="${otorgamientoDePoderInstance?.poderSolicitado}"/>
     </div>
 </div>
 

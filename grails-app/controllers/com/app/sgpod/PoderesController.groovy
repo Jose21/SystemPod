@@ -30,6 +30,7 @@ class PoderesController {
         def otorgamientosRojosList = []
         def otorgamientosAmarillosList = []
         def otorgamientosVerdesList = []
+        def otorgamientosNoAsignadosList = []
         poderesList1.each {poder ->
             if(poder.fechaDeEnvio){
                 def fechaHoy = new Date()                
@@ -42,11 +43,14 @@ class PoderesController {
                 }else if(diasPosteriores > parameters.estadoSemiSolicitud){
                     otorgamientosRojosList.add(poder)
                 }                                
+            }else{
+                otorgamientosNoAsignadosList.add(poder)
             }            
         }        
         def revocacionesRojosList = []
         def revocacionesAmarillosList = []
         def revocacionesVerdesList = []
+        def revocacionesNoAsignadosList = []
         poderesList2.each {poder ->
             if(poder.fechaDeEnvio){
                 def fechaHoy = new Date()                
@@ -59,6 +63,8 @@ class PoderesController {
                 }else{
                     revocacionesRojosList.add(poder)
                 }                                
+            }else{
+                revocacionesNoAsignadosList.add(poder)
             }            
         }
         
@@ -159,9 +165,11 @@ class PoderesController {
                 otorgamientosRojosList : otorgamientosRojosList,
                 otorgamientosAmarillosList : otorgamientosAmarillosList,
                 otorgamientosVerdesList : otorgamientosVerdesList,
+                otorgamientosNoAsignadosList : otorgamientosNoAsignadosList,
                 revocacionesRojosList : revocacionesRojosList,
                 revocacionesAmarillosList : revocacionesAmarillosList,
                 revocacionesVerdesList : revocacionesVerdesList,
+                revocacionesNoAsignadosList : revocacionesNoAsignadosList,
                 poderInstanceTotal: poderesList.size(),                
                 otorgamientoAsignadosInstanceList:asignadosOtorgamiento,
                 revocacionAsignadosInstanceList : asignadosRevocacion,

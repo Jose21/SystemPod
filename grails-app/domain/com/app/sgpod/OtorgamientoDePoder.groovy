@@ -25,7 +25,7 @@ class OtorgamientoDePoder extends Poder {
     static constraints = {       
         registroDeLaSolicitud nullable:false
         
-        poderSolicitado blank:false, maxSize:1048576
+        poderSolicitado blank:true, nullable:true, maxSize:1048576
         motivoDeOtorgamiento nullable:false, maxSize:1048576
         solicitadoPor blank:false
         

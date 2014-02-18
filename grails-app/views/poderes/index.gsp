@@ -133,6 +133,25 @@
                                         <td><g:formatDate date="${otorgamientoInstance?.fechaDeEnvio}" /></td>                                        
                                     </tr>
                                 </g:each>
+                                <g:each in="${otorgamientosNoAsignadosList}" status="i" var="otorgamientoInstance">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td>
+                                            <g:if test="${otorgamientoInstance.notas}">
+                                                <i class=" icon-exclamation-sign red"></i>   
+                                            </g:if>                                            
+                                        </td>
+                                        <td>
+                                            <g:link controller="otorgamientoDePoder" action="edit" id="${otorgamientoInstance?.id}">
+                                                <span class="label label-light arrowed-in">
+                                                    ${otorgamientoInstance?.id}-O
+                                                </span>
+                                            </g:link>
+                                        </td>
+                                        <td>${fieldValue(bean: otorgamientoInstance, field: "asignadaPor")}</td>
+                                        <td>${fieldValue(bean: otorgamientoInstance, field: "creadaPor")}</td>                                        
+                                        <td><g:formatDate date="${otorgamientoInstance?.fechaDeEnvio}" /></td>                                        
+                                    </tr>
+                                </g:each>
                             </tbody>
                         </table>                       
                         <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
@@ -192,6 +211,21 @@
                                         <td>
                                             <g:link controller="revocacionDePoder" action="show" id="${revocacionInstance?.id}">
                                                 <span class="label label-success arrowed-in">
+                                                    ${revocacionInstance?.id}-R
+                                                </span>
+                                            </g:link>
+                                        </td>
+                                        <td>${fieldValue(bean: revocacionInstance, field: "asignadaPor")}</td>
+                                        <td>${fieldValue(bean: revocacionInstance, field: "creadaPor")}</td>
+                                        <td><g:formatDate date="${revocacionInstance?.fechaDeEnvio}" /></td>
+                                    </tr>
+                                </g:each>
+                                <g:each in="${revocacionesNoAsignadosList}" status="i" var="revocacionInstance">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td></td>
+                                        <td>
+                                            <g:link controller="revocacionDePoder" action="edit" id="${revocacionInstance?.id}">
+                                                <span class="label label-light arrowed-in">
                                                     ${revocacionInstance?.id}-R
                                                 </span>
                                             </g:link>
