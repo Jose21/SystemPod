@@ -8,23 +8,18 @@
     </head>
     <body>
         <div class="page-header position-relative">
-            <g:if test="${session.revocacionDePoderId}">
-                <br/>
-                <h1>Enviar Testimonio de Escritura Pública</h1>
-                <br/>
+            <g:if test="${session.revocacionDePoderId}">                
+                <h1>Enviar Testimonio de Escritura Pública</h1>                
             </g:if>
-            <g:if test="${session.otorgamientoDePoderId}">
-                <br/>
-                <h1>Notificación de Envio de Documento Físico</h1>
-                <br/>
+            <g:if test="${session.otorgamientoDePoderId}">                
+                <h1>Notificación de Envio de Documento Físico</h1>                
             </g:if>
             <g:if test="${!session.revocacionDePoderId && !session.otorgamientoDePoderId}">
                 <h1>Crear: Nota</h1>
             </g:if>
         </div>
 
-        <div class="container-fluid">
-            <br/>
+        <div class="container-fluid">            
             <g:render template="/shared/alerts"/>
 
             <g:hasErrors bean="${notaInstance}">

@@ -8,7 +8,7 @@
     </head>
     <body>
         <div class="content-header">            
-        <g:form class="form-horizontal" controller="revocacionDePoder" method="post" >            
+        <g:form class="form-horizontal" controller="revocacionDePoder" method="post">            
             <div class="page-header position-relative">
                 <h1>Solicitud de Revocación de Poder
                 </h1>
@@ -158,7 +158,7 @@
                                         <g:textField class="span6"  name="apoderado" value="" autocomplete="off"/>
                                     </td>
                                     <td>
-                                        <g:hiddenField name="revocacionDePoder.id" value="${revocacionDePoderInstance?.id}"/>
+                                        <g:hiddenField name="revocacionDePoder.id" value="${revocacionDePoderInstance?.id}"/>                                        
                                         <g:actionSubmit class="btn btn-primary btn-mini" action="addApoderado" value="Agregar" />
                                     </td>
                                 </tr>

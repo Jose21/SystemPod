@@ -10,6 +10,11 @@
     <body>
         <div class="page-header position-relative">
             <h1>Carta de Instrucción de Revocación de Poder</h1>
+            <div class="btn-group">                                
+                <g:link class="btn btn-pink btn-small tip-bottom" action="imprimir" id="${cartaDeInstruccionDeRevocacionInstance?.id}" target="_blank">
+                    <i class="icon-print"></i> Imprimir Carta de Instrucción
+                </g:link>                
+            </div>
         </div>
 
         <div class="container-fluid">

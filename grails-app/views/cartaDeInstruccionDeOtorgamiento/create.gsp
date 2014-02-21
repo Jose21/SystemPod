@@ -28,7 +28,7 @@
             </g:hasErrors>
 
 
-            <g:form class="form-horizontal" action="save" >
+            <g:form name="myForm" class="form-horizontal" action="save" >
                 <g:hiddenField name="otorgamientoDePoderId" value="${otorgamientoDePoderId}"/>
                 <g:render template="form"/>
                 <h3 id="bloqueAsignacionExpedientes"  class="header smaller lighter blue">Asignación de Expediente</h3>
@@ -36,9 +36,10 @@
                 <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'asignar', 'error')} required">
                     <label for="asignar" class="control-label">
                         <g:message code="otorgamientoDePoder.asignar.label" default="Asignar A" />
+                        <span class="required-indicator">*</span>
                     </label>
                     <div class="controls">
-                        <g:select id="asignar" name="asignar.id" from="${usuarios}" optionKey="id"  value="${otorgamientoDePoderInstance?.asignar?.id}" noSelection="['':'-Elige Responsable-']" class="many-to-one"/>
+                        <g:select id="asignar" name="asignar.id" from="${usuarios}" optionKey="id"  value="${otorgamientoDePoderInstance?.asignar?.id}" noSelection="['':'-Elige Responsable-']" class="many-to-one validate[required]"/>
                     </div>
                 </div>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES">

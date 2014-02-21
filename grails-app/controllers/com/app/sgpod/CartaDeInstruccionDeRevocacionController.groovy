@@ -4,7 +4,9 @@ import org.springframework.dao.DataIntegrityViolationException
 import com.app.security.Usuario
 import com.app.security.Rol
 import com.app.security.UsuarioRol
+import grails.plugins.springsecurity.Secured
 
+@Secured(['IS_AUTHENTICATED_FULLY'])
 class CartaDeInstruccionDeRevocacionController {
     
     def springSecurityService
@@ -37,19 +39,19 @@ class CartaDeInstruccionDeRevocacionController {
     def save() {
         def cartaDeInstruccionDeRevocacionInstance = new CartaDeInstruccionDeRevocacion(params)
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoderId as long)
-        revocacionDePoderInstance.asignar = Usuario.get(params.asignar.id as long)
-        revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
-        revocacionDePoderInstance.fechaDeEnvio = new Date()
-        revocacionDePoderInstance.save() 
-        cartaDeInstruccionDeRevocacionInstance.revocacionDePoder = revocacionDePoderInstance
-        if (!cartaDeInstruccionDeRevocacionInstance.save(flush: true)) {
-            render(view: "create", model: [cartaDeInstruccionDeRevocacionInstance: cartaDeInstruccionDeRevocacionInstance])
-            return
-        }
+            revocacionDePoderInstance.asignar = Usuario.get(params.asignar.id as long)
+            revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
+            revocacionDePoderInstance.fechaDeEnvio = new Date()
+            revocacionDePoderInstance.save() 
+            cartaDeInstruccionDeRevocacionInstance.revocacionDePoder = revocacionDePoderInstance
+            if (!cartaDeInstruccionDeRevocacionInstance.save(flush: true)) {
+                render(view: "create", model: [cartaDeInstruccionDeRevocacionInstance: cartaDeInstruccionDeRevocacionInstance])
+                return
+            }
 
-        flash.message = "Se ha enviado la Carta de Instrucción al Notario Asignado."
-        redirect(controller:"poderes", action: "index")
-    }
+            flash.info = "Se ha enviado la Carta de Instrucción al Notario Asignado."
+            redirect(controller:"poderes", action: "index")
+        }
 
     def show(Long id) {
         def cartaDeInstruccionDeRevocacionInstance = CartaDeInstruccionDeRevocacion.get(id)
@@ -85,7 +87,7 @@ class CartaDeInstruccionDeRevocacionController {
         if (version != null) {
             if (cartaDeInstruccionDeRevocacionInstance.version > version) {
                 cartaDeInstruccionDeRevocacionInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'cartaDeInstruccionDeRevocacion.label', default: 'CartaDeInstruccionDeRevocacion')] as Object[],
+                    [message(code: 'cartaDeInstruccionDeRevocacion.label', default: 'CartaDeInstruccionDeRevocacion')] as Object[],
                           "Another user has updated this CartaDeInstruccionDeRevocacion while you were editing")
                 render(view: "edit", model: [cartaDeInstruccionDeRevocacionInstance: cartaDeInstruccionDeRevocacionInstance])
                 return
@@ -125,5 +127,9 @@ class CartaDeInstruccionDeRevocacionController {
         def cartaDeInstruccionDeRevocacionInstance = CartaDeInstruccionDeRevocacion.get(id)
         def revocacionDePoderInstance = cartaDeInstruccionDeRevocacionInstance.revocacionDePoder
         redirect(controller:"revocacionDePoder", action: "show", id: revocacionDePoderInstance.id)
+    }
+    def imprimir(Long id){
+        def cartaDeInstruccionDeRevocacionInstance = CartaDeInstruccionDeRevocacion.get(params.id as long)
+        [ cartaDeInstruccionDeRevocacionInstance : cartaDeInstruccionDeRevocacionInstance ]
     }
 }

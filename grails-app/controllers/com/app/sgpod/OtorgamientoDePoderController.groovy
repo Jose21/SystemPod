@@ -117,7 +117,7 @@ class OtorgamientoDePoderController {
         [otorgamientoDePoderInstance: otorgamientoDePoderInstance, anchor : params.anchor?:""]
     }
 
-    def update(Long id, Long version) {
+    def update(Long id, Long version) {        
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)
         if (!otorgamientoDePoderInstance) {

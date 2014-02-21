@@ -15,9 +15,9 @@
     </label>
     <div class="controls">
         <g:select name="tipoDeRevocacion" from="${revocacionDePoderInstance.constraints.tipoDeRevocacion.inList}" required=""
-                  noSelection="['':'Elige un tipo de revocación']"
-                  value="${revocacionDePoderInstance?.tipoDeRevocacion}"
-                  valueMessagePrefix="revocacionDePoder.tipoDeRevocacion"/>
+            noSelection="['':'Elige un tipo de revocación']"
+        value="${revocacionDePoderInstance?.tipoDeRevocacion}"
+            valueMessagePrefix="revocacionDePoder.tipoDeRevocacion"/>
     </div>
 </div>
 
@@ -28,8 +28,8 @@
     </label>
     <div class="controls">
         <g:select readonly="readonly" noSelection="['':'Elige una opción']" id="motivoDeRevocacion" name="motivoDeRevocacion.id"
-                  from="${com.app.sgpod.MotivoDeRevocacion.list()}" optionKey="id" required="" 
-                  value="${revocacionDePoderInstance?.motivoDeRevocacion?.id}" class="many-to-one" required="" />               
+        from="${com.app.sgpod.MotivoDeRevocacion.list()}" optionKey="id" required="" 
+        value="${revocacionDePoderInstance?.motivoDeRevocacion?.id}" class="many-to-one" required="" />               
     </div>    
 </div>
 
@@ -93,17 +93,18 @@ update:'categoriaSelection'
         <span class="required-indicator">*</span>
     </label>
     <div class="controls">
-        <g:textField  class="span6" name="solicitadoPor"  value="${revocacionDePoderInstance?.solicitadoPor}"/>
+        <g:textField  class="span6 validate[required]" name="solicitadoPor"  value="${revocacionDePoderInstance?.solicitadoPor}"/>
     </div>
 </div>
 
 <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'fechaDeRevocacion', 'error')} ">
     <label for="fechaDeRevocacion" class="control-label">
         <g:message code="revocacionDePoder.fechaDeRevocacion.label" default="Fecha De Revocación" />
+        <span class="required-indicator">*</span>
     </label>
     <div class="controls">          
         <div class="row-fluid input-append">
-            <input readonly="readonly" class="span6 date-picker" id="fechaDeRevocacion" type="text" value="${revocacionDePoderInstance?.fechaDeRevocacion?(new SimpleDateFormat("dd/MM/yyyy")).format(revocacionDePoderInstance?.fechaDeRevocacion):""}" data-date-format="dd/mm/yyyy" name="fechaDeRevocacion" />      
+            <input readonly="readonly" class="span6 date-picker validate[required]" id="fechaDeRevocacion" type="text" value="${revocacionDePoderInstance?.fechaDeRevocacion?(new SimpleDateFormat("dd/MM/yyyy")).format(revocacionDePoderInstance?.fechaDeRevocacion):""}" data-date-format="dd/mm/yyyy" name="fechaDeRevocacion" />      
             <span class="add-on">
                 <i class="icon-calendar"></i>
             </span>
@@ -124,21 +125,26 @@ update:'categoriaSelection'
     <label for="documentos" class="control-label">
         <g:hiddenField name="anchor" value="bloqueAdjuntarArchivos"/>
         <g:message code="revocacionDePoder.documentos.label" default="Documentos" />
+        <span class="required-indicator">*</span>
     </label>
     <div class="controls">
-        <g:each in="${revocacionDePoderInstance?.documentos}" var="d">
-            <div class="pull-left action-buttons">
-                <g:link class="red" controller="revocacionDePoder" action="deleteArchivo" id ="${d.id}" params="[revocacionDePoderId:revocacionDePoderInstance?.id, anchor:'bloqueAdjuntarArchivos']">
-                    <i class="icon-trash bigger-130"></i>
-                    <i class="icon-caret-right blue"></i>
-                </g:link>
-            </div>
-            <g:link controller="documentoDePoder" action="downloadArchivo" id="${d.id}">${d?.encodeAsHTML()}</g:link>
-            <g:hiddenField name="documento${d.id}" value="${d.id}" />
-            <br/>
-        </g:each>
-        <br/>
-        <input type="file" id="archivo" name="archivo"/>
+        <g:if test="${revocacionDePoderInstance.documentos}">
+            <g:each in="${revocacionDePoderInstance?.documentos}" var="d">
+                <div class="pull-left action-buttons">
+                    <g:link class="red" controller="revocacionDePoder" action="deleteArchivo" id ="${d.id}" params="[revocacionDePoderId:revocacionDePoderInstance?.id, anchor:'bloqueAdjuntarArchivos']">
+                        <i class="icon-trash bigger-130"></i>
+                        <i class="icon-caret-right blue"></i>
+                    </g:link>
+                </div>
+                <g:link controller="documentoDePoder" action="downloadArchivo" id="${d.id}">${d?.encodeAsHTML()}</g:link>
+                <g:hiddenField name="documento${d.id}" value="${d.id}" />                
+                <br/>
+            </g:each>
+        </g:if>
+        <g:else>
+            <g:hiddenField name="paso" value="${true}"/>
+            <input type="file" id="archivo" name="archivo" class="validate[required]"/>
+        </g:else>
     </div>
 </div>
 

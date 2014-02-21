@@ -144,19 +144,21 @@
     </tr>
     <tr>
         <td>
-            <table style="height: 100%; width: 100%;border-collapse: collapse" border="1">                
-                <tr>
-                    <td bgcolor="#E7EBEB" style="width:30%;text-align: right">
-                        <span style="font-family: sans-serif;font-size: 13px;">
-                            PODER SOLICITADO 
-                        </span>
-                    </td>                    
-                    <td style="width:70%;text-align: left">
-                        <span style="font-family: sans-serif;font-size: 13px;">
-                            <dd>   ${otorgamientoDePoderInstance?.poderSolicitado}</dd>
-                        </span>
-                    </td>
-                </tr>
+            <table style="height: 100%; width: 100%;border-collapse: collapse" border="1">
+                <g:if test="${otorgamientoDePoderInstance?.poderSolicitado}">
+                    <tr>
+                        <td bgcolor="#E7EBEB" style="width:30%;text-align: right">
+                            <span style="font-family: sans-serif;font-size: 13px;">
+                                PODER SOLICITADO 
+                            </span>
+                        </td>                    
+                        <td style="width:70%;text-align: left">
+                            <span style="font-family: sans-serif;font-size: 13px;">
+                                <dd>   ${otorgamientoDePoderInstance?.poderSolicitado}</dd>
+                            </span>
+                        </td>
+                    </tr>
+                </g:if>
                 <tr>
                     <td bgcolor="#E7EBEB" style="width:30%;text-align: right">
                         <span style="font-family: sans-serif;font-size: 13px;">
@@ -197,7 +199,7 @@
         </td>
     </tr>
     <!--datos complemntarios-->    
-    <g:if test="${otorgamientoDePoderInstance?.fechaDeOtorgamiento}">
+        <g:if test="${otorgamientoDePoderInstance?.fechaDeOtorgamiento}">
         <tr><td></br></td></tr>
         <tr bgcolor="#CAC8C7">
             <td>
@@ -249,4 +251,4 @@
             </td>
         </tr>
     </g:if>
-</table>
+    </table>

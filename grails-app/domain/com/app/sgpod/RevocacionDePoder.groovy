@@ -12,6 +12,7 @@ class RevocacionDePoder extends Poder{
     Date fechaDeRevocacion
     String tipoDeRevocacion
     boolean agregarApoderado = true
+    boolean agregadaManualmente = false
     
     static hasMany = [         
         apoderadosEliminar : Apoderado       
@@ -24,6 +25,7 @@ class RevocacionDePoder extends Poder{
         tipoDeRevocacion blank:false, inList : ["Total", "Parcial"]
         agregarApoderado blank:false
         apoderadosEliminar nullable:true
+        agregadaManualmente blank:false
     }
     
     String toString() {

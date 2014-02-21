@@ -19,7 +19,7 @@
                     <g:if test="${otorgamientoDePoderInstance.apoderados}">
                         <div class="btn-group">                    
                             <g:link action="asignarA" class="btn btn-small btn-warning tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id ]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
-                                <i class="icon-envelope-alt"></i> Enviar Solicitud
+                                <i class="icon-share"></i> Enviar Solicitud
                             </g:link>    
                         </div>
                     </g:if>                
@@ -110,7 +110,7 @@
                     </table>
                 </sec:ifAnyGranted>
 
-                <g:form class="form-horizontal" method="post"  enctype="multipart/form-data">
+                <g:form  name="myForm" class="form-horizontal" method="post"  enctype="multipart/form-data">
                     <g:hiddenField name="id" value="${otorgamientoDePoderInstance?.id}" />
                     <g:hiddenField name="version" value="${otorgamientoDePoderInstance?.version}" />
                     <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE">
@@ -124,17 +124,18 @@
                         </div>
                         <g:render template="form"/>
                     </sec:ifAnyGranted>
-
+                    
                     <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_NOTARIO">
                         <h3 id="bloqueDatosComplementarios"  class="header smaller lighter blue">Enviar Copia de Escritura Pública</h3>
-                        <br/>
-                        <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'fechaDeOtorgamiento', 'error')} ">
+                        <br/>                        
+                        <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'fechaDeOtorgamiento', 'error')}">
                             <label for="fechaDeOtorgamiento" class="control-label">
                                 <g:message code="otorgamientoDePoder.fechaDeOtorgamiento.label" default="Fecha De Otorgamiento" />
+                                <span class="required-indicator">*</span>
                             </label>
                             <div class="controls">
                                 <div class="row-fluid input-append">
-                                    <input readonly="readonly" class="span10 date-picker" id="fechaDeOtorgamiento" type="text" value="${otorgamientoDePoderInstance?.fechaDeOtorgamiento?(new SimpleDateFormat("dd/MM/yyyy")).format(otorgamientoDePoderInstance?.fechaDeOtorgamiento):""}" data-date-format="dd/mm/yyyy" name="fechaDeOtorgamiento" />      
+                                    <input readonly="readonly" class="span10 date-picker validate[required]"   id="fechaDeOtorgamiento" type="text" value="${otorgamientoDePoderInstance?.fechaDeOtorgamiento?(new SimpleDateFormat("dd/MM/yyyy")).format(otorgamientoDePoderInstance?.fechaDeOtorgamiento):""}" data-date-format="dd/mm/yyyy" name="fechaDeOtorgamiento" />      
                                     <span class="add-on">
                                         <i class="icon-calendar"></i>
                                     </span>
@@ -144,9 +145,10 @@
                         <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'escrituraPublica', 'error')} ">
                             <label for="escrituraPublica" class="control-label">
                                 <g:message code="otorgamientoDePoder.escrituraPublica.label" default="Escritura Pública" />
+                                <span class="required-indicator">*</span>
                             </label>
                             <div class="controls">
-                                <g:textField class="span6" name="escrituraPublica" value="${otorgamientoDePoderInstance?.escrituraPublica}"/>
+                                <g:textField class="span4 validate[required]" name="escrituraPublica" value="${otorgamientoDePoderInstance?.escrituraPublica}"/>
                             </div>
                         </div>
                         <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'comentarios', 'error')} ">
@@ -175,9 +177,9 @@
                                         <br/>
                                 </g:each>
                                 <br/>
-                                <input type="file" id="archivo" name="archivo" />
+                                <input type="file" id="archivo" name="archivo" class="validate[required]"/>
                             </div>
-                        </div>
+                        </div>                        
                     </sec:ifAnyGranted>
                 </div>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE">
@@ -211,7 +213,7 @@
             }
             });                        
             $(document).scrollTop( $("#${anchor?:""}").offset().top );
-            })(jQuery);
+            })(jQuery);            
         </script>       
     </body>
 </html>

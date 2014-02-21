@@ -83,11 +83,14 @@ class RevocacionDePoderController {
             }
         } 
         //se guardan los archivos adjuntos cuando se crea una solicitud manualmente
-        if (params.archivo.getSize()!=0) {            
-            def documentoInstance = new DocumentoDePoder(params)
-            documentoInstance.nombre = params.archivo.getOriginalFilename()
-            revocacionDePoderInstance.addToDocumentos(documentoInstance)
+        if(params.archivo){
+            if (params.archivo?.getSize()!=0) {            
+                def documentoInstance = new DocumentoDePoder(params)
+                documentoInstance.nombre = params.archivo.getOriginalFilename()
+                revocacionDePoderInstance.addToDocumentos(documentoInstance)
+                revocacionDePoderInstance.agregadaManualmente = true
             
+            }
         }
                         
         if (!revocacionDePoderInstance.save(flush: true)) {
@@ -269,27 +272,34 @@ class RevocacionDePoderController {
         [revocacionDePoderInstance: revocacionDePoderInstance, otorgamientoDePoderId : datosDelOtorgamiento?.id]
     }
     
-    def enviarSolicitud () {
+    def enviarSolicitud () {                
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)        
         if(revocacionDePoderInstance?.tipoDeRevocacion == "Parcial"){
-       
-            def apoderadoSelects = params.list('apoderadoList')        
-            def selectedApoderados = Apoderado.getAll(apoderadoSelects)            
-            def listaInicialDeApoderados = revocacionDePoderInstance.apoderados              
+            if(params.apoderadoList){
+                def apoderadoSelects = params.list('apoderadoList')        
+                def selectedApoderados = Apoderado.getAll(apoderadoSelects)            
+                def listaInicialDeApoderados = revocacionDePoderInstance.apoderados              
           
-            def lista2 = listaInicialDeApoderados - selectedApoderados            
-            //se agregar los apoderados que se van a eliminar a la solicitud                
-            selectedApoderados.each(){ it ->                                                
-                revocacionDePoderInstance.addToApoderadosEliminar(it)           
+                def lista2 = listaInicialDeApoderados - selectedApoderados            
+                //se agregar los apoderados que se van a eliminar a la solicitud                
+                selectedApoderados.each(){ it ->                                                
+                    revocacionDePoderInstance.addToApoderadosEliminar(it)           
+                }
+                // se quitan de la lista los apoderados que se eliminan
+                lista2.each(){ it ->                                                
+                    revocacionDePoderInstance.removeFromApoderados(it)            
+                }
+            }else if(revocacionDePoderInstance.agregadaManualmente == false){                
+                flash.error = "Debe Elegir al menos un Apoderado."
+                redirect(action: "edit", params: [id: revocacionDePoderInstance.id])
+                return            
             }
-            // se quitan de la lista los apoderados que se eliminan
-            lista2.each(){ it ->                                                
-                revocacionDePoderInstance.removeFromApoderados(it)            
-            }
-        }else{
+        }
+        
+        if(revocacionDePoderInstance?.tipoDeRevocacion == "Total"){            
             revocacionDePoderInstance.apoderados.each{ it ->
                 revocacionDePoderInstance.addToApoderadosEliminar(it)
-            }            
+            } 
         }
                 
         def usuarioGestorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_GESTOR")).collect {it.usuario}        

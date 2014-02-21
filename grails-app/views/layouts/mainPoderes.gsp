@@ -23,7 +23,8 @@
         <link rel="stylesheet" href="${resource(dir:'assets/css',file:'bootstrap-timepicker.css')}" />
         <link rel="stylesheet" href="${resource(dir:'assets/css',file:'daterangepicker.css')}" />
         <link rel="stylesheet" href="${resource(dir:'assets/css',file:'colorpicker.css')}" />
-        <link rel="stylesheet" href="${resource(dir:'assets/css',file:'ace-fonts.css')}" />    
+        <link rel="stylesheet" href="${resource(dir:'assets/css',file:'ace-fonts.css')}" />
+        <link rel="stylesheet" href="${resource(dir:'assets/css',file:'validationEngine.jquery.css')}"/>
         <link href="${resource(dir:'assets/css',file:'ace.min.css')}" rel="stylesheet" />
         <link href="${resource(dir:'assets/css',file:'ace-responsive.min.css')}" rel="stylesheet" />
         <link href="${resource(dir:'assets/css',file:'ace-skins.min.css')}" rel="stylesheet" />
@@ -31,7 +32,7 @@
         <!--[if lte IE 8]>
           <link rel="stylesheet" href="${resource(dir:'assets/css',file:'ace-ie.min.css')}" />
         <![endif]-->     
-        <script src="${resource(dir:'assets/js',file:'ace-extra.min.js')}"></script>      
+        <script src="${resource(dir:'assets/js',file:'ace-extra.min.js')}"></script>        
 
     <head>    
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -204,6 +205,8 @@
     <script src="${resource(dir:'assets/js',file:'jquery.hotkeys.min.js')}"></script>    
     <script src="${resource(dir:'assets/js',file:'bootbox.min.js')}"></script>
     <script src="${resource(dir:'assets/js',file:'chosen.jquery.min.js')}"></script>
+    <script src="${resource(dir:'assets/js',file:'jquery.validationEngine-es.js')}"></script>
+    <script src="${resource(dir:'assets/js',file:'jquery.validationEngine.js')}"></script>
 
 <!--ace scripts-->
     <script src="${resource(dir:'assets/js',file:'ace-elements.min.js')}"></script>
@@ -255,6 +258,10 @@
 
         $(".chosen-select").chosen();
         })(jQuery);
+        $(document).ready(function() {
+            // binds form submission and fields to the validation engine
+            $("#myForm").validationEngine();
+            });
     </script>
     <g:javascript library="application"/>
 <r:layoutResources />

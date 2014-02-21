@@ -26,7 +26,7 @@ class NotaController {
         [notaInstanceList: Nota.list(params), notaInstanceTotal: Nota.count()]
     }
 
-    def create() {
+    def create() {        
         if(params.tareaId){
             session.tareaId = params.tareaId as long
         }else{
@@ -62,26 +62,39 @@ class NotaController {
         //integracion con poderes //revocacion de poder
         //enviar copia electrónica
         if (session.revocacionDePoderId) {
-            def revocacionDePoderInstance = RevocacionDePoder.get(session.revocacionDePoderId)
-            //se eliminan los apoderados de la solicitud en la variable apoderadosVigentes de OtorgamientoDePoder
-            def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(revocacionDePoderInstance.escrituraPublica)
-            otorgamientoDePoderInstance.apoderadosVigentes = otorgamientoDePoderInstance.apoderadosVigentes - revocacionDePoderInstance.apoderadosEliminar
-            otorgamientoDePoderInstance.save()
+            if(params.archivo.getSize()!=0){                
+                def revocacionDePoderInstance = RevocacionDePoder.get(session.revocacionDePoderId)
+                //se eliminan los apoderados de la solicitud en la variable apoderadosVigentes de OtorgamientoDePoder
+                def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(revocacionDePoderInstance.escrituraPublica)
+                otorgamientoDePoderInstance.apoderadosVigentes = otorgamientoDePoderInstance.apoderadosVigentes - revocacionDePoderInstance.apoderadosEliminar
+                otorgamientoDePoderInstance.save()
             
-            def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}        
+                def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}        
                 usuarioResolvedorPoderes.each{
                     revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
                 }     
-            revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
-            revocacionDePoderInstance.fechaDeEnvio = new Date()
-            revocacionDePoderInstance.addToNotas(notaInstance).save(flush:true)
+                revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
+                revocacionDePoderInstance.fechaDeEnvio = new Date()
+                revocacionDePoderInstance.addToNotas(notaInstance).save(flush:true)
+            }else{
+                flash.error = "Debe Adjuntar el Archivo Electrónico."
+                redirect(action: "create", params: [revocacionDePoderId: session.revocacionDePoderId])
+                return
+            }            
         }
         //integracion con otorgamiento de poder
         //notificacion al enviar un documento físico
         if (session.otorgamientoDePoderId) {
-            def otorgamientoDePoderInstance = OtorgamientoDePoder.get(session.otorgamientoDePoderId)                                                
-            otorgamientoDePoderInstance.addToNotas(notaInstance).save(flush:true)
+            if(params.archivo.getSize()!=0){
+                def otorgamientoDePoderInstance = OtorgamientoDePoder.get(session.otorgamientoDePoderId)                                                
+                otorgamientoDePoderInstance.addToNotas(notaInstance).save(flush:true)                   
+            }else{
+                flash.error = "Debe Adjuntar el Archivo Electrónico."
+                redirect(action: "create", params: [otorgamientoDePoderId: session.otorgamientoDePoderId])
+                return
+            }            
         }
+        
         if (params.archivo.getSize()!=0) {            
             def documentoInstance = new Documento(params)
             documentoInstance.nombre = params.archivo.getOriginalFilename()
@@ -95,7 +108,7 @@ class NotaController {
             flash.info = "Se ha enviado la Notificación al Solicitante."
             redirect(controller: "poderes", action: "index") 
         }else if(session.revocacionDePoderId){
-            flash.info = "Se ha enviado el Testimonio al Usuario Resolvedor."
+            flash.info = "Se ha enviado el Testimonio de Escritura Pública al Usuario Resolvedor."
             redirect(controller: "poderes", action: "index") 
         }else{
             historialDeTareaService.agregar(notaInstance.tarea, springSecurityService.currentUser, "agregó una nota")

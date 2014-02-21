@@ -37,7 +37,7 @@
                 </div>
             </div>
             <h3 id="FinBusquedaPorEscrituraPublica"  class="header smaller lighter blue"></h3>
-            <g:form class="form-horizontal" action="save" enctype="multipart/form-data">
+            <g:form name="myForm" class="form-horizontal" action="save" enctype="multipart/form-data">
                 <g:render template="form"/>
                 <div class="form-actions">
                     <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />

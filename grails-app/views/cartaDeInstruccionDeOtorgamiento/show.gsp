@@ -10,6 +10,11 @@
     <body>
         <div class="page-header position-relative">
             <h1>Carta de Instrucción de Otorgamiento de Poder</h1>
+            <div class="btn-group">                                
+                <g:link class="btn btn-pink btn-small tip-bottom" action="imprimir" id="${cartaDeInstruccionDeOtorgamientoInstance?.id}" target="_blank">
+                    <i class="icon-print"></i> Imprimir Carta de Instrucción
+                </g:link>                
+            </div>
         </div>
 
         <div class="container-fluid">
@@ -63,8 +68,8 @@
                     <g:link class="btn btn-primary" action="edit" id="${cartaDeInstruccionDeOtorgamientoInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
                 </fieldset-->
             <!--/g:form-->
-                <div class="form-actions">
-                    <g:link class="btn btn-primary btn-mini" action="regresar" id="${cartaDeInstruccionDeOtorgamientoInstance?.id}">Regresar</g:link>
+            <div class="form-actions">
+                <g:link class="btn btn-primary btn-mini" action="regresar" id="${cartaDeInstruccionDeOtorgamientoInstance?.id}">Regresar</g:link>
                 </div>
             </div>
         </body>
