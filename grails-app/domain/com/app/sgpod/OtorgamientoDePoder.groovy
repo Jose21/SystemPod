@@ -17,6 +17,7 @@ class OtorgamientoDePoder extends Poder {
     Date fechaVencimiento
     boolean voBoCopiaElectronica = false
     boolean voBoDocumentoFisico = false
+    boolean solicitudEnProceso = false
     
     static hasMany = [         
         apoderadosVigentes : Apoderado        
@@ -34,6 +35,7 @@ class OtorgamientoDePoder extends Poder {
         voBoCopiaElectronica blank:false
         voBoDocumentoFisico blank:false
         apoderadosVigentes nullable:true
+        solicitudEnProceso blank:false
     }
     
     String toString() {

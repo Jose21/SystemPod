@@ -15,6 +15,7 @@
                 <g:if test="${revocacionDePoderInstance.motivoDeRevocacion && revocacionDePoderInstance.apoderados}">
                     <div class="btn-group">                                            
                         <g:hiddenField name="revocacionDePoder.id" value="${revocacionDePoderInstance?.id}" />
+                        <g:hiddenField name="otorgamientoDePoder" value="${otorgamientoDePoderId}" />
                         <g:actionSubmit class="btn btn-warning btn-btn" action="enviarSolicitud" value="Enviar Solicitud" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
                     </div>
                 </g:if>

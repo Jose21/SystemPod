@@ -67,6 +67,7 @@ class NotaController {
                 //se eliminan los apoderados de la solicitud en la variable apoderadosVigentes de OtorgamientoDePoder
                 def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(revocacionDePoderInstance.escrituraPublica)
                 otorgamientoDePoderInstance.apoderadosVigentes = otorgamientoDePoderInstance.apoderadosVigentes - revocacionDePoderInstance.apoderadosEliminar
+                otorgamientoDePoderInstance.solicitudEnProceso = false
                 otorgamientoDePoderInstance.save()
             
                 def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}        

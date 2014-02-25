@@ -33,6 +33,8 @@ class RevocacionDePoderController {
                 flash.warn = "No se ha encontrado una solicitud de Otorgamiento de Poder. >> Intente de nuevo o complemente los datos manualmente."
             }else if (!datosDelOtorgamiento?.apoderadosVigentes){
                 flash.warn = "El poder asociado al Número de Escritura Pública esta totalmente Revocado."
+            }else if(datosDelOtorgamiento?.solicitudEnProceso == true){
+                flash.warn = "Existe una solicitud en proceso asociada al Número de Escritura que esta buscando. Intente más tarde"
             }else{
                 
                 revocacionDePoderInstance.escrituraPublica = datosDelOtorgamiento?.escrituraPublica
@@ -274,6 +276,7 @@ class RevocacionDePoderController {
     
     def enviarSolicitud () {                
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)        
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(revocacionDePoderInstance.escrituraPublica)        
         if(revocacionDePoderInstance?.tipoDeRevocacion == "Parcial"){
             if(params.apoderadoList){
                 def apoderadoSelects = params.list('apoderadoList')        
@@ -307,8 +310,11 @@ class RevocacionDePoderController {
             revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
         }
         revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
-        revocacionDePoderInstance.fechaDeEnvio = new Date()
+        revocacionDePoderInstance.fechaDeEnvio = new Date()        
         revocacionDePoderInstance.save()
+        //se cambia el estatus del poder
+        otorgamientoDePoderInstance.solicitudEnProceso = true
+        otorgamientoDePoderInstance.save()
         flash.message = "Se ha enviado con éxito la Solicitud."
         
         redirect(controller: "poderes", action: "index")        

@@ -55,11 +55,11 @@
         value="${revocacionDePoderInstance?.categoriaDeTipoDePoder?.tipoDePoder?.id}"
             noSelection="['':'Elige un tipo de poder']"        
         onchange="${remoteFunction(
-controller:'tipoDePoder', 
-action:'ajaxGetCategorias', 
-params:'\'tipoDePoder.id=\' + this.value', 
-update:'categoriaSelection'
-)}"/>
+        controller:'tipoDePoder', 
+        action:'ajaxGetCategorias', 
+        params:'\'tipoDePoder.id=\' + this.value', 
+        update:'categoriaSelection'
+        )}"/>
     </div>
     <div class="controls" id="categoriaSelection" >
         <select readonly="readonly" class="chosen-select" data-placeholder="Elige una categoria..." name="categoriaDeTipoDePoder">

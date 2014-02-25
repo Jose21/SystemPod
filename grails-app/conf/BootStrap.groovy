@@ -22,8 +22,8 @@ class BootStrap {
         case Environment.DEVELOPMENT :
                 
             new Usuario (
-                firstName : "Claudia",
-                lastName : "Luna",
+                firstName : "CLAUDIA",
+                lastName : "LUNA",
                 email : "ejemplo2@hotmail.com",
                 username : "claudia.luna",
                 password : "claudia",
@@ -33,8 +33,8 @@ class BootStrap {
                 passwordExpired : false
             ).save()
             new Usuario (
-                firstName : "Alfredo",
-                lastName : "Chagoya",
+                firstName : "ALFREDO",
+                lastName : "CHAGOYA",
                 email : "ejemplo@yahoo.com.mx",
                 username : "alfredo.chagoya",
                 password : "alfredo",
@@ -55,9 +55,9 @@ class BootStrap {
                 passwordExpired : false
             ).save()
             new Usuario (
-                firstName : "Solicitante",
-                lastName : "Uno",
-                email : "the_real_thom@hotmail.com",
+                firstName : "LIC. ROBERTO",
+                lastName : "SANCHEZ CEREZO",
+                email : "ejemplo@hotmail.com",
                 username : "solicitante1",
                 password : "solicitante1",
                 enabled : true,
@@ -66,9 +66,9 @@ class BootStrap {
                 passwordExpired : false
             ).save()
             new Usuario (
-                firstName : "Notario",
-                lastName : "Uno",
-                email : "kokoro.miramar@gmail.com",
+                firstName : "LIC. ALFREDO",
+                lastName : "CASO VELAZQUEZ",
+                email : "ejemplo@gmail.com",
                 username : "notario1",
                 password : "notario1",
                 enabled : true,
@@ -77,9 +77,9 @@ class BootStrap {
                 passwordExpired : false
             ).save()                                
             new Usuario (
-                firstName : "Notario",
-                lastName : "Dos",
-                email : "tomas_mp@yahoo.com.mx",
+                firstName : "LIC. EDUARDO FRANCISCO",
+                lastName : "GARCIA VILLEGAZ SANCHÉZ CORDERO",
+                email : "ejemplo3@yahoo.com.mx",
                 username : "notario2",
                 password : "notario2",
                 enabled : true,
@@ -114,7 +114,13 @@ class BootStrap {
             ).save()
             
             new MotivoDeOtorgamiento(nombre:"Cambio de Adscripción").save()
+            new MotivoDeOtorgamiento(nombre:"Cambio de Funciones").save()
+            new MotivoDeOtorgamiento(nombre:"Nuevo Ingreso").save()
+            new MotivoDeOtorgamiento(nombre:"Nuevo Nombramiento").save()
             new MotivoDeRevocacion(nombre:"Cambio de Adscripción").save()
+            new MotivoDeRevocacion(nombre:"Cambio de Funciones").save()
+            new MotivoDeRevocacion(nombre:"Baja del Instituto").save()
+            new MotivoDeRevocacion(nombre:"Baja del Despacho").save()
             
             new Delegacion(nombre:"HERMOSILLO,SON.").save()
             new Delegacion(nombre:"CHIHUAHUA, CHIH.").save()

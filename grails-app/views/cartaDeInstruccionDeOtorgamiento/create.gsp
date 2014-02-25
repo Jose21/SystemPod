@@ -39,7 +39,7 @@
                         <span class="required-indicator">*</span>
                     </label>
                     <div class="controls">
-                        <g:select id="asignar" name="asignar.id" from="${usuarios}" optionKey="id"  value="${otorgamientoDePoderInstance?.asignar?.id}" noSelection="['':'-Elige Responsable-']" class="many-to-one validate[required]"/>
+                        <g:select id="asignar" name="asignar.id" from="${usuarios}" optionKey="id"  value="${otorgamientoDePoderInstance?.asignar?.id}" noSelection="['':'-Notarios-']" class="span6 many-to-one validate[required]"/>
                     </div>
                 </div>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES">
