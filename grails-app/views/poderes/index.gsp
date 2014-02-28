@@ -49,6 +49,14 @@
                         </a>
                     </li>
                     </sec:ifAnyGranted>
+                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_SOLICITANTE">                    
+                        <li>
+                            <a data-toggle="tab" href="#prorroga">
+                                <i class="icon-comment bigger-130"></i>
+                                <span class="bigger-110">Notificaciones <span class="badge">${prorrogaListTotal}</span></span>
+                            </a>
+                        </li>
+                    </sec:ifAnyGranted>
                 </ul>
             </div>
             <!--PENDIENTES-->
@@ -265,7 +273,7 @@
                         <table class="box-style" width="100%" border="2">
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    <th></th>                                    
                                     <th scope="col">Número de Solicitud</th>                                    
                                     <th scope="col">Creada Por</th>
                                     <th scope="col">Enviado a</th>
@@ -542,18 +550,18 @@
                                         <td><g:formatDate date="${otorgamientoAsignadosSolicitanteInstance?.fechaDeEnvio}" /></td>
                                         <td align="center">
                                             <g:if test="${otorgamientoAsignadosSolicitanteInstance.voBoCopiaElectronica == true && otorgamientoAsignadosSolicitanteInstance.documentos}">
-                                                <i class="icon-check bigger-160"></i>   
+                                                <i class="icon-check bigger-120"></i>   
                                             </g:if>
                                             <g:else>
-                                                <i class="icon-check-empty bigger-160"></i>
+                                                <i class="icon-ban-circle bigger-120"></i>
                                             </g:else>
                                         </td>
                                         <td align="center">
                                             <g:if test="${otorgamientoAsignadosSolicitanteInstance.voBoDocumentoFisico == true && otorgamientoAsignadosSolicitanteInstance.notas}">
-                                                <i class="icon-check bigger-160"></i>   
+                                                <i class="icon-check bigger-120"></i>   
                                             </g:if>
                                             <g:else>
-                                                <i class="icon-check-empty bigger-160"></i>
+                                                <i class="icon-ban-circle bigger-120"></i>
                                             </g:else>
                                         </td>
                                     </tr>
@@ -603,6 +611,59 @@
                             <div class="pull-right">
                                 <div class="pagination">
                                     <g:paginate total="${enviadosSolicitanteTotal}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--/.message-container-->
+                </div>
+                </sec:ifAnyGranted>
+                <!-- SOLICITUDES QUE ENVIO USUARIO RESOLVEDOR AL NOTARIO  -->
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_SOLICITANTE">
+                <div id="prorroga" class="tab-pane">
+                    <div class="message-container">
+                        <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
+                            <div class="message-bar">
+                                <div class="message-infobar" id="id-message-infobar">
+                                    <span class="blue bigger-130">
+                                        Prorrogas sobre Otorgamiento de Poder.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Se iteran los otorgamientos de poder enviados al notario-->
+                        <table class="box-style" width="100%" border="2">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th scope="col">Folio</th>                                    
+                                    <th scope="col">Título</th>
+                                    <th scope="col">Enviado por</th>
+                                    <th scope="col">Fecha de Envío</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <g:each in="${prorrogaList}" status="i" var="prorrogaInstance">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td></td>
+                                        <td>
+                                            <g:link controller="prorroga" action="show" id="${prorrogaInstance?.id}">
+                                                <span class="label label-info arrowed-in">
+                                                    ${prorrogaInstance?.id}
+                                                </span>
+                                            </g:link>
+                                        </td>                                        
+                                        <td>${fieldValue(bean: prorrogaInstance, field: "titulo")}</td>
+                                        <td>${fieldValue(bean: prorrogaInstance, field: "creadoPor")}</td>
+                                        <td><g:formatDate date="${prorrogaInstance?.fechaDeEnvio}" /></td>
+                                    </tr>
+                                </g:each>
+                            </tbody>
+                        </table>                                                
+                        <div class="message-footer clearfix">
+                            <div class="pull-left"> ${prorrogaListTotal} notificación(es) en total. </div>
+                            <div class="pull-right">
+                                <div class="pagination">
+                                    <g:paginate total="${prorrogaListTotal}" />
                                 </div>
                             </div>
                         </div>

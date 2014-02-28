@@ -48,7 +48,12 @@
                         <g:link  controller="nota" action="create" class="btn btn-small btn-purple tip-bottom" params="[ otorgamientoDePoderId : otorgamientoDePoderInstance?.id]">
                             <i class="icon-file-text"></i> Notificar Envio de Documento Físico
                         </g:link>
-                    </g:if>   
+                    </g:if>
+                    <g:if test="${!otorgamientoDePoderInstance.documentos}">
+                        <g:link  controller="prorroga" action="create" class="btn btn-small btn-info tip-bottom" params="[ otorgamientoDePoderId : otorgamientoDePoderInstance?.id]">
+                            <i class="icon-calendar"></i> Prorroga
+                        </g:link> 
+                    </g:if>
                 </sec:ifAnyGranted>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_GESTOR">
                     <g:if test="${ocultarBoton != true}">
@@ -57,7 +62,7 @@
                         </g:link>
                     </g:if>
                 </sec:ifAnyGranted>
-                <g:link action="imprimir" class="btn btn-small btn-pink tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]" target="_blank">
+                <g:link action="imprimir" class="btn btn-small btn-success tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]" target="_blank">
                     <i class="icon-print"></i> Imprimir Solcitud
                 </g:link>
             </div>
@@ -181,7 +186,44 @@
                                         </div><!--/widget-body-->
                                     </div><!--/widget-box-->
                                 </g:if>
+                                <g:if test="${otorgamientoDePoderInstance?.prorrogas}">
+                                    <div class="widget-box ">
+                                        <div class="widget-header">
+                                            <h4 class="lighter smaller">
+                                                <i class="icon-calendar blue"></i>
+                                                Prorrogas Agregadas
+                                            </h4>
+                                        </div>
 
+                                        <div class="widget-body">
+                                            <div class="widget-main no-padding">
+                                                <div class="dialogs">                
+                                                    <g:each var="prorroga" in="${otorgamientoDePoderInstance?.prorrogas?.sort { it.dateCreated }}">
+                                                        <div class="itemdiv dialogdiv">                                            
+                                                            <div class="body">
+                                                                <div class="time">                        
+                                                                    <span>Creada  Por: ${prorroga?.creadoPor?.firstName} ${prorroga?.creadoPor?.lastName}</span><br/>
+                                                                    <i class="icon-time"></i>
+                                                                    <span class="green">Fecha de Envio: <g:formatDate date="${prorroga?.fechaDeEnvio}" type="datetime" style="MEDIUM"/></span>                                                    
+                                                                </div>
+
+                                                                <div class="name">
+                                                                    Título: ${prorroga?.titulo}
+                                                                </div>
+                                                                <div class="text">
+                                                                    Motivos: ${prorroga?.motivos}                                                                                                                
+                                                                </div>
+                                                                <div class="text">
+                                                                    Plazo: ${prorroga?.dias}  día(s).                                                                                                              
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </g:each>
+                                                </div>
+                                            </div><!--/widget-main-->
+                                        </div><!--/widget-body-->
+                                    </div><!--/widget-box-->
+                                </g:if>
                             </div>
                         </div>
                     </div>

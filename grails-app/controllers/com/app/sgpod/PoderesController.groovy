@@ -159,6 +159,29 @@ class PoderesController {
         }
         def poderesPorVencerList = poderCriticoList + poderSemicriticoList
         
+        //prorrogas de otorgamiento de poder        
+        def prorrogaList = []      
+        listaPoderes.each { poder ->
+            if(poder.prorrogas){
+                poder.prorrogas.each{prorroga ->
+                    if(prorroga.asignadoA == springSecurityService.currentUser){                        
+                        prorrogaList.add(prorroga)                        
+                    }
+                }               
+            }                
+        }
+        //prorrogas de revocacion de poder
+        def listaPoderesRevocacion = RevocacionDePoder.list()              
+        listaPoderesRevocacion.each { poder ->
+            if(poder.prorrogas){
+                poder.prorrogas.each{prorroga ->
+                    if(prorroga.asignadoA == springSecurityService.currentUser){                        
+                        prorrogaList.add(prorroga)                        
+                    }
+                }               
+            }                
+        }        
+        prorrogaList.sort{ it.getId() }        
         render (
             view: "index", 
             model: [
@@ -182,7 +205,9 @@ class PoderesController {
                 enviadosSolicitanteTotal : enviadosSolicitanteList.size(),
                 poderCriticoInstanceList : poderCriticoList,
                 poderSemicriticoInstanceList : poderSemicriticoList,
-                poderesPorVencerTotal : poderesPorVencerList.size()
+                poderesPorVencerTotal : poderesPorVencerList.size(),
+                prorrogaList : prorrogaList,
+                prorrogaListTotal : prorrogaList.size()
             ]
         )
     }

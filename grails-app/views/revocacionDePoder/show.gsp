@@ -37,7 +37,12 @@
                             <i class="icon-external-link"></i> Enviar Copia al Solicitante
                         </g:link>
                     </g:if>
-                </sec:ifAnyGranted>
+                    <g:if test="${!cartaDeInstruccion}">
+                        <g:link  controller="prorroga" action="create" class="btn btn-small btn-info tip-bottom" params="[ revocacionDePoderId : revocacionDePoderInstance?.id]">
+                            <i class="icon-calendar"></i> Prorroga
+                        </g:link>
+                    </g:if>
+                </sec:ifAnyGranted>                
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_GESTOR">
                     <g:if test="${ocultarBoton != true}">
                         <g:link action="turnarResolvedor" class="btn btn-small btn-info tip-bottom" params="[ id : revocacionDePoderInstance?.id]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
@@ -133,7 +138,45 @@
                                             </div><!--/widget-main-->
                                         </div><!--/widget-body-->
                                     </div><!--/widget-box-->
-                                </g:if>	
+                                </g:if>
+                                <g:if test="${revocacionDePoderInstance?.prorrogas}">
+                                    <div class="widget-box ">
+                                        <div class="widget-header">
+                                            <h4 class="lighter smaller">
+                                                <i class="icon-calendar blue"></i>
+                                                Prorrogas Agregadas
+                                            </h4>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main no-padding">
+                                                <div class="dialogs">                
+                                                    <g:each var="prorroga" in="${revocacionDePoderInstance?.prorrogas?.sort { it.dateCreated }}">
+                                                        <div class="itemdiv dialogdiv">                                            
+                                                            <div class="body">
+                                                                <div class="time">                        
+                                                                    <span>Creada  Por: ${prorroga?.creadoPor?.firstName} ${prorroga?.creadoPor?.lastName}</span><br/>
+                                                                    <i class="icon-time"></i>
+                                                                    <span class="green">Fecha de Envio: <g:formatDate date="${prorroga?.fechaDeEnvio}" type="datetime" style="MEDIUM"/></span>                                                    
+                                                                </div>
+
+                                                                <div class="name">
+                                                                    Título: ${prorroga?.titulo}
+                                                                </div>
+                                                                <div class="text">
+                                                                    Motivos: ${prorroga?.motivos}                                                                                                                
+                                                                </div>
+                                                                <div class="text">
+                                                                    Plazo: ${prorroga?.dias}  día(s).                                                                                                              
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </g:each>
+                                                </div>
+                                            </div><!--/widget-main-->
+                                        </div><!--/widget-body-->
+                                    </div><!--/widget-box-->
+                                </g:if>
                             </div>
                         </div>
                     </div>

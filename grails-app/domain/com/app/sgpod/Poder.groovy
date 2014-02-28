@@ -23,7 +23,8 @@ class Poder {
         documentos : DocumentoDePoder,
         tareas : Tarea,
         apoderados : Apoderado,
-        notas : Nota
+        notas : Nota,
+        prorrogas : Prorroga
     ]
     
     static constraints = {
@@ -45,6 +46,7 @@ class Poder {
         responsable nullable:true,blank:true
         notas nullable:true
         fechaDeEnvio nullable:true
+        prorrogas nullable:true
     }
     
     String toString() {
