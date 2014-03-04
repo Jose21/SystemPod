@@ -22,22 +22,22 @@ class BootStrap {
         case Environment.DEVELOPMENT :
                 
             new Usuario (
-                firstName : "CLAUDIA",
-                lastName : "LUNA",
+                firstName : "Juan",
+                lastName : "Martinez",
                 email : "ejemplo2@hotmail.com",
-                username : "claudia.luna",
-                password : "claudia",
+                username : "resolvedor1",
+                password : "resolvedor1",
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
                 passwordExpired : false
             ).save()
             new Usuario (
-                firstName : "ALFREDO",
-                lastName : "CHAGOYA",
+                firstName : "Lic. Pedro",
+                lastName : "Chavez",
                 email : "ejemplo@yahoo.com.mx",
-                username : "alfredo.chagoya",
-                password : "alfredo",
+                username : "gestor1",
+                password : "gestor1",
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
@@ -55,8 +55,8 @@ class BootStrap {
                 passwordExpired : false
             ).save()
             new Usuario (
-                firstName : "LIC. ROBERTO",
-                lastName : "SANCHEZ CEREZO",
+                firstName : "LIC. ARTURO",
+                lastName : "CARMONA",
                 email : "ejemplo@hotmail.com",
                 username : "solicitante1",
                 password : "solicitante1",
@@ -66,8 +66,8 @@ class BootStrap {
                 passwordExpired : false
             ).save()
             new Usuario (
-                firstName : "LIC. ALFREDO",
-                lastName : "CASO VELAZQUEZ",
+                firstName : "LIC. JORGE",
+                lastName : "SANCHEZ",
                 email : "ejemplo@gmail.com",
                 username : "notario1",
                 password : "notario1",
@@ -77,8 +77,8 @@ class BootStrap {
                 passwordExpired : false
             ).save()                                
             new Usuario (
-                firstName : "LIC. EDUARDO FRANCISCO",
-                lastName : "GARCIA VILLEGAZ SANCHÉZ CORDERO",
+                firstName : "LIC. CARLOS",
+                lastName : "LOPEZ",
                 email : "ejemplo3@yahoo.com.mx",
                 username : "notario2",
                 password : "notario2",
@@ -96,11 +96,11 @@ class BootStrap {
             new Rol (authority : "ROLE_PODERES_GESTOR").save()
                 
             new UsuarioRol (usuario : Usuario.findByUsername("admin"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
-            new UsuarioRol (usuario : Usuario.findByUsername("claudia.luna"), rol : Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).save()
+            new UsuarioRol (usuario : Usuario.findByUsername("resolvedor1"), rol : Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).save()
             new UsuarioRol (usuario : Usuario.findByUsername("solicitante1"), rol : Rol.findByAuthority("ROLE_PODERES_SOLICITANTE")).save()
             new UsuarioRol (usuario : Usuario.findByUsername("notario1"), rol : Rol.findByAuthority("ROLE_PODERES_NOTARIO")).save()
             new UsuarioRol (usuario : Usuario.findByUsername("notario2"), rol : Rol.findByAuthority("ROLE_PODERES_NOTARIO")).save()
-            new UsuarioRol (usuario : Usuario.findByUsername("alfredo.chagoya"), rol : Rol.findByAuthority("ROLE_PODERES_GESTOR")).save()
+            new UsuarioRol (usuario : Usuario.findByUsername("gestor1"), rol : Rol.findByAuthority("ROLE_PODERES_GESTOR")).save()
                 
             new Grupo(nombre:"Sin Categoría", descripcion: "asd").save()
                 

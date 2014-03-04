@@ -122,9 +122,27 @@ class RevocacionDePoderController {
         if(revocacionDePoderInstance.asignar != springSecurityService.currentUser){
             ocultarBoton = true
         }
+        
+        //valor de prorrogas
+        def diasDeProrroga = null
+        def diasDeProrrogaTotal = 0
+        def diasRestantes = null
+        if(revocacionDePoderInstance.prorrogas){            
+            revocacionDePoderInstance.prorrogas.each{ prorroga ->
+                diasDeProrroga = prorroga.dias
+                diasDeProrrogaTotal = diasDeProrrogaTotal + diasDeProrroga
+            }            
+            def prorrogasList = revocacionDePoderInstance.prorrogas.sort{ it.getId() }                                                    
+            def prorrogaInstance = prorrogasList.get(0)            
+            def inicioProrroga = prorrogaInstance.fechaDeEnvio             
+            def fechaDeTerminoProrroga = inicioProrroga + diasDeProrrogaTotal             
+            def hoy = new Date()
+            diasRestantes = fechaDeTerminoProrroga - hoy                        
+        }
+        
         def cartaDeInstruccion = CartaDeInstruccionDeRevocacion.findByRevocacionDePoder(revocacionDePoderInstance)
         
-        [revocacionDePoderInstance: revocacionDePoderInstance, ocultarBoton : ocultarBoton, cartaDeInstruccion : cartaDeInstruccion ]
+        [revocacionDePoderInstance: revocacionDePoderInstance, ocultarBoton : ocultarBoton, cartaDeInstruccion : cartaDeInstruccion, diasRestantes : diasRestantes ]
     }
 
     def edit(Long id) {

@@ -1,7 +1,7 @@
 <%@ page import="com.app.sgpod.ConfigurarParametro" %>
 
 
-<h3 id="bloqueParametrosPoderes"  class="header smaller lighter blue">Valores para Otorgamientos de Poder</h3>
+<h3 id="bloqueParametrosPoderes"  class="header smaller lighter blue">Valores para Otorgamientos de Poder por Vencer.</h3>
 <div class="control-group fieldcontain ${hasErrors(bean: configurarParametroInstance, field: 'estadoCriticoPoder', 'error')} required">
 	<label for="estadoCriticoPoder" class="control-label">
 		<g:message code="configurarParametro.estadoCriticoPoder.label" default="Valor Estado Critico del Poder" />
@@ -22,10 +22,10 @@
         </div>
 </div>
 
-<h3 id="bloqueParametrosSolicitudes"  class="header smaller lighter blue">Valores para Solicitudes Pendientes</h3>
+<h3 id="bloqueParametrosSolicitudes"  class="header smaller lighter blue">Valores para Solicitudes Pendientes.</h3>
 <div class="control-group fieldcontain ${hasErrors(bean: configurarParametroInstance, field: 'estadoCriticoSolicitud', 'error')} required">
 	<label for="estadoCriticoSolicitud" class="control-label">
-		<g:message code="configurarParametro.estadoCriticoSolicitud.label" default="Valor Estado Normal en la Solicitud" />
+		<g:message code="configurarParametro.estadoCriticoSolicitud.label" default="Valor para Estado Critico en la Solicitud" />
 		<span class="required-indicator">*</span>
 	</label>
         <div class="controls">          

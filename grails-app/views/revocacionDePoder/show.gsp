@@ -37,7 +37,7 @@
                             <i class="icon-external-link"></i> Enviar Copia al Solicitante
                         </g:link>
                     </g:if>
-                    <g:if test="${!cartaDeInstruccion}">
+                    <g:if test="${!cartaDeInstruccion && ocultarBoton != true}">
                         <g:link  controller="prorroga" action="create" class="btn btn-small btn-info tip-bottom" params="[ revocacionDePoderId : revocacionDePoderInstance?.id]">
                             <i class="icon-calendar"></i> Prorroga
                         </g:link>
@@ -63,7 +63,37 @@
                         <div class="span12">
                             <div class="widget-box">
                                 <div class="widget-header widget-header-blue widget-header-flat">
+                                    <g:if test="${!revocacionDePoderInstance.prorrogas}">
                                     <h4 class="lighter"><i class="icon-file-text"></i> Solicitud de Revocación de Poder </h4>
+                                    </g:if>
+                                    <g:elseif test="${ocultarBoton != true && !cartaDeInstruccion}">
+                                        <table class="bordered">
+                                            <tr>
+                                                <td style="width:33%">
+                                                    <table style="width: 100%;border-collapse: collapse" border="1">
+                                                        <tr>                                                        
+                                                            <td style="width:50%">
+                                                                <h4 class="lighter"><i class="icon-file-text"></i> Solicitud de Revocación de Poder </h4>                                    
+                                                            </td>
+                                                            <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
+                                                            <td style="width:50%;text-align: right">
+                                                                <div class="infobox infobox-blue2 infobox-small infobox-dark">
+                                                                    <div class="infobox-icon">
+                                                                        <i class="icon-calendar"></i>
+                                                                    </div>
+                                                                    <div class="infobox-data">
+                                                                        <div class="infobox-content">Prorroga</div>
+                                                                        <div class="infobox-content">- ${diasRestantes} día(s)</div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            </sec:ifAnyGranted>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </g:elseif>
                                 </div>
                                 <div class="widget-body">
                                     <div class="widget-main">

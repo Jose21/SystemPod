@@ -162,7 +162,7 @@
             <tbody>
                 <g:each in="${otorgamientoDePoderInstanceList}" status="i" var="otorgamientoDePoderInstance">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                        <td style="text-align:center"><g:link controller="otorgamientoDePoder" action="edit" id="${otorgamientoDePoderInstance.id}"><span class="badge">${otorgamientoDePoderInstance?.id}-O</span></g:link></td>                        
+                        <td style="text-align:center"><g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoDePoderInstance.id}"><span class="badge">${otorgamientoDePoderInstance?.id}-O</span></g:link></td>                        
                         <td>
                             <g:each in ="${otorgamientoDePoderInstance.apoderados}" var="apoderado">
                                 ${apoderado.nombre}

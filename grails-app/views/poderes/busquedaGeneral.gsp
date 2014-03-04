@@ -129,7 +129,7 @@
             <tbody>
                 <g:each in="${otorgamientoDePoderInstanceList}" status="i" var="otorgamientoDePoderInstance">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                        <td style="text-align:center"><g:link controller="otorgamientoDePoder" action="edit" id="${otorgamientoDePoderInstance.id}"><span class="badge">${otorgamientoDePoderInstance?.id}-O</span></g:link></td>
+                        <td style="text-align:center"><g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoDePoderInstance.id}"><span class="badge">${otorgamientoDePoderInstance?.id}-O</span></g:link></td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "apoderados.nombre")}</td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "solicitadoPor")}</td>
                         <td><g:formatDate date="${otorgamientoDePoderInstance.registroDeLaSolicitud}" /></td>                        
@@ -161,7 +161,7 @@
             <tbody>
                 <g:each in="${revocacionDePoderInstanceList}" status="i" var="revocacionDePoderInstance">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                        <td style="text-align:center"><g:link controller="revocacionDePoder" action="edit" id="${revocacionDePoderInstance.id}"><span class="badge">${revocacionDePoderInstance?.id}-R</span></g:link></td>
+                        <td style="text-align:center"><g:link controller="revocacionDePoder" action="show" id="${revocacionDePoderInstance.id}"><span class="badge">${revocacionDePoderInstance?.id}-R</span></g:link></td>
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "apoderados.nombre")}</td>
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "solicitadoPor")}</td>
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "escrituraPublica")}</td>

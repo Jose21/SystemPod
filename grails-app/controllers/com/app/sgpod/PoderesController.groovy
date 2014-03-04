@@ -33,16 +33,38 @@ class PoderesController {
         def otorgamientosNoAsignadosList = []
         poderesList1.each {poder ->
             if(poder.fechaDeEnvio){
-                def fechaHoy = new Date()                
+                def fechaHoy = new Date() 
+                def diasDeProrroga = null
+                def diasDeProrrogaTotal = 0
                 def fechaDeEnvio = poder.fechaDeEnvio                
-                def diasPosteriores = fechaHoy - fechaDeEnvio                 
-                if(diasPosteriores <= parameters.estadoCriticoSolicitud){
-                    otorgamientosVerdesList.add(poder)
-                }else if(diasPosteriores <= parameters.estadoSemiSolicitud && diasPosteriores > parameters.estadoCriticoSolicitud){
-                    otorgamientosAmarillosList.add(poder)
-                }else if(diasPosteriores > parameters.estadoSemiSolicitud){
-                    otorgamientosRojosList.add(poder)
-                }                                
+                def diasPosteriores = fechaHoy - fechaDeEnvio                
+                if(poder.prorrogas){ 
+                    
+                    poder.prorrogas.each{ prorroga ->
+                        diasDeProrroga = prorroga.dias
+                        diasDeProrrogaTotal = diasDeProrrogaTotal + diasDeProrroga
+                    }  
+                    
+                    def prorrogasList = poder.prorrogas.sort{ it.getId() }                                                          
+                    def prorrogaInstance = prorrogasList.get(0)                    
+                    def inicioProrroga = prorrogaInstance.fechaDeEnvio                     
+                    def fechaDeTerminoProrroga = inicioProrroga + diasDeProrrogaTotal                     
+                    def hoy = new Date()
+                    def diasRestantes = fechaDeTerminoProrroga - hoy                    
+                    if(diasRestantes == 0){
+                        otorgamientosRojosList.add(poder)
+                    }else{
+                        otorgamientosVerdesList.add(poder)
+                    }
+                }else{ 
+                    if(diasPosteriores <= parameters.estadoCriticoSolicitud){
+                        otorgamientosVerdesList.add(poder)
+                    }else if(diasPosteriores <= parameters.estadoSemiSolicitud && diasPosteriores > parameters.estadoCriticoSolicitud){
+                        otorgamientosAmarillosList.add(poder)
+                    }else if(diasPosteriores > parameters.estadoSemiSolicitud){
+                        otorgamientosRojosList.add(poder)
+                    } 
+                }
             }else{
                 otorgamientosNoAsignadosList.add(poder)
             }            
@@ -53,16 +75,39 @@ class PoderesController {
         def revocacionesNoAsignadosList = []
         poderesList2.each {poder ->
             if(poder.fechaDeEnvio){
-                def fechaHoy = new Date()                
+                def fechaHoy = new Date()
+                def diasDeProrroga = null
+                def diasDeProrrogaTotal = 0
                 def fechaDeEnvio = poder.fechaDeEnvio                
-                def diasPosteriores = fechaHoy - fechaDeEnvio                
-                if(diasPosteriores <= 3){
-                    revocacionesVerdesList.add(poder)
-                }else if(diasPosteriores <= 5 && diasPosteriores > 3){
-                    revocacionesAmarillosList.add(poder)
-                }else{
-                    revocacionesRojosList.add(poder)
-                }                                
+                def diasPosteriores = fechaHoy - fechaDeEnvio
+                
+                if(poder.prorrogas){ 
+                    
+                    poder.prorrogas.each{ prorroga ->
+                        diasDeProrroga = prorroga.dias
+                        diasDeProrrogaTotal = diasDeProrrogaTotal + diasDeProrroga
+                    }  
+                    
+                    def prorrogasList = poder.prorrogas.sort{ it.getId() }                                                          
+                    def prorrogaInstance = prorrogasList.get(0)                    
+                    def inicioProrroga = prorrogaInstance.fechaDeEnvio                     
+                    def fechaDeTerminoProrroga = inicioProrroga + diasDeProrrogaTotal                     
+                    def hoy = new Date()
+                    def diasRestantes = fechaDeTerminoProrroga - hoy                    
+                    if(diasRestantes == 0){
+                        revocacionesRojosList.add(poder)
+                    }else{
+                        revocacionesVerdesList.add(poder)
+                    }
+                }else{                
+                   if(diasPosteriores <= parameters.estadoCriticoSolicitud){
+                        revocacionesVerdesList.add(poder)
+                    }else if(diasPosteriores <= parameters.estadoSemiSolicitud && diasPosteriores > parameters.estadoCriticoSolicitud){
+                        revocacionesAmarillosList.add(poder)
+                    }else if(diasPosteriores > parameters.estadoSemiSolicitud){
+                        revocacionesRojosList.add(poder)
+                    } 
+                }
             }else{
                 revocacionesNoAsignadosList.add(poder)
             }            
@@ -147,14 +192,14 @@ class PoderesController {
             if(poder.fechaVencimiento){
                 def fechaHoy = new Date()                
                 def fechaVencimiento = poder.fechaVencimiento                
-                def diasParaVencimiento = fechaVencimiento - fechaHoy                
+                def diasParaVencimiento = fechaVencimiento - fechaHoy                                 
                 if(diasParaVencimiento <= parameters.estadoCriticoPoder){
                     poderCriticoList.add(poder)
                 }else if(diasParaVencimiento <= parameters.estadoSemiPoder && diasParaVencimiento > parameters.estadoCriticoPoder ){
                     poderSemicriticoList.add(poder)
                 }else{
                     poderNoCritico.add(poder)
-                }                                
+                }                 
             }            
         }
         def poderesPorVencerList = poderCriticoList + poderSemicriticoList

@@ -66,10 +66,10 @@ class OtorgamientoDePoderController {
         redirect(action: "edit", id: otorgamientoDePoderInstance.id)
     }
 
-    def show(Long id) {
+    def show(Long id) {       
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         
-        def otorgamientoDePoderInstance = OtorgamientoDePoder.read(id)        
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.read(id)         
         if (!otorgamientoDePoderInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'poder.label', default: 'Poder'), id])
             redirect(action: "list")
@@ -95,10 +95,27 @@ class OtorgamientoDePoderController {
             otorgamientoDePoderInstance.voBoDocumentoFisico = true
             otorgamientoDePoderInstance.save()
         }
+        
+        //valor de prorrogas
+        def diasDeProrroga = null
+        def diasDeProrrogaTotal = 0
+        def diasRestantes = null
+        if(otorgamientoDePoderInstance.prorrogas){            
+            otorgamientoDePoderInstance.prorrogas.each{ prorroga ->
+                diasDeProrroga = prorroga.dias
+                diasDeProrrogaTotal = diasDeProrrogaTotal + diasDeProrroga
+            }            
+            def prorrogasList = otorgamientoDePoderInstance.prorrogas.sort{ it.getId() }                                                    
+            def prorrogaInstance = prorrogasList.get(0)            
+            def inicioProrroga = prorrogaInstance.fechaDeEnvio             
+            def fechaDeTerminoProrroga = inicioProrroga + diasDeProrrogaTotal             
+            def hoy = new Date()
+            diasRestantes = fechaDeTerminoProrroga - hoy                        
+        }
                               
         def cartaDeInstruccion = CartaDeInstruccionDeOtorgamiento.findByOtorgamientoDePoder(otorgamientoDePoderInstance)
         
-        [otorgamientoDePoderInstance: otorgamientoDePoderInstance, cartaDeInstruccion : cartaDeInstruccion, ocultarBoton:ocultarBoton]                       
+        [otorgamientoDePoderInstance: otorgamientoDePoderInstance, cartaDeInstruccion : cartaDeInstruccion, ocultarBoton:ocultarBoton, diasRestantes : diasRestantes]                       
     }
 
     def edit(Long id) {
