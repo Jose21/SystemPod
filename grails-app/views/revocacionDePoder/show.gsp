@@ -94,6 +94,9 @@
                                             </tr>
                                         </table>
                                     </g:elseif>
+                                    <g:else>
+                                        <h4 class="lighter"><i class="icon-file-text"></i> Solicitud de Revocación de Poder </h4>                                    
+                                    </g:else> 
                                 </div>
                                 <div class="widget-body">
                                     <div class="widget-main">

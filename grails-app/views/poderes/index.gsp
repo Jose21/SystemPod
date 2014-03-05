@@ -53,7 +53,7 @@
                         <li>
                             <a data-toggle="tab" href="#prorroga">
                                 <i class="icon-comment bigger-130"></i>
-                                <span class="bigger-110">Notificaciones <span class="badge">${prorrogaListTotal}</span></span>
+                                <span class="bigger-110">Prorrogas <span class="badge">${prorrogaListTotal}</span></span>
                             </a>
                         </li>
                     </sec:ifAnyGranted>
