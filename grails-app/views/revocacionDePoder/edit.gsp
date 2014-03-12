@@ -8,49 +8,63 @@
     </head>
     <body>
         <div class="content-header">            
-        <g:form class="form-horizontal" controller="revocacionDePoder" method="post">            
-            <div class="page-header position-relative">
-                <h1>Solicitud de Revocación de Poder
-                </h1>
-                <g:if test="${revocacionDePoderInstance.motivoDeRevocacion && revocacionDePoderInstance.apoderados}">
-                    <div class="btn-group">                                            
-                        <g:hiddenField name="revocacionDePoder.id" value="${revocacionDePoderInstance?.id}" />
-                        <g:hiddenField name="otorgamientoDePoder" value="${otorgamientoDePoderId}" />
-                        <g:actionSubmit class="btn btn-warning btn-btn" action="enviarSolicitud" value="Enviar Solicitud" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+            <g:form class="form-horizontal" controller="revocacionDePoder" method="post">            
+                <div class="page-header position-relative">
+                    <h1>Solicitud de Revocación de Poder
+                    </h1>
+                    <div class="span12">
+                        <div id="fuelux-wizard" class="row-fluid" data-target="#step-container">
+                            <ul class="wizard-steps">
+                                <li data-target="#step1" style="width: 50%;">
+                                    <span class="step">1</span>
+                                    <span class="title">Datos de la solicitud</span>
+                                </li>
+                                <li data-target="#step2" class="active" style="width: 50%;">
+                                    <span class="step">2</span>
+                                    <span class="title">Apoderados</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </g:if>
-            </div>
+                    <g:if test="${revocacionDePoderInstance.motivoDeRevocacion && revocacionDePoderInstance.apoderados}">
+                        <div class="btn-group">                                            
+                            <g:hiddenField name="revocacionDePoder.id" value="${revocacionDePoderInstance?.id}" />
+                            <g:hiddenField name="otorgamientoDePoder" value="${otorgamientoDePoderId}" />
+                            <g:actionSubmit class="btn btn-warning btn-btn" action="enviarSolicitud" value="Enviar Solicitud" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+                        </div>
+                    </g:if>
+                </div>
 
-            <div class="container-fluid">
-                <g:render template="/shared/alerts" />                
+                <div class="container-fluid">
+                    <g:render template="/shared/alerts" />                
 
-                <g:hasErrors bean="${revocacionDePoderInstance}">
-                    <div class="alert alert-block alert-warning">            
-                        <g:eachError bean="${revocacionDePoderInstance}" var="error">
-                            - <g:message error="${error}"/> <br/>
-                        </g:eachError>
-                    </div>
-                </g:hasErrors>
+                    <g:hasErrors bean="${revocacionDePoderInstance}">
+                        <div class="alert alert-block alert-warning">            
+                            <g:eachError bean="${revocacionDePoderInstance}" var="error">
+                                - <g:message error="${error}"/> <br/>
+                            </g:eachError>
+                        </div>
+                    </g:hasErrors>
 
-                <g:if test="${revocacionDePoderInstance.tipoDeRevocacion == "Parcial" && revocacionDePoderInstance.apoderados && revocacionDePoderInstance.agregarApoderado != true}">
-                    <h3 id="bloqueApoderados"  class="header smaller lighter blue">Seleccione los apoderados a quien desee revocar el poder.</h3>       
+                    <g:if test="${revocacionDePoderInstance.tipoDeRevocacion == "Parcial" && revocacionDePoderInstance.apoderados && revocacionDePoderInstance.agregarApoderado != true}">
+                        <h3 id="bloqueApoderados"  class="header smaller lighter blue">Seleccione los apoderados a quien desee revocar el poder.</h3>       
 
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <g:if test="${revocacionDePoderInstance.apoderados}">
-                                    <th></th>
-                                    <th>Nombre</th>
-                                    <th>Puesto</th>                
-                                    <th>Institución</th>
-                                    <th>Email</th>
-                                    </g:if>
-                                    <g:else>
-                                    <th colspan="4">Nombre</th>
-                                    </g:else>                                
-                            </tr>
-                        </thead>
-                        <tbody>                                                            
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <g:if test="${revocacionDePoderInstance.apoderados}">
+                                        <th></th>
+                                        <th>Nombre</th>
+                                        <th>Puesto</th>                
+                                        <th>Institución</th>
+                                        <th>Email</th>
+                                        </g:if>
+                                        <g:else>
+                                        <th colspan="4">Nombre</th>
+                                        </g:else>                                
+                                </tr>
+                            </thead>
+                            <tbody>                                                            
                                 <g:each in="${revocacionDePoderInstance.apoderados}" status="i" var="apoderado">            
                                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                                         <td style="text-align:center"><g:checkBox id="${apoderado.id}" name="apoderadoList" value="${apoderado.id}" checked="false"/></td>
@@ -60,41 +74,41 @@
                                         <td>${apoderado.email}</td>                                    
                                     </tr>                                
                                 </g:each>
-                                    <tr>
-                                        <td colspan="5" style="text-align:right">                                                                                                                                    
-                                            <!--g:actionSubmit class="btn btn-danger btn-mini" action="removeApoderado" value="Aceptar" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /-->
-                                        </td>
-                                    </tr>                            
-                        </tbody>
-                    </table>
-                </g:if>                                
+                                <tr>
+                                    <td colspan="5" style="text-align:right">                                                                                                                                    
+                                        <!--g:actionSubmit class="btn btn-danger btn-mini" action="removeApoderado" value="Aceptar" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /-->
+                                    </td>
+                                </tr>                            
+                            </tbody>
+                        </table>
+                    </g:if>                                
 
-                <g:if test="${revocacionDePoderInstance.tipoDeRevocacion == "Total" && revocacionDePoderInstance.apoderados && revocacionDePoderInstance.agregarApoderado != true}">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Puesto</th>                
-                                <th>Institución</th>
-                                <th>Email</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <g:each in="${revocacionDePoderInstance.apoderados}" status="i" var="apoderado">            
-                                <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                    <td>${apoderado.nombre}</td>
-                                    <td>${apoderado.puesto}</td>
-                                    <td>${apoderado.institucion}</td>
-                                    <td>${apoderado.email}</td>                                    
-                                </tr>            
-                            </g:each>         
-                        </tbody>
-                    </table>
+                    <g:if test="${revocacionDePoderInstance.tipoDeRevocacion == "Total" && revocacionDePoderInstance.apoderados && revocacionDePoderInstance.agregarApoderado != true}">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Puesto</th>                
+                                    <th>Institución</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <g:each in="${revocacionDePoderInstance.apoderados}" status="i" var="apoderado">            
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td>${apoderado.nombre}</td>
+                                        <td>${apoderado.puesto}</td>
+                                        <td>${apoderado.institucion}</td>
+                                        <td>${apoderado.email}</td>                                    
+                                    </tr>            
+                                </g:each>         
+                            </tbody>
+                        </table>
 
-                </g:if>
-                    
+                    </g:if>
+
                 </g:form>    
-                    
+
                 <g:if test="${revocacionDePoderInstance.agregarApoderado == true}">
                     <h3 id="bloqueApoderados"  class="header smaller lighter blue">Agregar Apoderados</h3>       
 

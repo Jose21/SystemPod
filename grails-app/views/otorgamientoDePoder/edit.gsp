@@ -6,7 +6,7 @@
         <g:set var="entityName" value="${message(code: 'otorgamientoDePoder.label', default: 'Otorgamiento de Poder')}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
     </head>
-    <body>
+    <body>        
         <div class="content-header">
             <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE">
                 <div class="page-header position-relative">                
@@ -15,7 +15,21 @@
                             <i class="icon-double-angle-right"></i>
                             Agregar Apoderados y Enviar Solicitud.
                         </small>
-                    </h1>                
+                    </h1>
+                    <div class="span12">
+                        <div id="fuelux-wizard" class="row-fluid" data-target="#step-container">
+                            <ul class="wizard-steps">
+                                <li data-target="#step1" style="width: 50%;">
+                                    <span class="step">1</span>
+                                    <span class="title">Datos de la solicitud</span>
+                                </li>
+                                <li data-target="#step2" class="active" style="width: 50%;">
+                                    <span class="step">2</span>
+                                    <span class="title">Apoderados</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>                   
                     <g:if test="${otorgamientoDePoderInstance.apoderados}">
                         <div class="btn-group">                    
                             <g:link action="asignarA" class="btn btn-small btn-warning tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id ]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
@@ -24,20 +38,17 @@
                         </div>
                     </g:if>                
                 </div>
-            </sec:ifAnyGranted>
-
+            </sec:ifAnyGranted>            
             <div class="container-fluid">
                 <g:render template="/shared/alerts" />
                 <br/>
-
                 <g:hasErrors bean="${otorgamientoDePoderInstance}">
                     <div class="alert alert-block alert-warning">            
                         <g:eachError bean="${otorgamientoDePoderInstance}" var="error">
                             - <g:message error="${error}"/> <br/>
                         </g:eachError>
                     </div>
-                </g:hasErrors>
-
+                </g:hasErrors>                
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE">
                     <h3 id="bloqueApoderados"  class="header smaller lighter blue">Agregar Apoderados</h3>       
                     <table class="table table-bordered table-striped">
@@ -124,7 +135,7 @@
                         </div>
                         <g:render template="form"/>
                     </sec:ifAnyGranted>
-                    
+
                     <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_NOTARIO">
                         <h3 id="bloqueDatosComplementarios"  class="header smaller lighter blue">Enviar Copia de Escritura Pública</h3>
                         <br/>                        
