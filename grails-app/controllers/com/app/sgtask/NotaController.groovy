@@ -65,10 +65,12 @@ class NotaController {
             if(params.archivo.getSize()!=0){                
                 def revocacionDePoderInstance = RevocacionDePoder.get(session.revocacionDePoderId)
                 //se eliminan los apoderados de la solicitud en la variable apoderadosVigentes de OtorgamientoDePoder
-                def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(revocacionDePoderInstance.escrituraPublica)
-                otorgamientoDePoderInstance.apoderadosVigentes = otorgamientoDePoderInstance.apoderadosVigentes - revocacionDePoderInstance.apoderadosEliminar
-                otorgamientoDePoderInstance.solicitudEnProceso = false
-                otorgamientoDePoderInstance.save()
+                def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(revocacionDePoderInstance.escrituraPublica)                
+                if(otorgamientoDePoderInstance){
+                    otorgamientoDePoderInstance.apoderadosVigentes = otorgamientoDePoderInstance.apoderadosVigentes - revocacionDePoderInstance.apoderadosEliminar
+                    otorgamientoDePoderInstance.solicitudEnProceso = false
+                    otorgamientoDePoderInstance.save()     
+                }
             
                 def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}        
                 usuarioResolvedorPoderes.each{
@@ -159,8 +161,7 @@ class NotaController {
             }
         }
 
-        notaInstance.properties = params
-        println "f"+ params.archivo
+        notaInstance.properties = params        
 
         if (!notaInstance.validate()) {
             notaInstance.errors.each {}

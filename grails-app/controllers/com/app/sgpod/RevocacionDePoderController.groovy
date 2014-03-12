@@ -106,6 +106,7 @@ class RevocacionDePoderController {
 
     def show(Long id) {
         def revocacionDePoderInstance = RevocacionDePoder.read(id)
+        println "revocacion:"+ revocacionDePoderInstance.apoderadosEliminar
         if (!revocacionDePoderInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'revocacionDePoder.label', default: 'RevocacionDePoder'), id])
             redirect(action: "list")
@@ -294,11 +295,13 @@ class RevocacionDePoderController {
     
     def enviarSolicitud () {                
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)        
-        def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(revocacionDePoderInstance.escrituraPublica)        
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(revocacionDePoderInstance.escrituraPublica)
+        println "otorgamiento:"+ otorgamientoDePoderInstance
         if(revocacionDePoderInstance?.tipoDeRevocacion == "Parcial"){
             if(params.apoderadoList){
                 def apoderadoSelects = params.list('apoderadoList')        
-                def selectedApoderados = Apoderado.getAll(apoderadoSelects)            
+                def selectedApoderados = Apoderado.getAll(apoderadoSelects)
+                println"aaaaa:"+ selectedApoderados
                 def listaInicialDeApoderados = revocacionDePoderInstance.apoderados              
           
                 def lista2 = listaInicialDeApoderados - selectedApoderados            
@@ -314,6 +317,10 @@ class RevocacionDePoderController {
                 flash.error = "Debe Elegir al menos un Apoderado."
                 redirect(action: "edit", params: [id: revocacionDePoderInstance.id])
                 return            
+            }else if(revocacionDePoderInstance.agregadaManualmente == true){
+                revocacionDePoderInstance.apoderados.each(){it ->
+                    revocacionDePoderInstance.addToApoderadosEliminar(it) 
+                }
             }
         }
         
@@ -330,10 +337,12 @@ class RevocacionDePoderController {
         revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
         revocacionDePoderInstance.fechaDeEnvio = new Date()        
         revocacionDePoderInstance.save()
-        //se cambia el estatus del poder
-        otorgamientoDePoderInstance.solicitudEnProceso = true
-        otorgamientoDePoderInstance.save()
-        flash.message = "Se ha enviado con éxito la Solicitud."
+        //se cambia el estatus del poder cuando es una revocacion atravez de una solicitud existente
+        if(otorgamientoDePoderInstance){
+            otorgamientoDePoderInstance.solicitudEnProceso = true
+            otorgamientoDePoderInstance.save()
+            flash.message = "Se ha enviado con éxito la Solicitud."
+        }
         
         redirect(controller: "poderes", action: "index")        
     }

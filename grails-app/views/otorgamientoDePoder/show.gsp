@@ -87,7 +87,7 @@
                                                             <td style="width:50%">
                                                                 <h4 class="lighter"><i class="icon-file-text"></i> Solicitud de Otorgamiento de Poder </h4>                                    
                                                             </td>
-                                                            <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
+                                                        <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
                                                             <td style="width:50%;text-align: right">
                                                                 <div class="infobox infobox-blue2 infobox-small infobox-dark">
                                                                     <div class="infobox-icon">
@@ -99,11 +99,11 @@
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            </sec:ifAnyGranted>
-                                                        </tr>
-                                                    </table>
-                                                </td>
+                                                        </sec:ifAnyGranted>
                                             </tr>
+                                        </table>
+                                        </td>
+                                        </tr>
                                         </table>
                                     </g:elseif>
                                     <g:else>
@@ -137,45 +137,45 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                            </g:if>                                            
-                                            <g:if test="${otorgamientoDePoderInstance?.tareas}">
-                                                <div class="widget-box ">
-                                                    <div class="widget-header">
-                                                        <h4 class="lighter smaller">
-                                                            <i class="icon-comment blue"></i>
-                                                            Notificación de Rechazo
-                                                        </h4>
-                                                    </div>
-
-                                                    <div class="widget-body">
-                                                        <div class="widget-main no-padding">
-                                                            <div class="dialogs">                
-                                                                <g:each var="tarea" in="${otorgamientoDePoderInstance?.tareas.sort { it.dateCreated }}">
-                                                                    <div class="itemdiv dialogdiv">                                            
-                                                                        <div class="body">
-                                                                            <div class="time">                        
-                                                                                <span>Enviada Por: ${tarea?.creadaPor?.firstName} ${tarea?.creadaPor?.lastName}</span><br/>
-                                                                                <i class="icon-time"></i>
-                                                                                <span class="green">Fecha de Envío: <g:formatDate date="${tarea?.dateCreated}" type="datetime" style="MEDIUM"/></span>                                                    
-                                                                            </div>
-
-                                                                            <div class="name">
-                                                                                Título: ${tarea?.nombre}
-                                                                            </div>
-                                                                            <div class="text">
-                                                                                Motivos: <%=tarea?.descripcion%>                                                                                              
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </g:each>
-                                                            </div>
-                                                        </div><!--/widget-main-->
-                                                    </div><!--/widget-body-->
-                                                </div><!--/widget-box-->
-                                            </g:if>	
+                                            </g:if>                                                                                        	
                                         </div>
                                     </div>
                                 </div>
+                                <g:if test="${otorgamientoDePoderInstance?.tareas}">
+                                    <div class="widget-box ">
+                                        <div class="widget-header">
+                                            <h4 class="lighter smaller">
+                                                <i class="icon-comment blue"></i>
+                                                Notificación de Rechazo
+                                            </h4>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main no-padding">
+                                                <div class="dialogs">                
+                                                    <g:each var="tarea" in="${otorgamientoDePoderInstance?.tareas.sort { it.dateCreated }}">
+                                                        <div class="itemdiv dialogdiv">                                            
+                                                            <div class="body">
+                                                                <div class="time">                        
+                                                                    <span>Enviada Por: ${tarea?.creadaPor?.firstName} ${tarea?.creadaPor?.lastName}</span><br/>
+                                                                    <i class="icon-time"></i>
+                                                                    <span class="green">Fecha de Envío: <g:formatDate date="${tarea?.dateCreated}" type="datetime" style="MEDIUM"/></span>                                                    
+                                                                </div>
+
+                                                                <div class="name">
+                                                                    Título: ${tarea?.nombre}
+                                                                </div>
+                                                                <div class="text">
+                                                                    Motivos: <%=tarea?.descripcion%>                                                                                              
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </g:each>
+                                                </div>
+                                            </div><!--/widget-main-->
+                                        </div><!--/widget-body-->
+                                    </div><!--/widget-box-->
+                                </g:if>
                                 <g:if test="${otorgamientoDePoderInstance?.notas}">
                                     <div class="widget-box ">
                                         <div class="widget-header">

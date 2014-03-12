@@ -285,7 +285,7 @@ class PoderesController {
         def r = OtorgamientoDePoder.createCriteria()
         def otorgamientoDePoderInstanceList = r.list {
             apoderados {
-                like("nombre", "%"+params.nombre+"%")
+                ilike("nombre", "%"+params.nombre+"%")
             }
             order("id", "asc")
         }        
@@ -390,7 +390,7 @@ class PoderesController {
         def s = RevocacionDePoder.createCriteria()
         def revocacionDePoderInstanceList = s.list {
             apoderados {
-                like("nombre", "%"+params.nombre+"%")
+                ilike("nombre", "%"+params.nombre+"%")
             }
             order("id", "asc")
         } 
@@ -410,7 +410,14 @@ class PoderesController {
         if (params.inActive=="porDelegacion") {
             porDelegacionActive = "active"
         }        
-        def revocacionDePoderInstanceList = RevocacionDePoder.findAllByDelegacionIlike("%"+params.delegacion+"%", [sort: "id", order: "asc"])
+        //def revocacionDePoderInstanceList = RevocacionDePoder.findAllByDelegacionIlike("%"+params.delegacion+"%", [sort: "id", order: "asc"])
+        def g = RevocacionDePoder.createCriteria()
+        def revocacionDePoderInstanceList = g.list {
+            delegacion {
+                ilike("nombre", "%"+params.delegacion+"%")
+            }
+            order("id", "asc")
+        } 
         session.revocacionDePoderInstanceList = revocacionDePoderInstanceList
         render(
             view: "revocacionConsulta", 
@@ -422,24 +429,24 @@ class PoderesController {
         )       
     }
     
-    def buscarPorNombreNotarioRevocacion (){
-        def porNombreNotarioActive = null
-        if (params.inActive=="porNombreNotario") {
-            porNombreNotarioActive = "active"
+    def buscarPorNumeroEscrituraRevocacion (){
+        def porNumeroEscrituraActive = null
+        if (params.inActive=="porNumeroEscritura") {
+            porNumeroEscrituraActive = "active"
         }
-        def revocacionDePoderInstanceList = RevocacionDePoder.findAllByNombreDeNotarioIlike("%"+params.nombreNotario+"%", [sort: "id", order: "asc"])
+        def revocacionDePoderInstanceList = RevocacionDePoder.findAllByEscrituraPublicaLike("%"+params.escrituraPublica+"%", [sort: "id", order: "asc"])        
         session.revocacionDePoderInstanceList = revocacionDePoderInstanceList
         render(
             view: "revocacionConsulta", 
             model: [
                 revocacionDePoderInstanceList: revocacionDePoderInstanceList,
                 revocacionDePoderInstanceTotal: revocacionDePoderInstanceList.size(),
-                porNombreNotarioActive : porNombreNotarioActive       
+                porNumeroEscrituraActive : porNumeroEscrituraActive       
             ]
         )       
     }
     
-    def buscarPorFechaRevocacion () {
+    def buscarPorFechaRevocacion () {        
         def porFechaRevocacionActive = null
         if (params.inActive=="porFechaRevocacion") {
             porFechaRevocacionActive = "active"
@@ -450,7 +457,7 @@ class PoderesController {
         def fechaFin = null
         def busquedaBean = null
         def revocacionDePoderInstanceList = []
-        if (params.rangoDeFechaRevocacion != "") {
+        if (params.rangoDeFechaRevocacion) {
             flash.warn = null
             rangoDeFechaRevocacion = params.rangoDeFechaRevocacion
             fechaInicio = sdf.parse(rangoDeFechaRevocacion.split("-")[0].trim())
@@ -506,14 +513,14 @@ class PoderesController {
         def a = OtorgamientoDePoder.createCriteria()
         def otorgamientoDePoderInstanceList = a.list {
             apoderados {
-                like("nombre", "%"+params.nombre+"%")
+                ilike("nombre", "%"+params.nombre+"%")
             }
             order("id", "asc")
         }
         def b = RevocacionDePoder.createCriteria()
         def revocacionDePoderInstanceList = b.list {
             apoderados {
-                like("nombre", "%"+params.nombre+"%")
+                ilike("nombre", "%"+params.nombre+"%")
             }
             order("id", "asc")
         }         
@@ -591,18 +598,18 @@ class PoderesController {
         log.info "activo:." + session.inActive
         log.info "total::." + session.otorgamientoDePoderInstanceList.size()
         log.info "params::::::::::::::::"+ params
-        log.info "convenioinstance::::::"+ session.otorgamientoDePoderInstanceList
+        log.info "otorgamiento::::::"+ session.otorgamientoDePoderInstanceList
         if(params?.format && params.format != "html"){
             response.contentType = grailsApplication.config.grails.mime.types[params.format]
             response.setHeader("Content-disposition", "attachment; filename=otorgamiento.${params.extension}")
-            List fields = ["id", "nombre", "solicitadoPor", "numeroDeFolio", "registroDeLaSolicitud","puesto", "tipoDePoder","delegacion"]
-            Map labels = ["id": "Id Interno", "solicitadoPor": "Solicitado Por","numeroDeFolio": "No.Folio","registroDeLaSolicitud":"Registro De Solicitud","puesto":"Puesto",\
-                          "contrato":"Contrato","tipoDePoder":"Tipo de Poder","delegacion":"Delegación"]
+            List fields = ["id", "categoriaDeTipoDePoder.tipoDePoder.nombre", "categoriaDeTipoDePoder.nombre", "solicitadoPor", "apoderados.nombre", "registroDeLaSolicitud", "delegacion"]
+            Map labels = ["id":"Número de Folio", "categoriaDeTipoDePoder.tipoDePoder.nombre":"Tipo de Poder", "categoriaDeTipoDePoder.nombre":"Categoria", "solicitadoPor": "Solicitado Por", "apoderados.nombre": "Apoderados", "registroDeLaSolicitud":"Registro De Solicitud",
+                          "delegacion":"Delegación"]
             def upperCase = { domain, value ->
                 return value.toUpperCase()
             }
             Map formatters = [contrato: upperCase]		
-            Map parameters = [title: "Reporte de Otorgamiento de Poder ", "column.widths": [0.2, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4], "title.font.size":12]
+            Map parameters = [title: "Reporte de Otorgamiento de Poder ", "column.widths": [0.2, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4], "title.font.size":12]
 
             exportService.export(params.format, response.outputStream, session.otorgamientoDePoderInstanceList, fields, labels, formatters, parameters)
         }
@@ -623,14 +630,14 @@ class PoderesController {
         if(params?.format && params.format != "html"){
             response.contentType = grailsApplication.config.grails.mime.types[params.format]
             response.setHeader("Content-disposition", "attachment; filename=revocacion.${params.extension}")
-            List fields = ["id", "nombre", "solicitadoPor", "escrituraPublica", "nombreDeNotario","puesto","fechaDeRevocacion"]
-            Map labels = ["id": "Id Interno","nombre": "Nombre Apoderado", "solicitadoPor": "Solicitado Por","escrituraPublica":"Escritura Pública","nombreDeNotario":"Nombre Notario",\
-                          "puesto":"Puesto","fechaDeRevocacion":"Fecha Revocación"]
+            List fields = ["id", "apoderadosEliminar.nombre", "solicitadoPor", "escrituraPublica","fechaDeRevocacion"]
+            Map labels = ["id": "Número de Folio","apoderadosEliminar.nombre": "Nombre Apoderado", "solicitadoPor": "Solicitado Por","escrituraPublica":"Escritura Pública",
+                          "fechaDeRevocacion":"Fecha Revocación"]
             def upperCase = { domain, value ->
                 return value.toUpperCase()
             }
             Map formatters = [nombreDeNotario: upperCase]		
-            Map parameters = [title: "Reporte de Revocación de Poder ", "column.widths": [0.2, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4], "title.font.size":12]
+            Map parameters = [title: "Reporte de Revocación de Poder ", "column.widths": [0.2, 0.4, 0.4, 0.4, 0.4], "title.font.size":12]
 
             exportService.export(params.format, response.outputStream, session.revocacionDePoderInstanceList, fields, labels, formatters, parameters)
         }

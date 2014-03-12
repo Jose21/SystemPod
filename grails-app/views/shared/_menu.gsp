@@ -19,7 +19,7 @@
                 <i class="icon-user"></i>
             </g:link>
         </sec:ifAnyGranted>
-        <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_TAREAS">
+        <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS">
             <g:link class="btn btn-small btn-warning" controller="tarea" action="hoy">
                 <i class="icon-check"></i>
             </g:link>
@@ -54,7 +54,7 @@
         </g:link> 
     </li>
     </sec:ifAnyGranted>
-    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_TAREAS">
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS">
     <li>
         <g:link controller="tarea" action="hoy">
             <i class="icon-check"></i>
@@ -62,7 +62,7 @@
         </g:link> 
     </li>
     </sec:ifAnyGranted>
-    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS, ROLE_PODERES, ROLE_TAREAS, ROLE_PODERES_RESOLVEDOR">
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
     <li>
         <g:link controller="user">
             <i class="icon-lock"></i>

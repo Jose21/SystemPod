@@ -21,7 +21,7 @@
             </g:link>
         </sec:ifAnyGranted>
 
-        <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_TAREAS">
+        <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS">
             <g:link class="btn btn-small btn-warning" controller="tarea" action="hoy">
                 <i class="icon-check"></i>
             </g:link>
@@ -39,7 +39,7 @@
     </div>
 </div><!--#sidebar-shortcuts-->
 
-<sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_TAREAS">
+<sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS">
 <ul class="nav nav-list">  
     <li class="active open">
         <a href="#" class="dropdown-toggle">

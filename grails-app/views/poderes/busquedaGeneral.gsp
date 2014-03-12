@@ -103,26 +103,27 @@
             <thead>
                 <g:if test="${params.nombre}">
                     <tr>
-                        <th colspan="8"  style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR NOMBRE: ${params.nombre}</th>
+                        <th colspan="8"  style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR NOMBRE: "${params.nombre}"</th>
                     </tr>
                 </g:if> 
                 <g:if test="${params.solicitadoPor}">
                     <tr>
-                        <th colspan="8"  style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR NOMBRE: ${params.solicitadoPor}</th>
+                        <th colspan="8"  style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR NOMBRE: "${params.solicitadoPor}"</th>
                     </tr>
                 </g:if>
                 <g:if test="${params.tags}">
                     <tr>
-                        <th colspan="10" style="text-align:center;font-size:16px">RESULTADO PARA LA PALABRA: ${params.tags}</br></br></th>
+                        <th colspan="10" style="text-align:center;font-size:16px">RESULTADO PARA LA PALABRA: "${params.tags}"</br></br></th>
                     </tr>
                 </g:if>
             <th colspan="8"  style="text-align:left;font-size:14px">Otorgamiento de Poder</th>
             <tr>
                 <th><g:message code="otorgamientoDePoder.id.label"  default="Número de Folio" /></th>
-                <th><g:message code="otorgamientoDePoder.apoderados.nombre.label" default="Nombre Apoderado" /></th>
+                <th><g:message code="otorgamientoDePoder.apoderados.nombre.label" default="Nombre Apoderado(s)" /></th>
                 <th><g:message code="otorgamientoDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
-                <th><g:message code="otorgamientoDePoder.registroDeLaSolicitud.label" default="Registro De La Solicitud" /></th>
-                <th><g:message code="otorgamientoDePoder.tipoDePoder.label" default="Tipo De Poder" /></th>
+                <th><g:message code="otorgamientoDePoder.registroDeLaSolicitud.label" default="Registro De La Solicitud" /></th>                
+                <th><g:message code="otorgamientoDePoder.categoriaDeTipoDePoder.tipoDePoder.label" default="Tipo De Poder" /></th>
+                <th><g:message code="otorgamientoDePoder.categoriaDeTipoDePoder.label" default="Categoria" /></th>
                 <th><g:message code="otorgamientoDePoder.delegacion.label" default="Delegación" />
             </tr>
             </thead>
@@ -130,10 +131,16 @@
                 <g:each in="${otorgamientoDePoderInstanceList}" status="i" var="otorgamientoDePoderInstance">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                         <td style="text-align:center"><g:link controller="otorgamientoDePoder" action="show" id="${otorgamientoDePoderInstance.id}"><span class="badge">${otorgamientoDePoderInstance?.id}-O</span></g:link></td>
-                        <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "apoderados.nombre")}</td>
+                        <td>
+                            <g:each in ="${otorgamientoDePoderInstance.apoderados}" var="apoderado">
+                                ${apoderado.nombre}
+                                <br>
+                            </g:each>
+                        </td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "solicitadoPor")}</td>
                         <td><g:formatDate date="${otorgamientoDePoderInstance.registroDeLaSolicitud}" /></td>                        
-                        <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "tipoDePoder")}</td>
+                        <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "categoriaDeTipoDePoder.tipoDePoder.nombre")}</td>
+                        <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "categoriaDeTipoDePoder.nombre")}</td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "delegacion")}</td>
                     </tr>
                 </g:each>
@@ -153,8 +160,7 @@
                 <th><g:message code="revocacionDePoder.id.label"  default="Número de Folio" /></th>
                 <th><g:message code="revocacionDePoder.apoderados.nombre.label" default="Nombre Apoderado" /></th>
                 <th><g:message code="revocacionDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
-                <th><g:message code="revocacionDePoder.escrituraPublica.label" default="Escritura Publica" /></th>
-                <th><g:message code="revocacionDePoder.nombreDeNotario.label" default="Nombre De Notario" /></th>                
+                <th><g:message code="revocacionDePoder.escrituraPublica.label" default="Escritura Publica" /></th>                
                 <th><g:message code="revocacionDePoder.fechaDeRevocacion.label" default="Fecha de Revocación" /></th>
             </tr>
             </thead>
@@ -162,10 +168,14 @@
                 <g:each in="${revocacionDePoderInstanceList}" status="i" var="revocacionDePoderInstance">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                         <td style="text-align:center"><g:link controller="revocacionDePoder" action="show" id="${revocacionDePoderInstance.id}"><span class="badge">${revocacionDePoderInstance?.id}-R</span></g:link></td>
-                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "apoderados.nombre")}</td>
+                        <td>
+                            <g:each in ="${revocacionDePoderInstance.apoderadosEliminar}" var="apoderado">
+                                ${apoderado.nombre}
+                                <br>
+                            </g:each>
+                        </td>
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "solicitadoPor")}</td>
-                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "escrituraPublica")}</td>
-                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "nombreDeNotario")}</td>                        
+                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "escrituraPublica")}</td>                        
                         <td><g:formatDate date="${revocacionDePoderInstance.fechaDeRevocacion}" /></td>
                     </tr>
                 </g:each>

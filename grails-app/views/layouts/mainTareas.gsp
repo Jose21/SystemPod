@@ -24,7 +24,8 @@
         <link rel="stylesheet" href="${resource(dir:'assets/css',file:'bootstrap-timepicker.css')}" />
         <link rel="stylesheet" href="${resource(dir:'assets/css',file:'daterangepicker.css')}" />
         <link rel="stylesheet" href="${resource(dir:'assets/css',file:'colorpicker.css')}" />
-        <link rel="stylesheet" href="${resource(dir:'assets/css',file:'ace-fonts.css')}" />    
+        <link rel="stylesheet" href="${resource(dir:'assets/css',file:'ace-fonts.css')}" />   
+        <link rel="stylesheet" href="${resource(dir:'assets/css',file:'validationEngine.jquery.css')}"/>
         <link href="${resource(dir:'assets/css',file:'ace.min.css')}" rel="stylesheet" />
         <link href="${resource(dir:'assets/css',file:'ace-responsive.min.css')}" rel="stylesheet" />
         <link href="${resource(dir:'assets/css',file:'ace-skins.min.css')}" rel="stylesheet" />
@@ -174,6 +175,8 @@
     <script src="${resource(dir:'assets/js/markdown',file:'bootstrap-markdown.min.js')}"></script>
     <script src="${resource(dir:'assets/js',file:'jquery.hotkeys.min.js')}"></script>    
     <script src="${resource(dir:'assets/js',file:'bootbox.min.js')}"></script>
+    <script src="${resource(dir:'assets/js',file:'jquery.validationEngine-es.js')}"></script>
+    <script src="${resource(dir:'assets/js',file:'jquery.validationEngine.js')}"></script>
 
     <script src="${resource(dir:'js',file:'highcharts.js')}"></script>
     <script src="${resource(dir:'js/modules',file:'exporting.js')}"></script>
@@ -295,7 +298,11 @@
         ]
         }]
         });
-        })(jQuery);        
+        })(jQuery);
+        $(document).ready(function() {
+            // binds form submission and fields to the validation engine
+            $("#myForm").validationEngine();
+        });
     </script>
     <g:javascript library="application"/>
 <r:layoutResources />    

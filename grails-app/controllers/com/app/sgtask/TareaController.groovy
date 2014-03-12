@@ -13,6 +13,8 @@ import com.app.sgcon.beans.BusquedaBean
 import com.pogos.BusquedaBean
 import com.app.sgpod.OtorgamientoDePoder
 import com.app.sgpod.RevocacionDePoder
+import com.app.security.Rol
+import com.app.security.UsuarioRol
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class TareaController {
@@ -231,7 +233,14 @@ class TareaController {
         } else {
             session.idRevocacionDePoder = null
         }
-        [tareaInstance: new Tarea(params)]
+        
+        if (params.idConvenio) {
+            def usuariosConveniosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS")).collect {it.usuario}            
+            [tareaInstance: new Tarea(params), usuariosConveniosList : usuariosConveniosList ]
+        }else{        
+        
+            [tareaInstance: new Tarea(params)]
+        }
     }
 
     def save() {
@@ -435,7 +444,8 @@ class TareaController {
     
     def share (Long id) {
         def tareaInstance = Tarea.get(id)
-        [ tareaInstance : tareaInstance ]
+        def usuariosConveniosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS")).collect {it.usuario}            
+        [ tareaInstance : tareaInstance, usuariosConveniosList : usuariosConveniosList ]
     }
     
     def addUsuarioToTarea(Long id) {

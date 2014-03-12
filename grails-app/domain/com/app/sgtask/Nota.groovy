@@ -18,7 +18,7 @@ class Nota {
     
     static constraints = {
         titulo blank:false
-        descripcion blank:true, maxSize:10240
+        descripcion blank:true, nullable:true, maxSize:10240
         tarea nullable:true
         documentos nullable:true
         agregadaPor nullable:false

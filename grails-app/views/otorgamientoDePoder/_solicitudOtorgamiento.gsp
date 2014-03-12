@@ -191,7 +191,7 @@
                     </td>                    
                     <td style="width:70%;text-align: left">
                         <span style="font-family: sans-serif;font-size: 13px;">
-                            <dd>  LIC. PEDRO CHAVEZ </dd>
+                            <dd>  ${otorgamientoDePoderInstance?.usuarioGestor} </dd>
                         </span>
                     </td>            
                 </tr>

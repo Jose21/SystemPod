@@ -18,6 +18,7 @@ class Poder {
     String tags
     Usuario responsable
     Date fechaDeEnvio
+    Usuario usuarioGestor
     
     static hasMany = [ 
         documentos : DocumentoDePoder,
@@ -47,6 +48,7 @@ class Poder {
         notas nullable:true
         fechaDeEnvio nullable:true
         prorrogas nullable:true
+        usuarioGestor nullable:true,blank:true
     }
     
     String toString() {

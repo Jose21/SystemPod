@@ -51,7 +51,7 @@
         <span class="required-indicator">*</span>
     </label>
     <div class="controls">
-        <g:select readonly="readonly" class="chosen-select" optionKey="id" optionValue="nombre" name="tipoDePoder.id" id="tipoDePoder.nombre" from="${com.app.sgpod.TipoDePoder.list()}"
+        <g:select readonly="readonly" class="chosen-select validate[required]" optionKey="id" optionValue="nombre" name="tipoDePoder.id" id="tipoDePoder.nombre" from="${com.app.sgpod.TipoDePoder.list()}"
         value="${revocacionDePoderInstance?.categoriaDeTipoDePoder?.tipoDePoder?.id}"
             noSelection="['':'Elige un tipo de poder']"        
         onchange="${remoteFunction(
@@ -62,7 +62,7 @@
         )}"/>
     </div>
     <div class="controls" id="categoriaSelection" >
-        <select readonly="readonly" class="chosen-select" data-placeholder="Elige una categoria..." name="categoriaDeTipoDePoder">
+        <select readonly="readonly" class="chosen-select validate[required]" data-placeholder="Elige una categoria..." name="categoriaDeTipoDePoder">
             <option value="${revocacionDePoderInstance?.categoriaDeTipoDePoder?.id}">${revocacionDePoderInstance?.categoriaDeTipoDePoder?.nombre}</option>
         </select>
     </div>    

@@ -130,7 +130,7 @@
                                                     <g:hiddenField name="version" value="${apoderado?.version}" />
                                                     <g:render template="/apoderado/itForm" bean="${apoderado}"/>            
                                                     <div class="form-actions">
-                                                        <g:actionSubmit class="btn btn-primary" action="updateIt" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+                                                        <g:actionSubmit class="btn btn-primary" action="updateItRevocacion" value="${message(code: 'default.button.update.label', default: 'Update')}" />
                                                     </div>
                                                 </g:form>
                                             </div>

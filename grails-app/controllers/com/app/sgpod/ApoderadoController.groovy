@@ -101,6 +101,7 @@ class ApoderadoController {
         }
     }
     def updateIt(Long id, Long version) {
+        println params
         def apoderadoInstance = Apoderado.get(id)
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoder.id as long)
         if (version != null) {
@@ -122,6 +123,29 @@ class ApoderadoController {
 
         flash.message = message(code: 'default.updated.message', args: [message(code: 'apoderado.label', default: 'Apoderado'), apoderadoInstance.id])
         redirect(controller:"otorgamientoDePoder", action: "edit", id: params.otorgamientoDePoder.id)
+    }
+    def updateItRevocacion(Long id, Long version) {        
+        def apoderadoInstance = Apoderado.get(id)
+        def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)
+        if (version != null) {
+            if (apoderadoInstance.version > version) {
+                apoderadoInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
+                          [message(code: 'apoderado.label', default: 'Apoderado')] as Object[],
+                          "Otro usuario actualizó los datos mientras los estabas editando.")
+                redirect(controller:"revocacionDePoder", action: "edit", id: apoderadoInstance.id)
+                return
+            }
+        }
+
+        apoderadoInstance.properties = params        
+        if (!apoderadoInstance.save(flush: true)) {
+            flash.message = ""
+            redirect(controller:"revocacionDePoder", action: "edit", id: apoderadoInstance.id)
+            return
+        }
+
+        flash.message = message(code: 'default.updated.message', args: [message(code: 'apoderado.label', default: 'Apoderado'), apoderadoInstance.id])
+        redirect(controller:"revocacionDePoder", action: "edit", id: params.revocacionDePoder.id)
     }
     def ajaxFinder() {
         def found = null

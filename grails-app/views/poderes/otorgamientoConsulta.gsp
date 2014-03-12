@@ -131,26 +131,26 @@
             <thead>
                 <g:if test="${params.nombre}">
                     <tr>
-                        <th colspan="8"  style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR NOMBRE DEL APODERADO: ${params.solicitadoPor}</th>
+                        <th colspan="8"  style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR NOMBRE DEL APODERADO: " ${params.nombre} "</th>
                     </tr>
                 </g:if>
                 <g:if test="${params.delegacion}">
                     <tr>
-                        <th colspan="8" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR DELEGACIÓN: ${params.delegacion.nombre}</br></br></th>
+                        <th colspan="8" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR DELEGACIÓN: " ${params.delegacion.nombre} "</br></br></th>
                     </tr>
                 </g:if>                
                 <g:if test="${rangoDeFechaRegistro}">
                     <tr>
-                        <th colspan="8" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FECHA DE REGISTRO: ${rangoDeFechaRegistro}</br></br></th>
+                        <th colspan="8" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FECHA DE REGISTRO: " ${rangoDeFechaRegistro} "</br></br></th>
                     </tr>
                 </g:if>
                 <g:if test="${params.tags}">
                     <tr>
-                        <th colspan="10" style="text-align:center;font-size:16px">RESULTADO PARA LA PALABRA: ${params.tags}</br></br></th>
+                        <th colspan="10" style="text-align:center;font-size:16px">RESULTADO PARA LA PALABRA: " ${params.tags} "</br></br></th>
                     </tr>
                 </g:if>
                 <tr>
-                    <th><g:message code="otorgamientoDePoder.id.label"  default="Número de Folio" /></th>
+                <th><g:message code="otorgamientoDePoder.id.label"  default="Número de Folio" /></th>
                 <th><g:message code="otorgamientoDePoder.apoderados.nombre.label" default="Nombre Apoderado(s)" /></th>
                 <th><g:message code="otorgamientoDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
                 <th><g:message code="otorgamientoDePoder.registroDeLaSolicitud.label" default="Registro De La Solicitud" /></th>                

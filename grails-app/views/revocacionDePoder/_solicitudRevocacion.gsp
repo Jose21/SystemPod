@@ -170,7 +170,7 @@
                 <tr>
                     <td bgcolor="#E7EBEB" style="width:30%;text-align: right">
                         <span style="font-family: sans-serif;font-size: 13px;">
-                            MOTIVO DE REVOCACI&Oacute:N
+                            MOTIVO DE REVOCACI&OacuteN
                         </span>
                     </td>                    
                     <td style="width:70%;text-align: left">

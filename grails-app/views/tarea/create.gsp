@@ -53,7 +53,7 @@
                 
                   <g:form class="form-horizontal" action="save" >
                 <g:render template="form"/>
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_CONVENIOS">
                     <div class="form-actions">
                         <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />
                     </div>

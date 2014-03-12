@@ -41,6 +41,12 @@ class OtorgamientoDePoderController {
         usuarioResolvedorPoderes.each{
             params.responsable = Usuario.get(it.id as long)   
         } 
+        //se agrega el usuario gestor en la solicitud         
+        def usuarioGestorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_GESTOR")).collect {it.usuario}        
+        usuarioGestorPoderes.each{
+            params.usuarioGestor = Usuario.get(it.id as long)   
+        }
+           
         
         if (params.registroDeLaSolicitud) {
             Date registroDeLaSolicitud = sdf.parse(params.registroDeLaSolicitud)
@@ -112,7 +118,7 @@ class OtorgamientoDePoderController {
             def hoy = new Date()
             diasRestantes = fechaDeTerminoProrroga - hoy                        
         }
-                              
+                                  
         def cartaDeInstruccion = CartaDeInstruccionDeOtorgamiento.findByOtorgamientoDePoder(otorgamientoDePoderInstance)
         
         [otorgamientoDePoderInstance: otorgamientoDePoderInstance, cartaDeInstruccion : cartaDeInstruccion, ocultarBoton:ocultarBoton, diasRestantes : diasRestantes]                       
@@ -325,7 +331,7 @@ class OtorgamientoDePoderController {
     }    
     
     def imprimir(Long id){
-        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)                
         [ otorgamientoDePoderInstance : otorgamientoDePoderInstance ]
     }
 }
