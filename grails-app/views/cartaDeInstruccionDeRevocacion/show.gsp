@@ -8,60 +8,39 @@
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
     <body>
-        <div class="page-header position-relative">
-            <h1>Carta de Instrucción de Revocación de Poder</h1>
+        <div class="page-header position-relative">            
             <div class="btn-group">                                
-                <g:link class="btn btn-pink btn-small tip-bottom" action="imprimir" id="${cartaDeInstruccionDeRevocacionInstance?.id}" target="_blank">
-                    <i class="icon-print"></i> Imprimir Carta de Instrucción
+                <g:link class="btn btn-success btn-small tip-bottom" action="imprimir" id="${cartaDeInstruccionDeRevocacionInstance?.id}" target="_blank">
+                    <i class="icon-print"></i> Imprimir
                 </g:link>                
             </div>
         </div>
-
         <div class="container-fluid">
             <g:if test="${flash.message}">
                 <br/>
                 <div class="alert alert-info">
                     <strong>¡Información!</strong> ${flash.message}
                 </div>
-            </g:if>
-            <div class="well">
-
-                <g:if test="${cartaDeInstruccionDeRevocacionInstance?.registro}">
-                    <dl>
-                        <dt><g:message code="cartaDeInstruccionDeRevocacion.registro.label" default="Registro" /></dt>
-
-                        <dd><g:fieldValue bean="${cartaDeInstruccionDeRevocacionInstance}" field="registro"/></dd>
-
-                    </dl>
-                </g:if>
-
-                <g:if test="${cartaDeInstruccionDeRevocacionInstance?.fecha}">
-                    <dl>
-                        <dt><g:message code="cartaDeInstruccionDeRevocacion.fecha.label" default="Fecha" /></dt>
-
-                        <dd><g:fieldValue bean="${cartaDeInstruccionDeRevocacionInstance}" field="fecha"/></dd>
-
-                    </dl>
-                </g:if>
-
-                <g:if test="${cartaDeInstruccionDeRevocacionInstance?.contenido}">
-                    <dl>
-                        <dt><g:message code="cartaDeInstruccionDeRevocacion.contenido.label" default="Contenido" /></dt>
-
-                        <dd class="well"><br/><%=cartaDeInstruccionDeRevocacionInstance?.contenido%></dd
-
-                    </dl>
-                </g:if>
-
-                <g:if test="${cartaDeInstruccionDeRevocacionInstance?.lastUpdated}">
-                    <dl>
-                        <dt><g:message code="cartaDeInstruccionDeRevocacion.lastUpdated.label" default="Última Actualización" /></dt>
-
-                        <dd><g:formatDate date="${cartaDeInstruccionDeRevocacionInstance?.lastUpdated}" /></dd>
-
-                    </dl>
-                </g:if>
-
+            </g:if>            
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="widget-box">
+                                <div class="widget-header widget-header-blue widget-header-flat">                                    
+                                    <h4 class="lighter"><i class="icon-file-text"></i> Carta de Instruccion </h4>                                                                        
+                                </div>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <g:render template="/cartaDeInstruccionDeRevocacion/carta" />
+                                        <div class="modal-footer wizard-actions col-xs-12">                                                                                                                                    	
+                                        </div>
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!--g:form class="form-actions"-->
                 <!--fieldset class="buttons">
@@ -69,8 +48,8 @@
                     <g:hiddenField name="revocacionDePoder" value="${revocacionDePoderInstance?.id}"/>
                 </fieldset-->
             <!--/g:form-->
-                <div class="form-actions">
-                    <g:link class="btn btn-primary btn-mini" action="regresar" id="${cartaDeInstruccionDeRevocacionInstance?.id}">Regresar</g:link>
+            <div class="form-actions">
+                <g:link class="btn btn-primary btn-mini" action="regresar" id="${cartaDeInstruccionDeRevocacionInstance?.id}">Regresar</g:link>
                 </div>
             </div>
         </body>

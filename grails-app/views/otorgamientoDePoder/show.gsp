@@ -63,7 +63,7 @@
                     </g:if>
                 </sec:ifAnyGranted>
                 <g:link action="imprimir" class="btn btn-small btn-success tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]" target="_blank">
-                    <i class="icon-print"></i> Imprimir Solcitud
+                    <i class="icon-print"></i> Imprimir Solicitud
                 </g:link>
             </div>
         </div>
@@ -102,9 +102,9 @@
                                                         </sec:ifAnyGranted>
                                             </tr>
                                         </table>
-                                        </td>
-                                        </tr>
-                                        </table>
+                                    </td>
+                                </tr>
+                                </table>
                                     </g:elseif>
                                     <g:else>
                                         <h4 class="lighter"><i class="icon-file-text"></i> Solicitud de Otorgamiento de Poder </h4>                                    

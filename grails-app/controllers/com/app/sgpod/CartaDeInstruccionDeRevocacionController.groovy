@@ -24,7 +24,13 @@ class CartaDeInstruccionDeRevocacionController {
 
     def create() {
         def revocacionDePoderId = params.id
-        def formato = FormatoDeCartaDeInstruccion.get(1)
+        def revocacionDePoderInstance = RevocacionDePoder.get(params.id as long)        
+        def formato = FormatoDeCartaDeInstruccion.get(2)
+        
+         if(formato.contenido){
+                formato.contenido = formato.contenido.replaceAll("@notario@","${revocacionDePoderInstance?.notarioCorrespondiente?.firstName} ${revocacionDePoderInstance?.notarioCorrespondiente?.lastName}")
+                formato.contenido = formato.contenido.replaceAll("@escrituraPublica@","${revocacionDePoderInstance?.escrituraPublica}")
+            }
         
         def usuarios = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_NOTARIO")).collect {it.usuario}
         
@@ -43,7 +49,7 @@ class CartaDeInstruccionDeRevocacionController {
             revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
             revocacionDePoderInstance.fechaDeEnvio = new Date()
             revocacionDePoderInstance.save() 
-            cartaDeInstruccionDeRevocacionInstance.revocacionDePoder = revocacionDePoderInstance
+            cartaDeInstruccionDeRevocacionInstance.revocacionDePoder = revocacionDePoderInstance                                
             if (!cartaDeInstruccionDeRevocacionInstance.save(flush: true)) {
                 render(view: "create", model: [cartaDeInstruccionDeRevocacionInstance: cartaDeInstruccionDeRevocacionInstance])
                 return
@@ -55,13 +61,14 @@ class CartaDeInstruccionDeRevocacionController {
 
     def show(Long id) {
         def cartaDeInstruccionDeRevocacionInstance = CartaDeInstruccionDeRevocacion.get(id)
+        def revocacionDePoderInstance = cartaDeInstruccionDeRevocacionInstance.revocacionDePoder
         if (!cartaDeInstruccionDeRevocacionInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'cartaDeInstruccionDeRevocacion.label', default: 'CartaDeInstruccionDeRevocacion'), id])
             redirect(action: "list")
             return
         }
 
-        [cartaDeInstruccionDeRevocacionInstance: cartaDeInstruccionDeRevocacionInstance]
+        [cartaDeInstruccionDeRevocacionInstance: cartaDeInstruccionDeRevocacionInstance, revocacionDePoderInstance : revocacionDePoderInstance]
     }
 
     def edit(Long id) {
@@ -130,6 +137,7 @@ class CartaDeInstruccionDeRevocacionController {
     }
     def imprimir(Long id){
         def cartaDeInstruccionDeRevocacionInstance = CartaDeInstruccionDeRevocacion.get(params.id as long)
-        [ cartaDeInstruccionDeRevocacionInstance : cartaDeInstruccionDeRevocacionInstance ]
+        def revocacionDePoderInstance = cartaDeInstruccionDeRevocacionInstance.revocacionDePoder
+        [ cartaDeInstruccionDeRevocacionInstance : cartaDeInstruccionDeRevocacionInstance, revocacionDePoderInstance : revocacionDePoderInstance ]
     }
 }

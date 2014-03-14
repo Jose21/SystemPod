@@ -21,7 +21,7 @@ class BootStrap {
         switch (Environment.current) {
         case Environment.DEVELOPMENT :
                 
-            /*
+            
             new Usuario (
                 firstName : "Juan",
                 lastName : "Martinez",
@@ -100,7 +100,7 @@ class BootStrap {
                 passwordExpired : false
             ).save() 
             
-            */
+            
                 
             new Rol (authority : "ROLE_ADMINISTRADOR").save()
             new Rol (authority : "ROLE_PODERES").save()
@@ -110,7 +110,7 @@ class BootStrap {
             new Rol (authority : "ROLE_PODERES_GESTOR").save()
             new Rol (authority : "ROLE_CONVENIOS").save()
             
-            /*
+            
                 
             new UsuarioRol (usuario : Usuario.findByUsername("admin"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
             new UsuarioRol (usuario : Usuario.findByUsername("resolvedor1"), rol : Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).save()
@@ -120,7 +120,7 @@ class BootStrap {
             new UsuarioRol (usuario : Usuario.findByUsername("gestor1"), rol : Rol.findByAuthority("ROLE_PODERES_GESTOR")).save()
             new UsuarioRol (usuario : Usuario.findByUsername("convenios"), rol : Rol.findByAuthority("ROLE_CONVENIOS")).save()
             
-            */
+            
                 
             new Grupo(nombre:"Sin Categoría", descripcion: "asd").save()
                 
@@ -129,8 +129,14 @@ class BootStrap {
                 
             new FormatoDeCartaDeInstruccion(
                 registro:"REG:SGJ/XXX-XX", 
-                fecha:"México, D.F., a XX de XXXX de 2013", 
-                contenido: "<p><strong>Lic. XXXX (Nombre y Apellidos)</strong></p> <p><strong>Notario P&uacute;blico N&uacute;mero XX (N&uacute;mero)</strong></p> <p><strong>Del XXXXXXXXXX</strong></p> <p><strong>PRESENTE</strong></p> <p>&nbsp;</p> <p><strong>Solicito se</strong> elaboren/revoquen <strong>los siguientes poderes con las facultades que se relacionan:</strong></p> <p><strong>1.</strong></p> <p><strong>2.</strong></p> <p>&nbsp;</p> <p><strong>ATENTAMENTE</strong></p> <p>T&iacute;tulo y Nombre: ()</p> <p>Puesto: (Subdirector General)</p>"
+                fecha:"México, D.F., a XX de XXXX de 2014", 
+                contenido: "<p><strong>M en D. José Octavio Tinajero Zenil</strong></p> <p><strong>Subdirector General Jurídico</strong></p> <p><strong>P R E S E N T E</strong></p> <p>&nbsp;</p> <p><strong>Solicito se</strong> elaboren/revoquen <strong>los siguientes poderes con las facultades que se relacionan:</strong></p> <p><strong>1.</strong></p> <p><strong>2.</strong></p> <p>&nbsp;</p>"
+            ).save()
+            
+            new FormatoDeCartaDeInstruccion(
+                registro:"REG:SGJ/XXX-XX", 
+                fecha:"México, D.F., a XX de XXXX de 2014", 
+                contenido: "<p><strong>M en D. José Octavio Tinajero Zenil</strong></p> <p><strong>Subdirector General Jurídico</strong></p> <p><strong>P R E S E N T E</strong></p> <p>&nbsp;</p> <p>Por este medio solicito que se realice la revocación del Poder Notarial Contenido en la escritura publica No. @escrituraPublica@  pasada ante la fe del correspondiente Notario Público No.______ a cargo del Lic. @notario@ a favor de los siguientes.</p> <p>&nbsp;</p>"
             ).save()
             
             new MotivoDeOtorgamiento(nombre:"Cambio de Adscripción").save()
@@ -139,7 +145,7 @@ class BootStrap {
             new MotivoDeOtorgamiento(nombre:"Nuevo Nombramiento").save()
             new MotivoDeRevocacion(nombre:"Cambio de Adscripción").save()
             new MotivoDeRevocacion(nombre:"Cambio de Funciones").save()
-            new MotivoDeRevocacion(nombre:"Baja del Instituto").save()
+            new MotivoDeRevocacion(nombre:"Baja del Instituto").save() 
             new MotivoDeRevocacion(nombre:"Baja del Despacho").save()
             
             new Delegacion(nombre:"HERMOSILLO,SON.").save()
@@ -179,7 +185,7 @@ class BootStrap {
             new TipoDePoder(nombre:"EXTERNO").save()
             new TipoDePoder(nombre:"ESPECIAL").save()
             
-            new CategoriaDeTipoDePoder(nombre:"Modelo-A1.-Pleitos y Cobranzas con falcultades para cancelar hipotecas", tipoDePoder: TipoDePoder.get(1)).save()
+            new CategoriaDeTipoDePoder(nombre:"Modelo-A1.-Pleitos y Cobranzas con facultades para cancelar hipotecas", tipoDePoder: TipoDePoder.get(1)).save()
             new CategoriaDeTipoDePoder(nombre:"Modelo-A2.-DELEGADOS", tipoDePoder: TipoDePoder.get(1)).save()
             new CategoriaDeTipoDePoder(nombre:"Modelo-A3.-Gerente de CESI",  tipoDePoder: TipoDePoder.get(1)).save()
             new CategoriaDeTipoDePoder(nombre:"Modelo-A4.-Gerente y Subgerente de Cobranza", tipoDePoder: TipoDePoder.get(1)).save()

@@ -26,7 +26,7 @@ class RevocacionDePoderController {
     }
 
     def create() {                
-        def datosDelOtorgamiento = OtorgamientoDePoder.findByEscrituraPublica(params.escrituraPublica)        
+        def datosDelOtorgamiento = OtorgamientoDePoder.findByEscrituraPublica(params.escrituraPublica)                 
         def revocacionDePoderInstance = new RevocacionDePoder(params)
         if(params.escrituraPublica){
             if(!datosDelOtorgamiento?.escrituraPublica){
@@ -45,13 +45,13 @@ class RevocacionDePoderController {
                 revocacionDePoderInstance.comentarios = datosDelOtorgamiento?.comentarios
                 revocacionDePoderInstance.documentos = datosDelOtorgamiento?.documentos
                 revocacionDePoderInstance.apoderados = datosDelOtorgamiento?.apoderadosVigentes
-                revocacionDePoderInstance.agregarApoderado = false
+                revocacionDePoderInstance.agregarApoderado = false                
             }
         }
         [revocacionDePoderInstance: revocacionDePoderInstance, otorgamientoDePoderId : datosDelOtorgamiento?.id]        
     }
 
-    def save() {        
+    def save() {          
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");        
         if (params.fechaDeRevocacion) {
             Date fechaDeRevocacion = sdf.parse(params.fechaDeRevocacion)
@@ -61,6 +61,9 @@ class RevocacionDePoderController {
         }
         //se agrega el que creó la revocacion en la bd
         params.creadaPor = springSecurityService.currentUser
+        //se agrega notario correspondiente a la solicitud de revocacion        
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(params.escrituraPublica)
+        params.notarioCorrespondiente = otorgamientoDePoderInstance.notarioCorrespondiente
         
         //Se cambian las comas por arrobas
         if(params.tags && !params.tags.endsWith(",")){
@@ -105,8 +108,7 @@ class RevocacionDePoderController {
     }
 
     def show(Long id) {
-        def revocacionDePoderInstance = RevocacionDePoder.read(id)
-        println "revocacion:"+ revocacionDePoderInstance.apoderadosEliminar
+        def revocacionDePoderInstance = RevocacionDePoder.read(id)        
         if (!revocacionDePoderInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'revocacionDePoder.label', default: 'RevocacionDePoder'), id])
             redirect(action: "list")
@@ -200,16 +202,12 @@ class RevocacionDePoderController {
             render(view: "edit", model: [revocacionDePoderInstance: revocacionDePoderInstance])
             return
         }
-                
+        /*        
         if (params.archivo.getSize()!=0) {            
             def documentoDePoderInstance = new DocumentoDePoder(params)
             documentoDePoderInstance.nombre = params.archivo.getOriginalFilename()
-            revocacionDePoderInstance.addToDocumentos(documentoDePoderInstance)
-            if (!revocacionDePoderInstance.save(flush: true)) {
-                render(view: "create", model: [revocacionDePoderInstance: revocacionDePoderInstance])
-                return
-            }
-        }
+            revocacionDePoderInstance.addToDocumentos(documentoDePoderInstance)                        
+        }*/
         if(revocacionDePoderInstance.tags){
             revocacionDePoderInstance = RevocacionDePoder.read(id)
             revocacionDePoderInstance.tags = revocacionDePoderInstance.tags.replaceAll("@",",")
@@ -295,13 +293,11 @@ class RevocacionDePoderController {
     
     def enviarSolicitud () {                
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)        
-        def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(revocacionDePoderInstance.escrituraPublica)
-        println "otorgamiento:"+ otorgamientoDePoderInstance
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(revocacionDePoderInstance.escrituraPublica)        
         if(revocacionDePoderInstance?.tipoDeRevocacion == "Parcial"){
             if(params.apoderadoList){
                 def apoderadoSelects = params.list('apoderadoList')        
-                def selectedApoderados = Apoderado.getAll(apoderadoSelects)
-                println"aaaaa:"+ selectedApoderados
+                def selectedApoderados = Apoderado.getAll(apoderadoSelects)                
                 def listaInicialDeApoderados = revocacionDePoderInstance.apoderados              
           
                 def lista2 = listaInicialDeApoderados - selectedApoderados            

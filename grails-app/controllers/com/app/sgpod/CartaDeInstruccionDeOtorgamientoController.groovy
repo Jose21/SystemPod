@@ -57,13 +57,14 @@ class CartaDeInstruccionDeOtorgamientoController {
 
     def show(Long id) {
         def cartaDeInstruccionDeOtorgamientoInstance = CartaDeInstruccionDeOtorgamiento.get(id)
+        def otorgamientoDePoderInstance = cartaDeInstruccionDeOtorgamientoInstance.otorgamientoDePoder
         if (!cartaDeInstruccionDeOtorgamientoInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'cartaDeInstruccionDeOtorgamiento.label', default: 'CartaDeInstruccionDeOtorgamiento'), id])
             redirect(action: "list")
             return
         }
 
-        [cartaDeInstruccionDeOtorgamientoInstance: cartaDeInstruccionDeOtorgamientoInstance]
+        [cartaDeInstruccionDeOtorgamientoInstance: cartaDeInstruccionDeOtorgamientoInstance, otorgamientoDePoderInstance : otorgamientoDePoderInstance]
     }
 
     def edit(Long id) {
@@ -133,6 +134,7 @@ class CartaDeInstruccionDeOtorgamientoController {
     }
     def imprimir(Long id){
         def cartaDeInstruccionDeOtorgamientoInstance = CartaDeInstruccionDeOtorgamiento.get(params.id as long)
-        [ cartaDeInstruccionDeOtorgamientoInstance : cartaDeInstruccionDeOtorgamientoInstance ]
+        def otorgamientoDePoderInstance = cartaDeInstruccionDeOtorgamientoInstance.otorgamientoDePoder
+        [ cartaDeInstruccionDeOtorgamientoInstance : cartaDeInstruccionDeOtorgamientoInstance,  otorgamientoDePoderInstance : otorgamientoDePoderInstance]
     }
 }

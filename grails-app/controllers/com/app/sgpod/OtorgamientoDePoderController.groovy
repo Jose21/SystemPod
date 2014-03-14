@@ -172,6 +172,7 @@ class OtorgamientoDePoderController {
                 otorgamientoDePoderInstance.asignar = Usuario.get(it.id as long)   
             } 
             otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+            otorgamientoDePoderInstance.notarioCorrespondiente = springSecurityService.currentUser
             otorgamientoDePoderInstance.fechaDeEnvio = new Date()
         } else {
             params.fechaDeOtorgamiento = null
