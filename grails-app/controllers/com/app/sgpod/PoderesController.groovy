@@ -229,8 +229,9 @@ class PoderesController {
         prorrogaList.sort{ it.getId() }
         
         //facturas
-        def facturaList = Factura.findAllByAsignadoA(springSecurityService.currentUser)
-        println "listaFacturas:"+ facturaList
+        def facturaList = Factura.findAllByAsignadoA(springSecurityService.currentUser)  
+        //facturas enviadas
+        def facturasEnviadasList = Factura.findAllByAsignadoPor(springSecurityService.currentUser)
         
         render (
             view: "index", 
@@ -260,6 +261,8 @@ class PoderesController {
                 prorrogaListTotal : prorrogaList.size(),
                 facturaList : facturaList,
                 facturaListTotal : facturaList.size(),
+                facturasEnviadasList : facturasEnviadasList,
+                facturasEnviadasTotal : facturasEnviadasList.size()
             ]
         )
     }

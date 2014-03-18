@@ -18,13 +18,14 @@
     </label>
     <div class="controls">
         <g:each in="${facturaInstance?.documentos}" var="d">
-            <g:link controller="documento" action="deleteArchivo" id ="${d.id}">
+            <g:link controller="documentoDePoder" action="deleteArchivo" id ="${d.id}">
                 <i class="icon-remove red"></i>
             </g:link>                      -
-            <g:link controller="documento" action="downloadArchivo" id="${d.id}">${d?.encodeAsHTML()}</g:link>
+            <g:link controller="documentoDePoder" action="downloadArchivo" id="${d.id}">${d?.encodeAsHTML()}</g:link>
                 <br/>
         </g:each>
-        <input type="file" id="archivo" name="archivo" class="validate[required]"/>
+        <input type="file" id="archivo" name="archivo" class="validate[required]"/><br/>
+        <input type="file" id="archivo2" name="archivo2"/>
     </div>
 </div>
 

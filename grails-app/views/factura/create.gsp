@@ -8,7 +8,7 @@
     </head>
     <body>
         <div class="page-header position-relative">
-            <h1><g:message code="default.create.label" args="[entityName]" /></h1>
+            <h1>Enviar Factura</h1>
             <div class="btn-group">        
             </div>
         </div>
@@ -33,7 +33,7 @@
             <g:form name="myForm" class="form-horizontal" action="save" enctype="multipart/form-data">
                 <g:render template="form"/>
                 <div class="form-actions">
-                    <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />
+                    <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.label', default: 'Enviar')}" />
                 </div>
             </g:form>
 

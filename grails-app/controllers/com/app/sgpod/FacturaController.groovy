@@ -29,12 +29,18 @@ class FacturaController {
     }
 
     def save() {        
-        def facturaInstance = new Factura(params)                
-        
+        def facturaInstance = new Factura(params)                        
         if(params.archivo){
             if (params.archivo?.getSize()!=0) {            
                 def documentoInstance = new DocumentoDePoder(params)
                 documentoInstance.nombre = params.archivo.getOriginalFilename()
+                facturaInstance.addToDocumentos(documentoInstance)                            
+            }
+        }
+        if(params.archivo2){
+            if (params.archivo2?.getSize()!=0) {            
+                def documentoInstance = new DocumentoDePoder(params)
+                documentoInstance.nombre = params.archivo2.getOriginalFilename()
                 facturaInstance.addToDocumentos(documentoInstance)                            
             }
         }
@@ -58,13 +64,28 @@ class FacturaController {
 
     def show(Long id) {
         def facturaInstance = Factura.get(id)
+        
+        def otorgamientosList = OtorgamientoDePoder.findAllByFactura(facturaInstance)
+        def revocacionesList = RevocacionDePoder.findAllByFactura(facturaInstance) 
+        
+        //parametro para ocualtar botones
+        def ocultarBoton = false
+        if(facturaInstance.asignadoA != springSecurityService.currentUser){
+            ocultarBoton = true
+        }
+        
         if (!facturaInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'factura.label', default: 'Factura'), id])
             redirect(action: "list")
             return
         }
 
-        [facturaInstance: facturaInstance]
+        [
+            facturaInstance: facturaInstance,
+            otorgamientosList : otorgamientosList,
+            revocacionesList : revocacionesList,
+            ocultarBoton : ocultarBoton 
+        ]
     }
 
     def edit(Long id) {
@@ -128,8 +149,18 @@ class FacturaController {
     
     def asignarSolicitud(Long id) {
         def facturaInstance = Factura.get(id)        
-        def otorgamientosList = OtorgamientoDePoder.findAllByFacturado(false)
-        def revocacionesList = RevocacionDePoder.findAllByFacturado(false)        
+        //def otorgamientosList = OtorgamientoDePoder.findAllByFacturadoAndEscrituraPublica(false, )
+        def c = OtorgamientoDePoder.createCriteria()
+        def otorgamientosList = c.list {
+            eq ("facturado", false)
+            isNotNull ("escrituraPublica")
+        }
+        //def revocacionesList = RevocacionDePoder.findAllByFacturado(false) 
+        def d = RevocacionDePoder.createCriteria()
+        def revocacionesList = d.list {
+            eq ("facturado", false)
+            isNotEmpty ("notas")
+        }
         
         if (!facturaInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'factura.label', default: 'Factura'), id])

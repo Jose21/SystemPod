@@ -15,12 +15,14 @@
             <br/>
             <div class="tabbable">
                 <ul id="inbox-tabs" class="inbox-tabs nav nav-tabs padding-16 tab-size-bigger tab-space-1">
-                    <li class="active">
-                        <a data-toggle="tab" href="#inbox">
-                            <i class="blue icon-inbox bigger-130"></i>
-                            <span class="bigger-110">Pendientes <span class="badge">${poderInstanceTotal}</span></span>
-                        </a>
-                    </li>
+                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_GESTOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE, ROLE_PODERES_RESOLVEDOR">
+                        <li class="active">
+                            <a data-toggle="tab" href="#inbox">
+                                <i class="blue icon-inbox bigger-130"></i>
+                                <span class="bigger-110">Pendientes <span class="badge">${poderInstanceTotal}</span></span>
+                            </a>
+                        </li>
+                    </sec:ifAnyGranted>
                     <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_GESTOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE">
                         <li>
                             <a data-toggle="tab" href="#shared">
@@ -60,8 +62,14 @@
                     <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_NOTARIO, ROLE_PODERES_RESOLVEDOR, ROLE_FACTURAS">                    
                         <li>
                             <a data-toggle="tab" href="#facturas">
-                                <i class="icon-money bigger-130"></i>
-                                <span class="bigger-110">Facturas <span class="badge">${facturaListTotal}</span></span>
+                                <i class="icon-inbox bigger-130"></i>
+                                <span class="bigger-110">Facturas Pendientes <span class="badge">${facturaListTotal}</span></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#facturasEnviadas">
+                                <i class="icon-arrow-right bigger-130"></i>
+                                <span class="bigger-110">Facturas Enviadas <span class="badge">${facturasEnviadasTotal}</span></span>
                             </a>
                         </li>
                     </sec:ifAnyGranted>
@@ -712,6 +720,44 @@
                                 <div class="pull-right">
                                     <div class="pagination">
                                         <g:paginate total="${facturaListTotal}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--/.message-container-->
+                    </div>
+                    <div id="facturasEnviadas" class="tab-pane">
+                        <div class="message-container">                                                    
+                            <table class="box-style" width="100%" border="2">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th scope="col">Folio</th>                                    
+                                        <th scope="col">Enviado A</th>                                        
+                                        <th scope="col">Fecha de Envío</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <g:each in="${facturasEnviadasList}" status="i" var="facturaInstance">
+                                        <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                            <td></td>
+                                            <td>
+                                                <g:link controller="factura" action="show" id="${facturaInstance?.id}">
+                                                    <span class="label label-info arrowed-in">
+                                                        ${facturaInstance?.id}
+                                                    </span>
+                                                </g:link>
+                                            </td>                                        
+                                            <td>${fieldValue(bean: facturaInstance, field: "asignadoA")}</td>                                        
+                                            <td><g:formatDate date="${facturaInstance?.fechaDeEnvio}" /></td>
+                                        </tr>
+                                    </g:each>
+                                </tbody>
+                            </table>                                                
+                            <div class="message-footer clearfix">
+                                <div class="pull-left"> ${facturasEnviadasTotal} factura(s) en total. </div>
+                                <div class="pull-right">
+                                    <div class="pagination">
+                                        <g:paginate total="${facturasEnviadasTotal}" />
                                     </div>
                                 </div>
                             </div>

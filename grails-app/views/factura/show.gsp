@@ -10,20 +10,26 @@
     <body>
         <div class="page-header position-relative">           
             <div class="btn-group">
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">                    
-                    <g:link class="btn btn-success btn-small tip-bottom" action="asignarSolicitud" id="${facturaInstance?.id}">
-                        <i class="icon-thumbs-up"></i> Asignar a Solicitudes
-                    </g:link>                    
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR"> 
+                    <g:if test="${ocultarBoton != true}">
+                        <g:link class="btn btn-success btn-small tip-bottom" action="asignarSolicitud" id="${facturaInstance?.id}">
+                            <i class="icon-thumbs-up"></i> Asignar a Solicitudes
+                        </g:link>
+                    </g:if>
                 </sec:ifAnyGranted>
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_FACTURAS">                                          
-                    <a class="btn btn-small btn-purple tip-bottom" href="#agregarFecha" data-toggle="modal">
-                        <i class="icon-thumbs-up"></i> Aceptar Solicitud
-                    </a>
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_FACTURAS">  
+                    <g:if test="${ocultarBoton != true}">
+                        <a class="btn btn-small btn-purple tip-bottom" href="#agregarFecha" data-toggle="modal">
+                            <i class="icon-thumbs-up"></i> Aceptar Solicitud
+                        </a>
+                    </g:if>
                 </sec:ifAnyGranted> 
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_FACTURAS">                                                              
-                    <a class="btn btn-small btn-danger tip-bottom" href="#comentarioDeRechazo" data-toggle="modal">
-                        <i class="icon-thumbs-down"></i> Rechazar Solicitud
-                    </a>
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_FACTURAS"> 
+                    <g:if test="${ocultarBoton != true}">
+                        <a class="btn btn-small btn-danger tip-bottom" href="#comentarioDeRechazo" data-toggle="modal">
+                            <i class="icon-thumbs-down"></i> Rechazar Solicitud
+                        </a>
+                    </g:if>
                 </sec:ifAnyGranted> 
             </div>
         </div>
@@ -70,27 +76,74 @@
                                                 <div class="body">                                                
                                                     <div class="name">
                                                         <span class="red">Motivos De Rechazo :<br/></span>
-                                                        ${facturaInstance?.comentarioDeRechazo}
+                                                            ${facturaInstance?.comentarioDeRechazo}
                                                     </div>                                                
                                                 </div>
                                             </div>
                                         </g:if>
                                     </div>
-                                </div>  
+                                </div> 
+                                <g:if test="${otorgamientosList}">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="6"> Solicitudes correspondientes a la factura.</th>
+                                            </tr>
+                                            <tr>                                            
+                                                <th></th>
+                                                <th scope="col">Número de Solicitud</th>                                    
+                                                <th scope="col">Notario Correspondiente</th>
+                                                <th scope="col">Tipo De Poder</th>
+                                                <th scope="col">Categoria</th>  
+                                                <th scope="col">Escritura Pública</th>                                                                                                                               
+                                            </tr>
+                                        </thead>
+                                        <tbody>                                                            
+                                            <g:each in="${otorgamientosList}" status="i" var="otorgamientoInstance">
+                                                <tr class="${(i % 2) == 0 ? 'even' : 'odd'}"> 
+                                                    <td></td>
+                                                    <td>                                                                
+                                                        <span class="label label-info arrowed-in">
+                                                            ${otorgamientoInstance?.id}-O
+                                                        </span>                                                                
+                                                    </td>                                        
+                                                    <td>${fieldValue(bean: otorgamientoInstance, field: "notarioCorrespondiente")}</td>
+                                                    <td>${fieldValue(bean: otorgamientoInstance, field: "categoriaDeTipoDePoder.tipoDePoder.nombre")}</td>
+                                                    <td>${fieldValue(bean: otorgamientoInstance, field: "categoriaDeTipoDePoder.nombre")}</td>                                                      
+                                                    <td>${fieldValue(bean: otorgamientoInstance, field: "escrituraPublica")}</td>                                                            
+                                                </tr>
+                                            </g:each>
+                                            <g:each in="${revocacionesList}" status="i" var="revocacionInstance">
+                                                <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">  
+                                                    <td></td>
+                                                    <td>                                                                
+                                                        <span class="label label-info arrowed-in">
+                                                            ${revocacionInstance?.id}-R
+                                                        </span>                                                                
+                                                    </td>                                        
+                                                    <td>${fieldValue(bean: revocacionInstance, field: "notarioCorrespondiente")}</td>
+                                                    <td>${fieldValue(bean: revocacionInstance, field: "categoriaDeTipoDePoder.tipoDePoder.nombre")}</td>
+                                                    <td>${fieldValue(bean: revocacionInstance, field: "categoriaDeTipoDePoder.nombre")}</td>                                                      
+                                                    <td>${fieldValue(bean: revocacionInstance, field: "escrituraPublica")}</td>                                                            
+                                                </tr>
+                                            </g:each>                                                                    
+                                        </tbody>
+                                    </table>
+                                </g:if>
                                 <div class="modal-footer wizard-actions col-xs-12">
                                     <g:if test="${facturaInstance?.documentos}"> 
                                         <table class="table table-bordered table-striped" border="2">
                                             <thead>
                                                 <tr>
-                                                    <th><g:message code="factura.documentos.label" default="Archivos adjuntos" /></th>                            
+                                                    <th colspan="2"><g:message code="factura.documentos.label" default="Archivos adjuntos" /></th>                            
                                                 </tr>                            
                                             </thead>
                                             <tbody>                            
                                                 <tr>
-                                                    <td style="text-align:center">
+                                                    <td style="text-align:center" width="40%">
                                                         Descargar
                                                     </td>
-                                                    <td style="text-align:center">
+                                                    <td style="text-align:center" width="60%">
                                                         <g:each in="${facturaInstance?.documentos}" var="d">
                                                             <g:link controller="documentoDePoder" action="downloadArchivo" class="btn btn-small btn-danger tip-bottom" id="${d.id}">
                                                                 ${d?.encodeAsHTML()}
@@ -106,15 +159,15 @@
                                         <table class="table table-bordered table-striped" border="2">
                                             <thead>
                                                 <tr>
-                                                    <th><g:message code="factura.fechaDePago.label" default="Pago Autorizado" /></th>                            
+                                                    <th colspan="2"><g:message code="factura.fechaDePago.label" default="Pago Autorizado" /></th>                            
                                                 </tr>                            
                                             </thead>
                                             <tbody>                            
                                                 <tr>
-                                                    <td style="text-align:center">
+                                                    <td style="text-align:center" width="40%">
                                                         Fecha de Pago
                                                     </td>
-                                                    <td style="text-align:center">
+                                                    <td style="text-align:center" width="60%">
                                                         <div class=" btn-small btn-info">                                                            
                                                             <g:formatDate date="${facturaInstance?.fechaDePago}" />
                                                         </div>
