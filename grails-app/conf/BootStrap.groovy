@@ -99,6 +99,17 @@ class BootStrap {
                 accountLocked : false,
                 passwordExpired : false
             ).save() 
+            new Usuario (
+                firstName : "Jose",
+                lastName : "Miramar Medina",
+                email : "miramar@yahoo.com.mx",
+                username : "facturas",
+                password : "facturas",
+                enabled : true,
+                accountExpired : false,
+                accountLocked : false,
+                passwordExpired : false
+            ).save() 
             
             
                 
@@ -109,7 +120,7 @@ class BootStrap {
             new Rol (authority : "ROLE_PODERES_SOLICITANTE").save()
             new Rol (authority : "ROLE_PODERES_GESTOR").save()
             new Rol (authority : "ROLE_CONVENIOS").save()
-            
+            new Rol (authority : "ROLE_FACTURAS").save()
             
                 
             new UsuarioRol (usuario : Usuario.findByUsername("admin"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
@@ -118,7 +129,8 @@ class BootStrap {
             new UsuarioRol (usuario : Usuario.findByUsername("notario1"), rol : Rol.findByAuthority("ROLE_PODERES_NOTARIO")).save()
             new UsuarioRol (usuario : Usuario.findByUsername("notario2"), rol : Rol.findByAuthority("ROLE_PODERES_NOTARIO")).save()
             new UsuarioRol (usuario : Usuario.findByUsername("gestor1"), rol : Rol.findByAuthority("ROLE_PODERES_GESTOR")).save()
-            new UsuarioRol (usuario : Usuario.findByUsername("convenios"), rol : Rol.findByAuthority("ROLE_CONVENIOS")).save()
+            new UsuarioRol (usuario : Usuario.findByUsername("convenios"), rol : Rol.findByAuthority("ROLE_CONVENIOS")).save()           
+            new UsuarioRol (usuario : Usuario.findByUsername("facturas"), rol : Rol.findByAuthority("ROLE_FACTURAS")).save()
             
             
                 

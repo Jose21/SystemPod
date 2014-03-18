@@ -234,13 +234,11 @@ class TareaController {
             session.idRevocacionDePoder = null
         }
         
-        if (params.idConvenio) {
-            def usuariosConveniosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS")).collect {it.usuario}            
-            [tareaInstance: new Tarea(params), usuariosConveniosList : usuariosConveniosList ]
-        }else{        
         
-            [tareaInstance: new Tarea(params)]
-        }
+        def usuariosConveniosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS")).collect {it.usuario}            
+              
+        
+        [tareaInstance: new Tarea(params), usuariosConveniosList : usuariosConveniosList]        
     }
 
     def save() {

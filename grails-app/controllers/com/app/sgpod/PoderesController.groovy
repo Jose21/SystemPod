@@ -226,7 +226,12 @@ class PoderesController {
                 }               
             }                
         }        
-        prorrogaList.sort{ it.getId() }        
+        prorrogaList.sort{ it.getId() }
+        
+        //facturas
+        def facturaList = Factura.findAllByAsignadoA(springSecurityService.currentUser)
+        println "listaFacturas:"+ facturaList
+        
         render (
             view: "index", 
             model: [
@@ -252,7 +257,9 @@ class PoderesController {
                 poderSemicriticoInstanceList : poderSemicriticoList,
                 poderesPorVencerTotal : poderesPorVencerList.size(),
                 prorrogaList : prorrogaList,
-                prorrogaListTotal : prorrogaList.size()
+                prorrogaListTotal : prorrogaList.size(),
+                facturaList : facturaList,
+                facturaListTotal : facturaList.size(),
             ]
         )
     }

@@ -62,8 +62,10 @@ class RevocacionDePoderController {
         //se agrega el que creó la revocacion en la bd
         params.creadaPor = springSecurityService.currentUser
         //se agrega notario correspondiente a la solicitud de revocacion        
-        def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(params.escrituraPublica)
-        params.notarioCorrespondiente = otorgamientoDePoderInstance.notarioCorrespondiente
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(params.escrituraPublica)        
+        if(otorgamientoDePoderInstance){
+            params.notarioCorrespondiente = otorgamientoDePoderInstance.notarioCorrespondiente
+        }
         
         //Se cambian las comas por arrobas
         if(params.tags && !params.tags.endsWith(",")){
@@ -204,9 +206,9 @@ class RevocacionDePoderController {
         }
         /*        
         if (params.archivo.getSize()!=0) {            
-            def documentoDePoderInstance = new DocumentoDePoder(params)
-            documentoDePoderInstance.nombre = params.archivo.getOriginalFilename()
-            revocacionDePoderInstance.addToDocumentos(documentoDePoderInstance)                        
+        def documentoDePoderInstance = new DocumentoDePoder(params)
+        documentoDePoderInstance.nombre = params.archivo.getOriginalFilename()
+        revocacionDePoderInstance.addToDocumentos(documentoDePoderInstance)                        
         }*/
         if(revocacionDePoderInstance.tags){
             revocacionDePoderInstance = RevocacionDePoder.read(id)

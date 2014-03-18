@@ -85,18 +85,6 @@ class NotaController {
                 return
             }            
         }
-        //integracion con otorgamiento de poder
-        //notificacion al enviar un documento físico
-        if (session.otorgamientoDePoderId) {
-            if(params.archivo.getSize()!=0){
-                def otorgamientoDePoderInstance = OtorgamientoDePoder.get(session.otorgamientoDePoderId)                                                
-                otorgamientoDePoderInstance.addToNotas(notaInstance).save(flush:true)                   
-            }else{
-                flash.error = "Debe Adjuntar el Archivo Electrónico."
-                redirect(action: "create", params: [otorgamientoDePoderId: session.otorgamientoDePoderId])
-                return
-            }            
-        }
         
         if (params.archivo.getSize()!=0) {            
             def documentoInstance = new Documento(params)

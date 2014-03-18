@@ -15,7 +15,7 @@
             </g:link>
         </sec:ifAnyGranted>
 
-        <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE, ROLE_PODERES_GESTOR">
+        <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE, ROLE_PODERES_GESTOR, ROLE_FACTURAS">
             <g:link class="btn btn-small btn-purple" controller="poderes" action="index">
                 <i class="icon-user"></i>
             </g:link>
@@ -63,7 +63,7 @@
     </li>
     </sec:ifAnyGranted>
     
-    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE">
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_SOLICITANTE">
     <li class="active open">
         <a href="#" class="dropdown-toggle">
             <i class="icon-book"></i>
@@ -80,7 +80,7 @@
     </li>
     </sec:ifAnyGranted>
     
-    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES">
     <li class="active open">
         <a href="#" class="dropdown-toggle">
             <i class="icon-folder-close"></i>
@@ -113,6 +113,22 @@
                     <i class="icon-double-angle-right"></i> Configuración de Parametros
                 </g:link>
             </li>
+        </ul>
+    </li>
+    </sec:ifAnyGranted>
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_NOTARIO">
+    <li class="active open">
+        <a href="#" class="dropdown-toggle">
+            <i class="icon-money"></i>
+            <span class="menu-text">Facturas</span>
+            <b class="arrow icon-angle-down"></b>
+        </a>
+        <ul class="submenu">            
+            <li>
+                <g:link controller="factura" action="create">
+                    <i class="icon-double-angle-right"></i> Enviar Factura
+                </g:link>
+            </li>            
         </ul>
     </li>
     </sec:ifAnyGranted>
