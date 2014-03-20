@@ -22,6 +22,7 @@ class Poder {
     Usuario notarioCorrespondiente
     boolean facturado = false
     Factura factura
+    Bitacora bitacora
     
     static hasMany = [ 
         documentos : DocumentoDePoder,
@@ -55,6 +56,7 @@ class Poder {
         notarioCorrespondiente nullable:true,blank:true
         facturado blank:false
         factura nullable:true
+        bitacora nullable:true
     }
     
     String toString() {

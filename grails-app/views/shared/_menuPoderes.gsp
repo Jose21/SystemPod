@@ -59,6 +59,13 @@
                     <i class="icon-double-angle-right"></i> Consulta
                 </g:link>
             </li>
+            <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
+                <li>
+                    <g:link controller="poderes" action="bitacoraList">
+                        <i class="icon-double-angle-right"></i> Bitacora
+                    </g:link>
+                </li>
+            </sec:ifAnyGranted>
         </ul>
     </li>
     </sec:ifAnyGranted>

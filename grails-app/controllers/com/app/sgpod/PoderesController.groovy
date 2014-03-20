@@ -657,5 +657,13 @@ class PoderesController {
         )
         
     }
+    def bitacoraList(Integer max){
+        
+        params.max = Math.min(max ?: 10, 100)
+        [
+            otorgamientoDePoderInstanceList: OtorgamientoDePoder.list(params), otorgamientoDePoderInstanceTotal: OtorgamientoDePoder.count(),
+            revocacionDePoderInstanceList: RevocacionDePoder.list(params), revocacionDePoderInstanceTotal: RevocacionDePoder.count()
+        ]                
+    }
     
 }

@@ -149,13 +149,12 @@ class FacturaController {
     
     def asignarSolicitud(Long id) {
         def facturaInstance = Factura.get(id)        
-        //def otorgamientosList = OtorgamientoDePoder.findAllByFacturadoAndEscrituraPublica(false, )
+        
         def c = OtorgamientoDePoder.createCriteria()
         def otorgamientosList = c.list {
             eq ("facturado", false)
             isNotNull ("escrituraPublica")
-        }
-        //def revocacionesList = RevocacionDePoder.findAllByFacturado(false) 
+        }        
         def d = RevocacionDePoder.createCriteria()
         def revocacionesList = d.list {
             eq ("facturado", false)

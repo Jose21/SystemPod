@@ -45,7 +45,7 @@ class OtorgamientoDePoderController {
         def usuarioGestorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_GESTOR")).collect {it.usuario}        
         usuarioGestorPoderes.each{
             params.usuarioGestor = Usuario.get(it.id as long)   
-        }
+        }        
            
         
         if (params.registroDeLaSolicitud) {
@@ -61,13 +61,14 @@ class OtorgamientoDePoderController {
         if(params.tags && !params.tags.endsWith(",")){
             params.tags = params.tags + "@"
         }
-        params.tags = params.tags.replaceAll(",", "@")
+        params.tags = params.tags.replaceAll(",", "@") 
         
         def otorgamientoDePoderInstance = new OtorgamientoDePoder(params)
         if (!otorgamientoDePoderInstance.save(flush: true)) {
             render(view: "create", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])
             return
         }
+                              
         flash.message = message(code: 'default.created.message', args: [message(code: 'poder.label', default: 'Poder'), otorgamientoDePoderInstance.id])
         redirect(action: "edit", id: otorgamientoDePoderInstance.id)
     }
@@ -309,7 +310,7 @@ class OtorgamientoDePoderController {
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.idOtorgamientoDePoder as long)        
         otorgamientoDePoderInstance.asignar = otorgamientoDePoderInstance.creadaPor
         otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
-        //se calcula la fecha de vencimiento sumando el periodo de 730 dias que es el perido de 2 años
+        //se calcula la fecha de vencimiento sumando el periodo de 730 dias que es el periodo de 2 años
         otorgamientoDePoderInstance.fechaVencimiento = otorgamientoDePoderInstance.fechaDeOtorgamiento + 730        
         //end
         otorgamientoDePoderInstance.fechaDeEnvio = new Date()
