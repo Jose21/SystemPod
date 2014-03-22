@@ -18,12 +18,16 @@ class CartaDeInstruccionDeOtorgamientoController {
     def index() {
         redirect(action: "list", params: params)
     }
-
+    /**
+    * Metodo apara enlistar los registros existentes en una domain class 
+    */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [cartaDeInstruccionDeOtorgamientoInstanceList: CartaDeInstruccionDeOtorgamiento.list(params), cartaDeInstruccionDeOtorgamientoInstanceTotal: CartaDeInstruccionDeOtorgamiento.count()]
     }
-
+    /**
+    * Este metodo sirve para la creacion de un registro de tipo carta de instrucción de otorgamiento.
+    */
     def create() {        
         def otorgamientoDePoderId = params.id
         def formato = FormatoDeCartaDeInstruccion.get(1)        
@@ -35,7 +39,9 @@ class CartaDeInstruccionDeOtorgamientoController {
         
         [cartaDeInstruccionDeOtorgamientoInstance: cartaDeInstruccionDeOtorgamientoInstance, otorgamientoDePoderId : otorgamientoDePoderId, usuarios:usuarios]
     }
-
+    /**
+    * Metodo para guardar los registros en el sistema.
+    */
     def save() {           
         def cartaDeInstruccionDeOtorgamientoInstance = new CartaDeInstruccionDeOtorgamiento(params)
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoderId as long)                
@@ -54,6 +60,9 @@ class CartaDeInstruccionDeOtorgamientoController {
             flash.info = "Se ha enviado la Carta de Instrucción al Notario Asignado."
             redirect(controller:"poderes", action: "index")
         }
+    /**
+    * Metodo para visualizar el registro creado en el sistema.
+    */
 
     def show(Long id) {
         def cartaDeInstruccionDeOtorgamientoInstance = CartaDeInstruccionDeOtorgamiento.get(id)
@@ -66,7 +75,9 @@ class CartaDeInstruccionDeOtorgamientoController {
 
         [cartaDeInstruccionDeOtorgamientoInstance: cartaDeInstruccionDeOtorgamientoInstance, otorgamientoDePoderInstance : otorgamientoDePoderInstance]
     }
-
+    /**
+    * Metodo para editar un registro.
+    */
     def edit(Long id) {
         def cartaDeInstruccionDeOtorgamientoInstance = CartaDeInstruccionDeOtorgamiento.get(id)
         if (!cartaDeInstruccionDeOtorgamientoInstance) {
@@ -77,6 +88,9 @@ class CartaDeInstruccionDeOtorgamientoController {
 
         [cartaDeInstruccionDeOtorgamientoInstance: cartaDeInstruccionDeOtorgamientoInstance, otorgamientoDePoderId : (params.otorgamientoDePoderId)]
     }
+    /**
+    * Metodo para actualizar los datos de un registro
+    */
 
     def update(Long id, Long version) {
         def cartaDeInstruccionDeOtorgamientoInstance = CartaDeInstruccionDeOtorgamiento.get(id)
@@ -108,7 +122,9 @@ class CartaDeInstruccionDeOtorgamientoController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'cartaDeInstruccionDeOtorgamiento.label', default: 'Carta De Instrucción De Otorgamiento'), cartaDeInstruccionDeOtorgamientoInstance.id])
         redirect(controller:"otorgamientoDePoder", action: "show", id: otorgamientoDePoderInstance.id)
     }
-
+    /**
+    * Metodo para eliminar el registro del sistema.
+    */
     def delete(Long id) {
         def cartaDeInstruccionDeOtorgamientoInstance = CartaDeInstruccionDeOtorgamiento.get(id)
         if (!cartaDeInstruccionDeOtorgamientoInstance) {
@@ -127,11 +143,17 @@ class CartaDeInstruccionDeOtorgamientoController {
             redirect(action: "show", id: id)
         }
     }
+    /**
+    * Metodo para la navegacion entre pantallas.
+    */
     def regresar(Long id) {
         def cartaDeInstruccionDeOtorgamientoInstance = CartaDeInstruccionDeOtorgamiento.get(id)
         def otorgamientoDePoderInstance = cartaDeInstruccionDeOtorgamientoInstance.otorgamientoDePoder
         redirect(controller:"otorgamientoDePoder", action: "show", id: otorgamientoDePoderInstance.id)
     }
+    /**
+    * Metodo para imorimir la carta de instrucción.
+    */
     def imprimir(Long id){
         def cartaDeInstruccionDeOtorgamientoInstance = CartaDeInstruccionDeOtorgamiento.get(params.id as long)
         def otorgamientoDePoderInstance = cartaDeInstruccionDeOtorgamientoInstance.otorgamientoDePoder

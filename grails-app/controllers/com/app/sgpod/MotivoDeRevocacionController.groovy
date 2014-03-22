@@ -9,16 +9,22 @@ class MotivoDeRevocacionController {
     def index() {
         redirect(action: "list", params: params)
     }
-
+    /**
+    * Método apara enlistar los registros existentes en una domain class 
+    */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [motivoDeRevocacionInstanceList: MotivoDeRevocacion.list(params), motivoDeRevocacionInstanceTotal: MotivoDeRevocacion.count()]
     }
-
+    /**
+    * Este método sirve para la creacion de un registro de tipo asistente.
+    */
     def create() {        
         [motivoDeRevocacionInstance: new MotivoDeRevocacion(params)]
     }
-
+    /**
+    * Método para guardar los registros en el sistema.
+    */
     def save() {        
         def motivoDeRevocacionInstance = new MotivoDeRevocacion(params)
         if (!motivoDeRevocacionInstance.save(flush: true)) {
@@ -29,7 +35,9 @@ class MotivoDeRevocacionController {
         flash.message = message(code: 'default.created.message', args: [message(code: 'motivoDeRevocacion.label', default: 'MotivoDeRevocacion'), motivoDeRevocacionInstance.id])
         redirect(action: "show", id: motivoDeRevocacionInstance.id)
     }
-
+    /**
+    * Método para visualizar el registro creado en el sistema.
+    */
     def show(Long id) {
         def motivoDeRevocacionInstance = MotivoDeRevocacion.get(id)
         if (!motivoDeRevocacionInstance) {
@@ -40,7 +48,9 @@ class MotivoDeRevocacionController {
 
         [motivoDeRevocacionInstance: motivoDeRevocacionInstance]
     }
-
+     /**
+    * Método para editar un registro.
+    */
     def edit(Long id) {
         def motivoDeRevocacionInstance = MotivoDeRevocacion.get(id)
         if (!motivoDeRevocacionInstance) {
@@ -51,7 +61,9 @@ class MotivoDeRevocacionController {
 
         [motivoDeRevocacionInstance: motivoDeRevocacionInstance]
     }
-
+    /**
+    * Método para actualizar los datos de un registro.
+    */
     def update(Long id, Long version) {
         def motivoDeRevocacionInstance = MotivoDeRevocacion.get(id)
         if (!motivoDeRevocacionInstance) {
@@ -80,7 +92,9 @@ class MotivoDeRevocacionController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'motivoDeRevocacion.label', default: 'MotivoDeRevocacion'), motivoDeRevocacionInstance.id])
         redirect(action: "show", id: motivoDeRevocacionInstance.id)
     }
-
+    /**
+    * Método para eliminar el registro del sistema.
+    */
     def delete(Long id) {
         def motivoDeRevocacionInstance = MotivoDeRevocacion.get(id)
         if (!motivoDeRevocacionInstance) {
@@ -99,6 +113,9 @@ class MotivoDeRevocacionController {
             redirect(action: "show", id: id)
         }
     }
+    /**
+    * Método para crear un nuevo motivo de rechazo.
+    */
     def nuevoMotivoDeRevocacion() {
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)
          def motivoDeRevocacionInstance = new MotivoDeRevocacion(params)

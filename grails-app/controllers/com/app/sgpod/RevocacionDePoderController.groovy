@@ -19,12 +19,16 @@ class RevocacionDePoderController {
     def index() {
         redirect(action: "list", params: params)
     }
-
+    /**
+    * Método apara enlistar los registros existentes en una domain class 
+    */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [revocacionDePoderInstanceList: RevocacionDePoder.list(params), revocacionDePoderInstanceTotal: RevocacionDePoder.count()]
     }
-
+    /**
+    * Este método sirve para la creacion de un registro de tipo revocación de poder.
+    */
     def create() {                
         def datosDelOtorgamiento = OtorgamientoDePoder.findByEscrituraPublica(params.escrituraPublica)                 
         def revocacionDePoderInstance = new RevocacionDePoder(params)
@@ -50,7 +54,9 @@ class RevocacionDePoderController {
         }
         [revocacionDePoderInstance: revocacionDePoderInstance, otorgamientoDePoderId : datosDelOtorgamiento?.id]        
     }
-
+    /**
+    * Método para guardar los registros en el sistema.
+    */
     def save() {          
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");        
         if (params.fechaDeRevocacion) {
@@ -108,7 +114,9 @@ class RevocacionDePoderController {
         flash.message = message(code: 'default.created.message', args: [message(code: 'revocacionDePoder.label', default: 'RevocacionDePoder'), revocacionDePoderInstance.id])
         redirect(action: "edit", id: revocacionDePoderInstance.id)
     }
-
+    /**
+    * Método para visualizar el registro creado en el sistema.
+    */
     def show(Long id) {
         def revocacionDePoderInstance = RevocacionDePoder.read(id)        
         if (!revocacionDePoderInstance) {
@@ -149,7 +157,9 @@ class RevocacionDePoderController {
         
         [revocacionDePoderInstance: revocacionDePoderInstance, ocultarBoton : ocultarBoton, cartaDeInstruccion : cartaDeInstruccion, diasRestantes : diasRestantes ]
     }
-
+    /**
+    * Método para editar un registro.
+    */
     def edit(Long id) {
         def revocacionDePoderInstance = RevocacionDePoder.read(id)        
         if (!revocacionDePoderInstance) {
@@ -165,7 +175,9 @@ class RevocacionDePoderController {
         }
         [revocacionDePoderInstance: revocacionDePoderInstance, anchor : params.anchor?:""]
     }
-
+    /**
+    * Método para actualizar los datos de un registro.
+    */
     def update(Long id, Long version) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         def revocacionDePoderInstance = RevocacionDePoder.get(id)
@@ -220,7 +232,9 @@ class RevocacionDePoderController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'revocacionDePoder.label', default: 'RevocacionDePoder'), revocacionDePoderInstance.id])
         redirect(action: "edit", id: revocacionDePoderInstance.id, params : [ anchor : params.anchor])
     }
-
+    /**
+    * Método para eliminar el registro del sistema.
+    */
     def delete(Long id) {
         def revocacionDePoderInstance = RevocacionDePoder.get(id)
         if (!revocacionDePoderInstance) {
@@ -239,6 +253,9 @@ class RevocacionDePoderController {
             redirect(action: "show", id: id)
         }
     }
+    /**
+    * Método para eliminar un archivo dentro de la solicitud de revocación de poder.
+    */
     def deleteArchivo(Long id) {
         def revocacionDePoderId = params.revocacionDePoderId
         def revocacionDePoder = RevocacionDePoder.get (revocacionDePoderId)
@@ -248,7 +265,9 @@ class RevocacionDePoderController {
         flash.message = "El archivo se ha eliminado satisfactoriamente."
         redirect(action: "edit", id: revocacionDePoderId, params : [ anchor : params.anchor ])
     }
-    
+    /**
+    * Método para saber si ya esta creada la carta de instrucción de una revocación.
+    */
     def existe() {
         def revocacionDePoderInstance = RevocacionDePoder.get(params.id)       
         def cartaDeInstruccion = CartaDeInstruccionDeRevocacion.findByRevocacionDePoder(revocacionDePoderInstance)
@@ -271,7 +290,9 @@ class RevocacionDePoderController {
             return   
         }
     }
-    
+    /**
+    * Método para hacer busquedas ajax para mostrar posibles opciones al buscar por número de escritura pública en la crecaion de una revocacion de poder.
+    */
     def ajaxFinder() {
         def found = null
         if (params.term) {            
@@ -282,7 +303,9 @@ class RevocacionDePoderController {
         }
         render (found?.'escrituraPublica' as JSON)
     }
-    
+    /**
+    * Método para buscar un otorgamiento de poder y crear una revocación.
+    */
     def buscarEscrituraPublica(){        
         def datosDelOtorgamiento = OtorgamientoDePoder.findByEscrituraPublica(params.escrituraPublica)                
         def revocacionDePoderInstance = new RevocacionDePoder(params)
@@ -292,7 +315,9 @@ class RevocacionDePoderController {
         
         [revocacionDePoderInstance: revocacionDePoderInstance, otorgamientoDePoderId : datosDelOtorgamiento?.id]
     }
-    
+    /**
+    * Método para enviar la solicitud y se asigna al usuario correspondiente.
+    */
     def enviarSolicitud () {                
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)        
         def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(revocacionDePoderInstance.escrituraPublica)        
@@ -344,6 +369,9 @@ class RevocacionDePoderController {
         
         redirect(controller: "poderes", action: "index")        
     }
+    /**
+    * Método para agregar apoderados dentro de la solicitud.
+    */
     def addApoderado () {
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)
         def apoderadoInstance = Apoderado.findByNombre(params."apoderado")
@@ -370,6 +398,9 @@ class RevocacionDePoderController {
         redirect(action: "edit", id: revocacionDePoderInstance.id, params : [anchor : params.anchor])
     }
     def asignarA(){
+        /**
+        * Método para enviar la solicitud y se asigna al usuario correspondiente.
+        */
         def revocacionDePoderInstance = RevocacionDePoder.get(params.idRevocacionDePoder as long)
         revocacionDePoderInstance.asignar = Usuario.get(1 as long)
         def usuarioGestorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_GESTOR")).collect {it.usuario}        
@@ -382,6 +413,9 @@ class RevocacionDePoderController {
         flash.message = "Se ha enviado con éxito la Solicitud."        
         redirect(controller: "poderes", action: "index")
     }
+    /**
+    * Método para enviar la copia de escritura publica al usuario solicitante.
+    */
     def entregarCopiaSolicitante(){
         def revocacionDePoderInstance = RevocacionDePoder.get(params.idRevocacionDePoder as long)        
         revocacionDePoderInstance.asignar = revocacionDePoderInstance.creadaPor
@@ -391,6 +425,9 @@ class RevocacionDePoderController {
         flash.message = "Se ha enviado con éxito la Copia Electrónica."        
         redirect(controller: "poderes", action: "index")
     }
+    /**
+    * Método para asignar la solicitud al usuario resolvedor.
+    */
     def turnarResolvedor(){
         def revocacionDePoderInstance = RevocacionDePoder.get(params.id as long)
         def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}        
@@ -403,6 +440,9 @@ class RevocacionDePoderController {
         flash.message = "Se ha turnado con éxito la Solicitud."        
         redirect(controller: "poderes", action: "index")
     }
+    /**
+    * Método para imprimir la solicitud.
+    */
     def imprimir(Long id){
         def revocacionDePoderInstance = RevocacionDePoder.get(id)
         [ revocacionDePoderInstance : revocacionDePoderInstance ]

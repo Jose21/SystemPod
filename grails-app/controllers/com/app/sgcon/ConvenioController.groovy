@@ -20,7 +20,9 @@ class ConvenioController {
         flash.error = null
         redirect(action: "list", params: params)
     }
-
+    /**
+    * Metodo apara enlistar los registros existentes en una domain class 
+    */
     def list() {
         flash.error = null
         flash.info = null
@@ -28,13 +30,17 @@ class ConvenioController {
         flash.warn = null
         [porFolioActive:"active"]  
     }
-
+    /**
+    * Este metodo sirve para la creacion de un registro de un convenio.
+    */
     def create() {
         flash.warn = null
         flash.info = null
         [convenioInstance: new Convenio(params)]
     }
-
+    /**
+    * Metodo para guardar los registros en el sistema
+    */
     def save() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         
@@ -82,7 +88,9 @@ class ConvenioController {
         historialDeConvenioService.addNewConvenioToHistorial(convenioInstance, null, null,"Se creo Convenio")
         redirect(action: "edit", id: convenioInstance.id)
     }
-
+    /**
+    * Metodo para visualizar el registro creado en el sistema.
+    */
     def show(Long id) {
         def convenioInstance = Convenio.get(id)
         if (!convenioInstance) {
@@ -93,7 +101,9 @@ class ConvenioController {
 
         [convenioInstance: convenioInstance]
     }
-
+    /**
+    * Metodo para editar un registro.
+    */
     def edit(Long id, String nombreDeCopiaElectronica) {
         session.idConvenio = null
         def convenioInstance = Convenio.get(id)
@@ -113,7 +123,9 @@ class ConvenioController {
         //log.info "Edit: anchor->" + params.anchor
         [convenioInstance: convenioInstance, anchor : params.anchor?:"", yesedit:yesedit]
     }
-
+    /**
+    * Metodo para actualizar los datos de un registro
+    */
     def update(Long id, Long version) {
         def convenioInstance = Convenio.get(id)
         def convenioOriginal = new Convenio(convenioInstance.properties)
@@ -173,7 +185,9 @@ class ConvenioController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'convenio.label', default: 'Convenio'), convenioInstance.id])
         redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
     }
-
+    /**
+    * Metodo para eliminar el registro del sistema.
+    */
     def delete(Long id) {
         def convenioInstance = Convenio.get(id)
         if (!convenioInstance) {
@@ -192,7 +206,9 @@ class ConvenioController {
             redirect(action: "show", id: id)
         }
     }
-    
+    /**
+    * Método para agregar un firmante al convenio.
+    */
     def addFirmante () {
         def convenioInstance = Convenio.get(params.convenio.id as long)
         def personaInstance = Persona.findByNombre(params."firmante")
@@ -220,7 +236,9 @@ class ConvenioController {
         }
         redirect(action: "edit", id: convenioInstance.id, params : [anchor : params.anchor])
     }
-    
+    /**
+    * Metodo para eliminar un firmante del convenio.
+    */
     def removeFirmante () {
         def convenioInstance = Convenio.get(params.convenio.id as long)        
         def personaInstance = Persona.get(params.firmante.id as long)
@@ -229,6 +247,9 @@ class ConvenioController {
         flash.message = "El firmante ha sido eliminado."        
         redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
     }
+    /**
+    * Metodo para agregar un responsable del convenio.
+    */
     
     def addResponsable () {
         def convenioInstance = Convenio.get(params.convenio.id as long)
@@ -257,7 +278,9 @@ class ConvenioController {
         }
         redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
     }
-    
+    /**
+    * Metodo para eliminar un responsable del convenio.
+    */
     def removeResponsable () {  
         def convenioInstance = Convenio.get(params.convenio.id as long)        
         def personaInstance = Persona.get(params.responsable.id as long)
@@ -266,7 +289,9 @@ class ConvenioController {
         flash.message = "El responsable ha sido eliminado."        
         redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
     }
-    
+    /**
+    * Metodo para cargar al sistema la copia electronica del convenio firmado.
+    */
     def uploadCopiaElectronica () {
         def convenioInstance = Convenio.get(params.convenio.id as long)
         def f = request.getFile('copiaElectronica')
@@ -296,14 +321,18 @@ class ConvenioController {
         }
         redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
     }
-    
+    /**
+    * Metodo para descargar el documento del convenio.
+    */
     def downloadCopiaEletronica () {
         def convenioInstance = Convenio.get(params.convenioId as long)
         response.setHeader("Content-Disposition", "attachment;filename=\"" + convenioInstance.nombreDeCopiaElectronica + "\"");
         byte[] copiaElectronica = convenioInstance.copiaElectronica
         response.outputStream << copiaElectronica
     }
-    
+    /**
+    * Metodo para enlistar los tipo de formatos aceptados por sistema. 
+    */
     def getExtensionList () {
         def extensiones = []
         extensiones << "doc"
@@ -315,7 +344,9 @@ class ConvenioController {
         extensiones << "bmp"
         extensiones
     }
-    
+    /**
+    * metodo para generar un rango de fecha entre las fechas del calendario que aperece en el formulario.
+    */
     def rangoDeFecha () {
         def rangoDeFechaActive = null
         if (params.inActive=="rangoDeFecha") {
@@ -351,7 +382,9 @@ class ConvenioController {
             ]
         )
     }
-    
+    /**
+    * Método para realizar una búsqueda por folio del convenio.
+    */
     def buscarPorFolio (){        
         def porFolioActive = null
         if (params.inActive=="porFolio") {
@@ -381,7 +414,9 @@ class ConvenioController {
             ]
         )  
     }
-    
+    /**
+    * Método para realizar una búsqueda por nombre del reponsable del convenio.
+    */
     def buscarPorNombreResponsables (){
         def nombreResponsablesActive = null
         if (params.inActive=="nombreResponsables") {
@@ -404,7 +439,9 @@ class ConvenioController {
             ]
         )       
     }
-    
+    /**
+    * Método para realizar una búsqueda por nombre del firmante del convenio.
+    */
     def buscarPorNombreFirmantes () {
         def nombreFirmantesActive = null
         if (params.inActive == "nombreFirmantes") {
@@ -427,7 +464,9 @@ class ConvenioController {
             ]
         )       
     }
-    
+    /**
+    * Método para realizar una búsqueda por categoria del convenio.
+    */
     def buscarPorCategoria (){
         def porCategoriaActive = null
         if (params.inActive=="porCategoria") {
@@ -450,7 +489,9 @@ class ConvenioController {
             ]
         )       
     }
-    
+    /**
+    * Método para realizar una búsqueda por fecha de registro del convenio.
+    */
     def buscarPorFechaRegistro () {
         def porFechaRegistroActive = null
         if (params.inActive=="porFechaRegistro") {
@@ -486,7 +527,9 @@ class ConvenioController {
             ]
         )
     }
-    
+    /**
+    * Método para realizar una búsqueda por palabras clave.
+    */
     def buscarPorTags () {
         def porTagsActive = null
         if (params.inActive == "porTags") {
@@ -509,7 +552,9 @@ class ConvenioController {
             ]
         )       
     }
- 
+    /**
+    * Método para generar un reporte sobre las consultas.
+    */
     def generarReporte(){
         def convenioInstanceList = session.convenioInstanceList
         def inActive = session.inActive
@@ -545,6 +590,9 @@ class ConvenioController {
         )
         
     }
+    /**
+    * Método para vincular un convenio con un convenio modificatorio.
+    */
     def linkToConvenioQueModifica () {
         def convenioInstance = Convenio.get(params.convenio.id as long)
         def convenioQueModifica = Convenio.get(params.modificaA.id as long)
@@ -561,7 +609,9 @@ class ConvenioController {
         }
         redirect(action: "edit", id: convenioInstance.id)
     }
-    
+    /**
+    * Método para desvincular un convenio de otro.
+    */
     def unlinkToConvenioQueModifica () {
         def convenioInstance = Convenio.get(params.convenio.id as long)
         def convenioQueModifica = Convenio.get(params.modificaA.id as long)
@@ -574,12 +624,16 @@ class ConvenioController {
         }
         redirect(action: "edit", id: convenioInstance.id)
     }
-    
+    /**
+    * Método para compartir un convenio.
+    */
     def share (Long id) {
         def convenioInstance = Convenio.get(id)
         [ convenioInstance : convenioInstance ]
     }
-    
+    /**
+    * Método para compartir un convenio agregando datos del usuario.
+    */
     def addUsuarioToConvenio(Long id) {
         def convenioInstance = Convenio.get(id)
         def compartirCon = Usuario.get(params.compartidoCon.id as long)
@@ -602,7 +656,9 @@ class ConvenioController {
         }
         redirect (action:"share", params : [ id : convenioInstance.id ])
     }
-    
+    /**
+    * Dejar de compartir el convenio con algun usuario.
+    */
     def removeUsuarioFromConvenio() {
         def convenioInstance = Convenio.get(params.convenioId as long)
         def usuario = Usuario.get(params.usuarioId as long)
@@ -610,16 +666,22 @@ class ConvenioController {
         usuarioDeConvenio.delete()
         redirect (action:"share", params : [ id : convenioInstance.id ])
     }
-    
+    /**
+    * Botón que ayuda  a la navegación entre pantallas de un convenio.
+    */
     def regresar(Long id) {
         redirect(action: "edit", id: id)
     }
-    
+    /**
+    * Método que ayuda a visualizar todo los campos de un convenio.
+    */
     def detalles(Long id){
         def convenioInstance = Convenio.get(id)
         [ convenioInstance : convenioInstance ]
     }
-    
+    /**
+    * Método para realizar una búsqueda del historial de un convenio.
+    */
     def buscarHistorial (Long id){
         def convenioInstance = Convenio.get(id)
         def convenioInstanceList = HistorialDeConvenio.findAllByConvenio(convenioInstance, [sort: "dateCreated", order: "asc"])

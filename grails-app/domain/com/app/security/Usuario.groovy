@@ -1,20 +1,54 @@
 package com.app.security
 
+/**
+*Domain class que nos sirve para guardar la informacion de los usuarios del sistema.
+*/
 class Usuario implements Serializable {
 
     transient springSecurityService
-
+    /**
+    *Propiedad referente al nombre de usuario con que se autentificara.
+    */
     String username
+    /**
+    *Propiedad referente a la contaseña del usuario.
+    */
     String password
+    /**
+    *Campo referente al correo electronico del usuario.
+    */
     String email
+    /**
+    *Propiedad para el o los nombres del usuario.
+    */
     String firstName
+    /**
+    *Propiedad para los apellidos del usuario.
+    */
     String lastName
+    /**
+    *Propiedad para bloquear algun usuario.
+    */
     boolean enabled
+    /**
+    *Campo que nos ayuda para saber si esta activa la cuenta del usuario.
+    */
     boolean accountExpired
+    /**
+    *Propiedad que ayuda a bloquear una cuenta de usuario.
+    */
     boolean accountLocked
+    /**
+    *Propiedad que ayuda a saber si expiro la contaseña del usuario.
+    */
     boolean passwordExpired
-
+    /**
+    *Campo para capturar la fecha que se creo en el sistema al usuario.
+    */
     Date dateCreated
+    /**
+    *Campo que registra la fecha de la ultima modificacion sobre un usuario.
+    */
     Date lastUpdated
     
     static constraints = {

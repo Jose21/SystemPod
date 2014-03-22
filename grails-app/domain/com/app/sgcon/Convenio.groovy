@@ -3,25 +3,78 @@ package com.app.sgcon
 import com.app.sgtask.Tarea
 import java.text.SimpleDateFormat
 
-class Convenio {
+/**
+* Domain class Convenio 
+*/
 
+class Convenio {
+    /**
+    * Campo para capturar el numero del convenio. 
+    */
     String numeroDeConvenio
+    /**
+    * Campo para capturar el objeto del convenio. 
+    */
     String objeto
+    /**
+    * Campo para susutento normativo el numero del convenio. 
+    */
     String sustentoNormativo
+    /**
+    * Fecha de firma del convenio. 
+    */
     Date fechaDeFirma
+    /**
+    * Fecha de vigencia para el convenio. 
+    */
     Date vigencia
+    /**
+    * Campo para indentificar el status del convenio.
+    */
     StatusDelConvenio status
+    /**
+    * Tipo del convenio. 
+    */
     String tipoDeConvenio
+    /**
+    * Institucion con la que se realiza el convenio. 
+    */
     String institucion
+    /**
+    * Compromisos del convenio. 
+    */
     String compromisos
+    /**
+    * fecha de creacion. 
+    */
     Date dateCreated
+    /**
+    * Fecha de ultima actualiacion de los datos. 
+    */
     Date lastUpdated
+    /**
+    * Nombre del archivo de la copia electronica del convenio firmado. 
+    */
     String nombreDeCopiaElectronica
+    /**
+    * Copia electronica del documentos firmado. 
+    */
     byte[] copiaElectronica
+    /**
+    * Bandera para no permitir editar el convenio cuando ya esta adjuntado el archivo electronico. 
+    */
     boolean editable = true
+    /**
+    * Palabras clave para busquedas. 
+    */
     String tags
-    
+    /**
+    * Convenios modificatorios al que mofica. 
+    */
     Convenio modificaA
+    /**
+    * Convenio modificatorio. 
+    */
     Convenio esModificadoPor
     
     static hasMany = [ 

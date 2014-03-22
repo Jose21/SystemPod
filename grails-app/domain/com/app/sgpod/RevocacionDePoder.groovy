@@ -3,17 +3,39 @@ package com.app.sgpod
 import com.app.security.Usuario
 import com.app.sgtask.Tarea
 
+/**
+* Domain class Revocación de poder, que hereda los atributos de la domain Poder.
+*/
 class RevocacionDePoder extends Poder{
     
-    
+    /**
+    * Motivo de la revocación.
+    */
     MotivoDeRevocacion motivoDeRevocacion
-    String solicitadoPor    
-    //Datos que puede complementar en cualquier momento    
-    Date fechaDeRevocacion
+    /**
+    * Quien solicita la revocación.
+    */
+    String solicitadoPor
+    /**
+    * Fecha de revocación.
+    */    
+    Date fechaDeRevocacio
+    /**
+    * Tipo de revocacion 
+    */
     String tipoDeRevocacion
+    /**
+    * Bandera que es utilizada cuando se elige el tipo de revocacion si es total o parcial.
+    */
     boolean agregarApoderado = true
+    /**
+    * Bandera que se utiliza para saber si fue agregada manualmente o se hizo sobre un otorgamiento de poder. 
+    */
     boolean agregadaManualmente = false
     
+    /**
+    * Esta es la relacóon que tiene con otras tablas en una relacion tipo  1-n.
+    */
     static hasMany = [         
         apoderadosEliminar : Apoderado       
     ]

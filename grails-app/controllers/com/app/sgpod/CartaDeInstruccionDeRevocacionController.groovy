@@ -16,12 +16,16 @@ class CartaDeInstruccionDeRevocacionController {
     def index() {
         redirect(action: "list", params: params)
     }
-
+    /**
+    * Método apara enlistar los registros existentes en una domain class 
+    */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [cartaDeInstruccionDeRevocacionInstanceList: CartaDeInstruccionDeRevocacion.list(params), cartaDeInstruccionDeRevocacionInstanceTotal: CartaDeInstruccionDeRevocacion.count()]
     }
-
+    /**
+    * Este método sirve para la creacion de un registro de tipo carta de instrucción de revocacion.
+    */
     def create() {
         def revocacionDePoderId = params.id
         def revocacionDePoderInstance = RevocacionDePoder.get(params.id as long)        
@@ -41,7 +45,9 @@ class CartaDeInstruccionDeRevocacionController {
         
         [cartaDeInstruccionDeRevocacionInstance: cartaDeInstruccionDeRevocacionInstance, revocacionDePoderId : revocacionDePoderId, usuarios:usuarios]
     }
-
+    /**
+    * Método para guardar los registros en el sistema.
+    */
     def save() {
         def cartaDeInstruccionDeRevocacionInstance = new CartaDeInstruccionDeRevocacion(params)
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoderId as long)
@@ -58,7 +64,9 @@ class CartaDeInstruccionDeRevocacionController {
             flash.info = "Se ha enviado la Carta de Instrucción al Notario Asignado."
             redirect(controller:"poderes", action: "index")
         }
-
+    /**
+    * Método para visualizar el registro creado en el sistema.
+    */
     def show(Long id) {
         def cartaDeInstruccionDeRevocacionInstance = CartaDeInstruccionDeRevocacion.get(id)
         def revocacionDePoderInstance = cartaDeInstruccionDeRevocacionInstance.revocacionDePoder
@@ -70,7 +78,9 @@ class CartaDeInstruccionDeRevocacionController {
 
         [cartaDeInstruccionDeRevocacionInstance: cartaDeInstruccionDeRevocacionInstance, revocacionDePoderInstance : revocacionDePoderInstance]
     }
-
+    /**
+    * Método para editar un registro.
+    */
     def edit(Long id) {
         def cartaDeInstruccionDeRevocacionInstance = CartaDeInstruccionDeRevocacion.get(id)
         if (!cartaDeInstruccionDeRevocacionInstance) {
@@ -81,7 +91,9 @@ class CartaDeInstruccionDeRevocacionController {
 
         [cartaDeInstruccionDeRevocacionInstance: cartaDeInstruccionDeRevocacionInstance, revocacionDePoderId : (params.revocacionId)]
     }
-
+    /**
+    * Método para actualizar los datos de un registro.
+    */
     def update(Long id, Long version) {
         def cartaDeInstruccionDeRevocacionInstance = CartaDeInstruccionDeRevocacion.get(id)
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoderId as long)
@@ -111,7 +123,9 @@ class CartaDeInstruccionDeRevocacionController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'cartaDeInstruccionDeRevocacion.label', default: 'Carta De Instrucción De Revocación'), cartaDeInstruccionDeRevocacionInstance.id])
         redirect(controller:"revocacionDePoder", action: "show", id: revocacionDePoderInstance.id)
     }
-
+    /**
+    * Método para eliminar el registro del sistema.
+    */
     def delete(Long id) {
         def cartaDeInstruccionDeRevocacionInstance = CartaDeInstruccionDeRevocacion.get(id)
         if (!cartaDeInstruccionDeRevocacionInstance) {
@@ -130,11 +144,17 @@ class CartaDeInstruccionDeRevocacionController {
             redirect(action: "show", id: id)
         }
     }
+    /**
+    * Método para la nevegación entre pantallas.
+    */
     def regresar(Long id) {
         def cartaDeInstruccionDeRevocacionInstance = CartaDeInstruccionDeRevocacion.get(id)
         def revocacionDePoderInstance = cartaDeInstruccionDeRevocacionInstance.revocacionDePoder
         redirect(controller:"revocacionDePoder", action: "show", id: revocacionDePoderInstance.id)
     }
+    /**
+    * Método para imprimir una carta de instrucción de revocación de poder.
+    */
     def imprimir(Long id){
         def cartaDeInstruccionDeRevocacionInstance = CartaDeInstruccionDeRevocacion.get(params.id as long)
         def revocacionDePoderInstance = cartaDeInstruccionDeRevocacionInstance.revocacionDePoder

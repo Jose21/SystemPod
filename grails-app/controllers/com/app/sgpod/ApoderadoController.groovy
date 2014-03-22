@@ -10,16 +10,22 @@ class ApoderadoController {
     def index() {
         redirect(action: "list", params: params)
     }
-
+    /**
+    * Metodo que sirve para enlistar los registros existentes en una domain class 
+    */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [apoderadoInstanceList: Apoderado.list(params), apoderadoInstanceTotal: Apoderado.count()]
     }
-
+    /**
+    * Este metodo sirve para la creacion de un registro de tipo apoderado.
+    */
     def create() {
         [apoderadoInstance: new Apoderado(params)]
     }
-
+    /**
+    * Metodo para guardar los registros en el sistema.
+    */
     def save() {
         def apoderadoInstance = new Apoderado(params)
         if (!apoderadoInstance.save(flush: true)) {
@@ -30,7 +36,9 @@ class ApoderadoController {
         flash.message = message(code: 'default.created.message', args: [message(code: 'apoderado.label', default: 'Apoderado'), apoderadoInstance.id])
         redirect(action: "show", id: apoderadoInstance.id)
     }
-
+    /**
+    * Metodo para visualizar el registro creado en el sistema.
+    */
     def show(Long id) {
         def apoderadoInstance = Apoderado.get(id)
         if (!apoderadoInstance) {
@@ -41,7 +49,9 @@ class ApoderadoController {
 
         [apoderadoInstance: apoderadoInstance]
     }
-
+     /**
+    * Metodo para editar un registro.
+    */
     def edit(Long id) {
         def apoderadoInstance = Apoderado.get(id)
         if (!apoderadoInstance) {
@@ -52,7 +62,9 @@ class ApoderadoController {
 
         [apoderadoInstance: apoderadoInstance]
     }
-
+    /**
+    * Metodo para actualizar los datos de un registro
+    */
     def update(Long id, Long version) {
         def apoderadoInstance = Apoderado.get(id)
         if (!apoderadoInstance) {
@@ -81,7 +93,9 @@ class ApoderadoController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'apoderado.label', default: 'Apoderado'), apoderadoInstance.id])
         redirect(action: "show", id: apoderadoInstance.id)
     }
-
+    /**
+    * Metodo para eliminar el registro del sistema.
+    */
     def delete(Long id) {
         def apoderadoInstance = Apoderado.get(id)
         if (!apoderadoInstance) {
@@ -100,6 +114,9 @@ class ApoderadoController {
             redirect(action: "show", id: id)
         }
     }
+    /**
+    * Metodo para actualizar los datos de un apoderado en las solicitudes de otorgamiento y revicación de poder.
+    */
     def updateIt(Long id, Long version) {
         println params
         def apoderadoInstance = Apoderado.get(id)
@@ -124,6 +141,9 @@ class ApoderadoController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'apoderado.label', default: 'Apoderado'), apoderadoInstance.id])
         redirect(controller:"otorgamientoDePoder", action: "edit", id: params.otorgamientoDePoder.id)
     }
+    /**
+    * Metodo para actualizar una revocacion.
+    */
     def updateItRevocacion(Long id, Long version) {        
         def apoderadoInstance = Apoderado.get(id)
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)
@@ -147,6 +167,9 @@ class ApoderadoController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'apoderado.label', default: 'Apoderado'), apoderadoInstance.id])
         redirect(controller:"revocacionDePoder", action: "edit", id: params.revocacionDePoder.id)
     }
+    /**
+    * Metodo que realiza busquedas ajax para mostrar coincidencias al ingresar un nombre de apoderado.
+    */
     def ajaxFinder() {
         def found = null
         if (params.term) {            

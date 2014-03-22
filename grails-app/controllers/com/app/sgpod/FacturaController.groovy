@@ -18,16 +18,22 @@ class FacturaController {
     def index() {
         redirect(action: "list", params: params)
     }
-
+    /**
+    * Método apara enlistar los registros existentes en una domain class 
+    */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [facturaInstanceList: Factura.list(params), facturaInstanceTotal: Factura.count()]
     }
-
+    /**
+    * Este método sirve para la creacion de un registro de tipo factura.
+    */
     def create() {
         [facturaInstance: new Factura(params)]
     }
-
+    /**
+    * Método para guardar los registros en el sistema.
+    */
     def save() {        
         def facturaInstance = new Factura(params)                        
         if(params.archivo){
@@ -61,7 +67,9 @@ class FacturaController {
         flash.message = "Se ha enviado con éxito la Factura."        
         redirect(controller: "poderes", action: "index")
     }
-
+    /**
+    * Método para visualizar el registro creado en el sistema.
+    */
     def show(Long id) {
         def facturaInstance = Factura.get(id)
         
@@ -87,7 +95,9 @@ class FacturaController {
             ocultarBoton : ocultarBoton 
         ]
     }
-
+    /**
+    * Método para editar un registro.
+    */
     def edit(Long id) {
         def facturaInstance = Factura.get(id)
         if (!facturaInstance) {
@@ -98,7 +108,9 @@ class FacturaController {
 
         [facturaInstance: facturaInstance]
     }
-
+    /**
+    * Método para actualizar los datos de un registro.
+    */
     def update(Long id, Long version) {
         def facturaInstance = Factura.get(id)
         if (!facturaInstance) {
@@ -127,7 +139,9 @@ class FacturaController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'factura.label', default: 'Factura'), facturaInstance.id])
         redirect(action: "show", id: facturaInstance.id)
     }
-
+    /**
+    * Método para eliminar el registro del sistema.
+    */
     def delete(Long id) {
         def facturaInstance = Factura.get(id)
         if (!facturaInstance) {
@@ -146,7 +160,9 @@ class FacturaController {
             redirect(action: "show", id: id)
         }
     }
-    
+    /**
+    * Método para mostrar las solicitudes que no estan asignadas.
+    */
     def asignarSolicitud(Long id) {
         def facturaInstance = Factura.get(id)        
         
@@ -173,7 +189,9 @@ class FacturaController {
             revocacionesList : revocacionesList
         ]
     }
-    
+    /**
+    * Método para asignar las solicitudes y enviar la factura.
+    */
     def asignarFactura(){        
         def facturaInstance = Factura.get(params.facturaInstance.id) 
         
@@ -215,6 +233,9 @@ class FacturaController {
         
         redirect(controller: "poderes", action: "index")       
     }
+    /**
+    * Método para guardar la fecha de pago y enviar la factura.
+    */
     def saveFecha(){
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");        
         def facturaInstance = Factura.get(params.factura.id) 
@@ -233,6 +254,9 @@ class FacturaController {
         }               
         redirect(controller:"poderes", action: "index")
     }
+    /**
+    * Método para guardar comentario de rechazo y enviar la factura.
+    */
     def saveComentario(){                
         def facturaInstance = Factura.get(params.factura.id)         
         facturaInstance.comentarioDeRechazo = params.comentarioDeRechazo

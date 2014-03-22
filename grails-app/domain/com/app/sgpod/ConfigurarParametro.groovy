@@ -1,13 +1,29 @@
 package com.app.sgpod
 
+/**
+* Domain class donde se configuran los principales parametros de las notificaciones de poderes.
+*/
 class ConfigurarParametro {
-    
-    //Parametros para vista en bandeja de Poderes por vencer y notificaciones por correo electrónico
+    /**
+    * Parametros para vista en bandeja de Poderes por vencer y notificaciones por correo electrónico.
+    * estado critico
+    */    
     Integer estadoCriticoPoder
+    /**
+    * Parametros para vista en bandeja de Poderes por vencer y notificaciones por correo electrónico.
+    * estado semi-critico
+    */    
     Integer estadoSemiPoder    
-    
-    //Parametros para vista en bandeja de Solicitudes Pendientes
+        
+    /**
+    * Parametros para vista en bandeja de Solicitudes Pendientes.
+    * estado critico.
+    */    
     Integer estadoCriticoSolicitud
+    /**
+    * Parametros para vista en bandeja de Solicitudes Pendientes.
+    * estado semi-critico.
+    */
     Integer estadoSemiSolicitud    
 
     static constraints = {        

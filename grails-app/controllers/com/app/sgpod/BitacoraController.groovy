@@ -9,16 +9,22 @@ class BitacoraController {
     def index() {
         redirect(action: "list", params: params)
     }
-
+    /**
+    * Metodo apara enlistar los registros existentes en una domain class 
+    */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [bitacoraInstanceList: Bitacora.list(params), bitacoraInstanceTotal: Bitacora.count()]
     }
-
+    /**
+    * Este metodo sirve para la creacion de un registro de tipo bitacora.
+    */
     def create() {
         [bitacoraInstance: new Bitacora(params)]
     }
-
+    /**
+    * Metodo para guardar los registros en el sistema.
+    */
     def save() {
         def bitacoraInstance = new Bitacora(params)
         if (!bitacoraInstance.save(flush: true)) {
@@ -29,7 +35,9 @@ class BitacoraController {
         flash.message = message(code: 'default.created.message', args: [message(code: 'bitacora.label', default: 'Bitacora'), bitacoraInstance.id])
         redirect(action: "show", id: bitacoraInstance.id)
     }
-
+     /**
+    * Metodo para visualizar el registro creado en el sistema.
+    */
     def show(Long id) {
         def bitacoraInstance = Bitacora.get(id)
         if (!bitacoraInstance) {
@@ -40,7 +48,9 @@ class BitacoraController {
 
         [bitacoraInstance: bitacoraInstance]
     }
-
+    /**
+    * Metodo para editar un registro.
+    */
     def edit(Long id) {
         def bitacoraInstance = Bitacora.get(id)
         if (!bitacoraInstance) {
@@ -51,7 +61,9 @@ class BitacoraController {
 
         [bitacoraInstance: bitacoraInstance]
     }
-
+     /**
+    * Metodo para actualizar los datos de un registro
+    */
     def update(Long id, Long version) {
         def bitacoraInstance = Bitacora.get(id)
         if (!bitacoraInstance) {
@@ -80,7 +92,9 @@ class BitacoraController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'bitacora.label', default: 'Bitacora'), bitacoraInstance.id])
         redirect(action: "show", id: bitacoraInstance.id)
     }
-
+    /**
+    * Metodo para eliminar el registro del sistema.
+    */
     def delete(Long id) {
         def bitacoraInstance = Bitacora.get(id)
         if (!bitacoraInstance) {

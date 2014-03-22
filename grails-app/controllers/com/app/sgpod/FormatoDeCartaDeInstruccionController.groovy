@@ -9,16 +9,22 @@ class FormatoDeCartaDeInstruccionController {
     def index() {
         redirect(action: "list", params: params)
     }
-
+    /**
+    * Método apara enlistar los registros existentes en una domain class 
+    */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [formatoDeCartaDeInstruccionInstanceList: FormatoDeCartaDeInstruccion.list(params), formatoDeCartaDeInstruccionInstanceTotal: FormatoDeCartaDeInstruccion.count()]
     }
-
+    /**
+    * Este método sirve para la creacion de un registro de tipo formato de carta de instrucción.
+    */
     def create() {
         [formatoDeCartaDeInstruccionInstance: new FormatoDeCartaDeInstruccion(params)]
     }
-
+    /**
+    * Método para guardar los registros en el sistema.
+    */
     def save() {
         def formatoDeCartaDeInstruccionInstance = new FormatoDeCartaDeInstruccion(params)
         if (!formatoDeCartaDeInstruccionInstance.save(flush: true)) {
@@ -29,7 +35,9 @@ class FormatoDeCartaDeInstruccionController {
         flash.message = message(code: 'default.created.message', args: [message(code: 'formatoDeCartaDeInstruccion.label', default: 'FormatoDeCartaDeInstruccion'), formatoDeCartaDeInstruccionInstance.id])
         redirect(action: "show", id: formatoDeCartaDeInstruccionInstance.id)
     }
-
+     /**
+    * Método para visualizar el registro creado en el sistema.
+    */
     def show(Long id) {
         def formatoDeCartaDeInstruccionInstance = FormatoDeCartaDeInstruccion.get(id)
         if (!formatoDeCartaDeInstruccionInstance) {
@@ -40,7 +48,9 @@ class FormatoDeCartaDeInstruccionController {
 
         [formatoDeCartaDeInstruccionInstance: formatoDeCartaDeInstruccionInstance]
     }
-
+     /**
+    * Método para editar un registro.
+    */
     def edit(Long id) {
         def formatoDeCartaDeInstruccionInstance = FormatoDeCartaDeInstruccion.get(id)
         if (!formatoDeCartaDeInstruccionInstance) {
@@ -51,7 +61,9 @@ class FormatoDeCartaDeInstruccionController {
 
         [formatoDeCartaDeInstruccionInstance: formatoDeCartaDeInstruccionInstance]
     }
-
+     /**
+    * Método para actualizar los datos de un registro.
+    */
     def update(Long id, Long version) {
         def formatoDeCartaDeInstruccionInstance = FormatoDeCartaDeInstruccion.get(id)
         if (!formatoDeCartaDeInstruccionInstance) {
@@ -80,7 +92,9 @@ class FormatoDeCartaDeInstruccionController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'formatoDeCartaDeInstruccion.label', default: 'FormatoDeCartaDeInstruccion'), formatoDeCartaDeInstruccionInstance.id])
         redirect(action: "show", id: formatoDeCartaDeInstruccionInstance.id)
     }
-
+    /**
+    * Método para eliminar el registro del sistema.
+    */
     def delete(Long id) {
         def formatoDeCartaDeInstruccionInstance = FormatoDeCartaDeInstruccion.get(id)
         if (!formatoDeCartaDeInstruccionInstance) {

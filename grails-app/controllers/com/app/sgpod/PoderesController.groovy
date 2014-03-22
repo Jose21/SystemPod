@@ -14,6 +14,9 @@ class PoderesController {
     def exportService
     def grailsApplication
 
+    /**
+    * Método para agregar a la bandeja de pendientes las solicitudes que corresponden.
+    */
     def index() {
         flash.warn = null
         //Mis Poderes:poderes que alguien me asigno o poderes que yo cree y que aun no eh asignado.
@@ -286,7 +289,9 @@ class PoderesController {
     def menuConsulta() { 
     
     }
-    
+    /**
+    * Método para busquedas por nombre del apoderado.
+    */
     def buscarNombreApoderado (){
         def nombreApoderadoActive = null
         if (params.inActive=="nombreApoderado") {
@@ -309,7 +314,9 @@ class PoderesController {
             ]
         )       
     }
-    
+    /**
+    * Método para busquedas por delegación.
+    */
     def buscarPorDelegacion (){
         def porDelegacionActive = null
         if (params.inActive=="porDelegacion") {
@@ -332,7 +339,9 @@ class PoderesController {
             ]
         )       
     }       
-    
+    /**
+    * Método para busquedas por fecha de otorgamiento.
+    */
     def buscarPorFechaOtorgamiento () {
         def porFechaOtorgamientoActive = null
         if (params.inActive=="porFechaOtorgamiento") {
@@ -368,7 +377,9 @@ class PoderesController {
             ]
         )
     }
-    
+    /**
+    * Método para busquedas por palabras clave.
+    */
     def buscarPorTags () {
         def porTagsActive = null
         if (params.inActive == "porTags") {
@@ -391,7 +402,9 @@ class PoderesController {
             ]
         )       
     }
-    
+    /**
+    * Método para busquedas por nombre del apoderado de revocacion.
+    */
     def buscarNombreApoderadoRevocacion (){
         def nombreApoderadoActive = null
         if (params.inActive=="nombreApoderado") {
@@ -414,7 +427,9 @@ class PoderesController {
             ]
         )       
     }
-    
+    /**
+    * Método para busquedas por delegacion de la revocación.
+    */
     def buscarPorDelegacionRevocacion (){
         def porDelegacionActive = null
         if (params.inActive=="porDelegacion") {
@@ -438,7 +453,9 @@ class PoderesController {
             ]
         )       
     }
-    
+    /**
+    * Método para busquedas por nombre de escritura pública de revocación.
+    */
     def buscarPorNumeroEscrituraRevocacion (){
         def porNumeroEscrituraActive = null
         if (params.inActive=="porNumeroEscritura") {
@@ -455,7 +472,9 @@ class PoderesController {
             ]
         )       
     }
-    
+    /**
+    * Método para busquedas por fecha de revocación.
+    */
     def buscarPorFechaRevocacion () {        
         def porFechaRevocacionActive = null
         if (params.inActive=="porFechaRevocacion") {
@@ -491,7 +510,9 @@ class PoderesController {
             ]
         )
     }
-    
+    /**
+    * Método para busquedas por palabras claves en revocacion de poder.
+    */
     def buscarPorTagsRevocacion () {
         def porTagsActive = null
         if (params.inActive == "porTags") {
@@ -514,7 +535,9 @@ class PoderesController {
             ]
         )       
     }
-    
+    /**
+    * Método para busquedas por nombre en busqueda general.
+    */
     def buscarNombreGeneral (){
         def nombreApoderadoActive = null
         if (params.inActive=="nombreApoderado") {
@@ -547,7 +570,9 @@ class PoderesController {
             ]
         )       
     }
-    
+    /**
+    * Método para busquedas por nombre del solciitante en busqueda general.
+    */
     def buscarPorSolicitanteGeneral () {
         def solicitadoPorActive = null
         if (params.inActive=="solicitadoPor") {
@@ -568,7 +593,9 @@ class PoderesController {
             ]
         )       
     }
-    
+    /**
+    * Método para busquedas por palabras clave de busqueda general.
+    */
     def buscarPorTagsGeneral () {
         def porTagsActive = null
         if (params.inActive == "porTags") {
@@ -601,7 +628,9 @@ class PoderesController {
             ]
         )       
     }
-    
+    /**
+    * Método para generar reportes en las busquedas.
+    */
     def generarReporteOtorgamiento(){
         def otorgamientoDePoderInstanceList = session.otorgamientoDePoderInstanceList
         def inActive = session.inActive

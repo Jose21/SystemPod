@@ -5,27 +5,69 @@ import com.app.sgcon.Convenio
 import com.app.sgpod.OtorgamientoDePoder
 import com.app.sgpod.RevocacionDePoder
 
+/**
+* Domain class que contiene las propiedades de una Tarea.
+*/
 class Tarea implements Comparable {
-
+    /**
+    * Nombre del turno
+    */
     String nombre
+    /**
+    * Descripción del turno.
+    */
     String descripcion
+    /**
+    * Fecha límite.
+    */
     Date fechaLimite
+    /**
+    * Bandera para dar por cerrada un turno.
+    */
     boolean cerrada = false
+    /**
+    * Fecha de creación.
+    */
     Date dateCreated
+    /**
+    * Fecha de última actualización.
+    */
     Date lastUpdated
+    /**
+    * Usuario creador del turno.
+    */
     Usuario creadaPor
+    /**
+    * Usuario responsable de atender el turno.
+    */
     Usuario responsable
+    /**
+    * Dias para la alerta de vencimiento
+    */
     String alertaVencimiento
+    /**
+    * Tipo de prioridad
+    */
     String prioridad
+    /**
+    * Palabras clave para busquedas avazadas.
+    */
     String tags
-    
+    /**
+    * Propiedad de tipo grupo.
+    */
     Grupo grupo
-    
+    /**
+    * Integración con convenios, otorgamiento y revocacion de poder.
+    */
     static belongsTo = [ 
         convenio : Convenio,
         otorgamientoDePoder : OtorgamientoDePoder,
         revocacionDePoder : RevocacionDePoder
     ]
+    /**
+    * Esta es la relación que tiene con otras tablas de tipo  1-n.
+    */
     static hasMany = [notas : Nota, usuariosDeTarea : UsuarioDeTarea]
     
     static constraints = {

@@ -12,14 +12,22 @@ class AsistenteController {
         redirect(action: "list", params: params)
     }
 
+    /**
+    * Método apara enlistar los registros existentes en una domain class 
+    */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [asistenteInstanceList: Asistente.list(params), asistenteInstanceTotal: Asistente.count()]
     }
-
+    /**
+    * Este método sirve para la creacion de un registro de tipo asistente.
+    */
     def create() {
         [asistenteInstance: new Asistente(params)]
     }
+    /**
+    * Método para guardar los registros en el sistema.
+    */
 
     def save() {
         def asistenteInstance = new Asistente(params)
@@ -31,6 +39,9 @@ class AsistenteController {
         flash.message = message(code: 'default.created.message', args: [message(code: 'asistente.label', default: 'Asistente'), asistenteInstance.id])
         redirect(action: "show", id: asistenteInstance.id)
     }
+    /**
+    * Método para visualizar el registro creado en el sistema.
+    */
 
     def show(Long id) {
         def asistenteInstance = Asistente.get(id)
@@ -42,6 +53,9 @@ class AsistenteController {
 
         [asistenteInstance: asistenteInstance]
     }
+    /**
+    * Método para editar un registro.
+    */
 
     def edit(Long id) {
         def asistenteInstance = Asistente.get(id)
@@ -53,6 +67,9 @@ class AsistenteController {
 
         [asistenteInstance: asistenteInstance]
     }
+    /**
+    * Método para actualizar los datos de un registro.
+    */
 
     def update(Long id, Long version) {
         def asistenteInstance = Asistente.get(id)
@@ -82,6 +99,9 @@ class AsistenteController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'asistente.label', default: 'Asistente'), asistenteInstance.id])
         redirect(controller:"convenio", action: "edit", id: params.convenio.id)
     }
+    /**
+    * Método para eliminar el registro del sistema.
+    */
 
     def delete(Long id) {
         def asistenteInstance = Asistente.get(id)

@@ -14,16 +14,22 @@ class PersonaController {
     def index() {
         redirect(action: "list", params: params)
     }
-
+    /**
+    * Metodo apara enlistar los registros existentes en una domain class.
+    */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [personaInstanceList: Persona.list(params), personaInstanceTotal: Persona.count()]
     }
-
+    /**
+    * Este metodo sirve para la creacion de un registro de Persona.
+    */
     def create() {
         [personaInstance: new Persona(params)]
     }
-
+    /**
+    * Metodo para guardar los registros en el sistema
+    */
     def save() {
         def personaInstance = new Persona(params)
         if (!personaInstance.save(flush: true)) {
@@ -34,7 +40,9 @@ class PersonaController {
         flash.message = message(code: 'default.created.message', args: [message(code: 'persona.label', default: 'Persona'), personaInstance.id])
         redirect(action: "show", id: personaInstance.id)
     }
-
+    /**
+    * Metodo para visualizar el registro creado en el sistema.
+    */
     def show(Long id) {
         def personaInstance = Persona.get(id)
         if (!personaInstance) {
@@ -45,7 +53,9 @@ class PersonaController {
 
         [personaInstance: personaInstance]
     }
-
+    /**
+    * Metodo para editar un registro.
+    */
     def edit(Long id) {
         def personaInstance = Persona.get(id)
         if (!personaInstance) {
@@ -56,7 +66,9 @@ class PersonaController {
 
         [personaInstance: personaInstance]
     }
-
+    /**
+    * Metodo para actualizar los datos de un registro.
+    */
     def update(Long id, Long version) {
         def personaInstance = Persona.get(id)
         if (!personaInstance) {
@@ -85,7 +97,9 @@ class PersonaController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'persona.label', default: 'Persona'), personaInstance.id])
         redirect(action: "show", id: personaInstance.id)
     }
-
+    /**
+    * Método para complementar los datos de un firmante o responsable de tipo persona.
+    */
     def updateIt(Long id, Long version) {
         def personaInstance = Persona.get(id)
         def convenioInstance = Convenio.get(params.convenio.id as long)
@@ -114,7 +128,9 @@ class PersonaController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'persona.label', default: 'Persona'), personaInstance.id])
         redirect(controller:"convenio", action: "edit", id: params.convenio.id)
     }
-    
+    /**
+    * Metodo para eliminar el registro del sistema.
+    */
     def delete(Long id) {
         def personaInstance = Persona.get(id)
         if (!personaInstance) {
@@ -133,7 +149,9 @@ class PersonaController {
             redirect(action: "show", id: id)
         }
     }
-    
+    /**
+    * Método para busquedas dinamicas de personas ya registradas en el sistema y muestra las coincidencias.
+    */
     def ajaxFinder() {
         def found = null
         if (params.term) {            

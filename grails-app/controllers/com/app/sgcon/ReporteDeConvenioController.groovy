@@ -13,7 +13,9 @@ class ReporteDeConvenioController {
     def conveniosPorFechaInit () {
         render (view:"conveniosPorFecha")
     }
-
+    /**
+    * Método que genera los listados sobre convenios en el sistema. Posteriormente genera los reportes ejecutivos.
+    */
     def conveniosPorFecha () {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
         
@@ -74,7 +76,9 @@ class ReporteDeConvenioController {
             flash.warn = "Debe elegir un rango de fechas válido."
         }
     }
-    
+    /**
+    * Método para realizar un listado de los convenios totales.
+    */
     def totalDeConvenios () {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
         

@@ -12,12 +12,16 @@ class ProrrogaController {
     def index() {
         redirect(action: "list", params: params)
     }
-
+    /**
+    * Método apara enlistar los registros existentes en una domain class 
+    */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [prorrogaInstanceList: Prorroga.list(params), prorrogaInstanceTotal: Prorroga.count()]
     }
-
+    /**
+    * Este método sirve para la creacion de un registro de tipo prorroga.
+    */
     def create() {        
         if(params.otorgamientoDePoderId){
             session.otorgamientoDePoderId = params.otorgamientoDePoderId as long  
@@ -31,7 +35,9 @@ class ProrrogaController {
         }    
         [prorrogaInstance: new Prorroga(params)]
     }
-
+    /**
+    * Método para guardar los registros en el sistema.
+    */
     def save() {  
         params.creadoPor = springSecurityService.currentUser            
         params.fechaDeEnvio = new Date()
@@ -57,7 +63,9 @@ class ProrrogaController {
         flash.info = "Se ha enviado con éxito la Prorroga."        
         redirect(controller: "poderes", action: "index")
     }
-
+    /**
+    * Método para visualizar el registro creado en el sistema.
+    */
     def show(Long id) {
         def prorrogaInstance = Prorroga.get(id)
         def otorgamientoDePoderInstance = null
@@ -92,7 +100,9 @@ class ProrrogaController {
 
         [prorrogaInstance: prorrogaInstance, otorgamientoDePoderInstance : otorgamientoDePoderInstance, revocacionDePoderInstance : revocacionDePoderInstance]
     }
-
+    /**
+    * Método para editar un registro.
+    */
     def edit(Long id) {
         def prorrogaInstance = Prorroga.get(id)
         if (!prorrogaInstance) {
@@ -103,7 +113,9 @@ class ProrrogaController {
 
         [prorrogaInstance: prorrogaInstance]
     }
-
+    /**
+    * Método para actualizar los datos de un registro.
+    */
     def update(Long id, Long version) {
         def prorrogaInstance = Prorroga.get(id)
         if (!prorrogaInstance) {
@@ -132,7 +144,9 @@ class ProrrogaController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'prorroga.label', default: 'Prorroga'), prorrogaInstance.id])
         redirect(action: "show", id: prorrogaInstance.id)
     }
-
+     /**
+    * Método para eliminar el registro del sistema.
+    */
     def delete(Long id) {
         def prorrogaInstance = Prorroga.get(id)
         if (!prorrogaInstance) {

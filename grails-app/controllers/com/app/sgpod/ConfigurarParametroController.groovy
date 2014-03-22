@@ -11,16 +11,22 @@ class ConfigurarParametroController {
     def index() {
         redirect(action: "list", params: params)
     }
-
+    /**
+    * Método apara enlistar los registros existentes en una domain class 
+    */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [configurarParametroInstanceList: ConfigurarParametro.list(params), configurarParametroInstanceTotal: ConfigurarParametro.count()]
     }
-
+    /**
+    * Este método sirve para la creacion de un registro de tipo parametros.
+    */
     def create() {
         [configurarParametroInstance: new ConfigurarParametro(params)]
     }
-
+    /**
+    * Método para guardar los registros en el sistema.
+    */
     def save() {
         def configurarParametroInstance = new ConfigurarParametro(params)
         if (!configurarParametroInstance.save(flush: true)) {
@@ -31,7 +37,9 @@ class ConfigurarParametroController {
         flash.message = message(code: 'default.created.message', args: [message(code: 'configurarParametro.label', default: 'ConfigurarParametro'), configurarParametroInstance.id])
         redirect(action: "show", id: configurarParametroInstance.id)
     }
-
+    /**
+    * Método para visualizar el registro creado en el sistema.
+    */
     def show(Long id) {
         def configurarParametroInstance = ConfigurarParametro.get(id)
         if (!configurarParametroInstance) {
@@ -42,7 +50,9 @@ class ConfigurarParametroController {
 
         [configurarParametroInstance: configurarParametroInstance]
     }
-
+    /**
+    * Método para editar un registro.
+    */
     def edit(Long id) {
         def configurarParametroInstance = ConfigurarParametro.get(id)
         if (!configurarParametroInstance) {
@@ -53,7 +63,9 @@ class ConfigurarParametroController {
 
         [configurarParametroInstance: configurarParametroInstance]
     }
-
+    /**
+    * Método para actualizar los datos de un registro.
+    */
     def update(Long id, Long version) {
         def configurarParametroInstance = ConfigurarParametro.get(id)
         if (!configurarParametroInstance) {
@@ -83,7 +95,9 @@ class ConfigurarParametroController {
         redirect(action: "show", id: configurarParametroInstance.id)
         
     }
-
+     /**
+    * Método para eliminar el registro del sistema.
+    */
     def delete(Long id) {
         def configurarParametroInstance = ConfigurarParametro.get(id)
         if (!configurarParametroInstance) {

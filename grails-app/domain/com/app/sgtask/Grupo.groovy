@@ -1,8 +1,16 @@
 package com.app.sgtask
 
+/**
+* Domain class que define un grupo dentro del modulo de covenios.
+*/
 class Grupo {
-
+    /**
+    * Nombre del grupo.
+    */
     String nombre
+    /**
+    * Descripción del grupo actual.
+    */
     String descripcion
     
     static constraints = {

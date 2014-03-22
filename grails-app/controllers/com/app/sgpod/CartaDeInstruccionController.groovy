@@ -9,16 +9,22 @@ class CartaDeInstruccionController {
     def index() {
         redirect(action: "list", params: params)
     }
-
+    /**
+    * Metodo apara enlistar los registros existentes en una domain class 
+    */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [cartaDeInstruccionInstanceList: CartaDeInstruccion.list(params), cartaDeInstruccionInstanceTotal: CartaDeInstruccion.count()]
     }
-
+    /**
+    * Este metodo sirve para la creacion de un registro de tipo carta de instruccón.
+    */
     def create() {
         [cartaDeInstruccionInstance: new CartaDeInstruccion(params)]
     }
-
+    /**
+    * Metodo para guardar los registros en el sistema.
+    */
     def save() {
         def cartaDeInstruccionInstance = new CartaDeInstruccion(params)
         if (!cartaDeInstruccionInstance.save(flush: true)) {
@@ -29,7 +35,9 @@ class CartaDeInstruccionController {
         flash.message = message(code: 'default.created.message', args: [message(code: 'cartaDeInstruccion.label', default: 'CartaDeInstruccion'), cartaDeInstruccionInstance.id])
         redirect(action: "show", id: cartaDeInstruccionInstance.id)
     }
-
+    /**
+    * Metodo para visualizar el registro creado en el sistema.
+    */
     def show(Long id) {
         def cartaDeInstruccionInstance = CartaDeInstruccion.get(id)
         if (!cartaDeInstruccionInstance) {
@@ -40,7 +48,9 @@ class CartaDeInstruccionController {
 
         [cartaDeInstruccionInstance: cartaDeInstruccionInstance]
     }
-
+    /**
+    * Metodo para editar un registro.
+    */
     def edit(Long id) {
         def cartaDeInstruccionInstance = CartaDeInstruccion.get(id)
         if (!cartaDeInstruccionInstance) {
@@ -51,7 +61,9 @@ class CartaDeInstruccionController {
 
         [cartaDeInstruccionInstance: cartaDeInstruccionInstance]
     }
-
+    /**
+    * Metodo para actualizar los datos de un registro
+    */
     def update(Long id, Long version) {
         def cartaDeInstruccionInstance = CartaDeInstruccion.get(id)
         if (!cartaDeInstruccionInstance) {
@@ -80,7 +92,9 @@ class CartaDeInstruccionController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'cartaDeInstruccion.label', default: 'CartaDeInstruccion'), cartaDeInstruccionInstance.id])
         redirect(action: "show", id: cartaDeInstruccionInstance.id)
     }
-
+    /**
+    * Metodo para eliminar el registro del sistema.
+    */
     def delete(Long id) {
         def cartaDeInstruccionInstance = CartaDeInstruccion.get(id)
         if (!cartaDeInstruccionInstance) {

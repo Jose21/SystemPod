@@ -20,12 +20,16 @@ class NotaController {
     def index() {
         redirect(action: "list", params: params)
     }
-
+     /**
+    * Método apara enlistar los registros existentes en una domain class 
+    */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [notaInstanceList: Nota.list(params), notaInstanceTotal: Nota.count()]
     }
-
+    /**
+    * Este método sirve para la creacion de un registro de tipo nota.
+    */
     def create() {        
         if(params.tareaId){
             session.tareaId = params.tareaId as long
@@ -44,7 +48,9 @@ class NotaController {
         }
         [notaInstance: new Nota(params)]
     }
-
+    /**
+    * Método para guardar los registros en el sistema.
+    */
     def save() {
         params.agregadaPor = springSecurityService.currentUser
         def notaInstance = new Nota(params)
@@ -107,7 +113,9 @@ class NotaController {
             redirect(controller:"tarea", action: "show", id: session.tareaId)
         }              
     }
-
+    /**
+    * Método para visualizar el registro creado en el sistema.
+    */
     def show(Long id) {
         def notaInstance = Nota.get(id)
         if (!notaInstance) {
@@ -118,7 +126,9 @@ class NotaController {
 
         [notaInstance: notaInstance]
     }
-
+    /**
+    * Método para editar un registro.
+    */
     def edit(Long id) {
         def notaInstance = Nota.get(id)
         session.tareaId = params.tareaId
@@ -129,7 +139,9 @@ class NotaController {
         }
         [notaInstance: notaInstance]
     }
-
+     /**
+    * Método para actualizar los datos de un registro.
+    */
     def update(Long id, Long version) {
         def notaInstance = Nota.get(id)
         def tareaId = session.tareaId
@@ -172,7 +184,9 @@ class NotaController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'nota.label', default: 'Nota'), notaInstance.id])
         redirect(controller:"tarea", action: "show", id: tareaId)
     }
-
+    /**
+    * Método para eliminar el registro del sistema.
+    */
     def delete(Long id) {
         def notaInstance = Nota.get(id)
         if (!notaInstance) {

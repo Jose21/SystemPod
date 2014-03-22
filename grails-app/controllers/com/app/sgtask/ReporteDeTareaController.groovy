@@ -16,7 +16,9 @@ class ReporteDeTareaController {
     def turnosPorFechaInit () {
         render (view:"turnosPorFecha")
     }
-    
+    /**
+    * Reportes ejecutivos por fecha
+    */
     def turnosPorFecha () {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
         
@@ -40,7 +42,9 @@ class ReporteDeTareaController {
         }
         [ turnosPorFechaBean : turnosPorFechaBean ]
     }
-    
+    /**
+    * Reportes ejecutivos con el total de turnos.
+    */
     def totalDeTurnos () {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
         

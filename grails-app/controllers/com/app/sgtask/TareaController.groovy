@@ -31,7 +31,9 @@ class TareaController {
     def index() {
         redirect(action: "list", params: params)
     }
-    
+    /**
+    * Bandeja de turnos pestaña hoy.
+    */
     def hoy() {
         flash.warn = null
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
@@ -79,7 +81,9 @@ class TareaController {
             ]
         )
     }
-    
+    /**
+    * Bandeja de turnos pestaña Programadas.
+    */
     def programadas() {
         flash.warn = null
         session.opt = params.action
@@ -123,7 +127,9 @@ class TareaController {
             ]
         )
     }
-    
+    /**
+    * Bandeja de turnos pestaña Retrasadas.
+    */
     def retrasadas () {
         session.opt = params.action
         flash.warn = null
@@ -166,7 +172,9 @@ class TareaController {
             ]
         )
     }
-    
+    /**
+    * Bandeja de turnos pestaña Concluidas.
+    */
     def concluidas () {
         session.opt = params.action
         
@@ -206,17 +214,23 @@ class TareaController {
             ]
         )
     }
-    
+    /**
+    * Historial de tarea.
+    */
     def historial (Long id) {
         def tareaInstance = Tarea.get(id)
         [ tareaInstance : tareaInstance, histList : HistorialDeTarea.findAllByTarea(tareaInstance)]
     }
-    
+    /**
+    * Método apara enlistar los registros existentes en una domain class 
+    */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [tareaInstanceList: Tarea.list(params), tareaInstanceTotal: Tarea.count()]
     }
-
+    /**
+    * Este método sirve para la creacion de un registro de tipo tarea.
+    */
     def create() {
         if (params.idConvenio) {
             session.idConvenio = params.idConvenio as long
@@ -240,7 +254,9 @@ class TareaController {
         
         [tareaInstance: new Tarea(params), usuariosConveniosList : usuariosConveniosList]        
     }
-
+     /**
+    * Método para guardar los registros en el sistema.
+    */
     def save() {
         if(session.idOtorgamientoDePoder){
             params.fechaLimite = null
@@ -321,7 +337,9 @@ class TareaController {
             redirect(controller: "poderes", action: "index", id: session.idOtorgamientoDePoder)            
         }
     }    
-
+    /**
+    * Método para visualizar el registro creado en el sistema.
+    */
     def show(Long id) {
         if (params.idConvenio) {
             session.idConvenio = params.idConvenio as long
@@ -364,7 +382,9 @@ class TareaController {
         }
         [tareaInstance: tareaInstance, currentUser : springSecurityService.currentUser]
     }
-
+    /**
+    * Método para editar un registro.
+    */
     def edit(Long id) {
         def tareaInstance = Tarea.get(id)
         if (!tareaInstance) {
@@ -375,7 +395,9 @@ class TareaController {
 
         [tareaInstance: tareaInstance]
     }
-
+    /**
+    * Método para actualizar los datos de un registro.
+    */
     def update(Long id, Long version) {
         
         def tareaInstance = Tarea.get(id)
@@ -420,7 +442,9 @@ class TareaController {
         flash.message = message(code: 'default.updated.message', args: [message(code: 'tarea.label', default: 'Turno'), tareaInstance.id])
         redirect(action: "show", id: tareaInstance.id)
     }
-
+    /**
+    * Método para eliminar el registro del sistema.
+    */
     def delete(Long id) {
         def tareaInstance = Tarea.get(id)
         if (!tareaInstance) {
@@ -439,13 +463,17 @@ class TareaController {
             redirect(action: "show", id: id)
         }
     }
-    
+    /**
+    * Método para compartir una tarea.
+    */
     def share (Long id) {
         def tareaInstance = Tarea.get(id)
         def usuariosConveniosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS")).collect {it.usuario}            
         [ tareaInstance : tareaInstance, usuariosConveniosList : usuariosConveniosList ]
     }
-    
+    /**
+    * Método para agregar compartir la tarea con los usuarios.
+    */
     def addUsuarioToTarea(Long id) {
         def tareaInstance = Tarea.get(id)        
         def compartirCon = Usuario.get(params.compartidoCon.id as long)
@@ -470,7 +498,9 @@ class TareaController {
         }
         redirect (action:"share", params : [ id : tareaInstance.id ])
     }
-    
+    /**
+    * Método para dejar de compartir una tarea con los usuarios.
+    */
     def removeUsuarioFromTarea() {
         def tareaInstance = Tarea.get(params.tareaId as long)
         def usuario = Usuario.get(params.usuarioId as long)
@@ -478,11 +508,15 @@ class TareaController {
         usuarioDeTarea.delete()
         redirect (action:"share", params : [ id : tareaInstance.id ])
     }
-    
+    /**
+    * Método para la navegacion entre pantallas.
+    */
     def regresar(Long id) {
         redirect(action: "show", id: id)
     }
-    
+    /**
+    * Método para cerrar una tarea.
+    */
     def cerrarTarea (Long id) {
         def tareaInstance = Tarea.get(id)
         tareaInstance.cerrada = true
@@ -498,12 +532,16 @@ class TareaController {
         }
         redirect (action:"show", id:tareaInstance.id)
     }    
-    
+    /**
+    * Método para las notificacion por correo electrónico.
+    */
     def notificationByEmail () {
         def message = "Tienes una nueva tarea asignada."
         [ tareaInstance : Tarea.get(1), message : message, usuarioInstance : springSecurityService.currentUser ]
     }
-    
+    /**
+    * Método para consultas.
+    */
     def consultaTarea() {
         flash.error = null
         flash.info = null
@@ -511,7 +549,9 @@ class TareaController {
         flash.warn = null
         [porFolioActive:"active"]  
     }
-    
+    /**
+    * Método para busquedas por folio.
+    */
     def buscarPorFolio (){
         flash.warn = null
         def porFolioActive = null
@@ -538,6 +578,9 @@ class TareaController {
             ]
         )  
     }
+    /**
+    * Método para busquedas por fecha de registro.
+    */
     def buscarPorFechaRegistro () {
         def porFechaRegistroActive = null
         if (params.inActive=="porFechaRegistro") {
@@ -573,6 +616,9 @@ class TareaController {
             ]
         )
     }
+    /**
+    * Método para crear un rango de fechas a partir de las fechas seleccionadas en el calendario del formulario.
+    */
     def rangoDeFecha () {
         def rangoDeFechaActive = null
         if (params.inActive=="rangoDeFecha") {
@@ -608,6 +654,9 @@ class TareaController {
             ]
         )
     }
+    /**
+    * Método para busquedas por nombre de responsable.
+    */
     def buscarPorNombreResponsables (){
         def nombreResponsablesActive = null
         if (params.inActive=="nombreResponsables") {
@@ -630,6 +679,9 @@ class TareaController {
             ]
         )       
     }
+    /**
+    * Método para busquedas por palabras clave.
+    */
     def buscarPorTags () {
         def porTagsActive = null
         if (params.inActive == "porTags") {
@@ -652,6 +704,9 @@ class TareaController {
             ]
         )       
     }
+    /**
+    * Método para generar reporte de consultas.
+    */
     def generarReporte(){
         def tareaInstanceList = session.tareaInstanceList
         def inActive = session.inActive
@@ -686,6 +741,9 @@ class TareaController {
             model: [inActive: inActive, tareaInstanceList: tareaInstanceList ]
         )  
     }
+    /**
+    * Método para visualizar todos los campos con su valor de una tarea.
+    */
     def detalles(Long id){
         def tareaInstance = Tarea.get(id)
         log.info "id de tarea "+ id
