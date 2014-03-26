@@ -19,7 +19,7 @@ class RevocacionDePoder extends Poder{
     /**
     * Fecha de revocación.
     */    
-    Date fechaDeRevocacio
+    Date fechaDeRevocacion
     /**
     * Tipo de revocacion 
     */
@@ -32,6 +32,11 @@ class RevocacionDePoder extends Poder{
     * Bandera que se utiliza para saber si fue agregada manualmente o se hizo sobre un otorgamiento de poder. 
     */
     boolean agregadaManualmente = false
+    
+    /**
+    * Bandera que se utiliza para saber si fue agregada manualmente o se hizo sobre un otorgamiento de poder. 
+    */
+    String escrituraPublicaRevocacion
     
     /**
     * Esta es la relacóon que tiene con otras tablas en una relacion tipo  1-n.
@@ -48,6 +53,7 @@ class RevocacionDePoder extends Poder{
         agregarApoderado blank:false
         apoderadosEliminar nullable:true
         agregadaManualmente blank:false
+        escrituraPublicaRevocacion nullable:true
     }
     
     String toString() {

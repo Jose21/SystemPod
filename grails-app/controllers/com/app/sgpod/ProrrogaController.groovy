@@ -2,6 +2,7 @@ package com.app.sgpod
 
 import org.springframework.dao.DataIntegrityViolationException
 import grails.plugins.springsecurity.Secured
+import java.text.SimpleDateFormat
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class ProrrogaController {
@@ -39,8 +40,15 @@ class ProrrogaController {
     * Método para guardar los registros en el sistema.
     */
     def save() {  
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         params.creadoPor = springSecurityService.currentUser            
         params.fechaDeEnvio = new Date()
+        
+        if (params.fechaProrroga) {
+            Date fechaProrroga = sdf.parse(params.fechaProrroga)
+            params.fechaProrroga = fechaProrroga
+        }
+        
         def prorrogaInstance = new Prorroga(params)                 
         
         if (session.otorgamientoDePoderId) {                                                                                        

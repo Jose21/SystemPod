@@ -133,8 +133,8 @@
                     </td>                    
                     <td style="width:70%;text-align: left">
                         <span style="font-family: sans-serif;font-size: 13px;">
-                            <g:each in="${otorgamientoDePoderInstance?.apoderados}" var="a">
-                                <dd>   ${a?.nombre.encodeAsHTML()}</dd>
+                            <g:each in="${otorgamientoDePoderInstance?.apoderados.sort{it.nombre}}" var="a">
+                                <dd>  - ${a?.nombre.encodeAsHTML()}</dd>
                             </g:each> 
                         </span>
                     </td>                           

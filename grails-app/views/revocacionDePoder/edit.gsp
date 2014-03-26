@@ -65,7 +65,7 @@
                                 </tr>
                             </thead>
                             <tbody>                                                            
-                                <g:each in="${revocacionDePoderInstance.apoderados}" status="i" var="apoderado">            
+                                <g:each in="${revocacionDePoderInstance.apoderados.sort{it.nombre}}" status="i" var="apoderado">            
                                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                                         <td style="text-align:center"><g:checkBox id="${apoderado.id}" name="apoderadoList" value="${apoderado.id}" checked="false"/></td>
                                         <td>${apoderado.nombre}</td>
@@ -128,7 +128,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <g:each in="${revocacionDePoderInstance.apoderados}" status="i" var="apoderado">            
+                            <g:each in="${revocacionDePoderInstance.apoderados.sort{it.nombre}}" status="i" var="apoderado">            
                                 <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                                     <td>                    
                                         <div id="editarApoderadoModal${i}" class="modal hide" style="width:600px;">

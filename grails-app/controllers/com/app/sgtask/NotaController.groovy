@@ -84,7 +84,9 @@ class NotaController {
                 }     
                 revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
                 revocacionDePoderInstance.fechaDeEnvio = new Date()
+                revocacionDePoderInstance.escrituraPublicaRevocacion = params.escrituraPublicaRevocacion
                 revocacionDePoderInstance.addToNotas(notaInstance).save(flush:true)
+                
             }else{
                 flash.error = "Debe Adjuntar el Archivo Electrónico."
                 redirect(action: "create", params: [revocacionDePoderId: session.revocacionDePoderId])

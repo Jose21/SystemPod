@@ -103,8 +103,8 @@
                                             </tr>
                                         </table>
                                     </td>
-                                </tr>
-                                </table>
+                                        </tr>
+                                        </table>
                                     </g:elseif>
                                     <g:else>
                                         <h4 class="lighter"><i class="icon-file-text"></i> Solicitud de Otorgamiento de Poder </h4>                                    
@@ -247,7 +247,7 @@
                                                                     Motivos: ${prorroga?.motivos}                                                                                                                
                                                                 </div>
                                                                 <div class="text">
-                                                                    Plazo: ${prorroga?.dias}  día(s).                                                                                                              
+                                                                    Fecha Limite: <g:formatDate date="${prorroga?.fechaProrroga}" type="datetime" style="MEDIUM"/>                                                                                                             
                                                                 </div>
                                                             </div>
                                                         </div>

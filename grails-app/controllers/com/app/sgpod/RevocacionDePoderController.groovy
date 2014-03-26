@@ -50,6 +50,7 @@ class RevocacionDePoderController {
                 revocacionDePoderInstance.documentos = datosDelOtorgamiento?.documentos
                 revocacionDePoderInstance.apoderados = datosDelOtorgamiento?.apoderadosVigentes
                 revocacionDePoderInstance.agregarApoderado = false                
+                flash.info = "Se han cargado los datos de la Escritura Pública"
             }
         }
         [revocacionDePoderInstance: revocacionDePoderInstance, otorgamientoDePoderId : datosDelOtorgamiento?.id]        
@@ -140,15 +141,14 @@ class RevocacionDePoderController {
         def diasDeProrroga = null
         def diasDeProrrogaTotal = 0
         def diasRestantes = null
-        if(revocacionDePoderInstance.prorrogas){            
-            revocacionDePoderInstance.prorrogas.each{ prorroga ->
-                diasDeProrroga = prorroga.dias
-                diasDeProrrogaTotal = diasDeProrrogaTotal + diasDeProrroga
-            }            
+        
+        if(revocacionDePoderInstance.prorrogas){ 
+                      
             def prorrogasList = revocacionDePoderInstance.prorrogas.sort{ it.getId() }                                                    
-            def prorrogaInstance = prorrogasList.get(0)            
-            def inicioProrroga = prorrogaInstance.fechaDeEnvio             
-            def fechaDeTerminoProrroga = inicioProrroga + diasDeProrrogaTotal             
+            def prorrogaFirst = prorrogasList.get(0)            
+            def prorrogaLast = prorrogasList.last()                        
+            def inicioProrroga = prorrogaFirst.fechaDeEnvio                     
+            def fechaDeTerminoProrroga = prorrogaLast.fechaProrroga                          
             def hoy = new Date()
             diasRestantes = fechaDeTerminoProrroga - hoy                        
         }

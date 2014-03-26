@@ -64,10 +64,10 @@
                                                     <dd><g:fieldValue bean="${prorrogaInstance}" field="motivos"/></dd>
                                                 </dl>
                                             </g:if>
-                                            <g:if test="${prorrogaInstance?.dias}">
+                                            <g:if test="${prorrogaInstance?.fechaProrroga}">
                                                 <dl>
-                                                    <dt><g:message code="prorroga.dias.label" default="Plazo" /></dt>
-                                                    <dd><g:fieldValue bean="${prorrogaInstance}" field="dias"/>  día(s).</dd>
+                                                    <dt><g:message code="prorroga.fechaProrroga.label" default="Fecha Limite" /></dt>
+                                                    <dd><g:formatDate date="${prorrogaInstance?.fechaProrroga}" /></dd>
                                                 </dl>
                                             </g:if>
                                             <g:if test="${prorrogaInstance?.creadoPor}">

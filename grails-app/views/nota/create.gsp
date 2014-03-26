@@ -34,6 +34,17 @@
                 <g:form name="myForm" class="form-horizontal" action="save" enctype="multipart/form-data">
                     <g:hiddenField name="tarea" id="tarea.id" value="${session.tareaId}"/>
                     <g:render template="form"/>
+                    <g:if test="${session.revocacionDePoderId}">
+                        <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'escrituraPublicaRevocacion', 'error')} ">
+                            <label for="escrituraPublicaRevocacion" class="control-label">
+                                <g:message code="revocacionDePoder.escrituraPublicaRevocacion.label" default="Escritura de Revocación" />
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <div class="controls">
+                                <g:textField class="span4 validate[required]" name="escrituraPublicaRevocacion" value="${revocacionDePoderInstance?.escrituraPublicaRevocacion}"/>
+                            </div>
+                        </div>
+                    </g:if>
                     <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES">
                         <div class="form-actions">
                             <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />

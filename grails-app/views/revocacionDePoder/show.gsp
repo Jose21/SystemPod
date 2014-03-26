@@ -200,7 +200,7 @@
                                                                     Motivos: ${prorroga?.motivos}                                                                                                                
                                                                 </div>
                                                                 <div class="text">
-                                                                    Plazo: ${prorroga?.dias}  día(s).                                                                                                              
+                                                                    Fecha Limite: <g:formatDate date="${prorroga?.fechaProrroga}" type="datetime" style="MEDIUM"/>                                                                                                              
                                                                 </div>
                                                             </div>
                                                         </div>

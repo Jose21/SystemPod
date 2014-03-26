@@ -155,8 +155,8 @@
                     </td>                    
                     <td style="width:70%;text-align: left">
                         <span style="font-family: sans-serif;font-size: 13px;">
-                            <g:each in="${revocacionDePoderInstance?.apoderadosEliminar}" var="a">
-                                <dd>   ${a?.nombre.encodeAsHTML()}</dd>
+                            <g:each in="${revocacionDePoderInstance?.apoderadosEliminar.sort{it.nombre}}" var="a">
+                                <dd>  - ${a?.nombre.encodeAsHTML()}</dd>
                             </g:each> 
                         </span>
                     </td>                           
@@ -206,12 +206,12 @@
                 <tr>
                     <td bgcolor="#E7EBEB" style="width:30%;text-align: right">
                         <span style="font-family: sans-serif;font-size: 13px;">
-                            ESCRITURA P&Uacute;BLICA
+                            ESCRITURA P&Uacute;BLICA DE REVOCACI&Oacute;N
                         </span>
                     </td>                    
                     <td style="width:70%;text-align: left">
                         <span style="font-family: sans-serif;font-size: 13px;">
-                            <dd>   ${revocacionDePoderInstance?.escrituraPublica}</dd>
+                            <dd>   ${revocacionDePoderInstance?.escrituraPublicaRevocacion}</dd>
                         </span>
                     </td>                           
                 </tr>

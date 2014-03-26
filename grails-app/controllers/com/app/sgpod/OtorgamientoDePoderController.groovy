@@ -116,15 +116,14 @@ class OtorgamientoDePoderController {
         def diasDeProrroga = null
         def diasDeProrrogaTotal = 0
         def diasRestantes = null
+        def fechaHoy = new Date()
         if(otorgamientoDePoderInstance.prorrogas){            
-            otorgamientoDePoderInstance.prorrogas.each{ prorroga ->
-                diasDeProrroga = prorroga.dias
-                diasDeProrrogaTotal = diasDeProrrogaTotal + diasDeProrroga
-            }            
+            
             def prorrogasList = otorgamientoDePoderInstance.prorrogas.sort{ it.getId() }                                                    
-            def prorrogaInstance = prorrogasList.get(0)            
-            def inicioProrroga = prorrogaInstance.fechaDeEnvio             
-            def fechaDeTerminoProrroga = inicioProrroga + diasDeProrrogaTotal             
+            def prorrogaFirst = prorrogasList.get(0)
+            def prorrogaLast = prorrogasList.last()                        
+            def inicioProrroga = prorrogaFirst.fechaDeEnvio                     
+            def fechaDeTerminoProrroga = prorrogaLast.fechaProrroga                   
             def hoy = new Date()
             diasRestantes = fechaDeTerminoProrroga - hoy                        
         }
@@ -282,7 +281,7 @@ class OtorgamientoDePoderController {
     /**
     * Método para agregar apoderados dentro de la solicitud.
     */
-    def addApoderado () {
+    def addApoderado () {        
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoder.id as long)
         def apoderadoInstance = Apoderado.findByNombre(params."apoderado")
         if (apoderadoInstance) {
@@ -293,8 +292,8 @@ class OtorgamientoDePoderController {
             } else {
                 flash.error = "No se pudo agregar el apoderado. Favor de reintentar."
             }
-        } else {
-            apoderadoInstance = new Apoderado(nombre:params."apoderado")
+        } else {          
+            apoderadoInstance = new Apoderado(nombre:params."apoderado".toUpperCase())
             if (apoderadoInstance.save(flush:true)) {  
                 otorgamientoDePoderInstance.addToApoderados(apoderadoInstance)
                 otorgamientoDePoderInstance.addToApoderadosVigentes(apoderadoInstance)

@@ -41,19 +41,15 @@ class PoderesController {
                 def diasDeProrrogaTotal = 0
                 def fechaDeEnvio = poder.fechaDeEnvio                
                 def diasPosteriores = fechaHoy - fechaDeEnvio                
-                if(poder.prorrogas){ 
-                    
-                    poder.prorrogas.each{ prorroga ->
-                        diasDeProrroga = prorroga.dias
-                        diasDeProrrogaTotal = diasDeProrrogaTotal + diasDeProrroga
-                    }  
+                if(poder.prorrogas){                                         
                     
                     def prorrogasList = poder.prorrogas.sort{ it.getId() }                                                          
-                    def prorrogaInstance = prorrogasList.get(0)                    
-                    def inicioProrroga = prorrogaInstance.fechaDeEnvio                     
-                    def fechaDeTerminoProrroga = inicioProrroga + diasDeProrrogaTotal                     
+                    def prorrogaLast = prorrogasList.last()
+                    def prorrogaFirst = prorrogasList.get(0)                    
+                    def inicioProrroga = prorrogaFirst.fechaDeEnvio                     
+                    def fechaDeTerminoProrroga = prorrogaLast.fechaProrroga                     
                     def hoy = new Date()
-                    def diasRestantes = fechaDeTerminoProrroga - hoy                    
+                    def diasRestantes = fechaDeTerminoProrroga - hoy                     
                     if(diasRestantes == 0){
                         otorgamientosRojosList.add(poder)
                     }else{
@@ -84,17 +80,13 @@ class PoderesController {
                 def fechaDeEnvio = poder.fechaDeEnvio                
                 def diasPosteriores = fechaHoy - fechaDeEnvio
                 
-                if(poder.prorrogas){ 
-                    
-                    poder.prorrogas.each{ prorroga ->
-                        diasDeProrroga = prorroga.dias
-                        diasDeProrrogaTotal = diasDeProrrogaTotal + diasDeProrroga
-                    }  
+                if(poder.prorrogas){                                        
                     
                     def prorrogasList = poder.prorrogas.sort{ it.getId() }                                                          
-                    def prorrogaInstance = prorrogasList.get(0)                    
-                    def inicioProrroga = prorrogaInstance.fechaDeEnvio                     
-                    def fechaDeTerminoProrroga = inicioProrroga + diasDeProrrogaTotal                     
+                    def prorrogaFirst = prorrogasList.get(0)
+                    def prorrogaLast = prorrogasList.last()                                       
+                    def inicioProrroga = prorrogaFirst.fechaDeEnvio                     
+                    def fechaDeTerminoProrroga = prorrogaLast.fechaProrroga                                      
                     def hoy = new Date()
                     def diasRestantes = fechaDeTerminoProrroga - hoy                    
                     if(diasRestantes == 0){

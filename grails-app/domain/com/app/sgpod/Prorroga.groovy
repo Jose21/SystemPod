@@ -15,9 +15,9 @@ class Prorroga {
     */
     String motivos
     /**
-    * Los dias que se piden como prorroga.
+    * Fecha de prorroga.
     */
-    Integer dias
+    Date fechaProrroga
     /**
     * Usuario que crea la prorroga.
     */
@@ -36,5 +36,12 @@ class Prorroga {
     Date fechaDeEnvio    
     
     static constraints = {
+        titulo nullable:false
+        motivos nullable:true
+        fechaProrroga nullable:true
+        creadoPor nullable:true
+        asignadoA nullable:true
+        dateCreated nullable:true
+        fechaDeEnvio nullable:true
     }
 }

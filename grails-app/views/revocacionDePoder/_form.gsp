@@ -55,11 +55,11 @@
         value="${revocacionDePoderInstance?.categoriaDeTipoDePoder?.tipoDePoder?.id}"
             noSelection="['':'Elige un tipo de poder']"        
         onchange="${remoteFunction(
-        controller:'tipoDePoder', 
-        action:'ajaxGetCategorias', 
-        params:'\'tipoDePoder.id=\' + this.value', 
-        update:'categoriaSelection'
-        )}"/>
+controller:'tipoDePoder', 
+action:'ajaxGetCategorias', 
+params:'\'tipoDePoder.id=\' + this.value', 
+update:'categoriaSelection'
+)}"/>
     </div>
     <div class="controls" id="categoriaSelection" >
         <select readonly="readonly" class="chosen-select validate[required]" data-placeholder="Elige una categoria..." name="categoriaDeTipoDePoder">
@@ -131,14 +131,10 @@
         <g:if test="${revocacionDePoderInstance.documentos}">
             <g:each in="${revocacionDePoderInstance?.documentos}" var="d">
                 <div class="pull-left action-buttons">
-                    <g:link class="red" controller="revocacionDePoder" action="deleteArchivo" id ="${d.id}" params="[revocacionDePoderId:revocacionDePoderInstance?.id, anchor:'bloqueAdjuntarArchivos']">
-                        <i class="icon-trash bigger-130"></i>
-                        <i class="icon-caret-right blue"></i>
-                    </g:link>
+                    <i class="icon-caret-right blue"></i>
                 </div>
                 <g:link controller="documentoDePoder" action="downloadArchivo" id="${d.id}">${d?.encodeAsHTML()}</g:link>
-                <g:hiddenField name="documento${d.id}" value="${d.id}" />                
-                <br/>
+                <g:hiddenField name="documento${d.id}" value="${d.id}" />                                
             </g:each>
         </g:if>
         <g:else>

@@ -52,7 +52,7 @@
                                 </g:form>
                             </div>
                         </div>
-                        <h3 id="FinBusquedaPorEscrituraPublica"  class="header smaller lighter blue"></h3>
+                        <h3 id="finBusquedaPorEscrituraPublica"  class="header smaller lighter blue"></h3>
                         <g:form name="myForm" class="form-horizontal" action="save" enctype="multipart/form-data">
                             <g:render template="form"/>
                             <div class="form-actions">

@@ -67,7 +67,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <g:each in="${otorgamientoDePoderInstance.apoderados}" status="i" var="apoderado">            
+                            <g:each in="${otorgamientoDePoderInstance.apoderados.sort{it.nombre}}" status="i" var="apoderado">            
                                 <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                                     <td>                    
                                         <div id="editarApoderadoModal${i}" class="modal hide" style="width:600px;">

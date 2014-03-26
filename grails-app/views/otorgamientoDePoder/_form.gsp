@@ -46,7 +46,7 @@
     </label>
     <div class="controls">
         <select class="chosen-select" id="delegacion" name="delegacion" data-placeholder="Elige una delegación..." required="">
-            <g:each in="${com.app.sgpod.Delegacion.list()}" var="delegacion">
+            <g:each in="${com.app.sgpod.Delegacion.list().sort{it.nombre}}" var="delegacion">
                 <g:if test="${delegacion?.id == otorgamientoDePoderInstance?.delegacion?.id}">                    
                     <option value="${delegacion.id}" selected>${delegacion.nombre}</option>
                 </g:if>
