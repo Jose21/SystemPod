@@ -11,9 +11,9 @@
         <div class="page-header position-relative">            
             <div class="btn-group">
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
-                    <g:if test="${!cartaDeInstruccion}">
+                    <g:if test="${!cartaDeInstruccion | !revocacionDePoderInstance.escrituraPublicaRevocacion}">
                         <g:link class="btn btn-success btn-small tip-bottom" controller="revocacionDePoder" action="existe" id="${revocacionDePoderInstance?.id}">
-                            <i class="icon-external-link"></i> Crear Carta de Instrucción
+                            <i class="icon-external-link"></i> Aceptar y Enviar Solicitud
                         </g:link>
                     </g:if>
                 </sec:ifAnyGranted>                
@@ -53,6 +53,13 @@
                 <g:link action="imprimir" class="btn btn-small btn-pink tip-bottom" params="[ id : revocacionDePoderInstance?.id]" target="_blank">
                     <i class="icon-print"></i> Imprimir Solicitud
                 </g:link>
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_NOTARIO">
+                    <g:if test="${ocultarBoton != true}">
+                        <a class="btn btn-small btn-inverse tip-bottom" href="#reasignarSolicitud" data-toggle="modal">
+                            <i class="icon-reply"></i> Reasignar Solicitud
+                        </a>
+                    </g:if>
+                </sec:ifAnyGranted>
             </div>
         </div>        
         <div class="page-content">
@@ -153,7 +160,7 @@
                                                                     Título: ${nota.titulo}
                                                                 </div>
                                                                 <div class="text">
-                                                                    Descripcion: <%=nota.descripcion%>
+                                                                    Descripcion: <%=nota.descripcion%><br/>
                                                                     <g:if test="${nota.documentos}">
                                                                         Archivos adjuntos<br/>
                                                                         <g:each in="${nota.documentos}" var="documento">                            
@@ -210,6 +217,22 @@
                                         </div><!--/widget-body-->
                                     </div><!--/widget-box-->
                                 </g:if>
+                            </div>
+                            <div id="reasignarSolicitud" class="modal hide" style="width:600px;">
+                                <div class="modal-header">
+                                    <button data-dismiss="modal" class="close" type="button">×</button>
+                                    <h3>Usuarios</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <g:form name="myForm" class="form-horizontal" method="post">                                            
+                                        <g:hiddenField name="revocacionDePoder.id" value="${revocacionDePoderInstance?.id}" />                                            
+                                        <g:hiddenField name="version" value="${revocacionDePoderInstance?.version}" />
+                                        <g:render template="/revocacionDePoder/reasignarSolicitudRevocacion" bean="${revocacionDePoder}"/>            
+                                        <div class="form-actions">
+                                            <g:actionSubmit class="btn btn-primary" action="reasignarSolicitud" value="${message(code: 'default.button.label', default: 'Aceptar')}" />
+                                        </div>
+                                    </g:form>
+                                </div>
                             </div>
                         </div>
                     </div>

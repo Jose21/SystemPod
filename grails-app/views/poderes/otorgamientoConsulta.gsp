@@ -35,6 +35,12 @@
                         <span class="bigger-110">Por Fecha de Otorgamiento <span class="badge"></span></span>
                     </a>
                 </li>
+                <li class="${porEscrituraPublicaActive?:""}">
+                    <a data-toggle="tab" href="#porEscrituraPublica">
+                        <i class="icon-calendar bigger-130"></i>
+                        <span class="bigger-110">Por Número de Escritura Pública <span class="badge"></span></span>
+                    </a>
+                </li>
                 <li class="${porTagsActive?:""}">
                     <a data-toggle="tab" href="#porTags">              
                         <i class="icon-tag bigger-130"></i>
@@ -105,7 +111,26 @@
                 </div>
             </div><!--/.message-container-->
         </div>
-        
+        <div id="porEscrituraPublica" class="tab-pane ${porEscrituraPublicaActive?:""}">  
+            <div class="message-container">
+                <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
+                    <div class="message-bar">
+                    </div>
+                    <g:form method="post">
+                        <g:hiddenField name="inActive" value="porEscrituraPublica"/>
+                        <div class="control-group">
+                            <div class="row-fluid input-prepend">
+                                <label for="escrituraPublica" class="control-label">
+                                    <g:message code="otorgamientoDePoder.escrituraPublica.label" default="Número" />
+                                </label>
+                                <g:textField name="escrituraPublica" required="" value="${otorgamientoDePoderInstance?.escrituraPublica}"/>
+                                <g:actionSubmit class="btn btn-primary" action="buscarPorEscrituraPublica" value="Buscar" />
+                            </div>
+                        </div>
+                    </g:form>
+                </div>
+            </div><!--/.message-container-->
+        </div>
         <div id="porTags" class="tab-pane ${porTagsActive?:""}">  
             <div class="message-container">
                 <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
@@ -142,6 +167,11 @@
                 <g:if test="${rangoDeFechaRegistro}">
                     <tr>
                         <th colspan="8" style="text-align:center;font-size:16px">RESULTADO PARA LA BúSQUEDA POR FECHA DE REGISTRO: " ${rangoDeFechaRegistro} "</br></br></th>
+                    </tr>
+                </g:if>
+                <g:if test="${params.escrituraPublica}">
+                    <tr>
+                        <th colspan="10" style="text-align:center;font-size:16px">RESULTADO PARA EL NÚMERO DE ESCRITURA PÚBLICA: " ${params.escrituraPublica} "</br></br></th>
                     </tr>
                 </g:if>
                 <g:if test="${params.tags}">

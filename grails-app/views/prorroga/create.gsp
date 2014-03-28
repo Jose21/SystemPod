@@ -28,7 +28,7 @@
             <g:form name="myForm" class="form-horizontal" action="save" >
                 <g:render template="form"/>
                 <div class="form-actions">
-                    <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.label', default: 'Enviar')}" />
+                    <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.label', default: 'Enviar')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
                 </div>
             </g:form>
         </div>

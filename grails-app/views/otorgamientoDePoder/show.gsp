@@ -13,7 +13,7 @@
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
                     <g:if test="${!otorgamientoDePoderInstance.documentos && ocultarBoton != true && !otorgamientoDePoderInstance.tareas}">
                         <g:link class="btn btn-success btn-small tip-bottom" action="existe" id="${otorgamientoDePoderInstance?.id}">
-                            <i class="icon-thumbs-up"></i> Aceptar Solicitud
+                            <i class="icon-thumbs-up"></i> Aceptar y Enviar Solicitud
                         </g:link>
                     </g:if>
                 </sec:ifAnyGranted>
@@ -34,7 +34,7 @@
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_NOTARIO">
                     <g:if test="${!otorgamientoDePoderInstance.documentos}">
                         <g:link  action="edit" class="btn btn-small btn-warning tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]">
-                            <i class="icon-external-link"></i> Enviar Copia Electronica
+                            <i class="icon-external-link"></i> Enviar Copia Electrónica
                         </g:link>
                     </g:if>
                 </sec:ifAnyGranted>
@@ -65,6 +65,13 @@
                 <g:link action="imprimir" class="btn btn-small btn-success tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]" target="_blank">
                     <i class="icon-print"></i> Imprimir Solicitud
                 </g:link>
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_NOTARIO">
+                    <g:if test="${ocultarBoton != true}">
+                        <a class="btn btn-small btn-inverse tip-bottom" href="#reasignarSolicitud" data-toggle="modal">
+                            <i class="icon-reply"></i> Reasignar Solicitud
+                        </a>
+                    </g:if>
+                </sec:ifAnyGranted>
             </div>
         </div>
         <div class="page-content">
@@ -100,10 +107,10 @@
                                                                 </div>
                                                             </td>
                                                         </sec:ifAnyGranted>
+                                                        </tr>
+                                                    </table>
+                                                </td>
                                             </tr>
-                                        </table>
-                                    </td>
-                                        </tr>
                                         </table>
                                     </g:elseif>
                                     <g:else>
@@ -201,7 +208,7 @@
                                                                     Título: ${nota?.titulo}
                                                                 </div>
                                                                 <div class="text">
-                                                                    Descripcion: <%=nota?.descripcion%>
+                                                                    Descripcion: <%=nota?.descripcion%><br/>
                                                                     <g:if test="${nota?.documentos}">
                                                                         Archivos adjuntos<br/>
                                                                         <g:each in="${nota?.documentos}" var="documento">                            
@@ -257,6 +264,22 @@
                                         </div><!--/widget-body-->
                                     </div><!--/widget-box-->
                                 </g:if>
+                            </div>
+                            <div id="reasignarSolicitud" class="modal hide" style="width:600px;">
+                                <div class="modal-header">
+                                    <button data-dismiss="modal" class="close" type="button">×</button>
+                                    <h3>Usuarios</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <g:form name="myForm" class="form-horizontal" method="post">                                            
+                                        <g:hiddenField name="otorgamientoDePoder.id" value="${otorgamientoDePoderInstance?.id}" />                                            
+                                        <g:hiddenField name="version" value="${otorgamientoDePoderInstance?.version}" />
+                                        <g:render template="/otorgamientoDePoder/reasignarSolicitud" bean="${otorgamientoDePoder}"/>            
+                                        <div class="form-actions">
+                                            <g:actionSubmit class="btn btn-primary" action="reasignarSolicitud" value="${message(code: 'default.button.label', default: 'Aceptar')}" />
+                                        </div>
+                                    </g:form>
+                                </div>
                             </div>
                         </div>
                     </div>

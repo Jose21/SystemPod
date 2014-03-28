@@ -80,13 +80,18 @@ class CartaDeInstruccionDeOtorgamientoController {
     */
     def edit(Long id) {
         def cartaDeInstruccionDeOtorgamientoInstance = CartaDeInstruccionDeOtorgamiento.get(id)
+        def usuarios = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_NOTARIO")).collect {it.usuario}                
         if (!cartaDeInstruccionDeOtorgamientoInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'cartaDeInstruccionDeOtorgamiento.label', default: 'CartaDeInstruccionDeOtorgamiento'), id])
             redirect(action: "list")
             return
         }
 
-        [cartaDeInstruccionDeOtorgamientoInstance: cartaDeInstruccionDeOtorgamientoInstance, otorgamientoDePoderId : (params.otorgamientoDePoderId)]
+        [
+            cartaDeInstruccionDeOtorgamientoInstance: cartaDeInstruccionDeOtorgamientoInstance,
+            otorgamientoDePoderId : (params.otorgamientoDePoderId),
+            usuarios : usuarios
+        ]
     }
     /**
     * Metodo para actualizar los datos de un registro

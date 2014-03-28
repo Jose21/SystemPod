@@ -10,11 +10,11 @@
         <div class="page-header position-relative">
             <g:if test="${session.idOtorgamientoDePoder}">
                 <br/>
-                    <h1>Crear Notificación de Rechazo</h1>
+                <h1>Crear Notificación de Rechazo</h1>
                 <br/>
             </g:if>
             <g:else><h1>Crear: Turno</h1></g:else>
-                
+
         </div>
 
         <div class="container-fluid">
@@ -50,8 +50,8 @@
                 </ul>
             </g:hasErrors>
 
-                
-                  <g:form class="form-horizontal" action="save" >
+
+            <g:form class="form-horizontal" action="save" >
                 <g:render template="form"/>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_CONVENIOS">
                     <div class="form-actions">
@@ -64,7 +64,7 @@
                     </div>
                 </sec:ifAnyGranted>
             </g:form>
-        
+
         </div>
     </body>
 </html>

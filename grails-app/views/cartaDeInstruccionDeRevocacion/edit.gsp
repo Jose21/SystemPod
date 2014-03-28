@@ -27,15 +27,36 @@
         </ul>
       </g:hasErrors>
 
-          <g:form class="form-horizontal" method="post" >
+          <g:form name="myForm" class="form-horizontal" method="post" action="save">
             <g:hiddenField name="id" value="${cartaDeInstruccionDeRevocacionInstance?.id}" />
             <g:hiddenField name="version" value="${cartaDeInstruccionDeRevocacionInstance?.version}" />
             <g:hiddenField name="revocacionDePoderId" value="${revocacionDePoderId}"/>
             <g:render template="form"/>
-            <div class="form-actions">
-              <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+            <h3 id="bloqueAsignacionExpedientes"  class="header smaller lighter blue">Asignación de Expediente</h3>
+                <br/>
+                <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'asignar', 'error')} required">
+                    <label for="asignar" class="control-label">
+                        <g:message code="revocacionDePoder.asignar.label" default="Asignar A" />
+                        <span class="required-indicator">*</span>
+                    </label>
+                    <div class="controls">
+                        <g:select id="asignar" name="asignar.id" from="${usuarios}" optionKey="id"  value="${revocacionDePoderInstance?.asignar?.id}" noSelection="['':'-Notarios-']" class="span6 many-to-one validate[required]"/>
+                    </div>
+                </div>
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES">
+                <div class="form-actions">
+                    <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}"/>
+                </div>
+                </sec:ifAnyGranted>
+                <sec:ifAnyGranted roles="ROLE_PODERES_RESOLVEDOR">
+                <div class="form-actions">
+                    <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.label', default: 'Enviar')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');"/>
+                </div>
+                </sec:ifAnyGranted>
+            <!--div class="form-actions"-->
+              <!--g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /-->
               <!--g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /-->
-            </div>
+            <!--/div-->
           </g:form>
     </div>
   </body>

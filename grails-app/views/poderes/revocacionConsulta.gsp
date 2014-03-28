@@ -99,10 +99,10 @@
                         <g:hiddenField name="inActive" value="porNumeroEscritura"/>
                         <div class="control-group">
                             <div class="row-fluid input-prepend">
-                                <label for="numeroEscritura" class="control-label">
-                                    <g:message code="revocacionDePoder.escrituraPublica.label" default="Número de Escritura:" />
+                                <label for="escrituraPublicaRevocacion" class="control-label">
+                                    <g:message code="revocacionDePoder.escrituraPublicaRevocacion.label" default="Número de Escritura:" />
                                 </label>
-                                <g:textField name="escrituraPublica" required="" value="${revocacionDePoderInstance?.escrituraPublica}"/>
+                                <g:textField name="escrituraPublica" required="" value="${revocacionDePoderInstance?.escrituraPublicaRevocacion}"/>
                                 <g:actionSubmit class="btn btn-primary" action="buscarPorNumeroEscrituraRevocacion" value="Buscar" />
                             </div>
                         </div>
@@ -182,7 +182,7 @@
                     <th><g:message code="revocacionDePoder.id.label"  default="Número de Folio" /></th>
                     <th><g:message code="revocacionDePoder.nombre.label" default="Apoderados a quien se Revoca el Poder" /></th>
                     <th><g:message code="revocacionDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
-                    <th><g:message code="revocacionDePoder.escrituraPublica.label" default="Escritura Publica" /></th>                    
+                    <th><g:message code="revocacionDePoder.escrituraPublicaRevocacion.label" default="Escritura Publica" /></th>                    
                     <th><g:message code="revocacionDePoder.fechaDeRevocacion.label" default="Fecha de Revocación" /></th>
                 </tr>
             </thead>
@@ -197,7 +197,7 @@
                             </g:each>
                         </td>
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "solicitadoPor")}</td>
-                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "escrituraPublica")}</td>                        
+                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "escrituraPublicaRevocacion")}</td>                        
                         <td><g:formatDate date="${revocacionDePoderInstance.fechaDeRevocacion}" /></td>
                     </tr>
                 </g:each>

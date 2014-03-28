@@ -17,7 +17,10 @@ class PoderesController {
     /**
     * Método para agregar a la bandeja de pendientes las solicitudes que corresponden.
     */
-    def index() {
+    def index(Integer max) {
+        
+        params.max = Math.min(max ?: 10, 100)
+        
         flash.warn = null
         //Mis Poderes:poderes que alguien me asigno o poderes que yo cree y que aun no eh asignado.
         def poderesList1 = OtorgamientoDePoder.where {
@@ -369,6 +372,27 @@ class PoderesController {
             ]
         )
     }
+    
+    /**
+    * Método para busquedas por número de escritura pública.
+    */
+    def buscarPorEscrituraPublica () {
+        def porEscrituraPublicaActive = null
+        if (params.inActive == "porEscrituraPublica") {
+            porEscrituraPublicaActive = "active"
+        }
+        def otorgamientoDePoderInstanceList = OtorgamientoDePoder.findAllByEscrituraPublicaLike("%"+params.escrituraPublica+"%", [sort: "id", order: "asc"])        
+        session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList
+        render(
+            view: "otorgamientoConsulta", 
+            model: [
+                otorgamientoDePoderInstanceList: otorgamientoDePoderInstanceList,
+                otorgamientoDePoderInstanceTotal: otorgamientoDePoderInstanceList.size(),
+                porEscrituraPublicaActive : porEscrituraPublicaActive       
+            ]
+        )       
+    }
+    
     /**
     * Método para busquedas por palabras clave.
     */
@@ -448,12 +472,12 @@ class PoderesController {
     /**
     * Método para busquedas por nombre de escritura pública de revocación.
     */
-    def buscarPorNumeroEscrituraRevocacion (){
+    def buscarPorNumeroEscrituraRevocacion (){        
         def porNumeroEscrituraActive = null
         if (params.inActive=="porNumeroEscritura") {
             porNumeroEscrituraActive = "active"
         }
-        def revocacionDePoderInstanceList = RevocacionDePoder.findAllByEscrituraPublicaLike("%"+params.escrituraPublica+"%", [sort: "id", order: "asc"])        
+        def revocacionDePoderInstanceList = RevocacionDePoder.findAllByEscrituraPublicaRevocacionLike("%"+params.escrituraPublica+"%", [sort: "id", order: "asc"])        
         session.revocacionDePoderInstanceList = revocacionDePoderInstanceList
         render(
             view: "revocacionConsulta", 
@@ -681,9 +705,12 @@ class PoderesController {
     def bitacoraList(Integer max){
         
         params.max = Math.min(max ?: 10, 100)
+        
         [
-            otorgamientoDePoderInstanceList: OtorgamientoDePoder.list(params), otorgamientoDePoderInstanceTotal: OtorgamientoDePoder.count(),
-            revocacionDePoderInstanceList: RevocacionDePoder.list(params), revocacionDePoderInstanceTotal: RevocacionDePoder.count()
+            otorgamientoDePoderInstanceList: OtorgamientoDePoder.list(params),
+            otorgamientoDePoderInstanceTotal: OtorgamientoDePoder.count(),
+            revocacionDePoderInstanceList: RevocacionDePoder.list(params),
+            revocacionDePoderInstanceTotal: RevocacionDePoder.count()
         ]                
     }
     

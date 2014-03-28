@@ -146,7 +146,7 @@
                             </label>
                             <div class="controls">
                                 <div class="row-fluid input-append">
-                                    <input readonly="readonly" class="span10 date-picker validate[required]"   id="fechaDeOtorgamiento" type="text" value="${otorgamientoDePoderInstance?.fechaDeOtorgamiento?(new SimpleDateFormat("dd/MM/yyyy")).format(otorgamientoDePoderInstance?.fechaDeOtorgamiento):""}" data-date-format="dd/mm/yyyy" name="fechaDeOtorgamiento" />      
+                                    <input readonly="readonly" class="span6 date-picker validate[required]"   id="fechaDeOtorgamiento" type="text" value="${otorgamientoDePoderInstance?.fechaDeOtorgamiento?(new SimpleDateFormat("dd/MM/yyyy")).format(otorgamientoDePoderInstance?.fechaDeOtorgamiento):""}" data-date-format="dd/mm/yyyy" name="fechaDeOtorgamiento" />      
                                     <span class="add-on">
                                         <i class="icon-calendar"></i>
                                     </span>

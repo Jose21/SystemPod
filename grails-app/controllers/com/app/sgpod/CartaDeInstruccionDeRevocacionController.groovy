@@ -83,13 +83,18 @@ class CartaDeInstruccionDeRevocacionController {
     */
     def edit(Long id) {
         def cartaDeInstruccionDeRevocacionInstance = CartaDeInstruccionDeRevocacion.get(id)
+        def usuarios = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_NOTARIO")).collect {it.usuario}                
         if (!cartaDeInstruccionDeRevocacionInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'cartaDeInstruccionDeRevocacion.label', default: 'CartaDeInstruccionDeRevocacion'), id])
             redirect(action: "list")
             return
         }
 
-        [cartaDeInstruccionDeRevocacionInstance: cartaDeInstruccionDeRevocacionInstance, revocacionDePoderId : (params.revocacionId)]
+        [
+            cartaDeInstruccionDeRevocacionInstance: cartaDeInstruccionDeRevocacionInstance,
+            revocacionDePoderId : (params.revocacionId),
+            usuarios : usuarios
+        ]
     }
     /**
     * Método para actualizar los datos de un registro.

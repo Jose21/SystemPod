@@ -127,10 +127,22 @@ class OtorgamientoDePoderController {
             def hoy = new Date()
             diasRestantes = fechaDeTerminoProrroga - hoy                        
         }
-                                  
+         
+        //usuarios para la reasignacion de solicitudes
+        def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}   
+        def usuarioNotarioPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_NOTARIO")).collect {it.usuario}
+        def usuariosReasignacion = usuarioResolvedorPoderes + usuarioNotarioPoderes
+        def usuarioInstance = springSecurityService.currentUser
+            usuariosReasignacion.remove(usuarioInstance)            
         def cartaDeInstruccion = CartaDeInstruccionDeOtorgamiento.findByOtorgamientoDePoder(otorgamientoDePoderInstance)
         
-        [otorgamientoDePoderInstance: otorgamientoDePoderInstance, cartaDeInstruccion : cartaDeInstruccion, ocultarBoton:ocultarBoton, diasRestantes : diasRestantes]                       
+        [
+            otorgamientoDePoderInstance: otorgamientoDePoderInstance,
+            cartaDeInstruccion : cartaDeInstruccion,
+            ocultarBoton:ocultarBoton,
+            diasRestantes : diasRestantes,
+            usuariosReasignacion : usuariosReasignacion
+        ]                       
     }
     /**
     * Método para editar un registro.
@@ -371,4 +383,22 @@ class OtorgamientoDePoderController {
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)                
         [ otorgamientoDePoderInstance : otorgamientoDePoderInstance ]
     }
+    /**
+    * Método para reasignar una solicitud en dado caso que aun no sea atendida
+    * por el usuario que la tiene actualmente asignada.
+    */
+    def reasignarSolicitud(Long id){        
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoder.id as long)        
+        
+        def usuarioInstance = Usuario.get(params.asignar.id as long)
+        otorgamientoDePoderInstance.asignar = usuarioInstance
+        otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+        otorgamientoDePoderInstance.save()
+        
+        flash.message = "Se ha Reasignado la Solicitud."        
+        redirect(controller: "poderes", action: "index")
+        
+        [ otorgamientoDePoderInstance : otorgamientoDePoderInstance ]
+    }
+    
 }
