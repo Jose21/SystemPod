@@ -198,11 +198,7 @@
                                                                     <span>Creada  Por: ${prorroga?.creadoPor?.firstName} ${prorroga?.creadoPor?.lastName}</span><br/>
                                                                     <i class="icon-time"></i>
                                                                     <span class="green">Fecha de Envio: <g:formatDate date="${prorroga?.fechaDeEnvio}" type="datetime" style="MEDIUM"/></span>                                                    
-                                                                </div>
-
-                                                                <div class="name">
-                                                                    Título: ${prorroga?.titulo}
-                                                                </div>
+                                                                </div>                                                                
                                                                 <div class="text">
                                                                     Motivos: ${prorroga?.motivos}                                                                                                                
                                                                 </div>

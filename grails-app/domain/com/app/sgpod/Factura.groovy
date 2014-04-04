@@ -31,9 +31,25 @@ class Factura {
     */
     Date fechaDePago
     /**
+    * Número de cesta.
+    */
+    String numeroDeCesta
+    /**
     * Comentario de rechazo de la factura.
     */
     String comentarioDeRechazo
+    /**
+    *campo para registrar si el documento fue cargado correctamente
+    */
+    boolean documentoCotizacion = false
+    /**
+    *campo para registrar si el documento fue cargado correctamente
+    */
+    boolean documentoXml = false
+    /**
+    *campo para registrar si el documento fue cargado correctamente
+    */
+    boolean documentoPdf = false
     
     static hasMany = [ documentos : DocumentoDePoder ]
 
@@ -45,5 +61,9 @@ class Factura {
         fechaDePago nullable:true
         creadaPor nullable:true
         comentarioDeRechazo nullable:true
+        documentoCotizacion blank:false
+        documentoXml blank:false
+        documentoXml blank:false
+        numeroDeCesta nullable:true
     }
 }

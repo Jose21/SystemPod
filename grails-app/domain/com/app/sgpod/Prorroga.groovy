@@ -5,11 +5,7 @@ import com.app.security.Usuario
 /**
 * Domain class donde se registran las prorrogas.
 */
-class Prorroga {
-    /**
-    * Título de la prorroga.
-    */
-    String titulo
+class Prorroga { 
     /**
     * Motivos de prorroga.
     */
@@ -35,8 +31,7 @@ class Prorroga {
     */
     Date fechaDeEnvio    
     
-    static constraints = {
-        titulo nullable:false
+    static constraints = {        
         motivos nullable:true
         fechaProrroga nullable:true
         creadoPor nullable:true

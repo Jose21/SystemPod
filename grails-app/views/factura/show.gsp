@@ -129,8 +129,9 @@
                                             </g:each>                                                                    
                                         </tbody>
                                     </table>
-                                </g:if>
-                                <div class="modal-footer wizard-actions col-xs-12">
+                                </g:if>                                
+
+                                <div class="modal-footer wizard-actions col-xs-12">                                     
                                     <g:if test="${facturaInstance?.documentos}"> 
                                         <table class="table table-bordered table-striped" border="2">
                                             <thead>
@@ -152,30 +153,107 @@
                                                         </g:each>
                                                     </td>                        
                                                 </tr>
-                                            </tbody>
+                                            </tbody>                                                                                                                                  
                                         </table>
                                     </g:if>
+                                    <div class="space-24"></div>
+                                    <h3 class="header smaller lighter blue" align="left">
+                                        Verificación de Documentos                                        
+                                    </h3>                                    
+                                    <div class="row-fluid">
+                                        <g:form action="saveListaDocumentos">
+                                            <g:hiddenField name="factura.id" value="${facturaInstance?.id}"/>
+                                            <div class="span4">
+                                                <div class="control-group">
+                                                    <label class="control-label"></label>
+
+                                                    <div class="controls">                                                        
+                                                        <label>
+                                                            <g:if test="${facturaInstance?.documentoCotizacion == false}">
+                                                                <input name="archivoCotizacion" class="ace ace-checkbox-2" type="checkbox" /> 
+                                                            </g:if> 
+                                                            <g:else>
+                                                                <input name="archivoCotizacion" class="ace ace-checkbox-2" type="checkbox" checked /> 
+                                                            </g:else>  
+                                                            <span class="lbl"> Cotización</span>
+                                                        </label>                                                                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="span2">
+                                                <div class="control-group">
+                                                    <label class="control-label"></label>
+
+                                                    <div class="controls">                                                                                                            
+                                                        <label>
+                                                            <g:if test="${facturaInstance?.documentoPdf == false}">
+                                                                <input name="archivoPdf" class="ace ace-checkbox-2" type="checkbox" /> 
+                                                            </g:if>
+                                                            <g:else>
+                                                                <input name="archivoPdf" class="ace ace-checkbox-2" type="checkbox" checked/>     
+                                                            </g:else>    
+                                                            <span class="lbl"> Pdf</span>
+                                                        </label>                                                    
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="span2">
+                                                <div class="control-group">
+                                                    <label class="control-label"></label>
+
+                                                    <div class="controls">                                                                                                                                                               
+                                                        <label>
+                                                            <g:if test="${facturaInstance?.documentoXml == false}">
+                                                                <input name="archivoXml" class="ace ace-checkbox-2" type="checkbox" />
+                                                            </g:if>
+                                                            <g:else>
+                                                                <input name="archivoXml" class="ace ace-checkbox-2" type="checkbox" checked/>
+                                                            </g:else>
+                                                            <span class="lbl"> Xml</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
+                                                <div class="form-actions">
+                                                    <g:if test="${ocultarBoton != true}">
+                                                        <g:submitButton name="create" class="btn btn-small btn-primary" value="${message(code: 'default.button.label', default: 'Guardar')}" />
+                                                    </g:if>
+                                                </div>
+                                            </sec:ifAnyGranted> 
+                                        </g:form>     
+                                    </div>
                                     <g:if test="${facturaInstance?.fechaDePago}"> 
                                         <table class="table table-bordered table-striped" border="2">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan="2"><g:message code="factura.fechaDePago.label" default="Pago Autorizado" /></th>                            
-                                                </tr>                            
-                                            </thead>
-                                            <tbody>                            
-                                                <tr>
-                                                    <td style="text-align:center" width="40%">
-                                                        Fecha de Pago
-                                                    </td>
-                                                    <td style="text-align:center" width="60%">
-                                                        <div class=" btn-small btn-info">                                                            
-                                                            <g:formatDate date="${facturaInstance?.fechaDePago}" />
-                                                        </div>
-                                                    </td>                        
-                                                </tr>
-                                            </tbody>
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2"><g:message code="factura.fechaDePago.label" default="Pago Autorizado" /></th>                            
+                                            </tr>                            
+                                        </thead>
+                                        <tbody>                            
+                                            <tr>
+                                                <td style="text-align:center" width="40%">
+                                                    Fecha de Pago
+                                                </td>
+                                                <td style="text-align:center" width="60%">
+                                                    <div class=" btn-small btn-info">                                                            
+                                                        <g:formatDate date="${facturaInstance?.fechaDePago}" />
+                                                    </div>
+                                                </td>                        
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center" width="40%">
+                                                    Número de Cesta
+                                                </td>
+                                                <td style="text-align:center" width="60%">
+                                                    <div class=" btn-small btn-info">                                                            
+                                                        ${facturaInstance?.numeroDeCesta}
+                                                    </div>
+                                                </td>                        
+                                            </tr>
+                                        </tbody>
                                         </table>
-                                    </g:if>
+                                    </g:if>                                    
                                 </div>
                                 <div id="agregarFecha" class="modal hide" style="width:600px;">
                                     <div class="modal-header">
@@ -183,7 +261,7 @@
                                         <h3>Agregar Fecha de Pago</h3>
                                     </div>
                                     <div class="modal-body">
-                                        <g:form class="form-horizontal" controller="factura" action="agregarFechaDePago" method="post">                                            
+                                        <g:form name="myForm" class="form-horizontal" controller="factura" action="agregarFechaDePago" method="post">                                            
                                             <g:hiddenField name="factura.id" value="${facturaInstance?.id}" />                                            
                                             <g:hiddenField name="version" value="${facturaInstance?.version}" />
                                             <g:render template="/factura/fechaDePagoForm" bean="${factura}"/>            
@@ -206,14 +284,14 @@
                                             <div class="form-actions">
                                                 <g:actionSubmit class="btn btn-primary" action="saveComentario" value="${message(code: 'default.button.label', default: 'Enviar')}" />
                                             </div>
-                                        </g:form>
+                                                </g:form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>        
-    </body>
-</html>
+            </div>            
+        </body>
+    </html>

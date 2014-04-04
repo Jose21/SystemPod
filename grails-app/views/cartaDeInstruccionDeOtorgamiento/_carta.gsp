@@ -101,7 +101,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <g:each in="${otorgamientoDePoderInstance?.apoderados}" status="i" var="apoderado">
+                    <g:each in="${otorgamientoDePoderInstance?.apoderados.sort{it.nombre}}" status="i" var="apoderado">
                         <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">                        
                             <td style="text-align: center">${fieldValue(bean: apoderado, field: "nombre")}</td>
                             <td style="text-align: center">${fieldValue(bean: apoderado, field: "puesto")}</td>

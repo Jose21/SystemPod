@@ -19,21 +19,21 @@ class FacturaController {
         redirect(action: "list", params: params)
     }
     /**
-    * Método apara enlistar los registros existentes en una domain class 
-    */
+     * Método apara enlistar los registros existentes en una domain class 
+     */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [facturaInstanceList: Factura.list(params), facturaInstanceTotal: Factura.count()]
     }
     /**
-    * Este método sirve para la creacion de un registro de tipo factura.
-    */
+     * Este método sirve para la creacion de un registro de tipo factura.
+     */
     def create() {
         [facturaInstance: new Factura(params)]
     }
     /**
-    * Método para guardar los registros en el sistema.
-    */
+     * Método para guardar los registros en el sistema.
+     */
     def save() {        
         def facturaInstance = new Factura(params)                        
         if(params.archivo){
@@ -47,6 +47,13 @@ class FacturaController {
             if (params.archivo2?.getSize()!=0) {            
                 def documentoInstance = new DocumentoDePoder(params)
                 documentoInstance.nombre = params.archivo2.getOriginalFilename()
+                facturaInstance.addToDocumentos(documentoInstance)                            
+            }
+        }
+        if(params.archivo3){
+            if (params.archivo3?.getSize()!=0) {            
+                def documentoInstance = new DocumentoDePoder(params)
+                documentoInstance.nombre = params.archivo3.getOriginalFilename()
                 facturaInstance.addToDocumentos(documentoInstance)                            
             }
         }
@@ -68,8 +75,8 @@ class FacturaController {
         redirect(controller: "poderes", action: "index")
     }
     /**
-    * Método para visualizar el registro creado en el sistema.
-    */
+     * Método para visualizar el registro creado en el sistema.
+     */
     def show(Long id) {
         def facturaInstance = Factura.get(id)
         
@@ -96,8 +103,8 @@ class FacturaController {
         ]
     }
     /**
-    * Método para editar un registro.
-    */
+     * Método para editar un registro.
+     */
     def edit(Long id) {
         def facturaInstance = Factura.get(id)
         if (!facturaInstance) {
@@ -109,8 +116,8 @@ class FacturaController {
         [facturaInstance: facturaInstance]
     }
     /**
-    * Método para actualizar los datos de un registro.
-    */
+     * Método para actualizar los datos de un registro.
+     */
     def update(Long id, Long version) {
         def facturaInstance = Factura.get(id)
         if (!facturaInstance) {
@@ -140,8 +147,8 @@ class FacturaController {
         redirect(action: "show", id: facturaInstance.id)
     }
     /**
-    * Método para eliminar el registro del sistema.
-    */
+     * Método para eliminar el registro del sistema.
+     */
     def delete(Long id) {
         def facturaInstance = Factura.get(id)
         if (!facturaInstance) {
@@ -161,8 +168,8 @@ class FacturaController {
         }
     }
     /**
-    * Método para mostrar las solicitudes que no estan asignadas.
-    */
+     * Método para mostrar las solicitudes que no estan asignadas.
+     */
     def asignarSolicitud(Long id) {
         def facturaInstance = Factura.get(id)        
         
@@ -190,9 +197,9 @@ class FacturaController {
         ]
     }
     /**
-    * Método para asignar las solicitudes y enviar la factura.
-    */
-    def asignarFactura(){        
+     * Método para asignar las solicitudes y enviar la factura.
+     */
+    def asignarFactura(){          
         def facturaInstance = Factura.get(params.facturaInstance.id) 
         
         if(params.otorgamientoDePoderList){            
@@ -234,8 +241,8 @@ class FacturaController {
         redirect(controller: "poderes", action: "index")       
     }
     /**
-    * Método para guardar la fecha de pago y enviar la factura.
-    */
+     * Método para guardar la fecha de pago y enviar la factura.
+     */
     def saveFecha(){
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");        
         def facturaInstance = Factura.get(params.factura.id) 
@@ -243,8 +250,14 @@ class FacturaController {
         params.fechaDePago = fechaDePago
         facturaInstance.fechaDePago = params.fechaDePago
         facturaInstance.asignadoPor = springSecurityService.currentUser
-        facturaInstance.asignadoA = facturaInstance.creadaPor
-        facturaInstance.fechaDeEnvio = new Date()                
+        def usuarioResolvedor = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}        
+        usuarioResolvedor.each{
+            facturaInstance.asignadoA = Usuario.get(it.id as long)               
+        }        
+        facturaInstance.fechaDeEnvio = new Date()
+        if(params.numeroDeCesta){
+            facturaInstance.numeroDeCesta = params.numeroDeCesta 
+        }
         
         flash.info = "Se ha enviado con éxito la información."        
         
@@ -255,8 +268,8 @@ class FacturaController {
         redirect(controller:"poderes", action: "index")
     }
     /**
-    * Método para guardar comentario de rechazo y enviar la factura.
-    */
+     * Método para guardar comentario de rechazo y enviar la factura.
+     */
     def saveComentario(){                
         def facturaInstance = Factura.get(params.factura.id)         
         facturaInstance.comentarioDeRechazo = params.comentarioDeRechazo
@@ -271,5 +284,27 @@ class FacturaController {
             return
         }               
         redirect(controller:"poderes", action: "index")
+    }
+    def saveListaDocumentos(){                        
+        def facturaInstance = Factura.get(params.factura.id)
+        if(params.archivoCotizacion){
+            facturaInstance.documentoCotizacion = true
+        }else{
+            facturaInstance.documentoCotizacion = false
+        }
+        if(params.archivoPdf){
+            facturaInstance.documentoPdf = true
+        }else{
+            facturaInstance.documentoPdf = false
+        }
+        if(params.archivoXml){
+            facturaInstance.documentoXml = true
+        }else{
+            facturaInstance.documentoXml = false
+        }        
+        facturaInstance.save()
+        flash.info = "Datos guardados correctamente."
+        redirect(action: "show", id: facturaInstance.id)
+        
     }
 }

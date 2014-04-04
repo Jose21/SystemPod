@@ -50,14 +50,7 @@
                                 </div>
                                 <div class="widget-body">
                                     <div class="widget-main">                                        
-                                        <div class="well">  
-
-                                            <g:if test="${prorrogaInstance?.titulo}">
-                                                <dl>
-                                                    <dt><g:message code="prorroga.titulo.label" default="Título " /></dt>
-                                                    <dd><g:fieldValue bean="${prorrogaInstance}" field="titulo"/></dd>
-                                                </dl>
-                                            </g:if>
+                                        <div class="well">                                             
                                             <g:if test="${prorrogaInstance?.motivos}">
                                                 <dl>
                                                     <dt><g:message code="prorroga.motivos.label" default="Motivos" /></dt>
