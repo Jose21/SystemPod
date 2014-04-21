@@ -12,6 +12,7 @@ import grails.plugins.springsecurity.Secured
 class CartaDeInstruccionDeOtorgamientoController {
     
     def springSecurityService
+    def bitacoraService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -49,7 +50,9 @@ class CartaDeInstruccionDeOtorgamientoController {
         otorgamientoDePoderInstance.asignar = usuarioInstance
             otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
             otorgamientoDePoderInstance.fechaDeEnvio = new Date()
-            otorgamientoDePoderInstance.save()        
+            otorgamientoDePoderInstance.save()
+            //se guardan datos en la bitacora
+            bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se creó Carta de Instrucción y se envió al Notario")
             cartaDeInstruccionDeOtorgamientoInstance.otorgamientoDePoder = otorgamientoDePoderInstance
                 
             if (!cartaDeInstruccionDeOtorgamientoInstance.save(flush: true)) {

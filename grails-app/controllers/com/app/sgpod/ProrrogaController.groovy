@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class ProrrogaController {
     def springSecurityService
+    def bitacoraService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -55,13 +56,15 @@ class ProrrogaController {
             def otorgamientoDePoderInstance = OtorgamientoDePoder.get(session.otorgamientoDePoderId)            
             otorgamientoDePoderInstance.addToProrrogas(prorrogaInstance).save()
             prorrogaInstance.asignadoA = otorgamientoDePoderInstance.creadaPor
-            //prorrogaInstance.save()
+            //se guardan datos en la bitacora
+            bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se agregó una Prorroga")
         }
         if (session.revocacionDePoderId) {                                                                                       
             def revocacionDePoderInstance = RevocacionDePoder.get(session.revocacionDePoderId)            
             revocacionDePoderInstance.addToProrrogas(prorrogaInstance).save()
             prorrogaInstance.asignadoA = revocacionDePoderInstance.creadaPor
-            //prorrogaInstance.save()
+            //se guardan datos en la bitacora
+            bitacoraService.agregarRevocacion(revocacionDePoderInstance, springSecurityService.currentUser, "Se agregó una Prorroga")
         }
         if (!prorrogaInstance.save(flush: true)) {
             render(view: "create", model: [prorrogaInstance: prorrogaInstance])

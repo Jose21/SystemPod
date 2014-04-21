@@ -13,6 +13,7 @@ import com.app.security.UsuarioRol
 class RevocacionDePoderController {
     
     def springSecurityService
+    def bitacoraService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -106,6 +107,8 @@ class RevocacionDePoderController {
             
             }
         }
+        //se guardan datos en la bitacora
+        bitacoraService.agregarRevocacion(revocacionDePoderInstance, springSecurityService.currentUser, "Se creó la Solicitud de Revocación de Poder")        
                         
         if (!revocacionDePoderInstance.save(flush: true)) {
             render(view: "create", model: [revocacionDePoderInstance: revocacionDePoderInstance])
@@ -423,6 +426,8 @@ class RevocacionDePoderController {
         revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
         revocacionDePoderInstance.fechaDeEnvio = new Date()
         revocacionDePoderInstance.save()
+        //se guardan datos en la bitacora
+        bitacoraService.agregarRevocacion(revocacionDePoderInstance, springSecurityService.currentUser, "Se envió la Solicitud de Revocación de Poder")        
         flash.message = "Se ha enviado con éxito la Solicitud."        
         redirect(controller: "poderes", action: "index")
     }
@@ -435,6 +440,8 @@ class RevocacionDePoderController {
         revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
         revocacionDePoderInstance.fechaDeEnvio = new Date()
         revocacionDePoderInstance.save()
+        //se guardan datos en la bitacora
+        bitacoraService.agregarRevocacion(revocacionDePoderInstance, springSecurityService.currentUser, "Se envió Copia Electrónica al Solicitante")        
         flash.message = "Se ha enviado con éxito la Copia Electrónica."        
         redirect(controller: "poderes", action: "index")
     }
@@ -450,6 +457,8 @@ class RevocacionDePoderController {
         revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
         revocacionDePoderInstance.fechaDeEnvio = new Date()
         revocacionDePoderInstance.save()
+        //se guardan datos en la bitacora
+        bitacoraService.agregarRevocacion(revocacionDePoderInstance, springSecurityService.currentUser, "Se turnó la solicitud al Usuario Resolvedor")
         flash.message = "Se ha turnado con éxito la Solicitud."        
         redirect(controller: "poderes", action: "index")
     }
@@ -471,7 +480,8 @@ class RevocacionDePoderController {
         revocacionDePoderInstance.asignar = usuarioInstance
         revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
         revocacionDePoderInstance.save()
-        
+        //se guardan datos en la bitacora
+        bitacoraService.agregarRevocacion(revocacionDePoderInstance, springSecurityService.currentUser, "Se reasignó la Solicitud")
         flash.message = "Se ha Reasignado la Solicitud."        
         redirect(controller: "poderes", action: "index")
         

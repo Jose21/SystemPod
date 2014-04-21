@@ -10,6 +10,7 @@ import grails.plugins.springsecurity.Secured
 class CartaDeInstruccionDeRevocacionController {
     
     def springSecurityService
+    def bitacoraService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -54,7 +55,9 @@ class CartaDeInstruccionDeRevocacionController {
             revocacionDePoderInstance.asignar = Usuario.get(params.asignar.id as long)
             revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
             revocacionDePoderInstance.fechaDeEnvio = new Date()
-            revocacionDePoderInstance.save() 
+            revocacionDePoderInstance.save()
+            //se guardan datos en la bitacora
+            bitacoraService.agregarRevocacion(revocacionDePoderInstance, springSecurityService.currentUser, "Se creó Carta de Instrucción y se envió al Notario")
             cartaDeInstruccionDeRevocacionInstance.revocacionDePoder = revocacionDePoderInstance                                
             if (!cartaDeInstruccionDeRevocacionInstance.save(flush: true)) {
                 render(view: "create", model: [cartaDeInstruccionDeRevocacionInstance: cartaDeInstruccionDeRevocacionInstance])

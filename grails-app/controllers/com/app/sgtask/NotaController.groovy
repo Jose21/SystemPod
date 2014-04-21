@@ -14,6 +14,7 @@ class NotaController {
 
     def historialDeTareaService
     def springSecurityService
+    def bitacoraService
     
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -30,7 +31,7 @@ class NotaController {
     /**
     * Este método sirve para la creacion de un registro de tipo nota.
     */
-    def create() {        
+    def create() {   
         if(params.tareaId){
             session.tareaId = params.tareaId as long
         }else{
@@ -51,7 +52,7 @@ class NotaController {
     /**
     * Método para guardar los registros en el sistema.
     */
-    def save() {
+    def save() {        
         params.agregadaPor = springSecurityService.currentUser
         def notaInstance = new Nota(params)
         if(session.tareaId){
@@ -75,7 +76,9 @@ class NotaController {
                 if(otorgamientoDePoderInstance){
                     otorgamientoDePoderInstance.apoderadosVigentes = otorgamientoDePoderInstance.apoderadosVigentes - revocacionDePoderInstance.apoderadosEliminar
                     otorgamientoDePoderInstance.solicitudEnProceso = false
-                    otorgamientoDePoderInstance.save()     
+                    otorgamientoDePoderInstance.save()
+                    //se guardan datos en la bitacora
+                bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se realizó una Revocacion de Poder")
                 }
             
                 def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}        
@@ -86,6 +89,8 @@ class NotaController {
                 revocacionDePoderInstance.fechaDeEnvio = new Date()
                 revocacionDePoderInstance.escrituraPublicaRevocacion = params.escrituraPublicaRevocacion
                 revocacionDePoderInstance.addToNotas(notaInstance).save(flush:true)
+                //se guardan datos en la bitacora
+                bitacoraService.agregarRevocacion(revocacionDePoderInstance, springSecurityService.currentUser, "Se envió la copia Electrónica con el número de Escritura Pública")
                 
             }else{
                 flash.error = "Debe Adjuntar el Archivo Electrónico."
@@ -103,7 +108,11 @@ class NotaController {
                 return
             }
         }
-        if(session.otorgamientoDePoderId){
+        if(session.otorgamientoDePoderId){           
+            def otorgamientoDePoderInstance = OtorgamientoDePoder.get(session.otorgamientoDePoderId as long)
+            otorgamientoDePoderInstance.addToNotas(notaInstance).save(flush:true)
+            //se guardan datos en la bitacora
+            bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se notificó el envio de Documento Físico")
             flash.info = "Se ha enviado la Notificación al Solicitante."
             redirect(controller: "poderes", action: "index") 
         }else if(session.revocacionDePoderId){

@@ -11,7 +11,7 @@
         <div class="page-header position-relative">            
             <div class="btn-group">
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
-                    <g:if test="${!cartaDeInstruccion | !revocacionDePoderInstance.escrituraPublicaRevocacion}">
+                    <g:if test="${!cartaDeInstruccion | !revocacionDePoderInstance.escrituraPublicaRevocacion && ocultarBoton != true}">
                         <g:link class="btn btn-success btn-small tip-bottom" controller="revocacionDePoder" action="existe" id="${revocacionDePoderInstance?.id}">
                             <i class="icon-external-link"></i> Aceptar y Enviar Solicitud
                         </g:link>

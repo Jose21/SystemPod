@@ -651,7 +651,6 @@
                                 <tr>
                                     <th></th>
                                     <th scope="col">Folio</th>                                    
-                                    <th scope="col">Título</th>
                                     <th scope="col">Enviado por</th>
                                     <th scope="col">Fecha de Envío</th>
                                 </tr>
@@ -666,8 +665,7 @@
                                                     ${prorrogaInstance?.id}
                                                 </span>
                                             </g:link>
-                                        </td>                                        
-                                        <td>${fieldValue(bean: prorrogaInstance, field: "titulo")}</td>
+                                        </td>                                                                                
                                         <td>${fieldValue(bean: prorrogaInstance, field: "creadoPor")}</td>
                                         <td><g:formatDate date="${prorrogaInstance?.fechaDeEnvio}" /></td>
                                     </tr>

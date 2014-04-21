@@ -69,10 +69,7 @@ class Poder {
     * Factura correspondiente.
     */
     Factura factura
-    /**
-    * Bitacora correspondiente.
-    */
-    Bitacora bitacora
+   
     
     /**
     * Esta es la relación que tiene con otras tablas en una relacion tipo  1-n.
@@ -82,7 +79,8 @@ class Poder {
         tareas : Tarea,
         apoderados : Apoderado,
         notas : Nota,
-        prorrogas : Prorroga
+        prorrogas : Prorroga,
+        bitacoras : Bitacora
     ]
     
     static constraints = {
@@ -109,7 +107,8 @@ class Poder {
         notarioCorrespondiente nullable:true,blank:true
         facturado blank:false
         factura nullable:true
-        bitacora nullable:true
+        bitacoras nullable:true
+                
     }
     
     String toString() {

@@ -11,6 +11,7 @@ import com.app.security.UsuarioRol
 class OtorgamientoDePoderController {
     
     def springSecurityService
+    def bitacoraService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -75,6 +76,8 @@ class OtorgamientoDePoderController {
             render(view: "create", model: [otorgamientoDePoderInstance: otorgamientoDePoderInstance])
             return
         }
+        //se guardan datos en la bitacora
+        bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se creó la Solicitud de Otorgamiento de Poder")        
                               
         flash.message = message(code: 'default.created.message', args: [message(code: 'poder.label', default: 'Poder'), otorgamientoDePoderInstance.id])
         redirect(action: "edit", id: otorgamientoDePoderInstance.id)
@@ -106,10 +109,14 @@ class OtorgamientoDePoderController {
         if(otorgamientoDePoderInstance.creadaPor == springSecurityService.currentUser && otorgamientoDePoderInstance.documentos){
             otorgamientoDePoderInstance.voBoCopiaElectronica = true
             otorgamientoDePoderInstance.save()
+            //se guardan datos en la bitacora
+            bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "El Usuario Solicitante recibió la copia Electrónica")
         }
         if(otorgamientoDePoderInstance.creadaPor == springSecurityService.currentUser && otorgamientoDePoderInstance.notas){
             otorgamientoDePoderInstance.voBoDocumentoFisico = true
             otorgamientoDePoderInstance.save()
+            //se guardan datos en la bitacora
+            bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "El Usuario Solicitante recibió la Notificación de envío Documento Físico")
         }
         
         //valor de prorrogas
@@ -199,6 +206,8 @@ class OtorgamientoDePoderController {
             otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
             otorgamientoDePoderInstance.notarioCorrespondiente = springSecurityService.currentUser
             otorgamientoDePoderInstance.fechaDeEnvio = new Date()
+            //se guardan datos en la bitacora
+            bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se envió la copia de Electrónica")
         } else {
             params.fechaDeOtorgamiento = null
         }
@@ -343,6 +352,8 @@ class OtorgamientoDePoderController {
         otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
         otorgamientoDePoderInstance.fechaDeEnvio = new Date()
         otorgamientoDePoderInstance.save()
+         //se guardan datos en la bitacora
+        bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se envió la solicitud")
         flash.message = "Se ha enviado con éxito la Solicitud."        
         redirect(controller: "poderes", action: "index")
     }
@@ -358,6 +369,8 @@ class OtorgamientoDePoderController {
         //end
         otorgamientoDePoderInstance.fechaDeEnvio = new Date()
         otorgamientoDePoderInstance.save()
+        //se guardan datos en la bitacora
+        bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se envió Copia Electrónica al Solicitante")
         flash.message = "Se ha enviado con éxito la Copia Electrónica."        
         redirect(controller: "poderes", action: "index")
     }
@@ -373,6 +386,8 @@ class OtorgamientoDePoderController {
         otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
         otorgamientoDePoderInstance.fechaDeEnvio = new Date()
         otorgamientoDePoderInstance.save()
+        //se guardan datos en la bitacora
+        bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se turnó la solicitud al Usuario Resolvedor")
         flash.message = "Se ha turnado con éxito la Solicitud."        
         redirect(controller: "poderes", action: "index")
     }    
@@ -394,7 +409,8 @@ class OtorgamientoDePoderController {
         otorgamientoDePoderInstance.asignar = usuarioInstance
         otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
         otorgamientoDePoderInstance.save()
-        
+        //se guardan datos en la bitacora
+        bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se reasignó la Solicitud")
         flash.message = "Se ha Reasignado la Solicitud."        
         redirect(controller: "poderes", action: "index")
         
