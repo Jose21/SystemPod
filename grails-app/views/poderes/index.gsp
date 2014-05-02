@@ -10,7 +10,7 @@
         <div class="page-header position-relative">
             <h1>Bandeja Principal</h1>
         </div><!--/.page-header-->             
-       ter <g:render template="/shared/alerts" />
+       <g:render template="/shared/alerts" />
         <br/>        
         <div class="tabbable">
             <ul id="inbox-tabs" class="inbox-tabs nav nav-tabs padding-16 tab-size-bigger tab-space-1">
