@@ -69,6 +69,14 @@ class Poder {
     * Factura correspondiente.
     */
     Factura factura
+    /**
+    * bandera para ocultar la solicitud de la bandeja del solicitante
+    */
+    boolean ocultadoPorSolicitante = false
+    /**
+    * bandera para ocultar la solicitud de la bandeja del usuario resolvedor
+    */
+    boolean ocultadoPorResolvedor = false
    
     
     /**
@@ -108,6 +116,8 @@ class Poder {
         facturado blank:false
         factura nullable:true
         bitacoras nullable:true
+        ocultadoPorSolicitante blank:false
+        ocultadoPorResolvedor blank:false
                 
     }
     

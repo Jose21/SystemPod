@@ -487,4 +487,27 @@ class RevocacionDePoderController {
         
         [ revocacionDePoderInstance : revocacionDePoderInstance ]
     }
+    
+    def ocultarPorResolvedor(Long id){          
+        def revocacionDePoderInstance = RevocacionDePoder.get(params.id as long)                
+        revocacionDePoderInstance.ocultadoPorResolvedor = true
+        revocacionDePoderInstance.save()
+        //se guardan datos en la bitacora
+        bitacoraService.agregarRevocacion(revocacionDePoderInstance, springSecurityService.currentUser, "Se ocultó la Solicitud")
+        flash.message = "Se ha Ocultado la Solicitud."        
+        redirect(controller: "poderes", action: "index")
+        
+        [ revocacionDePoderInstance : revocacionDePoderInstance ]
+    }
+    
+    def ocultarPorSolicitante(Long id){         
+        def revocacionDePoderInstance = RevocacionDePoder.get(params.id as long)                
+        revocacionDePoderInstance.ocultadoPorSolicitante = true
+        revocacionDePoderInstance.save()        
+        flash.message = "Se ha Ocultado la Solicitud."        
+        redirect(controller: "poderes", action: "index")
+        
+        [ revocacionDePoderInstance : revocacionDePoderInstance ]
+    }
+    
 }

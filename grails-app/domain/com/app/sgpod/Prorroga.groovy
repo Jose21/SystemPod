@@ -29,7 +29,11 @@ class Prorroga {
     /**
     * Fecha de envio.
     */
-    Date fechaDeEnvio    
+    Date fechaDeEnvio
+    /**
+    * bandera para ocultar la prorroga de la bandeja del solicitante
+    */
+    boolean ocultado = false
     
     static constraints = {        
         motivos nullable:true
@@ -38,5 +42,6 @@ class Prorroga {
         asignadoA nullable:true
         dateCreated nullable:true
         fechaDeEnvio nullable:true
+        ocultado blank:false
     }
 }

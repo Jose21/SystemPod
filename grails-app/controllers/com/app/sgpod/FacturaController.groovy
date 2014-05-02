@@ -307,4 +307,23 @@ class FacturaController {
         redirect(action: "show", id: facturaInstance.id)
         
     }
+    def ocultarPorResolvedor(Long id){         
+        def facturaInstance = Factura.get(params.id as long)                
+        facturaInstance.ocultadoPorResolvedor = true
+        facturaInstance.save()              
+        flash.message = "Se ha Ocultado la Factura."        
+        redirect(controller: "poderes", action: "index")
+        
+        [ facturaInstance : facturaInstance ]
+    }
+    
+    def ocultarPorUsuarioFacturas(Long id){          
+        def facturaInstance = Factura.get(params.id as long)                
+        facturaInstance.ocultadoPorFacturas = true
+        facturaInstance.save()        
+        flash.message = "Se ha Ocultado la Factura."        
+        redirect(controller: "poderes", action: "index")
+        
+        [ facturaInstance : facturaInstance ]
+    }
 }

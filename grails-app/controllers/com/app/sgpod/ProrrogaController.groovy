@@ -176,4 +176,13 @@ class ProrrogaController {
             redirect(action: "show", id: id)
         }
     }
+    def ocultar(Long id){         
+        def prorrogaInstance = Prorroga.get(params.id as long)                
+        prorrogaInstance.ocultado = true
+        prorrogaInstance.save()        
+        flash.message = "Se ha Ocultado la Prorroga."        
+        redirect(controller: "poderes", action: "index")
+        
+        [ prorrogaInstance : prorrogaInstance ]
+    }
 }

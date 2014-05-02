@@ -39,9 +39,7 @@
                                 
                             <th><g:message code="prorroga.creadoPor.label" default="Creado Por" /></th>
                                 
-                                <g:sortableColumn property="dateCreated" title="${message(code: 'prorroga.dateCreated.label', default: 'Date Created')}" />
-                                
-                                <g:sortableColumn property="dias" title="${message(code: 'prorroga.dias.label', default: 'Dias')}" />
+                                <g:sortableColumn property="dateCreated" title="${message(code: 'prorroga.dateCreated.label', default: 'Date Created')}" />                                                                
                                 
                                 <g:sortableColumn property="fechaDeEnvio" title="${message(code: 'prorroga.fechaDeEnvio.label', default: 'Fecha De Envio')}" />
                                 
@@ -57,9 +55,7 @@
                                 
                                 <td>${fieldValue(bean: prorrogaInstance, field: "creadoPor")}</td>
                                 
-                                <td><g:formatDate date="${prorrogaInstance.dateCreated}" /></td>
-                                
-                                <td>${fieldValue(bean: prorrogaInstance, field: "dias")}</td>
+                                <td><g:formatDate date="${prorrogaInstance.dateCreated}" /></td>                                                                
                                 
                                 <td><g:formatDate date="${prorrogaInstance.fechaDeEnvio}" /></td>
                                 

@@ -417,4 +417,26 @@ class OtorgamientoDePoderController {
         [ otorgamientoDePoderInstance : otorgamientoDePoderInstance ]
     }
     
+     def ocultarPorResolvedor(Long id){          
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.id as long)                
+        otorgamientoDePoderInstance.ocultadoPorResolvedor = true
+        otorgamientoDePoderInstance.save()
+        //se guardan datos en la bitacora
+        bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se ocultó la Solicitud")
+        flash.message = "Se ha Ocultado la Solicitud."        
+        redirect(controller: "poderes", action: "index")
+        
+        [ otorgamientoDePoderInstance : otorgamientoDePoderInstance ]
+    }
+    
+    def ocultarPorSolicitante(Long id){         
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.id as long)                
+        otorgamientoDePoderInstance.ocultadoPorSolicitante = true
+        otorgamientoDePoderInstance.save()        
+        flash.message = "Se ha Ocultado la Solicitud."        
+        redirect(controller: "poderes", action: "index")
+        
+        [ otorgamientoDePoderInstance : otorgamientoDePoderInstance ]
+    }
+    
 }

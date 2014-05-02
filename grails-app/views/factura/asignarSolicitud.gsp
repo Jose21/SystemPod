@@ -57,7 +57,7 @@
                                                                 <td>${fieldValue(bean: revocacionInstance, field: "notarioCorrespondiente")}</td>
                                                                 <td>${fieldValue(bean: revocacionInstance, field: "categoriaDeTipoDePoder.tipoDePoder.nombre")}</td>
                                                                 <td>${fieldValue(bean: revocacionInstance, field: "categoriaDeTipoDePoder.nombre")}</td>                                                      
-                                                                <td>${fieldValue(bean: revocacionInstance, field: "escrituraPublica")}</td>                                                            
+                                                                <td>${fieldValue(bean: revocacionInstance, field: "escrituraPublicaRevocacion")}</td>                                                            
                                                             </tr>
                                                         </g:each>
                                                         <tr>

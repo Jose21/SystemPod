@@ -50,6 +50,14 @@ class Factura {
     *campo para registrar si el documento fue cargado correctamente
     */
     boolean documentoPdf = false
+    /**
+    * bandera para ocultar la factura de la bandeja del solicitante
+    */
+    boolean ocultadoPorResolvedor = false
+    /**
+    * bandera para ocultar la factura de la bandeja del usuario facturas
+    */
+    boolean ocultadoPorFacturas = false
     
     static hasMany = [ documentos : DocumentoDePoder ]
 
@@ -65,5 +73,7 @@ class Factura {
         documentoXml blank:false
         documentoXml blank:false
         numeroDeCesta nullable:true
+        ocultadoPorResolvedor blank:false
+        ocultadoPorFacturas blank:false
     }
 }

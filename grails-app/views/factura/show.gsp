@@ -11,7 +11,7 @@
         <div class="page-header position-relative">           
             <div class="btn-group">
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR"> 
-                    <g:if test="${ocultarBoton != true}">
+                    <g:if test="${ocultarBoton != true && !facturaInstance.fechaDePago}">
                         <g:link class="btn btn-success btn-small tip-bottom" action="asignarSolicitud" id="${facturaInstance?.id}">
                             <i class="icon-thumbs-up"></i> Asignar a Solicitudes
                         </g:link>
@@ -25,7 +25,7 @@
                     </g:if>
                 </sec:ifAnyGranted> 
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_FACTURAS"> 
-                    <g:if test="${ocultarBoton != true}">
+                    <g:if test="${ocultarBoton != true && !facturaInstance.fechaDePago}">
                         <a class="btn btn-small btn-danger tip-bottom" href="#comentarioDeRechazo" data-toggle="modal">
                             <i class="icon-thumbs-down"></i> Rechazar Solicitud
                         </a>

@@ -15,8 +15,8 @@ class PoderesController {
     def grailsApplication
 
     /**
-    * Método para agregar a la bandeja de pendientes las solicitudes que corresponden.
-    */
+     * Método para agregar a la bandeja de pendientes las solicitudes que corresponden.
+     */
     def index(Integer max) {
         
         params.max = Math.min(max ?: 10, 100)
@@ -24,10 +24,10 @@ class PoderesController {
         flash.warn = null
         //Mis Poderes:poderes que alguien me asigno o poderes que yo cree y que aun no eh asignado.
         def poderesList1 = OtorgamientoDePoder.where {
-            (creadaPor == springSecurityService.currentUser &&  asignar == springSecurityService.currentUser) || (creadaPor == springSecurityService.currentUser && asignar == null) || (asignar == springSecurityService.currentUser)
-        }
+            (creadaPor == springSecurityService.currentUser &&  asignar == springSecurityService.currentUser && ocultadoPorSolicitante == false) || (creadaPor == springSecurityService.currentUser && asignar == null) || (asignar == springSecurityService.currentUser && ocultadoPorSolicitante == false)
+        }               
         def poderesList2 = RevocacionDePoder.where {
-            (creadaPor == springSecurityService.currentUser &&  asignar == springSecurityService.currentUser) || (creadaPor == springSecurityService.currentUser && asignar == null) || (asignar == springSecurityService.currentUser)
+            (creadaPor == springSecurityService.currentUser &&  asignar == springSecurityService.currentUser && ocultadoPorSolicitante == false) || (creadaPor == springSecurityService.currentUser && asignar == null) || (asignar == springSecurityService.currentUser && ocultadoPorSolicitante == false)
         }    
         def poderesList = poderesList1.list() + poderesList2.list()
         
@@ -98,7 +98,7 @@ class PoderesController {
                         revocacionesVerdesList.add(poder)
                     }
                 }else{                
-                   if(diasPosteriores <= parameters.estadoCriticoSolicitud){
+                    if(diasPosteriores <= parameters.estadoCriticoSolicitud){
                         revocacionesVerdesList.add(poder)
                     }else if(diasPosteriores <= parameters.estadoSemiSolicitud && diasPosteriores > parameters.estadoCriticoSolicitud){
                         revocacionesAmarillosList.add(poder)
@@ -166,6 +166,7 @@ class PoderesController {
             enviadosOtorgamientosSolicitante = g.list{
                 eq ("asignadaPor", springSecurityService.currentUser)
                 eq ("asignar", usuarioSolicitanteInstance)
+                eq ("ocultadoPorResolvedor", false)
             }
             enviados3 = enviados3 + enviadosOtorgamientosSolicitante
             //solicitudes de revocacion
@@ -173,6 +174,7 @@ class PoderesController {
             enviadosRevocacionesSolicitante = h.list{
                 eq ("asignadaPor", springSecurityService.currentUser)
                 eq ("asignar", usuarioSolicitanteInstance)
+                eq ("ocultadoPorResolvedor", false)
             }
             enviados4 = enviados4 + enviadosRevocacionesSolicitante
         }
@@ -207,7 +209,7 @@ class PoderesController {
         listaPoderes.each { poder ->
             if(poder.prorrogas){
                 poder.prorrogas.each{prorroga ->
-                    if(prorroga.asignadoA == springSecurityService.currentUser){                        
+                    if(prorroga.asignadoA == springSecurityService.currentUser && prorroga.ocultado == false){                        
                         prorrogaList.add(prorroga)                        
                     }
                 }               
@@ -215,10 +217,10 @@ class PoderesController {
         }
         //prorrogas de revocacion de poder
         def listaPoderesRevocacion = RevocacionDePoder.list()              
-        listaPoderesRevocacion.each { poder ->
+        listaPoderesRevocacion.each{ poder ->
             if(poder.prorrogas){
                 poder.prorrogas.each{prorroga ->
-                    if(prorroga.asignadoA == springSecurityService.currentUser){                        
+                    if(prorroga.asignadoA == springSecurityService.currentUser && prorroga.ocultado == false){                        
                         prorrogaList.add(prorroga)                        
                     }
                 }               
@@ -227,9 +229,9 @@ class PoderesController {
         prorrogaList.sort{ it.getId() }
         
         //facturas
-        def facturaList = Factura.findAllByAsignadoA(springSecurityService.currentUser)  
+        def facturaList = Factura.findAllByAsignadoAAndOcultadoPorFacturas(springSecurityService.currentUser, false)  
         //facturas enviadas
-        def facturasEnviadasList = Factura.findAllByAsignadoPor(springSecurityService.currentUser)
+        def facturasEnviadasList = Factura.findAllByAsignadoPorAndOcultadoPorResolvedor(springSecurityService.currentUser, false)
         
         render (
             view: "index", 
@@ -285,8 +287,8 @@ class PoderesController {
     
     }
     /**
-    * Método para busquedas por nombre del apoderado.
-    */
+     * Método para busquedas por nombre del apoderado.
+     */
     def buscarNombreApoderado (){
         def nombreApoderadoActive = null
         if (params.inActive=="nombreApoderado") {
@@ -310,8 +312,8 @@ class PoderesController {
         )       
     }
     /**
-    * Método para busquedas por delegación.
-    */
+     * Método para busquedas por delegación.
+     */
     def buscarPorDelegacion (){
         def porDelegacionActive = null
         if (params.inActive=="porDelegacion") {
@@ -335,8 +337,8 @@ class PoderesController {
         )       
     }       
     /**
-    * Método para busquedas por fecha de otorgamiento.
-    */
+     * Método para busquedas por fecha de otorgamiento.
+     */
     def buscarPorFechaOtorgamiento () {
         def porFechaOtorgamientoActive = null
         if (params.inActive=="porFechaOtorgamiento") {
@@ -374,8 +376,8 @@ class PoderesController {
     }
     
     /**
-    * Método para busquedas por número de escritura pública.
-    */
+     * Método para busquedas por número de escritura pública.
+     */
     def buscarPorEscrituraPublica () {
         def porEscrituraPublicaActive = null
         if (params.inActive == "porEscrituraPublica") {
@@ -394,8 +396,8 @@ class PoderesController {
     }
     
     /**
-    * Método para busquedas por palabras clave.
-    */
+     * Método para busquedas por palabras clave.
+     */
     def buscarPorTags () {
         def porTagsActive = null
         if (params.inActive == "porTags") {
@@ -419,8 +421,8 @@ class PoderesController {
         )       
     }
     /**
-    * Método para busquedas por nombre del apoderado de revocacion.
-    */
+     * Método para busquedas por nombre del apoderado de revocacion.
+     */
     def buscarNombreApoderadoRevocacion (){
         def nombreApoderadoActive = null
         if (params.inActive=="nombreApoderado") {
@@ -444,8 +446,8 @@ class PoderesController {
         )       
     }
     /**
-    * Método para busquedas por delegacion de la revocación.
-    */
+     * Método para busquedas por delegacion de la revocación.
+     */
     def buscarPorDelegacionRevocacion (){
         def porDelegacionActive = null
         if (params.inActive=="porDelegacion") {
@@ -470,8 +472,8 @@ class PoderesController {
         )       
     }
     /**
-    * Método para busquedas por nombre de escritura pública de revocación.
-    */
+     * Método para busquedas por nombre de escritura pública de revocación.
+     */
     def buscarPorNumeroEscrituraRevocacion (){        
         def porNumeroEscrituraActive = null
         if (params.inActive=="porNumeroEscritura") {
@@ -489,8 +491,8 @@ class PoderesController {
         )       
     }
     /**
-    * Método para busquedas por fecha de revocación.
-    */
+     * Método para busquedas por fecha de revocación.
+     */
     def buscarPorFechaRevocacion () {        
         def porFechaRevocacionActive = null
         if (params.inActive=="porFechaRevocacion") {
@@ -527,8 +529,8 @@ class PoderesController {
         )
     }
     /**
-    * Método para busquedas por palabras claves en revocacion de poder.
-    */
+     * Método para busquedas por palabras claves en revocacion de poder.
+     */
     def buscarPorTagsRevocacion () {
         def porTagsActive = null
         if (params.inActive == "porTags") {
@@ -552,8 +554,8 @@ class PoderesController {
         )       
     }
     /**
-    * Método para busquedas por nombre en busqueda general.
-    */
+     * Método para busquedas por nombre en busqueda general.
+     */
     def buscarNombreGeneral (){
         def nombreApoderadoActive = null
         if (params.inActive=="nombreApoderado") {
@@ -587,8 +589,8 @@ class PoderesController {
         )       
     }
     /**
-    * Método para busquedas por nombre del solciitante en busqueda general.
-    */
+     * Método para busquedas por nombre del solciitante en busqueda general.
+     */
     def buscarPorSolicitanteGeneral () {
         def solicitadoPorActive = null
         if (params.inActive=="solicitadoPor") {
@@ -610,8 +612,8 @@ class PoderesController {
         )       
     }
     /**
-    * Método para busquedas por palabras clave de busqueda general.
-    */
+     * Método para busquedas por palabras clave de busqueda general.
+     */
     def buscarPorTagsGeneral () {
         def porTagsActive = null
         if (params.inActive == "porTags") {
@@ -645,8 +647,8 @@ class PoderesController {
         )       
     }
     /**
-    * Método para generar reportes en las busquedas.
-    */
+     * Método para generar reportes en las busquedas.
+     */
     def generarReporteOtorgamiento(){
         def otorgamientoDePoderInstanceList = session.otorgamientoDePoderInstanceList
         def inActive = session.inActive
