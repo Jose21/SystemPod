@@ -326,4 +326,25 @@ class FacturaController {
         
         [ facturaInstance : facturaInstance ]
     }
+         
+    /**
+     * Método para busquedas por número de escritura pública.
+     */
+    def buscarPorId() {
+        flash.message = null
+        if(params.id.isInteger()){
+            def facturasList = Factura.findAllById(params.id, [sort: "id", order: "asc"])                  
+            render(
+                view: "list", 
+                model: [
+                    facturasList : facturasList,
+                    facturasListInstanceTotal : facturasList.size()                     
+                ]
+            )
+        }else{
+            flash.message = "Sólo se aceptar Números Enteros."
+            render(view: "list")
+            return
+        }                      
+    }
 }

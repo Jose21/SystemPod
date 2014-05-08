@@ -249,7 +249,7 @@
             <tbody>
                 <g:each in="${convenioInstanceList}" status="i" var="convenioInstance">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                        <td style="text-align:center"><g:link action="edit" id="${convenioInstance.id}"><span class="badge">${convenioInstance?.id}</span></g:link></td>
+                        <td style="text-align:center"><g:link action="show" id="${convenioInstance.id}"><span class="badge">${convenioInstance?.id}</span></g:link></td>
                         <td>${fieldValue(bean: convenioInstance, field: "numeroDeConvenio")}</td>
                         <td>${fieldValue(bean: convenioInstance, field: "objeto")}</td>
                         <td><g:formatDate date="${convenioInstance.dateCreated}" /></td>

@@ -15,6 +15,7 @@ import com.app.sgpod.OtorgamientoDePoder
 import com.app.sgpod.RevocacionDePoder
 import com.app.security.Rol
 import com.app.security.UsuarioRol
+//import com.app.ses.AmazonSES
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class TareaController {
@@ -297,6 +298,8 @@ class TareaController {
             responsable.tarea = tareaInstance
             if (responsable.save(flush:true)) {
                 notificacionesService.tareaAsignada(tareaInstance, responsable.usuario)
+                //AmazonSES enviarEmail = new AmazonSES()
+                //enviarEmail.sendMail("kokoro.miramar@gmail.com", "prueba desde amazon", "texto de prueba")                                
             }
         }
         

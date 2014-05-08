@@ -124,7 +124,7 @@ grails {
               "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
               "mail.smtp.socketFactory.fallback":"false"]
     }
-}
+    }
 // Uncomment and edit the following lines to start using Grails encoding & escaping improvements
 
 // GSP settings

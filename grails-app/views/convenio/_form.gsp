@@ -49,7 +49,7 @@
   </label>
   <div class="controls">          
     <div class="row-fluid input-append">
-      <input readonly="readonly" class="span10 date-picker" id="fechaDeFirma" type="text" value="${convenioInstance?.fechaDeFirma?(new SimpleDateFormat("dd/MM/yyyy")).format(convenioInstance?.fechaDeFirma):""}" data-date-format="dd/mm/yyyy" name="fechaDeFirma" />      
+      <input readonly="readonly" class="span5 date-picker" id="fechaDeFirma" type="text" value="${convenioInstance?.fechaDeFirma?(new SimpleDateFormat("dd/MM/yyyy")).format(convenioInstance?.fechaDeFirma):""}" data-date-format="dd/mm/yyyy" name="fechaDeFirma" />      
       <span class="add-on">
         <i class="icon-calendar"></i>
       </span>
@@ -64,7 +64,7 @@
   </label>
   <div class="controls">          
     <div class="row-fluid input-append">
-      <input readonly="readonly" class="span10 date-picker" id="vigencia" type="text" value="${convenioInstance?.vigencia?(new SimpleDateFormat("dd/MM/yyyy")).format(convenioInstance?.vigencia):"Indefinida"}" data-date-format="dd/mm/yyyy" name="vigencia" />
+      <input readonly="readonly" class="span5 date-picker" id="vigencia" type="text" value="${convenioInstance?.vigencia?(new SimpleDateFormat("dd/MM/yyyy")).format(convenioInstance?.vigencia):"Indefinida"}" data-date-format="dd/mm/yyyy" name="vigencia" />
       <input class="btn btn-small" type="button" name="btnIndefinida" id="btnIndefinida" value="Indefinida"/>
     </div>
   </div>

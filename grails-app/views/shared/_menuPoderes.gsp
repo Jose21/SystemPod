@@ -20,7 +20,7 @@
                 <i class="icon-user"></i>
             </g:link>
         </sec:ifAnyGranted>
-    
+
         <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS">
             <g:link class="btn btn-small btn-warning" controller="tarea" action="hoy">
                 <i class="icon-check"></i>
@@ -40,104 +40,109 @@
 </div><!--#sidebar-shortcuts-->
 
 <ul class="nav nav-list">  
-    
+
     <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE, ROLE_PODERES_GESTOR">
-    <li class="active open">
-        <a href="#" class="dropdown-toggle">
-            <i class="icon-legal"></i>
-            <span class="menu-text">Poderes</span>
-            <b class="arrow icon-angle-down"></b>
-        </a>
-        <ul class="submenu">            
-            <li>
-                <g:link controller="poderes" action="index">
-                    <i class="icon-double-angle-right"></i> Bandeja Principal
-                </g:link>
-            </li>            
-            <li>
-                <g:link controller="poderes" action="menuConsulta">
-                    <i class="icon-double-angle-right"></i> Consulta
-                </g:link>
-            </li>
-            <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
+        <li class="active open">
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-legal"></i>
+                <span class="menu-text">Poderes</span>
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">            
                 <li>
-                    <g:link controller="poderes" action="bitacoraList">
-                        <i class="icon-double-angle-right"></i> Bitacora
+                    <g:link controller="poderes" action="index">
+                        <i class="icon-double-angle-right"></i> Bandeja Principal
+                    </g:link>
+                </li>            
+                <li>
+                    <g:link controller="poderes" action="menuConsulta">
+                        <i class="icon-double-angle-right"></i> Consulta
                     </g:link>
                 </li>
-            </sec:ifAnyGranted>
-        </ul>
-    </li>
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
+                    <li>
+                        <g:link controller="poderes" action="bitacoraList">
+                            <i class="icon-double-angle-right"></i> Bitacora
+                        </g:link>
+                    </li>
+                </sec:ifAnyGranted>
+            </ul>
+        </li>
     </sec:ifAnyGranted>
-    
+
     <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_SOLICITANTE">
-    <li class="active open">
-        <a href="#" class="dropdown-toggle">
-            <i class="icon-book"></i>
-            <span class="menu-text">Expedientes</span>
-            <b class="arrow icon-angle-down"></b>
-        </a>
-        <ul class="submenu">            
-            <li>
-                <g:link controller="expediente" action="index">
-                    <i class="icon-double-angle-right"></i> Nuevo
-                </g:link>
-            </li>            
-        </ul>
-    </li>
+        <li class="active open">
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-book"></i>
+                <span class="menu-text">Expedientes</span>
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">            
+                <li>
+                    <g:link controller="expediente" action="index">
+                        <i class="icon-double-angle-right"></i> Nuevo
+                    </g:link>
+                </li>            
+            </ul>
+        </li>
     </sec:ifAnyGranted>
-    
+
     <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES">
-    <li class="active open">
-        <a href="#" class="dropdown-toggle">
-            <i class="icon-folder-close"></i>
-            <span class="menu-text"> Catálogos </span>
-            <b class="arrow icon-angle-down"></b>
-        </a>
-        <ul class="submenu">
-            <li>
-                <g:link controller="delegacion">
-                    <i class="icon-double-angle-right"></i> Delegaciones
-                </g:link>
-            </li>
-            <li>
-                <g:link controller="formatoDeCartaDeInstruccion" action="show" id="1">
-                    <i class="icon-double-angle-right"></i> Formato De Carta De Instrucción
-                </g:link>
-            </li>
-            <li>
-                <g:link controller="motivoDeOtorgamiento">
-                    <i class="icon-double-angle-right"></i> Motivos de Otorgamiento
-                </g:link>
-            </li>
-            <li>
-                <g:link controller="motivoDeRevocacion">
-                    <i class="icon-double-angle-right"></i> Motivos de Revocación
-                </g:link>
-            </li>
-            <li>
-                <g:link controller="configurarParametro" action="edit" id="1">
-                    <i class="icon-double-angle-right"></i> Configuración de Parametros
-                </g:link>
-            </li>
-        </ul>
-    </li>
+        <li class="active open">
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-folder-close"></i>
+                <span class="menu-text"> Catálogos </span>
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <g:link controller="delegacion">
+                        <i class="icon-double-angle-right"></i> Delegaciones
+                    </g:link>
+                </li>
+                <li>
+                    <g:link controller="formatoDeCartaDeInstruccion" action="show" id="1">
+                        <i class="icon-double-angle-right"></i> Formato De Carta De Instrucción
+                    </g:link>
+                </li>
+                <li>
+                    <g:link controller="motivoDeOtorgamiento">
+                        <i class="icon-double-angle-right"></i> Motivos de Otorgamiento
+                    </g:link>
+                </li>
+                <li>
+                    <g:link controller="motivoDeRevocacion">
+                        <i class="icon-double-angle-right"></i> Motivos de Revocación
+                    </g:link>
+                </li>
+                <li>
+                    <g:link controller="configurarParametro" action="edit" id="1">
+                        <i class="icon-double-angle-right"></i> Configuración de Parametros
+                    </g:link>
+                </li>
+            </ul>
+        </li>
     </sec:ifAnyGranted>
     <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_NOTARIO">
-    <li class="active open">
-        <a href="#" class="dropdown-toggle">
-            <i class="icon-money"></i>
-            <span class="menu-text">Facturas</span>
-            <b class="arrow icon-angle-down"></b>
-        </a>
-        <ul class="submenu">            
-            <li>
-                <g:link controller="factura" action="create">
-                    <i class="icon-double-angle-right"></i> Enviar Factura
-                </g:link>
-            </li>            
-        </ul>
-    </li>
+        <li class="active open">
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-money"></i>
+                <span class="menu-text">Facturas</span>
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">            
+                <li>
+                    <g:link controller="factura" action="create">
+                        <i class="icon-double-angle-right"></i> Enviar Factura
+                    </g:link>
+                </li>                               
+                <li>
+                    <g:link controller="factura" action="list">
+                        <i class="icon-double-angle-right"></i> Consulta
+                    </g:link>
+                </li>            
+            </ul>
+        </li>
     </sec:ifAnyGranted>
     <!--<li>
       <g:link controller="dashboard" action="index">
