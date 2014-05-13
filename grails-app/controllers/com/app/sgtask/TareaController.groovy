@@ -15,7 +15,7 @@ import com.app.sgpod.OtorgamientoDePoder
 import com.app.sgpod.RevocacionDePoder
 import com.app.security.Rol
 import com.app.security.UsuarioRol
-//import com.app.ses.AmazonSES
+import com.app.ses.AmazonSES
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class TareaController {
@@ -297,9 +297,9 @@ class TareaController {
             responsable.owner = false
             responsable.tarea = tareaInstance
             if (responsable.save(flush:true)) {
-                notificacionesService.tareaAsignada(tareaInstance, responsable.usuario)
-                //AmazonSES enviarEmail = new AmazonSES()
-                //enviarEmail.sendMail("kokoro.miramar@gmail.com", "prueba desde amazon", "texto de prueba")                                
+                //notificacionesService.tareaAsignada(tareaInstance, responsable.usuario)
+                AmazonSES enviarEmail = new AmazonSES()
+                enviarEmail.sendMail(responsable.usuario.email,"SGCON --Creación de Tarea", "Tienes un nuevo turno asignado. Folio: ${tareaInstance?.id} ,Creador del Turno: ${tareaInstance?.creadaPor?.firstName} ${tareaInstance?.creadaPor?.lastName}, Asunto: ${tareaInstance?.nombre}")                                
             }
         }
         
@@ -395,8 +395,9 @@ class TareaController {
             redirect(action: "list")
             return
         }
+        def usuariosConveniosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS")).collect {it.usuario}
 
-        [tareaInstance: tareaInstance]
+        [tareaInstance: tareaInstance, usuariosConveniosList : usuariosConveniosList]
     }
     /**
     * Método para actualizar los datos de un registro.
@@ -433,14 +434,16 @@ class TareaController {
                 tareaInstance.tags = tareaInstance.tags + "," 
             }
         }
-        //end busqueda tags
+        //end busqueda tags                
 
         if (!tareaInstance.save(flush: true)) {
             render(view: "edit", model: [tareaInstance: tareaInstance])
             return
         }
 
-        notificacionesService.tareaAsignada(tareaInstance, tareaInstance.creadaPor)    
+        //notificacionesService.tareaAsignada(tareaInstance, tareaInstance.creadaPor)
+        AmazonSES enviarEmail = new AmazonSES()
+        enviarEmail.sendMail(tareaInstance.creadaPor.email,"SGCON --Se editó un Turno", "Se realizarón modificaciones en el Turno. Folio: ${tareaInstance?.id} ,Creador del Turno: ${tareaInstance?.creadaPor?.firstName} ${tareaInstance?.creadaPor?.lastName}, Asunto: ${tareaInstance?.nombre}")
         historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "editó un turno")
         flash.message = message(code: 'default.updated.message', args: [message(code: 'tarea.label', default: 'Turno'), tareaInstance.id])
         redirect(action: "show", id: tareaInstance.id)
@@ -493,7 +496,9 @@ class TareaController {
             usuarioDeTarea.owner = false
             usuarioDeTarea.tarea = tareaInstance
             if (usuarioDeTarea.save(flush:true)) {            
-                notificacionesService.tareaCompartida(tareaInstance, usuarioDeTarea.usuario)
+                //notificacionesService.tareaCompartida(tareaInstance, usuarioDeTarea.usuario)
+                AmazonSES enviarEmail = new AmazonSES()
+                enviarEmail.sendMail(usuarioDeTarea.usuario.email,"SGCon: Tienes un nuevo turno compartido.", "Folio: ${tareaInstance?.id} ,Creador del Turno: ${tareaInstance?.creadaPor?.firstName} ${tareaInstance?.creadaPor?.lastName}, Asunto: ${tareaInstance?.nombre}")
             }
             flash.message = "Tarea compartida satisfactoriamente."
         } else {
@@ -526,7 +531,9 @@ class TareaController {
         if (tareaInstance.save(flush:true)) {
             def usuariosDeTarea = tareaInstance.usuariosDeTarea
             usuariosDeTarea.each { it ->
-                notificacionesService.tareaCerrada(tareaInstance, it.usuario)
+                //notificacionesService.tareaCerrada(tareaInstance, it.usuario)
+                AmazonSES enviarEmail = new AmazonSES()
+                enviarEmail.sendMail(it.usuario.email,"SGCon: El turno ${tareaInstance.id} ha sido cerrado.", "Creador del Turno: ${tareaInstance?.creadaPor?.firstName} ${tareaInstance?.creadaPor?.lastName}, Asunto: ${tareaInstance?.nombre}")
             }
             historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "concluyó un turno")
             flash.message = "La tarea fue cerrada satisfactoriamente."            
@@ -563,7 +570,7 @@ class TareaController {
         }        
         def tareaInstanceList = []
         def inActive = "active"
-        if(params.id?.isNumber()){
+        if(params.id?.isInteger()){
             tareaInstanceList = Tarea.findAllById(params.id) 
         }else{
             flash.warn = "Valor no válido. El campo debe contener sólo Números Enteros."

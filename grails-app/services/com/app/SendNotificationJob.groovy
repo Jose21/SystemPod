@@ -8,6 +8,8 @@ import com.app.sgtask.Tarea
 import com.app.NotificacionesService
 import com.app.security.Usuario
 import com.app.sgpod.OtorgamientoDePoder
+import com.app.sgpod.ConfigurarParametro
+import com.app.ses.AmazonSES
 
 class SendNotificationJob {
 
@@ -28,14 +30,19 @@ class SendNotificationJob {
         def tareaList = Tarea.list()
         def enviarCorreo = null
         tareaList.each { tarea ->
-            if(tarea.alertaDeVencimiento != 0){
+            if(tarea.alertaVencimiento != 0){
                 def fechaLimite = tarea.fechaLimite
                 def alertaVencimiento = tarea.alertaVencimiento
                 TimeDuration tiempo = TimeCategory.minus(fechaLimite, fechaHoy)
                 log.info "tiempo entre intervalo  "+ tiempo.days
                 if(tiempo.days == (alertaVencimiento as int) && !tarea.notas){
-                    notificacionesService.tareaPorVencer(tarea, tarea.creadaPor)
-                    notificacionesService.tareaPorVencer(tarea, tarea.responsable)
+                    //notificacionesService.tareaPorVencer(tarea, tarea.creadaPor)
+                    //notificacionesService.tareaPorVencer(tarea, tarea.responsable)
+                    AmazonSES enviarEmail = new AmazonSES()
+                    enviarEmail.sendMail(tarea.creadaPor.email,"SGCon: El turno ${tarea.id} no ha sido atendido.", "Folio: ${tarea?.id} ,Creador del Turno: ${tarea?.creadaPor?.firstName} ${tarea?.creadaPor?.lastName}, Asunto: ${tarea?.nombre}")                                
+                    AmazonSES enviarEmail2 = new AmazonSES()
+                    enviarEmail2.sendMail(tarea.responsable.email,"SGCon: El turno ${tarea.id} no ha sido atendido.", "Folio: ${tarea?.id} ,Creador del Turno: ${tarea?.creadaPor?.firstName} ${tarea?.creadaPor?.lastName}, Asunto: ${tarea?.nombre}")                                
+                    
                     log.info "Correo Enviado de Turno aun no atendido"
                 }else{
                     log.info "No se envia correo"
@@ -50,8 +57,12 @@ class SendNotificationJob {
                     }   
                 }
                 if(enviarCorreo == true){
-                    notificacionesService.tareaPorVencer(tarea, tarea.creadaPor)
-                    notificacionesService.tareaPorVencer(tarea, tarea.responsable)
+                    //notificacionesService.tareaPorVencer(tarea, tarea.creadaPor)
+                    //notificacionesService.tareaPorVencer(tarea, tarea.responsable)
+                    AmazonSES enviarEmail = new AmazonSES()
+                    enviarEmail.sendMail(tarea.creadaPor.email,"SGCon: El turno ${tarea.id} esta por vencer.", "Folio: ${tarea?.id} ,Creador del Turno: ${tarea?.creadaPor?.firstName} ${tarea?.creadaPor?.lastName}, Asunto: ${tarea?.nombre}")                                
+                    AmazonSES enviarEmail2 = new AmazonSES()
+                    enviarEmail2.sendMail(tarea.responsable.email,"SGCon: El turno ${tarea.id} esta por vencer.", "Folio: ${tarea?.id} ,Creador del Turno: ${tarea?.creadaPor?.firstName} ${tarea?.creadaPor?.lastName}, Asunto: ${tarea?.nombre}")                                
                     log.info "se envia correo desde la bandera enviar correo"
                 }else{
                     log.info "no se envia correo desde la bandera enviar correo"
@@ -72,13 +83,21 @@ class SendNotificationJob {
                 def diasParaVencimiento = fechaVencimiento - fechaHoy                
                 if(diasParaVencimiento <= parameters.estadoCriticoPoder){
                     poderCriticoList.add(otorgamientoDePoder)
-                    notificacionesService.poderPorVencer(otorgamientoDePoder, otorgamientoDePoder.responsable)
-                    notificacionesService.poderPorVencer(otorgamientoDePoder, otorgamientoDePoder.creadaPor)
+                    //notificacionesService.poderPorVencer(otorgamientoDePoder, otorgamientoDePoder.responsable)
+                    //notificacionesService.poderPorVencer(otorgamientoDePoder, otorgamientoDePoder.creadaPor)
+                    AmazonSES enviarEmail = new AmazonSES()
+                    enviarEmail.sendMail(otorgamientoDePoder.responsable.email,"SGCon: El Otorgamiento de Poder ${otorgamientoDePoder.id}-O está por expirar.", "Folio: ${otorgamientoDePoder?.id}-O ,Solicitado Por: ${otorgamientoDePoder?.creadaPor}")                                
+                    AmazonSES enviarEmail2 = new AmazonSES()
+                    enviarEmail2.sendMail(otorgamientoDePoder.creadaPor.email,"SGCon: El Otorgamiento de Poder ${otorgamientoDePoder.id}-O está por expirar.", "Folio: ${otorgamientoDePoder?.id}-O ,Solicitado Por: ${otorgamientoDePoder?.creadaPor}")                                
                     log.info "se envia correo critico"
                 }else if(diasParaVencimiento <= parameters.estadoSemiPoder && diasParaVencimiento > parameters.estadoCriticoPoder ){
                     poderSemicriticoList.add(otorgamientoDePoder)
-                    notificacionesService.poderPorVencer(otorgamientoDePoder, otorgamientoDePoder.responsable)
-                    notificacionesService.poderPorVencer(otorgamientoDePoder, otorgamientoDePoder.creadaPor)
+                    //notificacionesService.poderPorVencer(otorgamientoDePoder, otorgamientoDePoder.responsable)
+                    //notificacionesService.poderPorVencer(otorgamientoDePoder, otorgamientoDePoder.creadaPor)
+                    AmazonSES enviarEmail = new AmazonSES()
+                    enviarEmail.sendMail(otorgamientoDePoder.responsable.email,"SGCon: El Otorgamiento de Poder ${otorgamientoDePoder.id}-O está por expirar.", "Folio: ${otorgamientoDePoder?.id}-O ,Solicitado Por: ${otorgamientoDePoder?.creadaPor}")                                
+                    AmazonSES enviarEmail2 = new AmazonSES()
+                    enviarEmail2.sendMail(otorgamientoDePoder.creadaPor.email,"SGCon: El Otorgamiento de Poder ${otorgamientoDePoder.id}-O está por expirar.", "Folio: ${otorgamientoDePoder?.id}-O ,Solicitado Por: ${otorgamientoDePoder?.creadaPor}")                                
                     log.info "se envia correo semi-critico"
                 }
                 log.info "no se envia correo poderes"
