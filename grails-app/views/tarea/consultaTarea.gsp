@@ -57,7 +57,7 @@
                                 <label for="id" class="control-label">
                                     <g:message code="tarea.id.label" default="Número de Turno"/>
                                 </label>
-                                <g:textField type="number" class="span5" name="id" required="" maxlength="100" value="${tareaInstance?.id}"autocomplete="off"/>                               
+                                <g:textField type="number" class="span2" name="id" required="" maxlength="100" value="${tareaInstance?.id}"autocomplete="off"/>                               
                                 <g:actionSubmit class="btn btn-primary" action="buscarPorFolio" value="Buscar" />
                             </div>
                         </div>
@@ -116,8 +116,8 @@
                             <div class="row-fluid input-prepend">               
                                 <label for="usuario" class="control-label">
                                     <g:message code="convenio.usuario.label" default="Nombre" />
-                                </label>
-                                <g:select id="usuario" name="username" from="${com.app.security.Usuario.list()}" optionKey="username" required="" value="${usuarioDeTareaInstance?.username}" noSelection="['':'-Elige Categoría-']" class="many-to-one"/>
+                                </label>                                
+                                <g:textField name="nombre" required="" value="${usuarioDeTareaInstance?.nombre}"/>
                                 <g:actionSubmit class="btn btn-primary" action="buscarPorNombreResponsables" value="Buscar" />            
                             </div>
                         </div>
@@ -194,7 +194,7 @@
                         <td>${fieldValue(bean: tareaInstance, field: "grupo")}</td>
                         <td><g:formatDate date="${tareaInstance.dateCreated}" /></td>
                         <td>${fieldValue(bean: tareaInstance, field: "responsable")}</td>
-                        <td>${tareaInstance.descripcion}</td>
+                        <td><dd><%=tareaInstance?.descripcion%></dd></td>                                
                         <td>${fieldValue(bean: tareaInstance, field: "prioridad")}</td>
                         <td><g:formatDate date="${tareaInstance.fechaLimite}" /></td>
                         <td style="text-align:center"><g:link class="icon-print bigger-120" action="detalles"  target="_blank" id="${tareaInstance?.id}" /></td>

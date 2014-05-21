@@ -675,7 +675,7 @@ class TareaController {
         def c = Tarea.createCriteria()
         def tareaInstanceList = c.list {
             responsable {
-                like("username", "%"+params.username+"%")
+                ilike("firstName", "%"+params.nombre+"%")               
             }
             order("id", "asc")
         }

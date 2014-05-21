@@ -41,15 +41,13 @@
                     <g:if test="${turnosPorFechaBean.misTurnos}">
                         <tr><th colspan="8">MIS TURNOS</th></tr>
                                 <g:each in="${turnosPorFechaBean.misTurnos}" status="i" var="misTurnos">
-
                             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                <td style="text-align:center"><g:link controller="tarea" action="edit" id="${misTurnos.id}"><span class="badge">${misTurnos?.id}</span></g:link></td>
-
+                                <td style="text-align:center"><g:link controller="tarea" action="show" id="${misTurnos.id}"><span class="badge">${misTurnos?.id}</span></g:link></td>
                                 <td>${fieldValue(bean: misTurnos, field: "nombre")}</td>
                                 <td>${fieldValue(bean: misTurnos, field: "grupo")}</td>
                                 <td><g:formatDate date="${misTurnos.dateCreated}" /></td>
                                 <td>${fieldValue(bean: misTurnos, field: "responsable")}</td>
-                                <td>${misTurnos.descripcion}</td>
+                                <td><dd><%=misTurnos?.descripcion%></dd></td>                                
                                 <td>${fieldValue(bean: misTurnos, field: "prioridad")}</td>
                                 <td><g:formatDate date="${misTurnos.fechaLimite}" /></td>
                             </tr>
@@ -59,13 +57,12 @@
                         <tr><th colspan="8">COMPARTIDOS</th></tr>
                                 <g:each in="${turnosPorFechaBean.compartidos}" status="i" var="compartidos">
                             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                <td style="text-align:center"><g:link controller="tarea" action="edit" id="${compartidos.id}"><span class="badge">${compartidos?.id}</span></g:link></td>
-
+                                <td style="text-align:center"><g:link controller="tarea" action="show" id="${compartidos.id}"><span class="badge">${compartidos?.id}</span></g:link></td>
                                 <td>${fieldValue(bean: compartidos, field: "nombre")}</td>
                                 <td>${fieldValue(bean: compartidos, field: "grupo")}</td>
                                 <td><g:formatDate date="${compartidos.dateCreated}" /></td>
                                 <td>${fieldValue(bean: compartidos, field: "responsable")}</td>
-                                <td>${compartidos.descripcion}</td>
+                                <td><dd><%=compartidos?.descripcion%></dd></td>                                
                                 <td>${fieldValue(bean: compartidos, field: "prioridad")}</td>
                                 <td><g:formatDate date="${compartidos.fechaLimite}" /></td>
                             </tr>
@@ -81,7 +78,7 @@
                                 <td>${fieldValue(bean: turnados, field: "grupo")}</td>
                                 <td><g:formatDate date="${turnados.dateCreated}" /></td>
                                 <td>${fieldValue(bean: turnados, field: "responsable")}</td>
-                                <td>${turnados.descripcion}</td>
+                                <td><dd><%=turnados?.descripcion%></dd></td>                                
                                 <td>${fieldValue(bean: turnados, field: "prioridad")}</td>
                                 <td><g:formatDate date="${turnados.fechaLimite}" /></td>
                             </tr>
@@ -91,13 +88,13 @@
                         <tr><th colspan="8">PRIORIDAD URGENTE</th></tr>
                                 <g:each in="${turnosPorFechaBean.prioridadUrgente}" status="i" var="prioridadUrgente">
                             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                <td style="text-align:center"><g:link controller="tarea" action="edit" id="${prioridadUrgente.id}"><span class="badge">${prioridadUrgente?.id}</span></g:link></td>
+                                <td style="text-align:center"><g:link controller="tarea" action="show" id="${prioridadUrgente.id}"><span class="badge">${prioridadUrgente?.id}</span></g:link></td>
 
                                 <td>${fieldValue(bean: prioridadUrgente, field: "nombre")}</td>
                                 <td>${fieldValue(bean: prioridadUrgente, field: "grupo")}</td>
                                 <td><g:formatDate date="${prioridadUrgente.dateCreated}" /></td>
                                 <td>${fieldValue(bean: prioridadUrgente, field: "responsable")}</td>
-                                <td>${prioridadUrgente.descripcion}</td>
+                                <td><dd><%=prioridadUrgente?.descripcion%></dd></td>                                
                                 <td>${fieldValue(bean: prioridadUrgente, field: "prioridad")}</td>
                                 <td><g:formatDate date="${prioridadUrgente.fechaLimite}" /></td>
                             </tr>
@@ -107,13 +104,13 @@
                         <tr><th colspan="8">PRIORIDAD NORMAL</th></tr>
                                 <g:each in="${turnosPorFechaBean.prioridadNormal}" status="i" var="prioridadNormal">
                             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                <td style="text-align:center"><g:link controller="tarea" action="edit" id="${prioridadNormal.id}"><span class="badge">${prioridadNormal?.id}</span></g:link></td>
+                                <td style="text-align:center"><g:link controller="tarea" action="show" id="${prioridadNormal.id}"><span class="badge">${prioridadNormal?.id}</span></g:link></td>
 
                                 <td>${fieldValue(bean: prioridadNormal, field: "nombre")}</td>
                                 <td>${fieldValue(bean: prioridadNormal, field: "grupo")}</td>
                                 <td><g:formatDate date="${prioridadNormal.dateCreated}" /></td>
                                 <td>${fieldValue(bean: prioridadNormal, field: "responsable")}</td>
-                                <td>${prioridadNormal.descripcion}</td>
+                                <td><dd><%=prioridadNormal?.descripcion%></dd></td>                                
                                 <td>${fieldValue(bean: prioridadNormal, field: "prioridad")}</td>
                                 <td><g:formatDate date="${prioridadNormal.fechaLimite}" /></td>
                             </tr>

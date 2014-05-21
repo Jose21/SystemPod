@@ -223,6 +223,7 @@
         }); 
 
         $('#containerTotalDeConvenios').highcharts({
+        colors: ['#2f7ed8', '#FC3426', '#8bbc21'],
         chart: { type: 'column' },
         title: { text: "${conveniosPorFechaBean?conveniosPorFechaBean.title:""}" },
         xAxis: { categories: [ 'Total'] },
@@ -245,7 +246,7 @@
                 data: [ ${conveniosPorFechaBean?conveniosPorFechaBean?.totalConvenios:0}
         ]
         }, {
-        name: 'Contraidas por la Institución',
+        name: 'Contraidas por el Infonavit',
                 data: [ ${conveniosPorFechaBean?conveniosPorFechaBean?.totalConveniosContraidos:0}
         ]
         }, {
