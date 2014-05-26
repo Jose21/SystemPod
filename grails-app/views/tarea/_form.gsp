@@ -18,10 +18,11 @@
     </div>
 </div>
 
-<div class="control-group fieldcontain ${hasErrors(bean: tareaInstance, field: 'descripcion', 'error')}">
+<div class="control-group fieldcontain ${hasErrors(bean: tareaInstance, field: 'descripcion', 'error')} required">
     <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_CONVENIOS">
         <label for="descripcion" class="control-label">
             <g:message code="tarea.descripcion.label" default="Descripción" />
+            <span class="required-indicator">*</span>
         </label>
     </sec:ifAnyGranted>
     <sec:ifAnyGranted roles="ROLE_PODERES_RESOLVEDOR">
@@ -42,7 +43,7 @@
         </label>
         <div class="controls">
             <div class="row-fluid input-append">
-                <input readonly="readonly" class="span10 date-picker" id="fechaLimite" type="text" value="${tareaInstance?.fechaLimite?(new SimpleDateFormat("dd/MM/yyyy")).format(tareaInstance?.fechaLimite):""}" data-date-format="dd/mm/yyyy" name="fechaLimite" />
+                <input readonly="readonly" class="span4 date-picker" id="fechaLimite" type="text" value="${tareaInstance?.fechaLimite?(new SimpleDateFormat("dd/MM/yyyy")).format(tareaInstance?.fechaLimite):""}" data-date-format="dd/mm/yyyy" name="fechaLimite" />
                 <input class="btn btn-small" type="button" name="btnLimpiar" id="btnLimpiar" value="Limpiar"></input>
             </div>
         </div>

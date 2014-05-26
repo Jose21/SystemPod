@@ -49,7 +49,7 @@
   </label>
   <div class="controls">          
     <div class="row-fluid input-append">
-      <input readonly="readonly" class="span5 date-picker" id="fechaDeFirma" type="text" value="${convenioInstance?.fechaDeFirma?(new SimpleDateFormat("dd/MM/yyyy")).format(convenioInstance?.fechaDeFirma):""}" data-date-format="dd/mm/yyyy" name="fechaDeFirma" />      
+      <input readonly="readonly" class="span5 date-picker validate[required]" id="fechaDeFirma" type="text" value="${convenioInstance?.fechaDeFirma?(new SimpleDateFormat("dd/MM/yyyy")).format(convenioInstance?.fechaDeFirma):""}" data-date-format="dd/mm/yyyy" name="fechaDeFirma" />      
       <span class="add-on">
         <i class="icon-calendar"></i>
       </span>
@@ -76,7 +76,7 @@
     <span class="required-indicator">*</span>
   </label>
   <div class="controls">
-        <g:select id="status" name="status.id" from="${com.app.sgcon.StatusDelConvenio.list()}" optionKey="id" required="" value="${convenioInstance?.status?.id}" class="many-to-one"/>
+        <g:select id="status" name="status.id" from="${com.app.sgcon.StatusDelConvenio.list()}" optionKey="id" required="" value="${convenioInstance?.status?.id}"  noSelection="['':'-Elige un usuario-']" class="many-to-one validate[required]"/>
   </div>
 </div>
 

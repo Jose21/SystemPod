@@ -16,7 +16,6 @@
             <g:else><h1>Crear: Turno</h1></g:else>
 
         </div>
-
         <div class="container-fluid">
             <g:if test="${session.idConvenio}">
                 <br/>
@@ -49,9 +48,7 @@
                         </g:eachError>
                 </ul>
             </g:hasErrors>
-
-
-            <g:form class="form-horizontal" action="save" >
+            <g:form name="myForm" class="form-horizontal" action="save" >
                 <g:render template="form"/>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_CONVENIOS">
                     <div class="form-actions">
@@ -64,7 +61,12 @@
                     </div>
                 </sec:ifAnyGranted>
             </g:form>
-
         </div>
+        <script lang="javascript" type="text/javascript">
+            $(document).ready(function() {
+            // binds form submission and fields to the validation engine
+            $("#myForm").validationEngine();
+            });          
+        </script>  
     </body>
 </html>

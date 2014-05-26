@@ -27,7 +27,7 @@
                             </ul>
                         </g:hasErrors>
 
-                        <g:form class="form-horizontal" action="save" >
+                        <g:form name="myForm" class="form-horizontal" action="save" >
                             <g:render template="form"/>
                             <div class="form-actions">
                                 <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />
@@ -37,5 +37,11 @@
                 </div>
             </div>
         </div>
+        <script lang="javascript" type="text/javascript">
+            $(document).ready(function() {
+            // binds form submission and fields to the validation engine
+            $("#myForm").validationEngine();
+            });          
+        </script> 
     </body>
 </html>

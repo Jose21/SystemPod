@@ -279,7 +279,8 @@ class TareaController {
         params.asignadaA = springSecurityService.currentUser
         def tareaInstance = new Tarea(params)
         if (!tareaInstance.save(flush: true)) {
-            render(view: "create", model: [tareaInstance: tareaInstance])
+            def usuariosConveniosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS")).collect {it.usuario}            
+            render(view: "create", model: [tareaInstance: tareaInstance, usuariosConveniosList : usuariosConveniosList])
             return
         }
 
