@@ -233,7 +233,7 @@ class BootStrap {
             ).save()*/
             break
         case Environment.PRODUCTION :
-            
+           /* 
             new Usuario (
                 firstName : "Administrador",
                 lastName : "Del Sistema",
@@ -254,6 +254,7 @@ class BootStrap {
                 
             new StatusDelConvenio(nombre:"En Elaboración").save()
             new StatusDelConvenio(nombre:"Vigente").save()
+            */
              
             break
         }

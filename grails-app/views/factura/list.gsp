@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="main">
+        <meta name="layout" content="mainPoderes">
         <g:set var="entityName" value="${message(code: 'factura.label', default: 'Factura')}" />    
         <title><g:message code="default.list.label" args="[entityName]" /></title>
     </head>
