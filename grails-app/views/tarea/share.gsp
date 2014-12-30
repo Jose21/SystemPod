@@ -18,7 +18,7 @@
                 </label>
                 <div class="controls">
                     <g:select id="compartidoCon" name="compartidoCon.id" 
-                    from="${usuariosConveniosList}" optionKey="id" 
+                    from="${usuariosTurnosList}" optionKey="id" 
                         required="" value="" noSelection="['':'-Elige un usuario-']" class="many-to-one"/>
                 </div>
             </div>            

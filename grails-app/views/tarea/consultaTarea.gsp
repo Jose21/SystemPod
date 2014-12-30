@@ -13,6 +13,12 @@
         <br/>
         <div class="tabbable">
             <ul id="inbox-tabs" class="inbox-tabs nav nav-tabs padding-16 tab-size-bigger tab-space-1">
+                <li class="${porTagsActive?:""}">
+                    <a data-toggle="tab" href="#porTags">              
+                        <i class="icon-tag bigger-130"></i>
+                        <span class="bigger-110">Palabras Clave<span class="badge"></span></span>
+                    </a>
+                </li>
                 <li class="${porFolioActive?:""}">
                     <a data-toggle="tab" href="#porFolio">
                         <i class="icon-folder-open bigger-130"></i>
@@ -36,13 +42,7 @@
                         <i class="icon-group bigger-130"></i>
                         <span class="bigger-110">Por Nombre de Responsables <span class="badge"></span></span>
                     </a>
-                </li>
-                <li class="${porTagsActive?:""}">
-                    <a data-toggle="tab" href="#porTags">              
-                        <i class="icon-tag bigger-130"></i>
-                        <span class="bigger-110">Tags<span class="badge"></span></span>
-                    </a>
-                </li>
+                </li>                
             </ul>
         </div>
     </div>
@@ -188,7 +188,7 @@
             <tbody>
                 <g:each in="${tareaInstanceList}" status="i" var="tareaInstance">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                        <td style="text-align:center"><g:link action="edit" id="${tareaInstance.id}"><span class="badge">${tareaInstance?.id}</span></g:link></td>
+                        <td style="text-align:center"><g:link action="show" id="${tareaInstance.id}"><span class="badge">${tareaInstance?.id}</span></g:link></td>
                         
                         <td>${fieldValue(bean: tareaInstance, field: "nombre")}</td>
                         <td>${fieldValue(bean: tareaInstance, field: "grupo")}</td>

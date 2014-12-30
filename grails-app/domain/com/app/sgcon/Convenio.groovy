@@ -11,7 +11,7 @@ class Convenio {
     /**
     * Campo para capturar el numero del convenio. 
     */
-    String numeroDeConvenio
+    //String numeroDeConvenio
     /**
     * Campo para capturar el objeto del convenio. 
     */
@@ -77,6 +77,12 @@ class Convenio {
     */
     Convenio esModificadoPor
     
+    /**
+    *Baja lógica
+    *
+    */
+   boolean eliminado = null
+    
     static hasMany = [ 
         firmantes : Persona, 
         responsables : Persona, 
@@ -85,13 +91,13 @@ class Convenio {
     ]
     
     static constraints = {
-        numeroDeConvenio blank:false, maxSize:5000
+        //numeroDeConvenio blank:false, maxSize:5000
         objeto blank: false, maxSize:5000
         sustentoNormativo blank: false, maxSize:5000
         tipoDeConvenio blank:false, maxSize:5000
         institucion blank:false, maxSize:5000
         
-        fechaDeFirma blank: false
+        fechaDeFirma blank : true, nullable : true
         vigencia nullable:true, blank:true
         status nullable:false        
         nombreDeCopiaElectronica nullable:true, maxSize:1000
@@ -107,10 +113,11 @@ class Convenio {
         usuariosDeConvenio nullable:true
         tareas nullable:true
         tags nullable:true, maxSize:1000
+        eliminado nullable:true
        }
     
-    String toString () {
-        def sdf = new SimpleDateFormat("dd-MMM-yyyy")
-        "${id} - ${sdf.format(fechaDeFirma)}"
-    }
+    //String toString () {
+      //  def sdf = new SimpleDateFormat("dd-MMM-yyyy")
+        //"${id} - ${sdf.format(fechaDeFirma)}"
+    //}
 }

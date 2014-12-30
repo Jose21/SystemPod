@@ -20,7 +20,7 @@
             <g:if test="${session.idConvenio}">
                 <br/>
                 <g:link class="btn btn-small btn-info btn-block" controller="convenio" action="edit" id="${Convenio.get(session.idConvenio).id}">
-                    El turno se asociará al convenio: ${Convenio.get(session.idConvenio).id} - Número de Convenio: ${Convenio.get(session.idConvenio).numeroDeConvenio} - Objeto: ${Convenio.get(session.idConvenio).objeto}
+                    El turno se asociará al convenio: ${Convenio.get(session.idConvenio).id} - Objeto: ${Convenio.get(session.idConvenio).objeto}
                 </g:link>
                 <br/>
             </g:if>
@@ -50,7 +50,7 @@
             </g:hasErrors>
             <g:form name="myForm" class="form-horizontal" action="save" >
                 <g:render template="form"/>
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_CONVENIOS">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_CONVENIOS_ADMIN, ROLE_CONVENIOS_STANDARD, ROLE_TURNOS_ADMIN, ROLE_TURNOS_STANDARD">
                     <div class="form-actions">
                         <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />
                     </div>

@@ -9,8 +9,8 @@
             <i class="icon-home"></i>
         </g:link>
 
-        <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS">
-            <g:link class="btn btn-small btn-info" controller="convenio" action="create">
+        <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS_ADMIN, ROLE_CONVENIOS_STANDARD">
+            <g:link class="btn btn-small btn-info" controller="convenio" action="list">
                 <i class="icon-book"></i>
             </g:link>
         </sec:ifAnyGranted>
@@ -21,7 +21,7 @@
             </g:link>
         </sec:ifAnyGranted>
 
-        <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS">
+        <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_TURNOS_ADMIN, ROLE_TURNOS_STANDARD">
             <g:link class="btn btn-small btn-warning" controller="tarea" action="hoy">
                 <i class="icon-check"></i>
             </g:link>
@@ -39,7 +39,7 @@
     </div>
 </div><!--#sidebar-shortcuts-->
 
-<sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS">
+<sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_TURNOS_ADMIN, ROLE_TURNOS_STANDARD">
 <ul class="nav nav-list">  
     <li class="active open">
         <a href="#" class="dropdown-toggle">

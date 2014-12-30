@@ -40,7 +40,8 @@ class NotificacionesService {
         def emailPattern = /[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})/
         //def email = params.alertaPorEmail.trim()
         def email = compartidaCon.email
-        def message = "SGCon: Tienes un nuevo turno compartido."
+        //def message = "SGCon: Tienes un nuevo turno compartido."
+        def message = "SGCon: El turno ${tareaInstance.id} no ha sido atendido."
         if (email ==~ emailPattern) { 
             asyncMailService.sendMail {
                 to email

@@ -94,7 +94,7 @@
 
     <div class="control-group fieldcontain ${hasErrors(bean: tareaInstance, field: 'tags', 'error')}">
         <label for="tags" class="control-label">
-            <g:message code="tarea.tags.label" default="Tags" />
+            <g:message code="tarea.tags.label" default="Palabras Clave" />
         </label>
         <div class="controls">
             <g:textField class="span6" name="tags" value="${tareaInstance?.tags}"/>

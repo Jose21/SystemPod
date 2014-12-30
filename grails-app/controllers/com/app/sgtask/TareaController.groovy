@@ -33,8 +33,8 @@ class TareaController {
         redirect(action: "list", params: params)
     }
     /**
-    * Bandeja de turnos pestaña hoy.
-    */
+     * Bandeja de turnos pestaña hoy.
+     */
     def hoy() {
         flash.warn = null
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
@@ -42,8 +42,8 @@ class TareaController {
         session.opt = params.action
         
         //Mis turnos
-        def taskList1 = Tarea.findAllByCerradaAndResponsableAndFechaLimite(false, springSecurityService.currentUser, sdf.parse(sdf.format(new Date())))
-        def taskList2 = Tarea.findAllByCerradaAndResponsableAndFechaLimiteIsNull(false, springSecurityService.currentUser)
+        def taskList1 = Tarea.findAllByCerradaAndResponsableAndFechaLimiteAndEliminado(false, springSecurityService.currentUser, sdf.parse(sdf.format(new Date())), false)
+        def taskList2 = Tarea.findAllByCerradaAndResponsableAndFechaLimiteIsNullAndEliminado(false, springSecurityService.currentUser, false)
         def taskList = taskList1 + taskList2
         
         //Compartidos
@@ -52,6 +52,7 @@ class TareaController {
             eq ("cerrada", false)
             ne ("responsable", springSecurityService.currentUser)
             ne ("creadaPor", springSecurityService.currentUser)
+            eq ("eliminado", false)
             or {
                 eq ("fechaLimite", sdf.parse(sdf.format(new Date())))
                 isNull ("fechaLimite")
@@ -68,6 +69,7 @@ class TareaController {
             it.cerrada == false &&
             it.creadaPor == springSecurityService.currentUser &&
             it.responsable != springSecurityService.currentUser
+            it.eliminado == false
         }       
         
         render (
@@ -83,8 +85,8 @@ class TareaController {
         )
     }
     /**
-    * Bandeja de turnos pestaña Programadas.
-    */
+     * Bandeja de turnos pestaña Programadas.
+     */
     def programadas() {
         flash.warn = null
         session.opt = params.action
@@ -93,7 +95,8 @@ class TareaController {
         def taskListQuery = Tarea.where {            
             fechaLimite > new Date() &&
             cerrada == false &&
-            responsable == springSecurityService.currentUser
+            responsable == springSecurityService.currentUser &&
+            eliminado == false
         }
         def taskList = taskListQuery.list(sort:"id")
         
@@ -105,6 +108,7 @@ class TareaController {
             it.cerrada == false &&
             it.responsable != springSecurityService.currentUser &&
             it.creadaPor != springSecurityService.currentUser
+            it.eliminado == false
         }
         
         //Turnados
@@ -112,7 +116,8 @@ class TareaController {
             fechaLimite > new Date() &&
             cerrada == false &&
             responsable != springSecurityService.currentUser &&
-            creadaPor == springSecurityService.currentUser
+            creadaPor == springSecurityService.currentUser &&
+            eliminado == false
         }
         def turnados = turnadosQuery.list(sort:"id")
         
@@ -129,8 +134,8 @@ class TareaController {
         )
     }
     /**
-    * Bandeja de turnos pestaña Retrasadas.
-    */
+     * Bandeja de turnos pestaña Retrasadas.
+     */
     def retrasadas () {
         session.opt = params.action
         flash.warn = null
@@ -138,7 +143,8 @@ class TareaController {
         def taskListQuery = Tarea.where {
             fechaLimite < (new Date() - 1) &&
             cerrada == false &&
-            responsable == springSecurityService.currentUser
+            responsable == springSecurityService.currentUser && 
+            eliminado == false
         }
         def taskList = taskListQuery.list(sort:"id")
         
@@ -149,7 +155,8 @@ class TareaController {
             it.fechaLimite < (new Date() - 1) &&
             it.cerrada == false &&
             it.responsable != springSecurityService.currentUser &&
-            it.creadaPor != springSecurityService.currentUser
+            it.creadaPor != springSecurityService.currentUser &&
+            it.eliminado == false
         }
         
         //Turnados
@@ -157,7 +164,8 @@ class TareaController {
             fechaLimite < (new Date() - 1) &&
             cerrada == false &&
             responsable != springSecurityService.currentUser &&
-            creadaPor == springSecurityService.currentUser
+            creadaPor == springSecurityService.currentUser &&
+            eliminado == false
         }
         def turnados = turnadosQuery.list(sort:"id")
         
@@ -174,15 +182,16 @@ class TareaController {
         )
     }
     /**
-    * Bandeja de turnos pestaña Concluidas.
-    */
+     * Bandeja de turnos pestaña Concluidas.
+     */
     def concluidas () {
         session.opt = params.action
         
         //Mis turnos        
         def taskListQuery = Tarea.where {
             cerrada == true &&
-            responsable == springSecurityService.currentUser
+            responsable == springSecurityService.currentUser &&
+            eliminado == false
         }
         def taskList = taskListQuery.list(sort:"id")
         
@@ -192,14 +201,16 @@ class TareaController {
         sharedTaskList = sharedTaskList.findAll {
             it.cerrada == true &&
             it.responsable != springSecurityService.currentUser &&
-            it.creadaPor != springSecurityService.currentUser
+            it.creadaPor != springSecurityService.currentUser &&
+            it.eliminado == false
         }
         
         //Turnados
         def turnadosQuery = Tarea.where {
             cerrada == true &&
             responsable != springSecurityService.currentUser &&
-            creadaPor == springSecurityService.currentUser
+            creadaPor == springSecurityService.currentUser &&
+            eliminado == false
         }
         def turnados = turnadosQuery.list(sort:"id")
         
@@ -216,22 +227,46 @@ class TareaController {
         )
     }
     /**
-    * Historial de tarea.
-    */
+     * Bandeja de turnos para el modulo de convenios de turnos asiganados.
+     */
+    def asignacionConvenios() {
+        flash.warn = null
+        session.opt = params.action
+        
+        //Mis turnos        
+        def taskListQuery = Tarea.where {            
+            //fechaLimite > new Date() &&
+            cerrada == false &&
+            responsable == springSecurityService.currentUser &&
+            eliminado == false
+        }
+        def taskList = taskListQuery.list(sort:"id")
+                        
+        render (
+            view: "asignacionConvenios", 
+            model: [
+                tareaInstanceList: taskList, 
+                tareaInstanceTotal: taskList.size()                
+            ]
+        )
+    }
+    /**
+     * Historial de tarea.
+     */
     def historial (Long id) {
         def tareaInstance = Tarea.get(id)
         [ tareaInstance : tareaInstance, histList : HistorialDeTarea.findAllByTarea(tareaInstance)]
     }
     /**
-    * Método apara enlistar los registros existentes en una domain class 
-    */
+     * Método apara enlistar los registros existentes en una domain class 
+     */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [tareaInstanceList: Tarea.list(params), tareaInstanceTotal: Tarea.count()]
     }
     /**
-    * Este método sirve para la creacion de un registro de tipo tarea.
-    */
+     * Este método sirve para la creacion de un registro de tipo tarea.
+     */
     def create() {
         if (params.idConvenio) {
             session.idConvenio = params.idConvenio as long
@@ -249,15 +284,20 @@ class TareaController {
             session.idRevocacionDePoder = null
         }
         
+        //se buscan los usuarios parea este modulo para q aparezcan en la lista
+        def usuariosConveniosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS_ADMIN")).collect {it.usuario}
+        def usuariosConvenioStandard = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS_STANDARD")).collect {it.usuario}
         
-        def usuariosConveniosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS")).collect {it.usuario}            
+        usuariosConveniosList = usuariosConveniosList + usuariosConvenioStandard
+        //se quita el usuario que esta logueado en el sistema
+        usuariosConveniosList = usuariosConveniosList - springSecurityService.currentUser
               
         
         [tareaInstance: new Tarea(params), usuariosConveniosList : usuariosConveniosList]        
     }
-     /**
-    * Método para guardar los registros en el sistema.
-    */
+    /**
+     * Método para guardar los registros en el sistema.
+     */
     def save() {
         if(session.idOtorgamientoDePoder){
             params.fechaLimite = null
@@ -342,8 +382,8 @@ class TareaController {
         }
     }    
     /**
-    * Método para visualizar el registro creado en el sistema.
-    */
+     * Método para visualizar el registro creado en el sistema.
+     */
     def show(Long id) {
         if (params.idConvenio) {
             session.idConvenio = params.idConvenio as long
@@ -387,8 +427,8 @@ class TareaController {
         [tareaInstance: tareaInstance, currentUser : springSecurityService.currentUser]
     }
     /**
-    * Método para editar un registro.
-    */
+     * Método para editar un registro.
+     */
     def edit(Long id) {
         def tareaInstance = Tarea.get(id)
         if (!tareaInstance) {
@@ -401,8 +441,8 @@ class TareaController {
         [tareaInstance: tareaInstance, usuariosConveniosList : usuariosConveniosList]
     }
     /**
-    * Método para actualizar los datos de un registro.
-    */
+     * Método para actualizar los datos de un registro.
+     */
     def update(Long id, Long version) {
         
         def tareaInstance = Tarea.get(id)
@@ -450,10 +490,10 @@ class TareaController {
         redirect(action: "show", id: tareaInstance.id)
     }
     /**
-    * Método para eliminar el registro del sistema.
-    */
+     * Método para eliminar el registro del sistema.
+     */
     def delete(Long id) {
-        def tareaInstance = Tarea.get(id)
+        def tareaInstance = Tarea.get(id)       
         if (!tareaInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'tarea.label', default: 'Turno'), id])
             redirect(action: "list")
@@ -461,9 +501,10 @@ class TareaController {
         }
 
         try {
-            tareaInstance.delete(flush: true)
+            //tareaInstance.delete(flush: true)
+            tareaInstance.eliminado = true            
             flash.message = message(code: 'default.deleted.message', args: [message(code: 'tarea.label', default: 'Turno'), id])
-            redirect(action: "list")
+            redirect(action: "hoy")
         }
         catch (DataIntegrityViolationException e) {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'tarea.label', default: 'Turno'), id])
@@ -471,16 +512,19 @@ class TareaController {
         }
     }
     /**
-    * Método para compartir una tarea.
-    */
+     * Método para compartir una tarea.
+     */
     def share (Long id) {
         def tareaInstance = Tarea.get(id)
-        def usuariosConveniosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS")).collect {it.usuario}            
-        [ tareaInstance : tareaInstance, usuariosConveniosList : usuariosConveniosList ]
+        def usuariosTurnosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_TURNOS_ADMIN")).collect {it.usuario}
+        def list2 = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_TURNOS_STANDARD")).collect {it.usuario}    
+        usuariosTurnosList = usuariosTurnosList + list2
+        usuariosTurnosList = usuariosTurnosList - springSecurityService.currentUser
+        [ tareaInstance : tareaInstance, usuariosTurnosList : usuariosTurnosList ]
     }
     /**
-    * Método para agregar compartir la tarea con los usuarios.
-    */
+     * Método para agregar compartir la tarea con los usuarios.
+     */
     def addUsuarioToTarea(Long id) {
         def tareaInstance = Tarea.get(id)        
         def compartirCon = Usuario.get(params.compartidoCon.id as long)
@@ -508,8 +552,8 @@ class TareaController {
         redirect (action:"share", params : [ id : tareaInstance.id ])
     }
     /**
-    * Método para dejar de compartir una tarea con los usuarios.
-    */
+     * Método para dejar de compartir una tarea con los usuarios.
+     */
     def removeUsuarioFromTarea() {
         def tareaInstance = Tarea.get(params.tareaId as long)
         def usuario = Usuario.get(params.usuarioId as long)
@@ -518,14 +562,14 @@ class TareaController {
         redirect (action:"share", params : [ id : tareaInstance.id ])
     }
     /**
-    * Método para la navegacion entre pantallas.
-    */
+     * Método para la navegacion entre pantallas.
+     */
     def regresar(Long id) {
         redirect(action: "show", id: id)
     }
     /**
-    * Método para cerrar una tarea.
-    */
+     * Método para cerrar una tarea.
+     */
     def cerrarTarea (Long id) {
         def tareaInstance = Tarea.get(id)
         tareaInstance.cerrada = true
@@ -544,25 +588,25 @@ class TareaController {
         redirect (action:"show", id:tareaInstance.id)
     }    
     /**
-    * Método para las notificacion por correo electrónico.
-    */
+     * Método para las notificacion por correo electrónico.
+     */
     def notificationByEmail () {
         def message = "Tienes una nueva tarea asignada."
         [ tareaInstance : Tarea.get(1), message : message, usuarioInstance : springSecurityService.currentUser ]
     }
     /**
-    * Método para consultas.
-    */
+     * Método para consultas.
+     */
     def consultaTarea() {
         flash.error = null
         flash.info = null
         flash.message = null
         flash.warn = null
-        [porFolioActive:"active"]  
+        [porTagsActive:"active"]  
     }
     /**
-    * Método para busquedas por folio.
-    */
+     * Método para busquedas por folio.
+     */
     def buscarPorFolio (){
         flash.warn = null
         def porFolioActive = null
@@ -572,7 +616,7 @@ class TareaController {
         def tareaInstanceList = []
         def inActive = "active"
         if(params.id?.isInteger()){
-            tareaInstanceList = Tarea.findAllById(params.id) 
+            tareaInstanceList = Tarea.findAllByIdAndEliminado(params.id, false) 
         }else{
             flash.warn = "Valor no válido. El campo debe contener sólo Números Enteros."
         }   
@@ -590,8 +634,8 @@ class TareaController {
         )  
     }
     /**
-    * Método para busquedas por fecha de registro.
-    */
+     * Método para busquedas por fecha de registro.
+     */
     def buscarPorFechaRegistro () {
         def porFechaRegistroActive = null
         if (params.inActive=="porFechaRegistro") {
@@ -611,7 +655,7 @@ class TareaController {
             busquedaBean = new BusquedaBean()        
             busquedaBean.fechaInicio = fechaInicio
             busquedaBean.fechaFin = fechaFin
-            tareaInstanceList = Tarea.findAllByDateCreatedBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin, [sort: "id", order: "asc"])
+            tareaInstanceList = Tarea.findAllByDateCreatedBetweenAndEliminado(busquedaBean.fechaInicio, busquedaBean.fechaFin, false, [sort: "id", order: "asc"])
         } else {
             flash.warn = "Debe elegir un rango de fechas válido."
         }
@@ -628,8 +672,8 @@ class TareaController {
         )
     }
     /**
-    * Método para crear un rango de fechas a partir de las fechas seleccionadas en el calendario del formulario.
-    */
+     * Método para crear un rango de fechas a partir de las fechas seleccionadas en el calendario del formulario.
+     */
     def rangoDeFecha () {
         def rangoDeFechaActive = null
         if (params.inActive=="rangoDeFecha") {
@@ -649,7 +693,7 @@ class TareaController {
             busquedaBean = new BusquedaBean()        
             busquedaBean.fechaInicio = fechaInicio
             busquedaBean.fechaFin = fechaFin
-            tareaInstanceList = Tarea.findAllByFechaLimiteBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin,, [sort: "id", order: "asc"])
+            tareaInstanceList = Tarea.findAllByFechaLimiteBetweenAndEliminado(busquedaBean.fechaInicio, busquedaBean.fechaFin, false, [sort: "id", order: "asc"])
         } else {
             flash.warn = "Debe elegir un rango de fechas válido."
         }
@@ -666,8 +710,8 @@ class TareaController {
         )
     }
     /**
-    * Método para busquedas por nombre de responsable.
-    */
+     * Método para busquedas por nombre de responsable.
+     */
     def buscarPorNombreResponsables (){
         def nombreResponsablesActive = null
         if (params.inActive=="nombreResponsables") {
@@ -675,8 +719,11 @@ class TareaController {
         }         
         def c = Tarea.createCriteria()
         def tareaInstanceList = c.list {
-            responsable {
-                ilike("firstName", "%"+params.nombre+"%")               
+            eq("eliminado", false)
+            and{
+                responsable {
+                    ilike("firstName", "%"+params.nombre+"%")               
+                }
             }
             order("id", "asc")
         }
@@ -691,8 +738,8 @@ class TareaController {
         )       
     }
     /**
-    * Método para busquedas por palabras clave.
-    */
+     * Método para busquedas por palabras clave.
+     */
     def buscarPorTags () {
         def porTagsActive = null
         if (params.inActive == "porTags") {
@@ -702,7 +749,7 @@ class TareaController {
         def resultList = s.tokenize(",")
         def tareaInstanceList =[] 
         resultList.each{            
-            def results = Tarea.findAllByTagsIlike("%"+it+",%", [sort: "id", order: "asc"])
+            def results = Tarea.findAllByTagsIlikeAndEliminado("%"+it+",%", false, [sort: "id", order: "asc"])
             tareaInstanceList = tareaInstanceList + results as Set    
         }
         session.tareaInstanceList = tareaInstanceList
@@ -716,8 +763,8 @@ class TareaController {
         )       
     }
     /**
-    * Método para generar reporte de consultas.
-    */
+     * Método para generar reporte de consultas.
+     */
     def generarReporte(){
         def tareaInstanceList = session.tareaInstanceList
         def inActive = session.inActive
@@ -753,8 +800,8 @@ class TareaController {
         )  
     }
     /**
-    * Método para visualizar todos los campos con su valor de una tarea.
-    */
+     * Método para visualizar todos los campos con su valor de una tarea.
+     */
     def detalles(Long id){
         def tareaInstance = Tarea.get(id)
         log.info "id de tarea "+ id

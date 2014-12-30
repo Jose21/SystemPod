@@ -44,7 +44,7 @@
             </tr>
             <tr>
                 <th style="text-align: right"><g:message code="tarea.descripcion.label" default="Descripción: " /></th>
-                <td style="text-align: left">${tareaInstance?.descripcion}</td>
+                <td style="text-align: left"><%=tareaInstance?.descripcion%></td>
             </tr>
             <tr>
                 <th style="text-align: right"><g:message code="tarea.alertaVencimiento.label" default="Alerta de Vencimiento: " /></th>

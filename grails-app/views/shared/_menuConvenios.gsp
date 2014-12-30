@@ -9,7 +9,7 @@
       <i class="icon-home"></i>
     </g:link>
 
-    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS">
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS_STANDARD, ROLE_CONVENIOS_ADMIN">
         <g:link class="btn btn-small btn-info" controller="convenio" action="create">
             <i class="icon-book"></i>
         </g:link>
@@ -21,7 +21,7 @@
         </g:link>
     </sec:ifAnyGranted>
     
-    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS">
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_TURNOS_STANDARD, ROLE_TURNOS_ADMIN">
         <g:link class="btn btn-small btn-warning" controller="tarea" action="hoy">
             <i class="icon-check"></i>
         </g:link>
@@ -39,7 +39,7 @@
   </div>
 </div><!--#sidebar-shortcuts-->
 
-<sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS">
+<sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS_STANDARD, ROLE_CONVENIOS_ADMIN">
 <ul class="nav nav-list">
   <li class="active open">
     <a href="#" class="dropdown-toggle">
@@ -48,6 +48,11 @@
       <b class="arrow icon-angle-down"></b>
     </a>
     <ul class="submenu">
+      <li>
+        <g:link controller="tarea" action="asignacionConvenios">
+          <i class="icon-double-angle-right"></i> Asignaciones
+        </g:link>
+      </li>
       <li>
         <g:link controller="convenio" action="create">
           <i class="icon-double-angle-right"></i> Nuevo
@@ -95,7 +100,7 @@
       </li>
       <li>        
         <g:link controller="statusDelConvenio">
-          <i class="icon-double-angle-right"></i> Status Del Convenio
+          <i class="icon-double-angle-right"></i> Estatus Del Convenio
         </g:link>
       </li>
     </ul>

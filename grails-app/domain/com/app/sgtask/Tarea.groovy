@@ -60,6 +60,13 @@ class Tarea implements Comparable {
     /**
     * Integración con convenios, otorgamiento y revocacion de poder.
     */
+   
+    /**
+    *Baja lógica
+    *
+    */
+   boolean eliminado = null
+    
     static belongsTo = [ 
         convenio : Convenio,
         otorgamientoDePoder : OtorgamientoDePoder,
@@ -86,6 +93,7 @@ class Tarea implements Comparable {
         alertaVencimiento blank:false, inList : ["0","1","2","3","4","5","6","7"]
         prioridad blank:false, inList : ["Normal", "Urgente"]
         tags nullable:true, maxSize:1000
+        eliminado nullable:true
     }
     
     static mapping = {

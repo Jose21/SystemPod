@@ -10,7 +10,7 @@
     <body>
         <div id="content-header">
             <h1>Mostrar: Convenio</h1>
-            <div class="btn-group">
+            <!--div class="btn-group">
                 <g:link class="btn btn-small tip-bottom" action="index">
                     <i class="icon-file"></i>
                     <g:message code="default.list.label" args="[entityName]" />
@@ -19,7 +19,7 @@
                     <i class="icon-file"></i>
                     <g:message code="default.new.label" args="[entityName]" />
                 </g:link>
-            </div>
+            </div-->
         </div>
 
         <div class="container-fluid">
@@ -55,10 +55,9 @@
 
                 <g:if test="${convenioInstance?.status}">
                     <dl>
-                        <dt><g:message code="convenio.status.label" default="Status" /></dt>
+                        <dt><g:message code="convenio.status.label" default="Estatus" /></dt>
 
-                        <dd><g:link controller="statusDeConvenio" action="show" id="${convenioInstance?.status?.id}">${convenioInstance?.status?.encodeAsHTML()}</g:link></dd>
-
+                        <dd><g:fieldValue bean="${convenioInstance}" field="status"/></dd>
                     </dl>
                 </g:if>
 
@@ -67,7 +66,7 @@
                         <dt><g:message code="convenio.responsables.label" default="Responsables" /></dt>
 
                         <g:each in="${convenioInstance.responsables}" var="r">
-                         <dd><g:link controller="persona" action="show" id="${r.id}">${r?.encodeAsHTML()}</g:link></dd>
+                            <dd><g:link controller="persona" action="show" id="${r.id}">${r?.encodeAsHTML()}</g:link></dd>
                         </g:each>
 
                     </dl>
@@ -89,7 +88,9 @@
                 <fieldset class="buttons">
                     <g:hiddenField name="id" value="${convenioInstance?.id}" />
                     <g:link class="btn btn-primary" action="edit" id="${convenioInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-                    <g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_CONVENIOS_ADMIN">
+                        <g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+                    </sec:ifAnyGranted>
                 </fieldset>
             </g:form>
         </div>

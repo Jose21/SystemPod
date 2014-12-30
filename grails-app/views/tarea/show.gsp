@@ -39,7 +39,7 @@
             <g:if test="${tareaInstance?.convenio}">
                 <br/>
                 <g:link class="btn btn-small btn-info btn-block" controller="convenio" action="edit" id="${tareaInstance?.convenio.id}">                
-                    El turno está asociado al convenio: ${tareaInstance?.convenio.id} - Número de Convenio: ${tareaInstance?.convenio.numeroDeConvenio} - Objeto: ${tareaInstance?.convenio.objeto}
+                    El turno está asociado al convenio: ${tareaInstance?.convenio.id} - Objeto: ${tareaInstance?.convenio.objeto}
                 </g:link>
                 <br/>
             </g:if>
@@ -140,7 +140,7 @@
                                                 </dd>                                                
                                             </g:if>
                                             <g:if test="${tareaInstance?.tags}">                                                
-                                                <dt><g:message code="tarea.tags.label" default="Tags" /></dt>
+                                                <dt><g:message code="tarea.tags.label" default="Palabras Clave" /></dt>
                                                 <dd><g:fieldValue bean="${tareaInstance}" field="tags"/></dd>                                                
                                             </g:if>
                                         </dl>
@@ -224,7 +224,10 @@
                 <fieldset class="buttons">
                     <g:hiddenField name="id" value="${tareaInstance?.id}" />
                     <g:link class="btn btn-primary" action="edit" id="${tareaInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-                    </fieldset>
+                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_TURNOS_ADMIN">
+                        <g:actionSubmit class="btn btn-danger" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+                    </sec:ifAnyGranted>
+                </fieldset>
             </g:form>
         </g:if>
         <g:else>

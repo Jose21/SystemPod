@@ -25,11 +25,7 @@
             <tr>
                 <th style="text-align: right"><g:message code="convenio.id.label"  default="Identificador Interno:" /></th>
                 <td style="text-align: left">${convenioInstance?.id}</td>
-            </tr>
-            <tr>
-                <th style="text-align: right"><g:message code="convenio.numeroDeConvenio.label" default="Número de Convenio:" /></th>
-                <td style="text-align: left">${convenioInstance?.numeroDeConvenio}</td>
-            </tr>
+            </tr>           
             <tr>
                 <th style="text-align: right"><g:message code="convenio.objeto.label" default="Objeto:" /></th>
                 <td style="text-align: left">${convenioInstance?.objeto}</td>

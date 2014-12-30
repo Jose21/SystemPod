@@ -100,11 +100,22 @@ class BootStrap {
                 passwordExpired : false
             ).save() 
             new Usuario (
-                firstName : "Jose",
-                lastName : "Miramar Medina",
-                email : "miramar@yahoo.com.mx",
+                firstName : "Enrique",
+                lastName : "Mejia Díaz",
+                email : "dostres@yahoo.com.mx",
                 username : "facturas",
                 password : "facturas",
+                enabled : true,
+                accountExpired : false,
+                accountLocked : false,
+                passwordExpired : false
+            ).save() 
+            new Usuario (
+                firstName : "Arturo",
+                lastName : "Carmona Sanchez",
+                email : "carmona@yahoo.com.mx",
+                username : "turnos",
+                password : "turnos",
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
@@ -119,8 +130,11 @@ class BootStrap {
             new Rol (authority : "ROLE_PODERES_NOTARIO").save()
             new Rol (authority : "ROLE_PODERES_SOLICITANTE").save()
             new Rol (authority : "ROLE_PODERES_GESTOR").save()
-            new Rol (authority : "ROLE_CONVENIOS").save()
+            new Rol (authority : "ROLE_CONVENIOS_ADMIN").save()
+            new Rol (authority : "ROLE_CONVENIOS_STANDARD").save()
             new Rol (authority : "ROLE_FACTURAS").save()
+            new Rol (authority : "ROLE_TURNOS_ADMIN").save()
+            new Rol (authority : "ROLE_TURNOS_STANDARD").save()
             
                 
             new UsuarioRol (usuario : Usuario.findByUsername("admin"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
@@ -129,15 +143,16 @@ class BootStrap {
             new UsuarioRol (usuario : Usuario.findByUsername("notario1"), rol : Rol.findByAuthority("ROLE_PODERES_NOTARIO")).save()
             new UsuarioRol (usuario : Usuario.findByUsername("notario2"), rol : Rol.findByAuthority("ROLE_PODERES_NOTARIO")).save()
             new UsuarioRol (usuario : Usuario.findByUsername("gestor1"), rol : Rol.findByAuthority("ROLE_PODERES_GESTOR")).save()
-            new UsuarioRol (usuario : Usuario.findByUsername("convenios"), rol : Rol.findByAuthority("ROLE_CONVENIOS")).save()           
+            new UsuarioRol (usuario : Usuario.findByUsername("convenios"), rol : Rol.findByAuthority("ROLE_CONVENIOS_ADMIN")).save()           
             new UsuarioRol (usuario : Usuario.findByUsername("facturas"), rol : Rol.findByAuthority("ROLE_FACTURAS")).save()
-            
+            new UsuarioRol (usuario : Usuario.findByUsername("turnos"), rol : Rol.findByAuthority("ROLE_TURNOS_ADMIN")).save()
             
                 
             new Grupo(nombre:"Sin Categoría", descripcion: "asd").save()
                 
             new StatusDelConvenio(nombre:"En Elaboración").save()
-            new StatusDelConvenio(nombre:"Vigente").save()
+            new StatusDelConvenio(nombre:"Liberado").save()
+            new StatusDelConvenio(nombre:"Firmado").save()
                 
             new FormatoDeCartaDeInstruccion(
                 registro:"REG:SGJ/XXX-XX", 

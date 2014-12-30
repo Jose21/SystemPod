@@ -38,8 +38,7 @@
                     <thead>                
                     <br>
                     <tr>
-                        <th><g:message code="convenio.id.label"  default="Identificador interno" /></th>
-                        <th><g:message code="convenio.numeroDeConvenio.label" default="Número de Convenio" /></th>
+                        <th><g:message code="convenio.id.label"  default="Identificador interno" /></th>                        
                         <th><g:message code="convenio.objeto.label" default="Objeto" /></th>
                         <th><g:message code="convenio.dateCreated.label" default="Fecha de Registro" /></th>
                         <th><g:message code="convenio.responsables.label" default="Responsables" /></th>
@@ -53,8 +52,7 @@
                             <tr><th colspan="8">CONVENIOS</th></tr>
                                     <g:each in="${conveniosPorFechaBean.convenios}" status="i" var="convenios">
                                 <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                    <td style="text-align:center"><g:link controller="convenio" action="show" id="${convenios.id}"><span class="badge">${convenios?.id}</span></g:link></td>
-                                    <td>${fieldValue(bean: convenios, field: "numeroDeConvenio")}</td>
+                                    <td style="text-align:center"><g:link controller="convenio" action="show" id="${convenios.id}"><span class="badge">${convenios?.id}</span></g:link></td>                                    
                                     <td>${fieldValue(bean: convenios, field: "objeto")}</td>
                                     <td><g:formatDate date="${convenios?.dateCreated}" /></td>
                                     <td>
@@ -78,8 +76,7 @@
                             <tr><th colspan="8">CONTRAIDOS POR EL INFONAVIT</th></tr>
                                     <g:each in="${conveniosPorFechaBean.conveniosContraidos}" status="i" var="conveniosContraidos">
                                 <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                    <td style="text-align:center"><g:link controller="convenio" action="show" id="${conveniosContraidos.id}"><span class="badge">${conveniosContraidos?.id}</span></g:link></td>
-                                    <td>${fieldValue(bean: conveniosContraidos, field: "numeroDeConvenio")}</td>
+                                    <td style="text-align:center"><g:link controller="convenio" action="show" id="${conveniosContraidos.id}"><span class="badge">${conveniosContraidos?.id}</span></g:link></td>                                    
                                     <td>${fieldValue(bean: conveniosContraidos, field: "objeto")}</td>
                                     <td><g:formatDate date="${conveniosContraidos.dateCreated}" /></td>
                                     <td>
@@ -103,8 +100,7 @@
                             <tr><th colspan="8">CONTRAIDOS POR OTRAS DEPENDENCIAS</th></tr>
                                     <g:each in="${conveniosPorFechaBean.conveniosNoContraidos}" status="i" var="conveniosNoContraidos">
                                 <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                                    <td style="text-align:center"><g:link controller="convenio" action="show" id="${conveniosNoContraidos.id}"><span class="badge">${conveniosNoContraidos?.id}</span></g:link></td>
-                                    <td>${fieldValue(bean: conveniosNoContraidos, field: "numeroDeConvenio")}</td>
+                                    <td style="text-align:center"><g:link controller="convenio" action="show" id="${conveniosNoContraidos.id}"><span class="badge">${conveniosNoContraidos?.id}</span></g:link></td>                                    
                                     <td>${fieldValue(bean: conveniosNoContraidos, field: "objeto")}</td>
                                     <td><g:formatDate date="${conveniosNoContraidos.dateCreated}" /></td>
                                     <td>

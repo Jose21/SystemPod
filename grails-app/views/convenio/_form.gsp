@@ -1,14 +1,6 @@
 <%@ page import="com.app.sgcon.Convenio;java.text.SimpleDateFormat" %>
 
-<div class="control-group fieldcontain ${hasErrors(bean: convenioInstance, field: 'numeroDeConvenio', 'error')} required">
-    <label for="numeroDeConvenio" class="control-label">
-        <g:message code="convenio.numeroDeConvenio.label" default="Número de Convenio" />
-        <span class="required-indicator">*</span>
-    </label>
-    <div class="controls">
-        <g:textField class="span6" name="numeroDeConvenio" maxlength="100" required="" value="${convenioInstance?.numeroDeConvenio}" autocomplete="off"/>
-    </div>
-</div>
+
 
 <div class="control-group fieldcontain ${hasErrors(bean: convenioInstance, field: 'objeto', 'error')} required">
     <label for="objeto" class="control-label">
@@ -42,14 +34,13 @@
   </div>
 </div>
 
-<div class="control-group fieldcontain ${hasErrors(bean: convenioInstance, field: 'fechaDeFirma', 'error')} required">
+<div class="control-group fieldcontain ${hasErrors(bean: convenioInstance, field: 'fechaDeFirma', 'error')}">
   <label for="fechaDeFirma" class="control-label">
         <g:message code="convenio.fechaDeFirma.label" default="Fecha De Firma" />
-    <span class="required-indicator">*</span>
   </label>
   <div class="controls">          
     <div class="row-fluid input-append">
-      <input readonly="readonly" class="span5 date-picker validate[required]" id="fechaDeFirma" type="text" value="${convenioInstance?.fechaDeFirma?(new SimpleDateFormat("dd/MM/yyyy")).format(convenioInstance?.fechaDeFirma):""}" data-date-format="dd/mm/yyyy" name="fechaDeFirma" />      
+      <input readonly="readonly" class="span5 date-picker" id="fechaDeFirma" type="text" value="${convenioInstance?.fechaDeFirma?(new SimpleDateFormat("dd/MM/yyyy")).format(convenioInstance?.fechaDeFirma):""}" data-date-format="dd/mm/yyyy" name="fechaDeFirma" />      
       <span class="add-on">
         <i class="icon-calendar"></i>
       </span>
@@ -72,11 +63,11 @@
 
 <div class="control-group fieldcontain ${hasErrors(bean: convenioInstance, field: 'status', 'error')} required">
   <label for="status" class="control-label">
-        <g:message code="convenio.status.label" default="Status" />
+        <g:message code="convenio.status.label" default="Estatus" />
     <span class="required-indicator">*</span>
   </label>
   <div class="controls">
-        <g:select id="status" name="status.id" from="${com.app.sgcon.StatusDelConvenio.list()}" optionKey="id" required="" value="${convenioInstance?.status?.id}"  noSelection="['':'-Elige un usuario-']" class="many-to-one validate[required]"/>
+        <g:select id="status" name="status.id" from="${com.app.sgcon.StatusDelConvenio.list()}" optionKey="id" required="" value="${convenioInstance?.status?.id}"  noSelection="['':'-Elige una opción-']" class="many-to-one validate[required]"/>
   </div>
 </div>
 
@@ -104,7 +95,7 @@
 
 <div class="control-group fieldcontain ${hasErrors(bean: convenioInstance, field: 'tags', 'error')}">
   <label for="tags" class="control-label">
-        <g:message code="convenio.tags.label" default="Tags" />
+        <g:message code="convenio.tags.label" default="Palabras Clave" />
   </label>
   <div class="controls">
         <g:textArea class="span6" name="tags" maxlength="5000" value="${convenioInstance?.tags}" autocomplete="off"/>

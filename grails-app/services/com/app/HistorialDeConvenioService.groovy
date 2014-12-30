@@ -72,7 +72,7 @@ class HistorialDeConvenioService {
         historialDeConvenio.usuario = springSecurityService.currentUser
         historialDeConvenio.campo = campo
         historialDeConvenio.valorAnterior = valorAnterior
-        historialDeConvenio.valorActual = convenioInstance.numeroDeConvenio
+        //historialDeConvenio.valorActual = convenioInstance.numeroDeConvenio
         historialDeConvenio.accion = accion
         historialDeConvenio.save(flush:true)   
     }
