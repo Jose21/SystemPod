@@ -14,7 +14,7 @@
         <br/>        
         <div class="tabbable">
             <ul id="inbox-tabs" class="inbox-tabs nav nav-tabs padding-16 tab-size-bigger tab-space-1">
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_GESTOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE, ROLE_PODERES_RESOLVEDOR">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_GESTOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE, ROLE_PODERES_RESOLVEDOR, ROLE_GESTOR_EXTERNO, ROLE_SOLICITANTE_EXTERNO">
                     <li class="active">
                         <a data-toggle="tab" href="#inbox">
                             <i class="blue icon-inbox bigger-130"></i>
@@ -22,7 +22,7 @@
                         </a>
                     </li>
                 </sec:ifAnyGranted>
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_GESTOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_GESTOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE, ROLE_GESTOR_EXTERNO, ROLE_SOLICITANTE_EXTERNO">
                     <li>
                         <a data-toggle="tab" href="#shared">
                             <i class="icon-group bigger-130"></i>
@@ -308,7 +308,7 @@
                 </div><!--/.message-container-->
             </div>
                                   <!-- SOLICITUDES QUE ENVIE  -->
-            <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_GESTOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE">    
+            <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_GESTOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE, ROLE_SOLICITANTE_EXTERNO">    
                 <div id="shared" class="tab-pane">
                     <div class="message-container">
                         <div id="id-message-list-navbar" class="message-navbar align-center clearfix">

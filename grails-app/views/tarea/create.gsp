@@ -55,7 +55,7 @@
                         <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />
                     </div>
                 </sec:ifAnyGranted>
-                <sec:ifAnyGranted roles="ROLE_PODERES_RESOLVEDOR">
+                <sec:ifAnyGranted roles="ROLE_PODERES_RESOLVEDOR, ROLE_GESTOR_EXTERNO">
                     <div class="form-actions">
                         <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.label', default: 'Enviar')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
                     </div>

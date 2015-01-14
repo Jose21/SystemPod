@@ -18,8 +18,8 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                 <!--<g:link action="share" class="btn btn-small btn-info tip-bottom" id="${convenioInstance?.id}">          
                     <i class="icon-share-alt"></i> Compartir
                 </g:link>-->
-                <g:link controller="tarea" action="create" class="btn btn-small btn-inverse tip-bottom" params="[ idConvenio : convenioInstance?.id ]">
-                    <i class="icon-external-link"></i> Asociar Turno
+                <g:link controller="tarea" action="create" class="btn btn-small btn-warning tip-bottom" params="[ idConvenio : convenioInstance?.id ]">
+                    <i class="icon-external-link"></i> Turnar Convenio
                 </g:link>
                 <a class="btn btn-small btn-purple tip-bottom" href="#tareasAsociadas" data-toggle="modal">
                     <i class="icon-comments"></i> Turnos Asociados
@@ -415,7 +415,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                         </div>
                         <div class="widget-body">
                             <div class="widget-main">
-                                <g:each in="${convenioInstance?.tareas.findAll{ it.cerrada == false }}" var="tarea">
+                                <g:each in="${convenioInstance?.tareas.findAll{it.cerrada == false}.sort{it.id}}" var="tarea">
                                     <g:link class="btn btn-mini btn-info btn-block" controller="tarea" action="show" id="${tarea.id}" params="[ idConvenio : convenioInstance?.id ]">
                                         <span class="label label-large label-info arrowed-in-right arrowed-in">Turno: ${tarea.id}</span>
                                         ${tarea.nombre}

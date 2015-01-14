@@ -16,6 +16,7 @@ import com.app.sgpod.RevocacionDePoder
 import com.app.security.Rol
 import com.app.security.UsuarioRol
 import com.app.ses.AmazonSES
+import com.app.sgcon.HistorialDeConvenio
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class TareaController {
@@ -26,6 +27,7 @@ class TareaController {
     NotificacionesService notificacionesService
     def exportService
     def grailsApplication
+    def historialDeConvenioService
     
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -268,8 +270,26 @@ class TareaController {
      * Este método sirve para la creacion de un registro de tipo tarea.
      */
     def create() {
+        
+        def usuariosList = null
+        def usuarioStandard = null
+        
         if (params.idConvenio) {
             session.idConvenio = params.idConvenio as long
+            def convenioInstance = Convenio.get(params.idConvenio as long)        
+            if(!convenioInstance.responsables || !convenioInstance.firmantes){                
+                flash.warn = "Debe agregar al menos un responsable y un firmante oara poder turnar el convenio"
+                redirect(controller: "convenio", action: "edit", id: session.idConvenio)                
+            }
+            
+           //se buscan los usuarios parea este modulo para q aparezcan en la lista
+            usuariosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS_ADMIN")).collect {it.usuario}
+            usuarioStandard = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS_STANDARD")).collect {it.usuario}
+        
+            usuariosList = usuariosList + usuarioStandard
+            //se quita el usuario que esta logueado en el sistema
+            usuariosList = usuariosList - springSecurityService.currentUser
+            
         } else {
             session.idConvenio = null
         }
@@ -283,17 +303,18 @@ class TareaController {
         } else {
             session.idRevocacionDePoder = null
         }
+        if (!params.idConvenio && !params.idOtorgamientoDePoder && !params.idRevocacionDePoder){
+            
+            //se buscan los usuarios parea este modulo para q aparezcan en la lista
+            usuariosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_TURNOS_ADMIN")).collect {it.usuario}
+            usuarioStandard = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_TURNOS_STANDARD")).collect {it.usuario}
         
-        //se buscan los usuarios parea este modulo para q aparezcan en la lista
-        def usuariosConveniosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS_ADMIN")).collect {it.usuario}
-        def usuariosConvenioStandard = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS_STANDARD")).collect {it.usuario}
+            usuariosList = usuariosList + usuarioStandard
+            //se quita el usuario que esta logueado en el sistema
+            usuariosList = usuariosList - springSecurityService.currentUser            
+        }                             
         
-        usuariosConveniosList = usuariosConveniosList + usuariosConvenioStandard
-        //se quita el usuario que esta logueado en el sistema
-        usuariosConveniosList = usuariosConveniosList - springSecurityService.currentUser
-              
-        
-        [tareaInstance: new Tarea(params), usuariosConveniosList : usuariosConveniosList]        
+        [tareaInstance: new Tarea(params), usuariosList : usuariosList]        
     }
     /**
      * Método para guardar los registros en el sistema.
@@ -348,6 +369,10 @@ class TareaController {
         if (session.idConvenio) {
             def convenioInstance = Convenio.get(session.idConvenio)
             convenioInstance.addToTareas(tareaInstance).save(flush:true)
+            def usuarioInstance = Usuario.get(params.responsable.id as long)
+
+            println "params.responsable: " + usuarioInstance
+            historialDeConvenioService.addTurnosToHistorial(usuarioInstance, convenioInstance,null,"Se turnó el Convenio al usuario:")
         }
         //Integración con Otorgamiento De Poder
         if (session.idOtorgamientoDePoder){
@@ -424,7 +449,14 @@ class TareaController {
         if (tareaInstance.creadaPor != springSecurityService.currentUser) {
             historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "abrió un turno")
         }
-        [tareaInstance: tareaInstance, currentUser : springSecurityService.currentUser]
+        
+        if(tareaInstance.creadaPor == springSecurityService.currentUser){
+            def owner = false            
+        }else{
+            def owner = true            
+        }  
+        
+        [tareaInstance: tareaInstance, currentUser : springSecurityService.currentUser, owner:params.owner]
     }
     /**
      * Método para editar un registro.
@@ -745,14 +777,19 @@ class TareaController {
         if (params.inActive == "porTags") {
             porTagsActive = "active"
         }
-        def s = params.tags.toString().replaceAll(" ", "")
-        def resultList = s.tokenize(",")
-        def tareaInstanceList =[] 
-        resultList.each{            
-            def results = Tarea.findAllByTagsIlikeAndEliminado("%"+it+",%", false, [sort: "id", order: "asc"])
+       
+        //def s = params.tags.toString().replaceAll(" ", ",")
+        //def resultList = s.tokenize(",")
+        //def tareaInstanceList =[]         
+       /*resultList.each{ algo -> 
+            println "it: "+ algo
+            def results = Tarea.findAllByTagsIlikeAndEliminado("%"+algo+",%", false, [sort: "id", order: "asc"])
             tareaInstanceList = tareaInstanceList + results as Set    
-        }
-        session.tareaInstanceList = tareaInstanceList
+            println "tareaInstanceList: " + tareaInstanceList
+        }*/        
+        def tareaInstanceList = Tarea.findAllByTagsIlikeAndEliminado("%"+params.tags+"%", false, [sort: "id", order: "asc"])
+                
+        session.tareaInstanceList = tareaInstanceList       
         render(
             view: "consultaTarea", 
             model: [
@@ -765,7 +802,7 @@ class TareaController {
     /**
      * Método para generar reporte de consultas.
      */
-    def generarReporte(){
+    def generarReporte(){        
         def tareaInstanceList = session.tareaInstanceList
         def inActive = session.inActive
         log.info "activo:." + session.inActive

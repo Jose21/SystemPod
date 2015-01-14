@@ -170,19 +170,7 @@
                             <dd>   ${otorgamientoDePoderInstance?.motivoDeOtorgamiento}</dd>
                         </span>
                     </td>
-                </tr>
-                <tr>
-                    <td bgcolor="#E7EBEB" style="width:30%;text-align: right">
-                        <span style="font-family: sans-serif;font-size: 13px;">
-                            SOLICITADO POR
-                        </span>
-                    </td>                    
-                    <td style="width:70%;text-align: left">
-                        <span style="font-family: sans-serif;font-size: 13px;">
-                            <dd>   ${otorgamientoDePoderInstance?.solicitadoPor}</dd>
-                        </span>
-                    </td>        
-                </tr>
+                </tr>                
                 <tr>
                     <td bgcolor="#E7EBEB" style="width:30%;text-align: right">
                         <span style="font-family: sans-serif;font-size: 13px;">

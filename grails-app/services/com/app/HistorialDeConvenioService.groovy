@@ -76,4 +76,13 @@ class HistorialDeConvenioService {
         historialDeConvenio.accion = accion
         historialDeConvenio.save(flush:true)   
     }
+    def addTurnosToHistorial(Usuario usuarioInstance, Convenio convenioInstance,String valorAnterior, String accion){
+        def historialDeConvenio = new HistorialDeConvenio()
+        historialDeConvenio.convenio = convenioInstance     
+        historialDeConvenio.usuario = springSecurityService.currentUser
+        //historialDeConvenio.campo = campo
+        historialDeConvenio.valorAnterior = usuarioInstance 
+        historialDeConvenio.accion = accion
+        historialDeConvenio.save(flush:true)   
+    }
 }

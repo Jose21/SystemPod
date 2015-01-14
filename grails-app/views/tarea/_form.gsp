@@ -1,7 +1,7 @@
 <%@ page import="com.app.sgtask.Tarea;java.text.SimpleDateFormat" %>
 
 <div class="control-group fieldcontain ${hasErrors(bean: tareaInstance, field: 'nombre', 'error')} required">
-    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_CONVENIOS">
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_CONVENIOS_ADMIN, ROLE_CONVENIOS_STANDARD, ROLE_GESTOR_EXTERNO, ROLE_TURNOS_ADMIN, ROLE_TURNOS_STANDARD">
         <label for="nombre" class="control-label">
             <g:message code="tarea.nombre.label" default="Nombre" />
             <span class="required-indicator">*</span>
@@ -19,7 +19,7 @@
 </div>
 
 <div class="control-group fieldcontain ${hasErrors(bean: tareaInstance, field: 'descripcion', 'error')} required">
-    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_CONVENIOS">
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_CONVENIOS_ADMIN, ROLE_CONVENIOS_STANDARD, ROLE_GESTOR_EXTERNO, ROLE_TURNOS_ADMIN, ROLE_TURNOS_STANDARD">
         <label for="descripcion" class="control-label">
             <g:message code="tarea.descripcion.label" default="Descripción" />
             <span class="required-indicator">*</span>
@@ -86,7 +86,7 @@
             <span class="required-indicator">*</span>
         </label>
         <div class="controls">
-            <g:select id="responsable" name="responsable.id" from="${usuariosConveniosList}" optionKey="id" required="" value="${tareaInstance?.responsable?.id}" noSelection="['':'-Elige un usuario-']" class="many-to-one"/>
+            <g:select id="responsable" name="responsable.id" from="${usuariosList}" optionKey="id" required="" value="${tareaInstance?.responsable?.id}" noSelection="['':'-Elige un usuario-']" class="many-to-one"/>
         </div>
     </div>
 

@@ -22,7 +22,7 @@ class OtorgamientoDePoder extends Poder {
     /**
     * Nombre de quien solicita el poder.
     */
-    String solicitadoPor
+    //String solicitadoPor
         
     /**
     * Fecha del otorgamiento.
@@ -54,7 +54,7 @@ class OtorgamientoDePoder extends Poder {
         
         poderSolicitado blank:true, nullable:true, maxSize:1048576
         motivoDeOtorgamiento nullable:false, maxSize:1048576
-        solicitadoPor blank:false
+        //solicitadoPor blank:false
         
         fechaDeOtorgamiento nullable:true       
         fechaVencimiento nullable:true

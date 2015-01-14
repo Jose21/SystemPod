@@ -23,16 +23,16 @@
                         <span class="bigger-110">Por Nombre del Apoderado <span class="badge"></span></span>
                     </a>
                 </li>
-                <li class="${solicitadoPorActive?:""}">
+                <!--li class="${solicitadoPorActive?:""}">
                     <a data-toggle="tab" href="#solicitadoPor">
                         <i class="icon-group bigger-130"></i>
                         <span class="bigger-110">Por Nombre del Solicitante <span class="badge"></span></span>
                     </a>
-                </li>
+                </li-->
                 <li class="${porTagsActive?:""}">
                     <a data-toggle="tab" href="#porTags">              
                         <i class="icon-tag bigger-130"></i>
-                        <span class="bigger-110">Tags<span class="badge"></span></span>
+                        <span class="bigger-110">Palabras Clave<span class="badge"></span></span>
                     </a>
                 </li>
             </ul>
@@ -119,8 +119,7 @@
             <th colspan="8"  style="text-align:left;font-size:14px">Otorgamiento de Poder</th>
             <tr>
                 <th><g:message code="otorgamientoDePoder.id.label"  default="Número de Folio" /></th>
-                <th><g:message code="otorgamientoDePoder.apoderados.nombre.label" default="Nombre Apoderado(s)" /></th>
-                <th><g:message code="otorgamientoDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
+                <th><g:message code="otorgamientoDePoder.apoderados.nombre.label" default="Nombre Apoderado(s)" /></th>                
                 <th><g:message code="otorgamientoDePoder.registroDeLaSolicitud.label" default="Registro De La Solicitud" /></th>                
                 <th><g:message code="otorgamientoDePoder.categoriaDeTipoDePoder.tipoDePoder.label" default="Tipo De Poder" /></th>
                 <th><g:message code="otorgamientoDePoder.categoriaDeTipoDePoder.label" default="Categoria" /></th>
@@ -136,8 +135,7 @@
                                 ${apoderado.nombre}
                                 <br>
                             </g:each>
-                        </td>
-                        <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "solicitadoPor")}</td>
+                        </td>                        
                         <td><g:formatDate date="${otorgamientoDePoderInstance.registroDeLaSolicitud}" /></td>                        
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "categoriaDeTipoDePoder.tipoDePoder.nombre")}</td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "categoriaDeTipoDePoder.nombre")}</td>
@@ -158,8 +156,7 @@
             <th colspan="7"  style="text-align:left;font-size:14px">Revocación de Poder</th>
             <tr>
                 <th><g:message code="revocacionDePoder.id.label"  default="Número de Folio" /></th>
-                <th><g:message code="revocacionDePoder.apoderados.nombre.label" default="Nombre Apoderado" /></th>
-                <th><g:message code="revocacionDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
+                <th><g:message code="revocacionDePoder.apoderados.nombre.label" default="Nombre Apoderado" /></th>                
                 <th><g:message code="revocacionDePoder.escrituraPublica.label" default="Escritura Publica" /></th>                
                 <th><g:message code="revocacionDePoder.fechaDeRevocacion.label" default="Fecha de Revocación" /></th>
             </tr>
@@ -173,8 +170,7 @@
                                 ${apoderado.nombre}
                                 <br>
                             </g:each>
-                        </td>
-                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "solicitadoPor")}</td>
+                        </td>                        
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "escrituraPublica")}</td>                        
                         <td><g:formatDate date="${revocacionDePoderInstance.fechaDeRevocacion}" /></td>
                     </tr>

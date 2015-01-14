@@ -16,8 +16,8 @@
                             <i class="icon-thumbs-up"></i> Aceptar y Enviar Solicitud
                         </g:link>
                     </g:if>
-                </sec:ifAnyGranted>
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
+                </sec:ifAnyGranted>                
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_GESTOR_EXTERNO">
                     <g:if test="${!otorgamientoDePoderInstance.documentos && !otorgamientoDePoderInstance.tareas && ocultarBoton != true}">
                         <g:link controller="tarea" action="create" class="btn btn-small btn-danger tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id ]">
                             <i class="icon-thumbs-down"></i> Rechazar Solicitud
@@ -56,6 +56,13 @@
                     </g:if>
                 </sec:ifAnyGranted>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_GESTOR">
+                    <g:if test="${ocultarBoton != true}">
+                        <g:link action="turnarResolvedor" class="btn btn-small btn-info tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+                            <i class="icon-external-link"></i> Turnar a Resolvedor
+                        </g:link>
+                    </g:if>
+                </sec:ifAnyGranted>
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_GESTOR_EXTERNO">
                     <g:if test="${ocultarBoton != true}">
                         <g:link action="turnarResolvedor" class="btn btn-small btn-info tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
                             <i class="icon-external-link"></i> Turnar a Resolvedor
@@ -125,7 +132,7 @@
                                                 <table class="table table-bordered table-striped" border="2">
                                                     <thead>
                                                         <tr>
-                                                            <th><g:message code="otorgamientoDePoder.documentos.label" default="Copia de Escritura Pública" /></th>                            
+                                                            <th colspan="2"><g:message code="otorgamientoDePoder.documentos.label" default="Copia de Escritura Pública" /></th>                            
                                                         </tr>                            
                                                     </thead>
                                                     <tbody>                            

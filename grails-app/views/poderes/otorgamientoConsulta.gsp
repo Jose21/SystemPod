@@ -44,7 +44,7 @@
                 <li class="${porTagsActive?:""}">
                     <a data-toggle="tab" href="#porTags">              
                         <i class="icon-tag bigger-130"></i>
-                        <span class="bigger-110">Tags<span class="badge"></span></span>
+                        <span class="bigger-110">Palabras Clave<span class="badge"></span></span>
                     </a>
                 </li>
             </ul>
@@ -181,8 +181,7 @@
                 </g:if>
                 <tr>
                 <th><g:message code="otorgamientoDePoder.id.label"  default="Número de Folio" /></th>
-                <th><g:message code="otorgamientoDePoder.apoderados.nombre.label" default="Nombre Apoderado(s)" /></th>
-                <th><g:message code="otorgamientoDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
+                <th><g:message code="otorgamientoDePoder.apoderados.nombre.label" default="Nombre Apoderado(s)" /></th>                
                 <th><g:message code="otorgamientoDePoder.registroDeLaSolicitud.label" default="Registro De La Solicitud" /></th>                
                 <th><g:message code="otorgamientoDePoder.categoriaDeTipoDePoder.tipoDePoder.label" default="Tipo De Poder" /></th>
                 <th><g:message code="otorgamientoDePoder.categoriaDeTipoDePoder.label" default="Categoria" /></th>
@@ -198,8 +197,7 @@
                                 ${apoderado.nombre}
                                 <br>
                             </g:each>
-                        </td>
-                        <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "solicitadoPor")}</td>
+                        </td>                        
                         <td><g:formatDate date="${otorgamientoDePoderInstance.registroDeLaSolicitud}" /></td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "categoriaDeTipoDePoder.tipoDePoder.nombre")}</td>
                         <td>${fieldValue(bean: otorgamientoDePoderInstance, field: "categoriaDeTipoDePoder.nombre")}</td>

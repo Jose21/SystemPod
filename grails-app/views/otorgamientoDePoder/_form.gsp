@@ -68,16 +68,6 @@
     </div>
 </div>
 
-<div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'solicitadoPor', 'error')} required">
-    <label for="solicitadoPor" class="control-label">
-        <g:message code="otorgamientoDePoder.solicitadoPor.label" default="Solicitado Por" />
-        <span class="required-indicator">*</span>
-    </label>
-    <div class="controls">
-        <g:textField class="span6" name="solicitadoPor" required="" value="${otorgamientoDePoderInstance?.solicitadoPor}"/>
-    </div>
-</div>
-
 <h3 id="bloqueTags" class="header smaller lighter blue">Agrega palabras clave para búsquedas avanzadas.</h3>
 
 <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'tags', 'error')}">

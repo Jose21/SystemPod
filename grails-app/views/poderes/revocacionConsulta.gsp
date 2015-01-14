@@ -43,7 +43,7 @@
                 <li class="${porTagsActive?:""}">
                     <a data-toggle="tab" href="#porTags">              
                         <i class="icon-tag bigger-130"></i>
-                        <span class="bigger-110">Tags<span class="badge"></span></span>
+                        <span class="bigger-110">Palabras Clave<span class="badge"></span></span>
                     </a>
                 </li>
             </ul>
@@ -180,8 +180,7 @@
                 </g:if>
                 <tr>
                     <th><g:message code="revocacionDePoder.id.label"  default="Número de Folio" /></th>
-                    <th><g:message code="revocacionDePoder.nombre.label" default="Apoderados a quien se Revoca el Poder" /></th>
-                    <th><g:message code="revocacionDePoder.solicitadoPor.label" default="Solicitado Por" /></th>
+                    <th><g:message code="revocacionDePoder.nombre.label" default="Apoderados a quien se Revoca el Poder" /></th>                    
                     <th><g:message code="revocacionDePoder.escrituraPublicaRevocacion.label" default="Escritura Publica" /></th>                    
                     <th><g:message code="revocacionDePoder.fechaDeRevocacion.label" default="Fecha de Revocación" /></th>
                 </tr>
@@ -195,8 +194,7 @@
                                 ${apoderado.nombre}
                                 <br>
                             </g:each>
-                        </td>
-                        <td>${fieldValue(bean: revocacionDePoderInstance, field: "solicitadoPor")}</td>
+                        </td>                        
                         <td>${fieldValue(bean: revocacionDePoderInstance, field: "escrituraPublicaRevocacion")}</td>                        
                         <td><g:formatDate date="${revocacionDePoderInstance.fechaDeRevocacion}" /></td>
                     </tr>

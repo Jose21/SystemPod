@@ -32,7 +32,7 @@ class BootStrap {
                 accountExpired : false,
                 accountLocked : false,
                 passwordExpired : false
-            ).save()
+            ).save()            
             new Usuario (
                 firstName : "Lic. Pedro",
                 lastName : "Chavez",
@@ -54,7 +54,7 @@ class BootStrap {
                 accountExpired : false,
                 accountLocked : false,
                 passwordExpired : false
-            ).save()
+            ).save()            
             new Usuario (
                 firstName : "LIC. ARTURO",
                 lastName : "CARMONA",
@@ -120,9 +120,30 @@ class BootStrap {
                 accountExpired : false,
                 accountLocked : false,
                 passwordExpired : false
-            ).save() 
-            
-            
+            ).save()            
+            new Usuario (
+                firstName : "Joel",
+                lastName : "Ramirez Sanchez",
+                email : "joel@yahoo.com.mx",
+                username : "solicitanteExterno",
+                password : "solicitanteExterno",
+                enabled : true,
+                accountExpired : false,
+                accountLocked : false,
+                passwordExpired : false
+            ).save()
+            new Usuario (
+                firstName : "Laura",
+                lastName : "Jimenez Sanchez",
+                email : "laura@yahoo.com.mx",
+                username : "gestorExterno",
+                password : "gestorExterno",
+                enabled : true,
+                accountExpired : false,
+                accountLocked : false,
+                passwordExpired : false
+            ).save()          
+                     
                 
             new Rol (authority : "ROLE_ADMINISTRADOR").save()
             new Rol (authority : "ROLE_PODERES").save()
@@ -130,6 +151,8 @@ class BootStrap {
             new Rol (authority : "ROLE_PODERES_NOTARIO").save()
             new Rol (authority : "ROLE_PODERES_SOLICITANTE").save()
             new Rol (authority : "ROLE_PODERES_GESTOR").save()
+            new Rol (authority : "ROLE_SOLICITANTE_EXTERNO").save()
+            new Rol (authority : "ROLE_GESTOR_EXTERNO").save()
             new Rol (authority : "ROLE_CONVENIOS_ADMIN").save()
             new Rol (authority : "ROLE_CONVENIOS_STANDARD").save()
             new Rol (authority : "ROLE_FACTURAS").save()
@@ -146,6 +169,8 @@ class BootStrap {
             new UsuarioRol (usuario : Usuario.findByUsername("convenios"), rol : Rol.findByAuthority("ROLE_CONVENIOS_ADMIN")).save()           
             new UsuarioRol (usuario : Usuario.findByUsername("facturas"), rol : Rol.findByAuthority("ROLE_FACTURAS")).save()
             new UsuarioRol (usuario : Usuario.findByUsername("turnos"), rol : Rol.findByAuthority("ROLE_TURNOS_ADMIN")).save()
+            new UsuarioRol (usuario : Usuario.findByUsername("gestorExterno"), rol : Rol.findByAuthority("ROLE_GESTOR_EXTERNO")).save()
+            new UsuarioRol (usuario : Usuario.findByUsername("solicitanteExterno"), rol : Rol.findByAuthority("ROLE_SOLICITANTE_EXTERNO")).save()
             
                 
             new Grupo(nombre:"Sin Categoría", descripcion: "asd").save()

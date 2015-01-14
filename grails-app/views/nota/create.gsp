@@ -61,7 +61,7 @@
                 <g:form class="form-horizontal" action="save" enctype="multipart/form-data">
                     <g:hiddenField name="tarea" id="tarea.id" value="${session.tareaId}"/>
                     <g:render template="form"/>
-                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_CONVENIOS">
+                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_CONVENIOS_ADMIN, ROLE_CONVENIOS_STANDARD, ROLE_TURNOS_ADMIN, ROLE_TURNOS_STANDARD">
                         <div class="form-actions">
                             <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />
                         </div>

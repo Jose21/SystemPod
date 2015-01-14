@@ -19,24 +19,39 @@ class OtorgamientoDePoderController {
         redirect(action: "list", params: params)
     }
     /**
-    * Método apara enlistar los registros existentes en una domain class 
-    */
+     * Método apara enlistar los registros existentes en una domain class 
+     */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [otorgamientoDePoderInstanceList: OtorgamientoDePoder.list(params), otorgamientoDePoderInstanceTotal: OtorgamientoDePoder.count()]
     }
     /**
-    * Este método sirve para la creacion de un registro de tipo otorgamiento de poder.
-    */
+     * Este método sirve para la creacion de un registro de tipo otorgamiento de poder.
+     */
     def create() {
         
         params.registroDeLaSolicitud = new Date()
         
+        def userActual = springSecurityService.currentUser
+        List<Rol> currentUserRoles = UsuarioRol.findByUsuario(userActual).collect { it.rol } as List
+        println currentUserRoles.authority
+        
+        def userExterno = null
+        if(currentUserRoles.authority.contains("ROLE_SOLICITANTE_EXTERNO")) {
+           
+            println "ok ok"
+            params.userExterno = true
+        }else{
+            println "fail"
+            params.userExterno = false
+        }
+        
+        println "params: "+ params
         [otorgamientoDePoderInstance: new OtorgamientoDePoder(params)]
     }
     /**
-    * Método para guardar los registros en el sistema.
-    */
+     * Método para guardar los registros en el sistema.
+     */
 
     def save() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -83,8 +98,8 @@ class OtorgamientoDePoderController {
         redirect(action: "edit", id: otorgamientoDePoderInstance.id)
     }
     /**
-    * Método para visualizar el registro creado en el sistema.
-    */
+     * Método para visualizar el registro creado en el sistema.
+     */
     def show(Long id) {       
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         
@@ -140,7 +155,7 @@ class OtorgamientoDePoderController {
         def usuarioNotarioPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_NOTARIO")).collect {it.usuario}
         def usuariosReasignacion = usuarioResolvedorPoderes + usuarioNotarioPoderes
         def usuarioInstance = springSecurityService.currentUser
-            usuariosReasignacion.remove(usuarioInstance)            
+        usuariosReasignacion.remove(usuarioInstance)            
         def cartaDeInstruccion = CartaDeInstruccionDeOtorgamiento.findByOtorgamientoDePoder(otorgamientoDePoderInstance)
         
         [
@@ -152,8 +167,8 @@ class OtorgamientoDePoderController {
         ]                       
     }
     /**
-    * Método para editar un registro.
-    */
+     * Método para editar un registro.
+     */
     def edit(Long id) {
         def otorgamientoDePoderInstance = OtorgamientoDePoder.read(id)
         if (!otorgamientoDePoderInstance) {
@@ -170,8 +185,8 @@ class OtorgamientoDePoderController {
         [otorgamientoDePoderInstance: otorgamientoDePoderInstance, anchor : params.anchor?:""]
     }
     /**
-    * Método para actualizar los datos de un registro.
-    */
+     * Método para actualizar los datos de un registro.
+     */
     def update(Long id, Long version) {        
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)
@@ -253,8 +268,8 @@ class OtorgamientoDePoderController {
         }
     }
     /**
-    * Método para eliminar el registro del sistema.
-    */
+     * Método para eliminar el registro del sistema.
+     */
     def delete(Long id) {
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)
         if (!otorgamientoDePoderInstance) {
@@ -274,8 +289,8 @@ class OtorgamientoDePoderController {
         }
     }
     /**
-    * Método para eliminar un archivo dentro de la solicitud de otorgamiento de poder.
-    */
+     * Método para eliminar un archivo dentro de la solicitud de otorgamiento de poder.
+     */
     def deleteArchivo(Long id) {
         def otorgamientoDePoderId = params.otorgamientoDePoderId
         def otorgamientoDePoder = OtorgamientoDePoder.get (otorgamientoDePoderId)
@@ -286,8 +301,8 @@ class OtorgamientoDePoderController {
         redirect(action: "edit", id: otorgamientoDePoderId, params : [ anchor : params.anchor ])
     }
     /**
-    * Método para saber si ya esta creada la carta de instrucción de un otorgamiento.
-    */
+     * Método para saber si ya esta creada la carta de instrucción de un otorgamiento.
+     */
     def existe() {
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.id)        
         def cartaDeInstruccion = CartaDeInstruccionDeOtorgamiento.findByOtorgamientoDePoder(otorgamientoDePoderInstance)
@@ -300,8 +315,8 @@ class OtorgamientoDePoderController {
         }
     }
     /**
-    * Método para agregar apoderados dentro de la solicitud.
-    */
+     * Método para agregar apoderados dentro de la solicitud.
+     */
     def addApoderado () {        
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoder.id as long)
         def apoderadoInstance = Apoderado.findByNombre(params."apoderado")
@@ -330,8 +345,8 @@ class OtorgamientoDePoderController {
         redirect(action: "edit", id: otorgamientoDePoderInstance.id, params : [anchor : params.anchor])
     }
     /**
-    * Método para eliminar apoderado dentro de la solicitud.
-    */
+     * Método para eliminar apoderado dentro de la solicitud.
+     */
     def removeApoderado () {
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoder.id as long)        
         def apoderadoInstance = Apoderado.get(params.apoderado.id as long)
@@ -341,25 +356,60 @@ class OtorgamientoDePoderController {
         redirect(action: "edit", id: otorgamientoDePoderInstance.id, params : [ anchor : params.anchor ])
     }
     /**
-    * Método para enviar la solicitud y se asigna al usuario correspondiente.
-    */
+     * Método para enviar la solicitud y se asigna al usuario correspondiente.
+     */
     def asignarA(){
+        
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.idOtorgamientoDePoder as long)
-        def usuarioGestorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_GESTOR")).collect {it.usuario}        
-        usuarioGestorPoderes.each{
-            otorgamientoDePoderInstance.asignar = Usuario.get(it.id as long)   
-        }        
-        otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
-        otorgamientoDePoderInstance.fechaDeEnvio = new Date()
-        otorgamientoDePoderInstance.save()
-         //se guardan datos en la bitacora
-        bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se envió la solicitud")
-        flash.message = "Se ha enviado con éxito la Solicitud."        
-        redirect(controller: "poderes", action: "index")
+        
+        println "params: "+ params
+        def userActual = springSecurityService.currentUser
+        List<Rol> currentUserRoles = UsuarioRol.findByUsuario(userActual).collect { it.rol } as List
+        println currentUserRoles.authority
+        
+        def userExterno = null
+        if(currentUserRoles.authority.contains("ROLE_SOLICITANTE_EXTERNO")) {
+           
+            println "ok ok"
+            //params.userExterno = true
+           
+            if (!otorgamientoDePoderInstance.datosUsuarioExterno){
+                flash.warn = "No se ha agregado un documento con los datos necesarios del usuario." 
+                redirect(action: "edit", id: params.idOtorgamientoDePoder, params : [anchor : params.anchor])
+            }else{
+                def usuarioGestorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_GESTOR_EXTERNO")).collect {it.usuario}        
+                usuarioGestorPoderes.each{
+                    otorgamientoDePoderInstance.asignar = Usuario.get(it.id as long)   
+                }        
+                otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+                otorgamientoDePoderInstance.fechaDeEnvio = new Date()
+                otorgamientoDePoderInstance.save()
+                //se guardan datos en la bitacora
+                bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se envió la solicitud")
+                flash.message = "Se ha enviado con éxito la Solicitud."        
+                redirect(controller: "poderes", action: "index")                
+            }            
+        }else{
+            println "fail"
+            params.userExterno = false
+        
+           
+            def usuarioGestorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_GESTOR")).collect {it.usuario}        
+            usuarioGestorPoderes.each{
+                otorgamientoDePoderInstance.asignar = Usuario.get(it.id as long)   
+            }        
+            otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+            otorgamientoDePoderInstance.fechaDeEnvio = new Date()
+            otorgamientoDePoderInstance.save()
+            //se guardan datos en la bitacora
+            bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se envió la solicitud")
+            flash.message = "Se ha enviado con éxito la Solicitud."        
+            redirect(controller: "poderes", action: "index")
+        }
     }
     /**
-    * Método para enviar la copia de escritura publica al usuario solicitante.
-    */
+     * Método para enviar la copia de escritura publica al usuario solicitante.
+     */
     def entregarCopiaSolicitante(){
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.idOtorgamientoDePoder as long)        
         otorgamientoDePoderInstance.asignar = otorgamientoDePoderInstance.creadaPor
@@ -375,8 +425,8 @@ class OtorgamientoDePoderController {
         redirect(controller: "poderes", action: "index")
     }
     /**
-    * Método para asignar la solicitud al usuario resolvedor.
-    */
+     * Método para asignar la solicitud al usuario resolvedor.
+     */
     def turnarResolvedor(){
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.id as long)
         def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}        
@@ -392,16 +442,16 @@ class OtorgamientoDePoderController {
         redirect(controller: "poderes", action: "index")
     }    
     /**
-    * Método para imprimir la solicitud de otorgamiento de poder.
-    */
+     * Método para imprimir la solicitud de otorgamiento de poder.
+     */
     def imprimir(Long id){
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)                
         [ otorgamientoDePoderInstance : otorgamientoDePoderInstance ]
     }
     /**
-    * Método para reasignar una solicitud en dado caso que aun no sea atendida
-    * por el usuario que la tiene actualmente asignada.
-    */
+     * Método para reasignar una solicitud en dado caso que aun no sea atendida
+     * por el usuario que la tiene actualmente asignada.
+     */
     def reasignarSolicitud(Long id){        
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoder.id as long)        
         
@@ -417,7 +467,7 @@ class OtorgamientoDePoderController {
         [ otorgamientoDePoderInstance : otorgamientoDePoderInstance ]
     }
     
-     def ocultarPorResolvedor(Long id){          
+    def ocultarPorResolvedor(Long id){          
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.id as long)                
         otorgamientoDePoderInstance.ocultadoPorResolvedor = true
         otorgamientoDePoderInstance.save()
@@ -437,6 +487,26 @@ class OtorgamientoDePoderController {
         redirect(controller: "poderes", action: "index")
         
         [ otorgamientoDePoderInstance : otorgamientoDePoderInstance ]
+    }
+    def uploadDatosUsuario (){
+        
+        println "params: " + params
+                
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoder.id as long)    
+        def f = request.getFile('datosUsuario')
+        if (!f.getSize()) {
+            flash.warn = "Debe indicar la ruta de la copia electrónica."
+        } else if (f.getSize() >= 52428800) {
+            flash.warn = "El archivo debe pesar menos de 50 Mb."
+        } else {                                   
+            otorgamientoDePoderInstance.datosUsuarioExterno = f.getBytes()
+            if (otorgamientoDePoderInstance.save(flash:true)) {                
+                flash.message = "el archivo se ha cargado correctamente."
+                redirect(action: "edit", id: params.otorgamientoDePoder.id, params : [anchor : params.anchor])
+            } else {
+                flash.error = "Error en base de datos."
+            }                       
+        }
     }
     
 }

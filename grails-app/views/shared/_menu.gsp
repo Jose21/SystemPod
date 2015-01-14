@@ -14,7 +14,7 @@
                 <i class="icon-book"></i>
             </g:link>
         </sec:ifAnyGranted>
-        <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE, ROLE_PODERES_GESTOR, ROLE_FACTURAS">
+        <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE, ROLE_PODERES_GESTOR, ROLE_FACTURAS, ROLE_GESTOR_EXTERNO, ROLE_SOLICITANTE_EXTERNO">
             <g:link class="btn btn-small btn-purple" controller="poderes" action="index">
                 <i class="icon-user"></i>
             </g:link>
@@ -46,9 +46,9 @@
         </g:link> 
     </li>
     </sec:ifAnyGranted>
-    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE, ROLE_PODERES_GESTOR, ROLE_FACTURAS">
+    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_NOTARIO, ROLE_PODERES_SOLICITANTE, ROLE_PODERES_GESTOR, ROLE_FACTURAS, ROLE_GESTOR_EXTERNO, ROLE_SOLICITANTE_EXTERNO">
     <li>
-        <g:link controller="poderes" action="list">
+        <g:link controller="poderes" action="index">
             <i class="icon-key"></i>
             <span class="menu-text">Poderes</span>
         </g:link> 

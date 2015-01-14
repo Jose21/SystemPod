@@ -7,9 +7,8 @@
         <g:set var="entityName" value="${message(code: 'convenio.label', default: 'Convenio')}" />    
         <title><g:message code="default.list.label" args="[entityName]" /></title>
     </head>
-    <body>
-
-
+    <body>  
+        <r:require module="export"/>    
         <div class="page-content">
             <div class="container-fluid">      
                 <div class="container-fluid">

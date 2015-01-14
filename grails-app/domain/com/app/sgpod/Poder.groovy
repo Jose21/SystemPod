@@ -77,7 +77,10 @@ class Poder {
     * bandera para ocultar la solicitud de la bandeja del usuario resolvedor
     */
     boolean ocultadoPorResolvedor = false
-   
+    /**
+    * Copia electronica del documentos firmado. 
+    */
+    byte[] datosUsuarioExterno
     
     /**
     * Esta es la relación que tiene con otras tablas en una relacion tipo  1-n.
@@ -118,6 +121,7 @@ class Poder {
         bitacoras nullable:true
         ocultadoPorSolicitante blank:false
         ocultadoPorResolvedor blank:false
+        datosUsuarioExterno nullable:true, maxSize:52428800
                 
     }
     

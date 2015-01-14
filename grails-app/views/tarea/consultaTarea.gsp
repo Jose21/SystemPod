@@ -7,7 +7,7 @@
         <title>Busqueda</title>
     </head>
     <body>
-        <r:require module="export"/>    
+    <r:require module="export"/>    
     <div class="container-fluid">      
         <g:render template="/shared/alerts" />
         <br/>
@@ -45,8 +45,28 @@
                 </li>                
             </ul>
         </div>
-    </div>
+    </div>    
     <div class="tab-content no-border no-padding">
+        <div id="porTags" class="tab-pane ${porTagsActive?:""}">  
+            <div class="message-container">
+                <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
+                    <div class="message-bar">
+                    </div>
+                    <g:form method="post">
+                        <g:hiddenField name="inActive" value="porTags"/>
+                        <div class="control-group">
+                            <div class="row-fluid input-prepend">
+                                <label for="tags" class="control-label">
+                                    <g:message code="tarea.tags.label" default="Palabra Clave" />
+                                </label>
+                                <g:textField name="tags" required="" value="${tareaInstance?.tags}"/>
+                                <g:actionSubmit class="btn btn-primary" action="buscarPorTags" value="Buscar" />
+                            </div>
+                        </div>
+                    </g:form>
+                </div>
+            </div><!--/.message-container-->
+        </div>
         <div id="porFolio" class="tab-pane ${porFolioActive?:""}">  
             <div class="message-container">
                 <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
@@ -124,27 +144,7 @@
                     </g:form>
                 </div>
             </div><!--/.message-container-->
-        </div>
-        <div id="porTags" class="tab-pane ${porTagsActive?:""}">  
-            <div class="message-container">
-                <div id="id-message-list-navbar" class="message-navbar align-center clearfix">
-                    <div class="message-bar">
-                    </div>
-                    <g:form method="post">
-                        <g:hiddenField name="inActive" value="porTags"/>
-                        <div class="control-group">
-                            <div class="row-fluid input-prepend">
-                                <label for="tags" class="control-label">
-                                    <g:message code="tarea.tags.label" default="Palabra Clave" />
-                                </label>
-                                <g:textField name="tags" required="" value="${tareaInstance?.tags}"/>
-                                <g:actionSubmit class="btn btn-primary" action="buscarPorTags" value="Buscar" />
-                            </div>
-                        </div>
-                    </g:form>
-                </div>
-            </div><!--/.message-container-->
-        </div>
+        </div>        
         <table class="table table-bordered table-striped">
             <thead>
                 <g:if test="${id}">
@@ -189,17 +189,17 @@
                 <g:each in="${tareaInstanceList}" status="i" var="tareaInstance">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                         <td style="text-align:center"><g:link action="show" id="${tareaInstance.id}"><span class="badge">${tareaInstance?.id}</span></g:link></td>
-                        
+
                         <td>${fieldValue(bean: tareaInstance, field: "nombre")}</td>
                         <td>${fieldValue(bean: tareaInstance, field: "grupo")}</td>
                         <td><g:formatDate date="${tareaInstance.dateCreated}" /></td>
                         <td>${fieldValue(bean: tareaInstance, field: "responsable")}</td>
                         <td><dd><%=tareaInstance?.descripcion%></dd></td>                                
-                        <td>${fieldValue(bean: tareaInstance, field: "prioridad")}</td>
-                        <td><g:formatDate date="${tareaInstance.fechaLimite}" /></td>
-                        <td style="text-align:center"><g:link class="icon-print bigger-120" action="detalles"  target="_blank" id="${tareaInstance?.id}" /></td>
-                    </tr>
-                </g:each>
+                <td>${fieldValue(bean: tareaInstance, field: "prioridad")}</td>
+                <td><g:formatDate date="${tareaInstance.fechaLimite}" /></td>
+                <td style="text-align:center"><g:link class="icon-print bigger-120" action="detalles"  target="_blank" id="${tareaInstance?.id}" /></td>
+                </tr>
+            </g:each>
             </tbody>
         </table>
         <div class="message-footer clearfix">
@@ -209,5 +209,5 @@
             <export:formats formats="['excel', 'pdf']" action="generarReporte"/>
         </g:if>
     </div>
-    </body>
+</body>
 </html>

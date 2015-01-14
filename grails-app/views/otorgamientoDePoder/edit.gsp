@@ -8,7 +8,7 @@
     </head>
     <body>        
         <div class="content-header">
-            <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE">
+            <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE, ROLE_SOLICITANTE_EXTERNO">
                 <div class="page-header position-relative">                
                     <h1>Solicitud de Otorgamiento de Poder
                         <small>
@@ -49,7 +49,7 @@
                         </g:eachError>
                     </div>
                 </g:hasErrors>                
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE, ROLE_SOLICITANTE_EXTERNO">
                     <h3 id="bloqueApoderados"  class="header smaller lighter blue">Agregar Apoderados</h3>       
                     <table class="table table-bordered table-striped">
                         <thead>
@@ -121,10 +121,40 @@
                     </table>
                 </sec:ifAnyGranted>
 
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_SOLICITANTE_EXTERNO">
+                    <h3 id="bloqueDatosUsuario" class="header smaller lighter blue">Datos del Usuario</h3>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Datos</th>                                    
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <g:uploadForm class="form-horizontal" action="uploadDatosUsuario" >
+                                <tr>
+                                    <td>
+                                        <g:hiddenField name="anchor" value="bloqueDatosUsuario" />
+                                        <g:hiddenField name="otorgamientoDePoder.id" value="${otorgamientoDePoderInstance?.id}" />                    
+                                        <div class="control-group">
+                                            <div class="control-label">          
+                                                <input type="file" name="datosUsuario"/> 
+                                            </div>                                                                                                                                                 
+                                        </div>
+                                    </td>    
+                                    <td>
+                                        <g:submitButton class="btn btn-primary btn-mini" name="adjuntar" value="Adjuntar" />
+                                    </td>
+                                </tr>
+                            </g:uploadForm>
+                        </tbody>
+                    </table>
+                </sec:ifAnyGranted>
+                
                 <g:form  name="myForm" class="form-horizontal" method="post"  enctype="multipart/form-data">
                     <g:hiddenField name="id" value="${otorgamientoDePoderInstance?.id}" />
                     <g:hiddenField name="version" value="${otorgamientoDePoderInstance?.version}" />
-                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE">
+                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE,ROLE_SOLICITANTE_EXTERNO">
                         <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'id', 'error')}">
                             <label for="id" class="control-label">
                                 <g:message code="otorgamientoDePoder.id.label" default="Número De Folio" />

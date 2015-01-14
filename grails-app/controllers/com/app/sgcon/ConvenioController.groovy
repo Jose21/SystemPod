@@ -105,7 +105,7 @@ class ConvenioController {
             redirect(action: "list")
             return
         }
-
+              
         [convenioInstance: convenioInstance]
     }
     /**
@@ -554,13 +554,14 @@ class ConvenioController {
         if (params.inActive == "porTags") {
             porTagsActive = "active"
         }
-        def s = params.tags.toString().replaceAll(" ", "")
+        /*def s = params.tags.toString().replaceAll(" ", "")
         def resultList = s.tokenize(",")
         def convenioInstanceList =[] 
         resultList.each{            
             def results = Convenio.findAllByTagsIlikeAndEliminado("%"+it+",%", false, [sort: "id", order: "asc"])
             convenioInstanceList = convenioInstanceList + results as Set    
-        }
+        }*/
+        def convenioInstanceList = Convenio.findAllByTagsIlikeAndEliminado("%"+params.tags+"%", false, [sort: "id", order: "asc"])
         session.convenioInstanceList = convenioInstanceList
         render(
             view: "list", 
@@ -690,7 +691,7 @@ class ConvenioController {
             usuarioDeConvenio.usuario = compartirCon
             usuarioDeConvenio.owner = false
             usuarioDeConvenio.convenio = convenioInstance
-            usuarioDeConvenio.save(flush:true)
+            usuarioDeConvenio.save(flush:true)            
             flash.message = "Convenio compartido satisfactoriamente."
         } else {
             flash.warn = "Ya se encuentra compartido con el usuario seleccionado."
@@ -725,7 +726,7 @@ class ConvenioController {
      */
     def buscarHistorial (Long id){
         def convenioInstance = Convenio.get(id)
-        def convenioInstanceList = HistorialDeConvenio.findAllByConvenio(convenioInstance, [sort: "dateCreated", order: "asc"])
+        def convenioInstanceList = HistorialDeConvenio.findAllByConvenio(convenioInstance, [sort: "dateCreated", order: "desc"])
         render(
             view: "historial", 
             model: [
