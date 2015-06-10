@@ -192,10 +192,7 @@
             if("ontouchend" in document) document.write("<script src='${resource(dir:'assets/js',file:'jquery.mobile.custom.min.js')}'>"+"<"+"/script>");
     </script>
     <script src="${resource(dir:'assets/js',file:'bootstrap.min.js')}"></script>
-    <!--page specific plugin scripts-->
-    <!--[if lte IE 8]>
-      <script src="${resource(dir:'assets/js',file:'excanvas.min.js')}"></script>
-    <![endif]-->
+    <!--page specific plugin scripts-->   
     <script src="${resource(dir:'assets/js',file:'jquery.ui.touch-punch.min.js')}"></script>
     <script src="${resource(dir:'assets/js/date-time',file:'bootstrap-datepicker.min.js')}"></script>
     <script src="${resource(dir:'assets/js/date-time',file:'moment.min.js')}"></script>
@@ -207,7 +204,9 @@
     <script src="${resource(dir:'assets/js',file:'chosen.jquery.min.js')}"></script>
     <script src="${resource(dir:'assets/js',file:'jquery.validationEngine-es.js')}"></script>
     <script src="${resource(dir:'assets/js',file:'jquery.validationEngine.js')}"></script>
-
+    <script src="${resource(dir:'assets/js',file:'bootstrap-wysiwyg.min.js')}"></script>   
+    <script src="${resource(dir:'assets/js/ace',file:'elements.wysiwyg.js')}"></script>   
+   
 <!--ace scripts-->
     <script src="${resource(dir:'assets/js',file:'ace-elements.min.js')}"></script>
     <script src="${resource(dir:'assets/js',file:'ace.min.js')}"></script>    
@@ -227,7 +226,7 @@
         }).next().on(ace.click_event, function(){
         $(this).prev().focus();
         });
-          $.fn.datepicker.dates['es'] = {
+        $.fn.datepicker.dates['es'] = {
         days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"],
         daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
         daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa", "Do"],
@@ -255,13 +254,22 @@
         ).prev().on(ace.click_event, function(){
         $(this).next().focus();
         });
-
+         $('#rangoDeFechaBitacora').daterangepicker({ 
+        format: 'DD/MM/YYYY',
+        locale: 'es'
+        }
+        ).prev().on(ace.click_event, function(){
+        $(this).next().focus();
+        });
         $(".chosen-select").chosen();
         })(jQuery);
         $(document).ready(function() {
-            // binds form submission and fields to the validation engine
-            $("#myForm").validationEngine();
-            });
+        // binds form submission and fields to the validation engine
+        $("#myForm").validationEngine();
+        });
+
+        $('#editor1').ace_wysiwyg();
+
     </script>
     <g:javascript library="application"/>
 <r:layoutResources />

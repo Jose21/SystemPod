@@ -6,6 +6,7 @@ import grails.plugins.springsecurity.Secured
 import com.app.security.Usuario
 import com.app.security.Rol
 import com.app.security.UsuarioRol
+import groovy.time.TimeCategory
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class OtorgamientoDePoderController {
@@ -33,27 +34,27 @@ class OtorgamientoDePoderController {
         params.registroDeLaSolicitud = new Date()
         
         def userActual = springSecurityService.currentUser
-        List<Rol> currentUserRoles = UsuarioRol.findByUsuario(userActual).collect { it.rol } as List
-        println currentUserRoles.authority
+        List<Rol> currentUserRoles = UsuarioRol.findByUsuario(userActual).collect { it.rol } as List        
         
         def userExterno = null
+        def listTipoDePoder = null
         if(currentUserRoles.authority.contains("ROLE_SOLICITANTE_EXTERNO")) {
-           
-            println "ok ok"
+            
+            //listTipoDePoder =TipoDePoder.list() 
+            listTipoDePoder = TipoDePoder.findAllByNombre("EXTERNO",[max: 1, sort: "nombre", order: "desc"])
             params.userExterno = true
         }else{
-            println "fail"
+            listTipoDePoder =TipoDePoder.list() 
             params.userExterno = false
-        }
-        
-        println "params: "+ params
-        [otorgamientoDePoderInstance: new OtorgamientoDePoder(params)]
+        }                
+                
+        [otorgamientoDePoderInstance: new OtorgamientoDePoder(params), listTipoDePoder : listTipoDePoder ]
     }
     /**
      * Método para guardar los registros en el sistema.
      */
 
-    def save() {
+    def save() {                
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         
         //se agrega el que creó el otorgamiento en la bd
@@ -80,6 +81,12 @@ class OtorgamientoDePoderController {
             params.fechaDeOtorgamiento = fechaDeOtorgamiento
         }
         
+        if(params.documentoPoderEspecial){
+            if (params.documentoPoderEspecial.getSize()!=0) {                            
+                params.nombreDocumentoPoderEspecial = params.documentoPoderEspecial.getOriginalFilename()                   
+            }
+        }
+        
         //Se cambian las comas por arrobas
         if(params.tags && !params.tags.endsWith(",")){
             params.tags = params.tags + "@"
@@ -103,7 +110,7 @@ class OtorgamientoDePoderController {
     def show(Long id) {       
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         
-        def otorgamientoDePoderInstance = OtorgamientoDePoder.read(id)         
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.read(id)        
         if (!otorgamientoDePoderInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'poder.label', default: 'Poder'), id])
             redirect(action: "list")
@@ -115,7 +122,7 @@ class OtorgamientoDePoderController {
                 otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.substring(0,otorgamientoDePoderInstance.tags.length()-1)
             }
         }
-        //parametro para ocualtar botones
+        //parametro para ocultar botones
         def ocultarBoton = false
         if(otorgamientoDePoderInstance.asignar != springSecurityService.currentUser){
             ocultarBoton = true
@@ -155,22 +162,52 @@ class OtorgamientoDePoderController {
         def usuarioNotarioPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_NOTARIO")).collect {it.usuario}
         def usuariosReasignacion = usuarioResolvedorPoderes + usuarioNotarioPoderes
         def usuarioInstance = springSecurityService.currentUser
-        usuariosReasignacion.remove(usuarioInstance)            
+        usuariosReasignacion.remove(usuarioInstance)
+        usuariosReasignacion.each{            
+            if(it.accountLocked == true){
+                usuariosReasignacion = usuariosReasignacion - it
+            }
+        }
         def cartaDeInstruccion = CartaDeInstruccionDeOtorgamiento.findByOtorgamientoDePoder(otorgamientoDePoderInstance)
         
+        //bandera para saber si es una solicitud de solicitante_externo         
+        def solicitudExterno = null
+        def solicitanteInterno = null
+        def solicitanteUSS = null
+        def userSolicitante = otorgamientoDePoderInstance.creadaPor        
+        List<Rol> currentUserRoles = UsuarioRol.findByUsuario(userSolicitante).collect { it.rol } as List               
+        if(currentUserRoles.authority.contains("ROLE_SOLICITANTE_EXTERNO")) {
+            solicitudExterno = true
+        }else{
+            solicitudExterno = false
+        }   
+        if(currentUserRoles.authority.contains("ROLE_PODERES_SOLICITANTE")) {
+            solicitanteInterno = true
+        }else if((currentUserRoles.authority.contains("ROLE_SOLICITANTE_ESPECIAL"))){
+            solicitanteUSS = true
+        }
+        //datos del notario        
+        def datosNotario = null
+        if(otorgamientoDePoderInstance.notarioCorrespondienteId){
+            datosNotario = Usuario.get(otorgamientoDePoderInstance?.notarioCorrespondienteId)
+        }        
         [
             otorgamientoDePoderInstance: otorgamientoDePoderInstance,
             cartaDeInstruccion : cartaDeInstruccion,
             ocultarBoton:ocultarBoton,
             diasRestantes : diasRestantes,
-            usuariosReasignacion : usuariosReasignacion
+            usuariosReasignacion : usuariosReasignacion,
+            solicitudExterno : solicitudExterno,
+            datosNotario : datosNotario,
+            solicitanteUSS : solicitanteUSS,
+            solicitanteInterno : solicitanteInterno
         ]                       
     }
     /**
      * Método para editar un registro.
      */
-    def edit(Long id) {
-        def otorgamientoDePoderInstance = OtorgamientoDePoder.read(id)
+    def edit(Long id) {        
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.read(id)        
         if (!otorgamientoDePoderInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'poder.label', default: 'Poder'), id])
             redirect(action: "list")
@@ -181,8 +218,20 @@ class OtorgamientoDePoderController {
             if(otorgamientoDePoderInstance.tags && otorgamientoDePoderInstance.tags.endsWith(",")){
                 otorgamientoDePoderInstance.tags = otorgamientoDePoderInstance.tags.substring(0,otorgamientoDePoderInstance.tags.length()-1)
             }
-        }        
-        [otorgamientoDePoderInstance: otorgamientoDePoderInstance, anchor : params.anchor?:""]
+        }         
+        def cargosPrincipal = CargoApoderado.list()        
+        def listCargos = []                       
+        cargosPrincipal.each{cargo->
+            cargo.categoriasDeTipoDePoder.each{categoria ->                
+                if(categoria.nombre == otorgamientoDePoderInstance.categoriaDeTipoDePoder.nombre){                   
+                    listCargos.add(cargo)
+                }
+            }
+        }         
+        [
+            otorgamientoDePoderInstance: otorgamientoDePoderInstance, anchor : params.anchor?:"",
+            listCargos : listCargos
+        ]
     }
     /**
      * Método para actualizar los datos de un registro.
@@ -220,7 +269,17 @@ class OtorgamientoDePoderController {
             } 
             otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
             otorgamientoDePoderInstance.notarioCorrespondiente = springSecurityService.currentUser
+            //se calcula la fecha de vencimiento sumando el periodo de 730 dias que es el periodo de 2 años                               
+            use (TimeCategory) {
+                otorgamientoDePoderInstance.fechaVencimiento = params.fechaDeOtorgamiento + 24.month
+            }        
+            //end
             otorgamientoDePoderInstance.fechaDeEnvio = new Date()
+            //se cambia el status de los apoderados para c/u de los apoderados
+            otorgamientoDePoderInstance.apoderados.each{apoderado ->
+                apoderado.statusDePoder = 'Vigente'
+                apoderado.save()
+            }
             //se guardan datos en la bitacora
             bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se envió la copia de Electrónica")
         } else {
@@ -317,32 +376,42 @@ class OtorgamientoDePoderController {
     /**
      * Método para agregar apoderados dentro de la solicitud.
      */
-    def addApoderado () {        
+    def addApoderado () {            
+        def cargoApoderado = CargoApoderado.get(params.cargoApoderado as long)        
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoder.id as long)
-        def apoderadoInstance = Apoderado.findByNombre(params."apoderado")
-        if (apoderadoInstance) {
-            otorgamientoDePoderInstance.addToApoderados(apoderadoInstance)
-            otorgamientoDePoderInstance.addToApoderadosVigentes(apoderadoInstance)
-            if (otorgamientoDePoderInstance.save(flush:true)) {                
-                flash.message = "Se ha agregado apoderado a la solicitud."
-            } else {
-                flash.error = "No se pudo agregar el apoderado. Favor de reintentar."
-            }
-        } else {          
-            apoderadoInstance = new Apoderado(nombre:params."apoderado".toUpperCase())
-            if (apoderadoInstance.save(flush:true)) {  
+        if(params.apoderado == params.apoderado2){                    
+            def apoderadoInstance = Apoderado.findByNombre(params."apoderado") 
+            apoderadoInstance = new Apoderado(nombre:params."apoderado".toUpperCase(), cargoApoderado:cargoApoderado, numeroIN:params?.numeroIN  ) 
+            if (apoderadoInstance) {
+                apoderadoInstance.cargoApoderado = cargoApoderado
+                apoderadoInstance.save()
                 otorgamientoDePoderInstance.addToApoderados(apoderadoInstance)
                 otorgamientoDePoderInstance.addToApoderadosVigentes(apoderadoInstance)
-                if (otorgamientoDePoderInstance.save(flush:true)) {                    
+                if (otorgamientoDePoderInstance.save(flush:true)) {                
                     flash.message = "Se ha agregado apoderado a la solicitud."
+                    params.apoderado = null
                 } else {
                     flash.error = "No se pudo agregar el apoderado. Favor de reintentar."
-                }                
-            } else {
-                flash.error = "No se pudo agregar el apoderado. Favor de reintentar."
+                }
+            } else {          
+                apoderadoInstance = new Apoderado(nombre:params."apoderado".toUpperCase(), cargoApoderado:cargoApoderado, numeroIN:params?.numeroIN  )                        
+                if (apoderadoInstance.save(flush:true)) {  
+                    otorgamientoDePoderInstance.addToApoderados(apoderadoInstance)
+                    otorgamientoDePoderInstance.addToApoderadosVigentes(apoderadoInstance)
+                    if (otorgamientoDePoderInstance.save(flush:true)) {                    
+                        flash.message = "Se ha agregado apoderado a la solicitud."
+                        params.apoderado = null
+                    } else {
+                        flash.error = "No se pudo agregar el apoderado. Favor de reintentar."
+                    }                
+                } else {
+                    flash.error = "No se pudo agregar el apoderado. Favor de reintentar."
+                }
             }
+        }else{
+            flash.error = "No coinciden los campos del nombre de apoderado"
         }
-        redirect(action: "edit", id: otorgamientoDePoderInstance.id, params : [anchor : params.anchor])
+        redirect(action: "edit", id: otorgamientoDePoderInstance.id, params : [anchor : params.anchor, apoderado : params.apoderado])
     }
     /**
      * Método para eliminar apoderado dentro de la solicitud.
@@ -352,7 +421,7 @@ class OtorgamientoDePoderController {
         def apoderadoInstance = Apoderado.get(params.apoderado.id as long)
         otorgamientoDePoderInstance.removeFromApoderados(apoderadoInstance)
         otorgamientoDePoderInstance.removeFromApoderadosVigentes(apoderadoInstance)
-        flash.message = "El firmante ha sido eliminado."        
+        flash.message = "El apoderado ha sido eliminado."        
         redirect(action: "edit", id: otorgamientoDePoderInstance.id, params : [ anchor : params.anchor ])
     }
     /**
@@ -361,16 +430,13 @@ class OtorgamientoDePoderController {
     def asignarA(){
         
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.idOtorgamientoDePoder as long)
-        
-        println "params: "+ params
+                
         def userActual = springSecurityService.currentUser
-        List<Rol> currentUserRoles = UsuarioRol.findByUsuario(userActual).collect { it.rol } as List
-        println currentUserRoles.authority
+        List<Rol> currentUserRoles = UsuarioRol.findByUsuario(userActual).collect { it.rol } as List        
         
         def userExterno = null
         if(currentUserRoles.authority.contains("ROLE_SOLICITANTE_EXTERNO")) {
-           
-            println "ok ok"
+                       
             //params.userExterno = true
            
             if (!otorgamientoDePoderInstance.datosUsuarioExterno){
@@ -383,14 +449,39 @@ class OtorgamientoDePoderController {
                 }        
                 otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
                 otorgamientoDePoderInstance.fechaDeEnvio = new Date()
+                otorgamientoDePoderInstance.apoderados.each{apoderado ->
+                    apoderado.statusDePoder = 'En trámite de otorgamiento'
+                }
                 otorgamientoDePoderInstance.save()
                 //se guardan datos en la bitacora
                 bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se envió la solicitud")
                 flash.message = "Se ha enviado con éxito la Solicitud."        
                 redirect(controller: "poderes", action: "index")                
             }            
-        }else{
-            println "fail"
+        }else if(currentUserRoles.authority.contains("ROLE_SOLICITANTE_ESPECIAL")){
+            
+            if (!otorgamientoDePoderInstance.datosUsuarioExterno){
+                flash.warn = "No se ha agregado un documento con los datos necesarios del usuario." 
+                redirect(action: "edit", id: params.idOtorgamientoDePoder, params : [anchor : params.anchor])
+            }else{
+                def usuarioGestorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_GESTOR")).collect {it.usuario}        
+                usuarioGestorPoderes.each{
+                    otorgamientoDePoderInstance.asignar = Usuario.get(it.id as long)   
+                }        
+                otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+                otorgamientoDePoderInstance.fechaDeEnvio = new Date()
+                otorgamientoDePoderInstance.apoderados.each{apoderado ->
+                    apoderado.statusDePoder = 'En trámite de otorgamiento'
+                    apoderado.save()
+                }
+                otorgamientoDePoderInstance.save()
+                //se guardan datos en la bitacora
+                bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se envió la solicitud")
+                flash.message = "Se ha enviado con éxito la Solicitud."        
+                redirect(controller: "poderes", action: "index")                
+            } 
+            
+        }else{            
             params.userExterno = false
         
            
@@ -400,6 +491,10 @@ class OtorgamientoDePoderController {
             }        
             otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
             otorgamientoDePoderInstance.fechaDeEnvio = new Date()
+            otorgamientoDePoderInstance.apoderados.each{apoderado ->
+                apoderado.statusDePoder = 'En trámite de otorgamiento'
+                apoderado.save()
+            }
             otorgamientoDePoderInstance.save()
             //se guardan datos en la bitacora
             bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se envió la solicitud")
@@ -413,16 +508,28 @@ class OtorgamientoDePoderController {
     def entregarCopiaSolicitante(){
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.idOtorgamientoDePoder as long)        
         otorgamientoDePoderInstance.asignar = otorgamientoDePoderInstance.creadaPor
-        otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
-        //se calcula la fecha de vencimiento sumando el periodo de 730 dias que es el periodo de 2 años
-        otorgamientoDePoderInstance.fechaVencimiento = otorgamientoDePoderInstance.fechaDeOtorgamiento + 730        
-        //end
-        otorgamientoDePoderInstance.fechaDeEnvio = new Date()
+        otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser       
+        otorgamientoDePoderInstance.fechaDeEnvio = new Date()       
         otorgamientoDePoderInstance.save()
         //se guardan datos en la bitacora
         bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se envió Copia Electrónica al Solicitante")
         flash.message = "Se ha enviado con éxito la Copia Electrónica."        
         redirect(controller: "poderes", action: "index")
+    }
+    def entregarCopiaGestorExterno(){
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.idOtorgamientoDePoder as long)
+        def usuarioGestorExterno = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_GESTOR_EXTERNO")).collect {it.usuario}        
+        usuarioGestorExterno.each{
+            otorgamientoDePoderInstance.asignar = Usuario.get(it.id as long)   
+        }        
+        otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+        otorgamientoDePoderInstance.fechaDeEnvio = new Date()
+        otorgamientoDePoderInstance.save()
+        //se guardan datos en la bitacora
+        bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se envió Copia Electrónica al Gestor Externo")
+        flash.message = "Se ha turnado con éxito la Solicitud."        
+        redirect(controller: "poderes", action: "index")
+        
     }
     /**
      * Método para asignar la solicitud al usuario resolvedor.
@@ -441,12 +548,65 @@ class OtorgamientoDePoderController {
         flash.message = "Se ha turnado con éxito la Solicitud."        
         redirect(controller: "poderes", action: "index")
     }    
+    def turnarGestor(){
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.id as long)
+        def usuarioGestorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_GESTOR")).collect {it.usuario}        
+        usuarioGestorPoderes.each{
+            otorgamientoDePoderInstance.asignar = Usuario.get(it.id as long)   
+        }        
+        otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+        otorgamientoDePoderInstance.fechaDeEnvio = new Date()
+        otorgamientoDePoderInstance.save()
+        //se guardan datos en la bitacora
+        bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se turnó la solicitud al Usuario Gestor")
+        flash.message = "Se ha turnado con éxito la Solicitud."        
+        redirect(controller: "poderes", action: "index")
+    } 
+    def turnarSolicitanteExterni(){
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.id as long)       
+            
+        otorgamientoDePoderInstance.asignar = otorgamientoDePoderInstance.creadaPor              
+        otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+        otorgamientoDePoderInstance.fechaDeEnvio = new Date()
+        otorgamientoDePoderInstance.save()
+        //se guardan datos en la bitacora
+        bitacoraService.agregarOtorgamiento(otorgamientoDePoderInstance, springSecurityService.currentUser, "Se envió el rechazo de la solicitud al Usuario Solicitante por parte del usuario Gestor Externo")
+        flash.message = "Se ha turnado con éxito la Solicitud."        
+        redirect(controller: "poderes", action: "index")
+    }
     /**
      * Método para imprimir la solicitud de otorgamiento de poder.
      */
     def imprimir(Long id){
-        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)                
-        [ otorgamientoDePoderInstance : otorgamientoDePoderInstance ]
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(id)
+        //datos del notario        
+        def datosNotario = null
+        if(otorgamientoDePoderInstance.notarioCorrespondienteId){
+            datosNotario = Usuario.get(otorgamientoDePoderInstance?.notarioCorrespondienteId)
+        }
+        //bandera para saber si es una solicitud de solicitante_externo         
+        def solicitudExterno = null
+        def solicitanteInterno = null
+        def solicitanteUSS = null
+        def userSolicitante = otorgamientoDePoderInstance.creadaPor        
+        List<Rol> currentUserRoles = UsuarioRol.findByUsuario(userSolicitante).collect { it.rol } as List               
+        if(currentUserRoles.authority.contains("ROLE_SOLICITANTE_EXTERNO")) {
+            solicitudExterno = true
+        }else{
+            solicitudExterno = false
+        }   
+        if(currentUserRoles.authority.contains("ROLE_PODERES_SOLICITANTE")) {
+            solicitanteInterno = true
+        }else if((currentUserRoles.authority.contains("ROLE_SOLICITANTE_ESPECIAL"))){
+            solicitanteUSS = true
+        }
+        
+        [ otorgamientoDePoderInstance : otorgamientoDePoderInstance,
+            datosNotario : datosNotario,
+            solicitudExterno : solicitudExterno,
+            solicitanteInterno : solicitanteInterno,
+            solicitanteUSS : solicitanteUSS
+        ]
     }
     /**
      * Método para reasignar una solicitud en dado caso que aun no sea atendida
@@ -489,16 +649,17 @@ class OtorgamientoDePoderController {
         [ otorgamientoDePoderInstance : otorgamientoDePoderInstance ]
     }
     def uploadDatosUsuario (){
-        
-        println "params: " + params
-                
+                                
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoder.id as long)    
         def f = request.getFile('datosUsuario')
         if (!f.getSize()) {
-            flash.warn = "Debe indicar la ruta de la copia electrónica."
+            flash.warn = "Debe indicar la ruta del archivo."
         } else if (f.getSize() >= 52428800) {
             flash.warn = "El archivo debe pesar menos de 50 Mb."
-        } else {                                   
+        } else {
+            def filename = f.getOriginalFilename()                         
+            def extension = filename.substring(filename.lastIndexOf(".") + 1, filename.size()).toLowerCase()                       
+            otorgamientoDePoderInstance.nombreDatosUsuarioExterno = filename
             otorgamientoDePoderInstance.datosUsuarioExterno = f.getBytes()
             if (otorgamientoDePoderInstance.save(flash:true)) {                
                 flash.message = "el archivo se ha cargado correctamente."
@@ -507,6 +668,22 @@ class OtorgamientoDePoderController {
                 flash.error = "Error en base de datos."
             }                       
         }
+    }
+    
+    def downloadArchivo2 () {        
+        if(params.id){
+            def poderId = params.id
+            def poderInstance = OtorgamientoDePoder.get(poderId as long)
+            response.setHeader("Content-Disposition", "attachment;filename=\"" + poderInstance.nombreDocumentoPoderEspecial + "\"");
+            byte[] documentoPoderEspecial = poderInstance.documentoPoderEspecial
+            response.outputStream << documentoPoderEspecial
+        }else{
+        
+            def poderInstance = OtorgamientoDePoder.get(params.poderId as long)
+            response.setHeader("Content-Disposition", "attachment;filename=\"" + poderInstance.nombreDocumentoPoderEspecial + "\"");
+            byte[] documentoPoderEspecial = poderInstance.documentoPoderEspecial
+            response.outputStream << documentoPoderEspecial
+        }  
     }
     
 }

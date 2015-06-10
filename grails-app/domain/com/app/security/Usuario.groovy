@@ -51,10 +51,22 @@ class Usuario implements Serializable {
     */
     Date lastUpdated
     
+    /**
+    *campos para usuarios notarios
+    */
+    String notaria_titular
+    String notaria_numero
+    String notaria_entidad
+    String nombreDespachoExterno
+    
     static constraints = {
         username blank: false, unique: true
         password blank: false
         email blank:true, email:true
+        notaria_titular  nullable:true
+        notaria_numero   nullable:true
+        notaria_entidad  nullable:true
+        nombreDespachoExterno  nullable:true
     }
 
     static mapping = {

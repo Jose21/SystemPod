@@ -25,9 +25,16 @@
         <g:message code="formatoDeCartaDeInstruccion.contenido.label" default="Contenido" />
         <span class="required-indicator">*</span>
     </label>
-    <div class="controls">
-        <g:textArea class="ckeditor" name="contenido" cols="40" rows="5" maxlength="1048576" required="" value="${formatoDeCartaDeInstruccionInstance?.contenido}"/>
+    <div class="controls">        
+        <div name="contenido" class="wysiwyg-editor" id="editor1">
+            ${raw(formatoDeCartaDeInstruccionInstance?.contenido)}
+        </div>
+        <g:hiddenField name="contenido" />
     </div>
 </div>
-
-<g:javascript src="ckeditor/ckeditor.js"/>
+<script type="text/javascript">    
+    $('.form-horizontal').submit(function()
+    {    
+    $('#contenido').val($('#editor1').html());    
+    });    
+</script>

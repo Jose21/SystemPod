@@ -58,7 +58,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                                 </div>
                                 <div class="widget-body">
                                     <div class="widget-main">
-                                        Número de Convenio: <b>${convenioInstance?.modificaA?.numeroDeConvenio}<br/></b>
+                                        Id Convenio: <b>${convenioInstance?.id}<br/></b>
                                         Objeto: <b>${convenioInstance?.modificaA?.objeto}</b>                    
                                     </div><!--/widget-main-->
                                 </div><!--/widget-body-->
@@ -80,7 +80,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                                 </div>
                                 <div class="widget-body">
                                     <div class="widget-main">
-                                        Número de Convenio: <b>${convenioInstance?.esModificadoPor?.numeroDeConvenio}</b><br/>
+                                        Id Convenio: <b>${convenioInstance?.id}</b><br/>
                                         Objeto: <b>${convenioInstance?.esModificadoPor?.objeto}</b>                    
                                     </div><!--/widget-main-->
                                 </div><!--/widget-body-->
@@ -110,7 +110,7 @@ c<%@ page import="com.app.sgcon.Convenio" %>
                     <!--g:actionSubmit class="btn btn-primary" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" /-->
                 </div>
             </g:form>          
-
+            <g:render template="/shared/alerts" />
             <h3 id="bloqueFirmantes"  class="header smaller lighter blue">Firmantes</h3>       
 
             <table class="table table-bordered table-striped">

@@ -40,94 +40,95 @@
 </div><!--#sidebar-shortcuts-->
 
 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_TURNOS_ADMIN, ROLE_TURNOS_STANDARD">
-<ul class="nav nav-list">  
-    <li class="active open">
-        <a href="#" class="dropdown-toggle">
-            <i class="icon-book"></i>
-            <span class="menu-text">Turnos</span>
-            <b class="arrow icon-angle-down"></b>
-        </a>
-        <ul class="submenu">
-            <li>
-                <g:link controller="tarea" action="create">
-                    <i class="icon-double-angle-right"></i> Nuevo
-                </g:link>
-            </li>
-            <li>
-                <g:link controller="tarea" action="hoy">
-                    <i class="icon-double-angle-right"></i> Para hoy
-                </g:link>
-            </li>
-            <li>
-                <g:link controller="tarea" action="programadas">
-                    <i class="icon-double-angle-right"></i> Programados
-                </g:link>
-            </li>
-            <li>
-                <g:link controller="tarea" action="retrasadas">
-                    <i class="icon-double-angle-right"></i> Retrasados
-                </g:link>
-            </li>
-            <li>
-                <g:link controller="tarea" action="concluidas">
-                    <i class="icon-double-angle-right"></i> Concluídos
-                </g:link>
-            </li>
-            <li>
-                <g:link controller="tarea" action="consultaTarea">
-                    <i class="icon-double-angle-right"></i> Consulta
-                </g:link>
-            </li>
-        </ul>
-    </li>
+    <ul class="nav nav-list">  
+        <li class="active open">
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-book"></i>
+                <span class="menu-text">Turnos</span>
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <g:link controller="tarea" action="create">
+                        <i class="icon-double-angle-right"></i> Nuevo
+                    </g:link>
+                </li>
+                <li>
+                    <g:link controller="tarea" action="hoy">
+                        <i class="icon-double-angle-right"></i> Para hoy
+                    </g:link>
+                </li>
+                <li>
+                    <g:link controller="tarea" action="programadas">
+                        <i class="icon-double-angle-right"></i> Programados
+                    </g:link>
+                </li>
+                <li>
+                    <g:link controller="tarea" action="retrasadas">
+                        <i class="icon-double-angle-right"></i> Retrasados
+                    </g:link>
+                </li>
+                <li>
+                    <g:link controller="tarea" action="concluidas">
+                        <i class="icon-double-angle-right"></i> Concluídos
+                    </g:link>
+                </li>
+                <li>
+                    <g:link controller="tarea" action="consultaTarea">
+                        <i class="icon-double-angle-right"></i> Consulta
+                    </g:link>
+                </li>
+            </ul>
+        </li>
 
-    <li class="active open">
-        <a href="#" class="dropdown-toggle">
-            <i class="icon-hdd"></i>
-            <span class="menu-text"> Reportes </span>
-            <b class="arrow icon-angle-down"></b>
-        </a>
-        <ul class="submenu">
-            <li>
-                <g:link controller="reporteDeTarea" action="totalDeTurnos">
-                    <i class="icon-double-angle-right"></i> Total de Turnos
-                </g:link>
+        <li class="active open">
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-hdd"></i>
+                <span class="menu-text"> Reportes </span>
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <g:link controller="reporteDeTarea" action="totalDeTurnos">
+                        <i class="icon-double-angle-right"></i> Total de Turnos
+                    </g:link>
+                </li>
+                <li>
+                    <!--
+                  <g:link controller="reporteDeTarea" action="turnosPorFechaInit">
+                    <i class="icon-double-angle-right"></i> Turnos por Fecha
+                  </g:link>-->
+                </li>
+            </ul>
+        </li>
+        <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_TURNOS_ADMIN">
+            <li class="active open">
+                <a href="#" class="dropdown-toggle">
+                    <i class="icon-hdd"></i>
+                    <span class="menu-text"> Grupos </span>
+                    <b class="arrow icon-angle-down"></b>
+                </a>
+                <ul class="submenu">
+                    <li>
+                        <g:link controller="grupo" action="create">
+                            <i class="icon-double-angle-right"></i> Nuevo
+                        </g:link>
+                    </li>
+                    <li>        
+                        <g:link controller="grupo" action="list">
+                            <i class="icon-double-angle-right"></i> Consulta
+                        </g:link>
+                    </li>
+                </ul>
             </li>
-            <li>
-                <!--
-              <g:link controller="reporteDeTarea" action="turnosPorFechaInit">
-                <i class="icon-double-angle-right"></i> Turnos por Fecha
-              </g:link>-->
-            </li>
-        </ul>
-    </li>
-
-    <li class="active open">
-        <a href="#" class="dropdown-toggle">
-            <i class="icon-hdd"></i>
-            <span class="menu-text"> Grupos </span>
-            <b class="arrow icon-angle-down"></b>
-        </a>
-        <ul class="submenu">
-            <li>
-                <g:link controller="grupo" action="create">
-                    <i class="icon-double-angle-right"></i> Nuevo
-                </g:link>
-            </li>
-            <li>        
-                <g:link controller="grupo" action="list">
-                    <i class="icon-double-angle-right"></i> Consulta
-                </g:link>
-            </li>
-        </ul>
-    </li>
-    <!--<li>
-      <g:link controller="dashboard" action="index">
-        <i class="icon-exchange"></i>
-        <span class="menu-text">Regresar</span>
-      </g:link>          
-    </li>-->
-</ul><!--/.nav-list-->
+        </sec:ifAnyGranted>
+        <!--<li>
+          <g:link controller="dashboard" action="index">
+            <i class="icon-exchange"></i>
+            <span class="menu-text">Regresar</span>
+          </g:link>          
+        </li>-->
+    </ul><!--/.nav-list-->
 </sec:ifAnyGranted>
 
 <div class="sidebar-collapse" id="sidebar-collapse">

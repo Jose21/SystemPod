@@ -79,6 +79,9 @@ grails.project.dependency.resolution = {
         compile ':cache:1.0.1' 
         compile ":export:1.5"
         compile ":quartz:1.0.1"
+        
+        //java melody
+        compile ":grails-melody:1.54.0"
     }
 }
 

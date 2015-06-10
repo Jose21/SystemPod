@@ -28,10 +28,10 @@
         <link rel="stylesheet" href="${resource(dir:'assets/css',file:'validationEngine.jquery.css')}"/>
         <link href="${resource(dir:'assets/css',file:'ace.min.css')}" rel="stylesheet" />
         <link href="${resource(dir:'assets/css',file:'ace-responsive.min.css')}" rel="stylesheet" />
-        <link href="${resource(dir:'assets/css',file:'ace-skins.min.css')}" rel="stylesheet" />
-        <!--[if lte IE 8]>
-          <link rel="stylesheet" href="${resource(dir:'assets/css',file:'ace-ie.min.css')}" />
-        <![endif]-->       
+        <link href="${resource(dir:'assets/css',file:'ace-skins.min.css')}" rel="stylesheet" />      
+<!--[if lte IE 8]>
+  <link rel="stylesheet" href="${resource(dir:'assets/css',file:'ace-ie.min.css')}" />
+<![endif]-->       
     <r:require module="jquery"/>
     <r:require module="jquery-ui"/>
     <script src="${resource(dir:'assets/js',file:'ace-extra.min.js')}"></script>    
@@ -177,6 +177,8 @@
     <script src="${resource(dir:'assets/js',file:'bootbox.min.js')}"></script>
     <script src="${resource(dir:'assets/js',file:'jquery.validationEngine-es.js')}"></script>
     <script src="${resource(dir:'assets/js',file:'jquery.validationEngine.js')}"></script>
+    <script src="${resource(dir:'assets/js',file:'bootstrap-wysiwyg.min.js')}"></script>   
+    <script src="${resource(dir:'assets/js/ace',file:'elements.wysiwyg.js')}"></script>   
 
     <script src="${resource(dir:'js',file:'highcharts.js')}"></script>
     <script src="${resource(dir:'js/modules',file:'exporting.js')}"></script>
@@ -184,7 +186,10 @@
   <!--ace scripts-->
     <script src="${resource(dir:'assets/js',file:'ace-elements.min.js')}"></script>
     <script src="${resource(dir:'assets/js',file:'ace.min.js')}"></script>
-    <script type="text/javascript">      
+    <script type="text/javascript">    
+
+        $('#editor1').ace_wysiwyg();
+        
         (function($) {
         $.fn.datepicker.dates['es'] = {
         days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"],
@@ -217,24 +222,24 @@
         $("#btnLimpiar").click(function() {
         $("#fechaLimite").val("");
         });
-        
+
         $('#containerTotalDeTurnos').highcharts({
         chart: { type: 'column' },
         title: { text: 'Total de Turnos' },
         xAxis: { categories: [ 'Total', 'Resueltos', 'Pendientes', 'Atrasados', 'Prioridad Urgente', 'Prioridad Normal'] },
         yAxis: { min: 0, title: { text: 'Cantidad de Turnos' } },
         plotOptions: { column: { pointPadding: 0.2, borderWidth: 0,
-         cursor: 'pointer',    
-            point: {
-                    events: {
-                        click: function() {
-                            //alert ('Category: '+ this.category +', value: '+ this.y);
-                            $("#barra").val(this.category);
-                            document.getElementById("asdas").submit();
-                        }
-                    }
-                }
-            }  
+        cursor: 'pointer',    
+        point: {
+        events: {
+        click: function() {
+        //alert ('Category: '+ this.category +', value: '+ this.y);
+        $("#barra").val(this.category);
+        document.getElementById("asdas").submit();
+        }
+        }
+        }
+        }  
         },
         series: [{
         name: 'Mis Turnos',
@@ -300,8 +305,8 @@
         });
         })(jQuery);
         $(document).ready(function() {
-            // binds form submission and fields to the validation engine
-            $("#myForm").validationEngine();
+        // binds form submission and fields to the validation engine
+        $("#myForm").validationEngine();
         });
     </script>
     <g:javascript library="application"/>

@@ -69,7 +69,12 @@
                                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                                         <td style="text-align:center"><g:checkBox id="${apoderado.id}" name="apoderadoList" value="${apoderado.id}" checked="false"/></td>
                                         <td>${apoderado.nombre}</td>
-                                        <td>${apoderado.puesto}</td>
+                                        <g:if test="${apoderado.cargoApoderado}" >
+                                            <td>${apoderado.cargoApoderado}</td>
+                                        </g:if>
+                                        <g:else>
+                                            <td>${apoderado.puesto}</td>
+                                        </g:else>
                                         <td>${apoderado.institucion}</td>
                                         <td>${apoderado.email}</td>                                    
                                     </tr>                                
@@ -81,7 +86,7 @@
                                 </tr>                            
                             </tbody>
                         </table>
-                    </g:if>                                
+                    </g:if>
 
                     <g:if test="${revocacionDePoderInstance.tipoDeRevocacion == "Total" && revocacionDePoderInstance.apoderados && revocacionDePoderInstance.agregarApoderado != true}">
                         <table class="table table-bordered table-striped">
@@ -181,7 +186,44 @@
                         </tbody>
                     </table>
                 </g:if>
-
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_SOLICITANTE_EXTERNO, ROLE_SOLICITANTE_ESPECIAL">
+                    <h3 id="bloqueDatosUsuario" class="header smaller lighter blue">Datos del Usuario</h3>
+                    <table class="table table-bordered table-striped">
+                        <thead>                            
+                        <thead>
+                            <tr>
+                                <th>Datos</th>
+                                    <g:if test="${revocacionDePoderInstance?.datosUsuarioExterno}">
+                                    <th>Descargar archivo</th>
+                                    </g:if>
+                            </tr>
+                        </thead>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <g:uploadForm class="form-horizontal" action="uploadDatosUsuario" >                                        
+                                        <g:hiddenField name="revocacionDePoder.id" value="${revocacionDePoderInstance?.id}" />                    
+                                        <div class="control-group">                                                     
+                                            <input type="file" name="datosUsuario"/>                                                                                                                                                                                             
+                                        </div>
+                                        <div class="form-actions">
+                                            <g:submitButton class="btn btn-primary btn-mini" name="adjuntar" value="Adjuntar" />
+                                        </div>
+                                    </g:uploadForm>
+                                </td>    
+                                <g:if test="${revocacionDePoderInstance?.datosUsuarioExterno}">
+                                    <td style="text-align:center">                  
+                                        <g:link controller="poderes" action="downloadArchivo" params="[poderId: revocacionDePoderInstance.id]">
+                                            <g:img dir="images" file="download.png" width="64px" height="64px"/>
+                                            <br/>${revocacionDePoderInstance?.nombreDatosUsuarioExterno}
+                                        </g:link>
+                                    </td>
+                                </g:if>
+                            </tr>
+                        </tbody>
+                    </table>
+                </sec:ifAnyGranted>
 
                 <g:form class="form-horizontal" method="post" enctype="multipart/form-data">                    
                     <h3 id="finBloqueDatosComplementarios"  class="header smaller lighter blue"></h3>
@@ -195,10 +237,12 @@
                             <span class="badge">${revocacionDePoderInstance?.id}-R</span>
                         </div>
                     </div>
-                    <g:render template="form"/>                                                                                                   
-                    <div class="form-actions">
-                        <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
-                    </div>
+                    <g:render template="form"/>  
+                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR">
+                        <div class="form-actions">
+                            <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+                        </div>
+                    </sec:ifAnyGranted>
                 </g:form>
             </div>            
             <div id="agregarMotivoDeRevocacionModal" class="modal hide" style="width:600px;">

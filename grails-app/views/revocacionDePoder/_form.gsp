@@ -87,17 +87,7 @@ update:'categoriaSelection'
     </div>
 </div>
 
-<div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'solicitadoPor', 'error')}">
-    <label for="solicitadoPor" class="control-label">
-        <g:message code="revocacionDePoder.solicitadoPor.label" default="Solicitado Por" />
-        <span class="required-indicator">*</span>
-    </label>
-    <div class="controls">
-        <g:textField  class="span6 validate[required]" name="solicitadoPor"  value="${revocacionDePoderInstance?.solicitadoPor}"/>
-    </div>
-</div>
-
-<div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'fechaDeRevocacion', 'error')} ">
+<!--div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'fechaVencimiento', 'error')} ">
     <label for="fechaDeRevocacion" class="control-label">
         <g:message code="revocacionDePoder.fechaDeRevocacion.label" default="Fecha De Revocación" />
         <span class="required-indicator">*</span>
@@ -110,7 +100,7 @@ update:'categoriaSelection'
             </span>
         </div>
     </div>
-</div> 
+</--> 
 
 <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'comentarios', 'error')} ">
     <label for="comentarios" class="control-label">
@@ -124,7 +114,7 @@ update:'categoriaSelection'
 <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'documentos', 'error')} ">
     <label for="documentos" class="control-label">
         <g:hiddenField name="anchor" value="bloqueAdjuntarArchivos"/>
-        <g:message code="revocacionDePoder.documentos.label" default="Documentos" />
+        <g:message code="revocacionDePoder.documentos.label" default="Escritura Pública de Otorgamiento de poder" />
         <span class="required-indicator">*</span>
     </label>
     <div class="controls">
@@ -148,7 +138,7 @@ update:'categoriaSelection'
 
 <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'tags', 'error')}">
     <label for="tags" class="control-label">
-        <g:message code="revocacionDePoder.tags.label" default="Tags" />
+        <g:message code="revocacionDePoder.tags.label" default="Palabras Clave" />
     </label>
     <div class="controls">
         <g:textField class="span6" name="tags" value="${revocacionDePoderInstance?.tags}"/>

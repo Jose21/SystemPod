@@ -21,52 +21,54 @@ class RevocacionDePoderController {
         redirect(action: "list", params: params)
     }
     /**
-    * Método apara enlistar los registros existentes en una domain class 
-    */
+     * Método apara enlistar los registros existentes en una domain class 
+     */
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         [revocacionDePoderInstanceList: RevocacionDePoder.list(params), revocacionDePoderInstanceTotal: RevocacionDePoder.count()]
     }
     /**
-    * Este método sirve para la creacion de un registro de tipo revocación de poder.
-    */
-    def create() {                
+     * Este método sirve para la creacion de un registro de tipo revocación de poder.
+     */
+    def create() {                               
         def datosDelOtorgamiento = OtorgamientoDePoder.findByEscrituraPublica(params.escrituraPublica)                 
         def revocacionDePoderInstance = new RevocacionDePoder(params)
         if(params.escrituraPublica){
             if(!datosDelOtorgamiento?.escrituraPublica){
-                flash.warn = "No se ha encontrado una solicitud de Otorgamiento de Poder. >> Intente de nuevo o complemente los datos manualmente."
+                flash.warn = "No se ha encontrado una solicitud de Otorgamiento de Poder"
             }else if (!datosDelOtorgamiento?.apoderadosVigentes){
                 flash.warn = "El poder asociado al Número de Escritura Pública esta totalmente Revocado."
             }else if(datosDelOtorgamiento?.solicitudEnProceso == true){
-                flash.warn = "Existe una solicitud en proceso asociada al Número de Escritura que esta buscando. Intente más tarde"
+                flash.warn = "Existe una solicitud en proceso asociada al Número de Escritura que esta buscando"
             }else{
                 
                 revocacionDePoderInstance.escrituraPublica = datosDelOtorgamiento?.escrituraPublica
                 revocacionDePoderInstance.categoriaDeTipoDePoder = datosDelOtorgamiento?.categoriaDeTipoDePoder
-                revocacionDePoderInstance.delegacion = datosDelOtorgamiento?.delegacion
-                revocacionDePoderInstance.solicitadoPor = datosDelOtorgamiento?.solicitadoPor
-                revocacionDePoderInstance.fechaDeRevocacion = datosDelOtorgamiento?.fechaVencimiento
+                revocacionDePoderInstance.delegacion = datosDelOtorgamiento?.delegacion                
+                //revocacionDePoderInstance.fechaDeRevocacion = datosDelOtorgamiento?.fechaVencimiento
                 revocacionDePoderInstance.comentarios = datosDelOtorgamiento?.comentarios
                 revocacionDePoderInstance.documentos = datosDelOtorgamiento?.documentos
-                revocacionDePoderInstance.apoderados = datosDelOtorgamiento?.apoderadosVigentes
+                revocacionDePoderInstance.apoderados = datosDelOtorgamiento?.apoderadosVigentes                
                 revocacionDePoderInstance.agregarApoderado = false                
-                flash.info = "Se han cargado los datos de la Escritura Pública"
-            }
+                flash.info = "Se han cargado los datos de la Escritura Pública"                
+            }            
         }
         [revocacionDePoderInstance: revocacionDePoderInstance, otorgamientoDePoderId : datosDelOtorgamiento?.id]        
     }
     /**
-    * Método para guardar los registros en el sistema.
-    */
+     * Método para guardar los registros en el sistema.
+     */
     def save() {          
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
+        
+        params.registroDeLaSolicitud = new Date()
+        
         if (params.fechaDeRevocacion) {
             Date fechaDeRevocacion = sdf.parse(params.fechaDeRevocacion)
             params.fechaDeRevocacion = fechaDeRevocacion
         } else {
             params.fechaDeRevocacion = null
-        }
+        }       
         //se agrega el que creó la revocacion en la bd
         params.creadaPor = springSecurityService.currentUser
         //se agrega notario correspondiente a la solicitud de revocacion        
@@ -119,8 +121,8 @@ class RevocacionDePoderController {
         redirect(action: "edit", id: revocacionDePoderInstance.id)
     }
     /**
-    * Método para visualizar el registro creado en el sistema.
-    */
+     * Método para visualizar el registro creado en el sistema.
+     */
     def show(Long id) {
         def revocacionDePoderInstance = RevocacionDePoder.read(id)        
         if (!revocacionDePoderInstance) {
@@ -161,21 +163,56 @@ class RevocacionDePoderController {
         def usuarioNotarioPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_NOTARIO")).collect {it.usuario}
         def usuariosReasignacion = usuarioResolvedorPoderes + usuarioNotarioPoderes
         def usuarioInstance = springSecurityService.currentUser
-            usuariosReasignacion.remove(usuarioInstance)            
+        usuariosReasignacion.remove(usuarioInstance)
+        usuariosReasignacion.each{            
+            if(it.accountLocked == true){
+                usuariosReasignacion = usuariosReasignacion - it
+            }
+        }
         
         def cartaDeInstruccion = CartaDeInstruccionDeRevocacion.findByRevocacionDePoder(revocacionDePoderInstance)
+        
+        //bandera para saber si es una solicitud de solicitante_externo                                       
+        def userSolicitante = revocacionDePoderInstance.creadaPor
+        List<Rol> currentUserRoles = UsuarioRol.findByUsuario(userSolicitante).collect { it.rol } as List          
+        def solicitudExterno = null
+        def solicitanteInterno = null
+        def solicitanteUSS = null
+        if(currentUserRoles.authority.contains("ROLE_SOLICITANTE_EXTERNO")) {            
+            solicitudExterno = true            
+        }else{                                   
+            solicitudExterno = false
+        }  
+        if(currentUserRoles.authority.contains("ROLE_PODERES_SOLICITANTE")) {
+            solicitanteInterno = true
+        }else if((currentUserRoles.authority.contains("ROLE_SOLICITANTE_ESPECIAL"))){
+            solicitanteUSS = true
+        }
+        
+        //datos del notario        
+        def datosNotario = null
+        if(revocacionDePoderInstance.notarioCorrespondienteId){
+            datosNotario = Usuario.get(revocacionDePoderInstance?.notarioCorrespondienteId)
+        }          
+        //otorgamiento al q pertenece la revocacion        
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(revocacionDePoderInstance.otorgamientoDePoderId)        
         
         [
             revocacionDePoderInstance: revocacionDePoderInstance,
             ocultarBoton : ocultarBoton,
             cartaDeInstruccion : cartaDeInstruccion,
             diasRestantes : diasRestantes,
-            usuariosReasignacion : usuariosReasignacion
+            usuariosReasignacion : usuariosReasignacion,
+            solicitudExterno : solicitudExterno,
+            solicitanteUSS : solicitanteUSS,
+            solicitanteInterno : solicitanteInterno,
+            datosNotario : datosNotario,
+            otorgamientoDePoderInstance : otorgamientoDePoderInstance
         ]
     }
     /**
-    * Método para editar un registro.
-    */
+     * Método para editar un registro.
+     */
     def edit(Long id) {
         def revocacionDePoderInstance = RevocacionDePoder.read(id)        
         if (!revocacionDePoderInstance) {
@@ -192,8 +229,8 @@ class RevocacionDePoderController {
         [revocacionDePoderInstance: revocacionDePoderInstance, anchor : params.anchor?:""]
     }
     /**
-    * Método para actualizar los datos de un registro.
-    */
+     * Método para actualizar los datos de un registro.
+     */
     def update(Long id, Long version) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         def revocacionDePoderInstance = RevocacionDePoder.get(id)
@@ -215,7 +252,8 @@ class RevocacionDePoderController {
 
         if (params.fechaDeRevocacion) {
             Date fechaDeRevocacion = sdf.parse(params.fechaDeRevocacion)
-            params.fechaDeRevocacion = fechaDeRevocacion
+            params.fechaDeRevocacion = fechaDeRevocacion            
+            params.notarioCorrespondiente = springSecurityService.currentUser            
         } else {
             params.fechaDeRevocacion = null
         }
@@ -249,8 +287,8 @@ class RevocacionDePoderController {
         redirect(action: "edit", id: revocacionDePoderInstance.id, params : [ anchor : params.anchor])
     }
     /**
-    * Método para eliminar el registro del sistema.
-    */
+     * Método para eliminar el registro del sistema.
+     */
     def delete(Long id) {
         def revocacionDePoderInstance = RevocacionDePoder.get(id)
         if (!revocacionDePoderInstance) {
@@ -270,8 +308,8 @@ class RevocacionDePoderController {
         }
     }
     /**
-    * Método para eliminar un archivo dentro de la solicitud de revocación de poder.
-    */
+     * Método para eliminar un archivo dentro de la solicitud de revocación de poder.
+     */
     def deleteArchivo(Long id) {
         def revocacionDePoderId = params.revocacionDePoderId
         def revocacionDePoder = RevocacionDePoder.get (revocacionDePoderId)
@@ -282,8 +320,8 @@ class RevocacionDePoderController {
         redirect(action: "edit", id: revocacionDePoderId, params : [ anchor : params.anchor ])
     }
     /**
-    * Método para saber si ya esta creada la carta de instrucción de una revocación.
-    */
+     * Método para saber si ya esta creada la carta de instrucción de una revocación.
+     */
     def existe() {
         def revocacionDePoderInstance = RevocacionDePoder.get(params.id)       
         def cartaDeInstruccion = CartaDeInstruccionDeRevocacion.findByRevocacionDePoder(revocacionDePoderInstance)
@@ -307,8 +345,8 @@ class RevocacionDePoderController {
         }
     }
     /**
-    * Método para hacer busquedas ajax para mostrar posibles opciones al buscar por número de escritura pública en la crecaion de una revocacion de poder.
-    */
+     * Método para hacer busquedas ajax para mostrar posibles opciones al buscar por número de escritura pública en la crecaion de una revocacion de poder.
+     */
     def ajaxFinder() {
         def found = null
         if (params.term) {            
@@ -320,8 +358,8 @@ class RevocacionDePoderController {
         render (found?.'escrituraPublica' as JSON)
     }
     /**
-    * Método para buscar un otorgamiento de poder y crear una revocación.
-    */
+     * Método para buscar un otorgamiento de poder y crear una revocación.
+     */
     def buscarEscrituraPublica(){        
         def datosDelOtorgamiento = OtorgamientoDePoder.findByEscrituraPublica(params.escrituraPublica)                
         def revocacionDePoderInstance = new RevocacionDePoder(params)
@@ -332,11 +370,52 @@ class RevocacionDePoderController {
         [revocacionDePoderInstance: revocacionDePoderInstance, otorgamientoDePoderId : datosDelOtorgamiento?.id]
     }
     /**
-    * Método para enviar la solicitud y se asigna al usuario correspondiente.
-    */
-    def enviarSolicitud () {                
-        def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)        
-        def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(revocacionDePoderInstance.escrituraPublica)        
+     * Método para enviar la solicitud y se asigna al usuario correspondiente.
+     */
+    def enviarSolicitud () {         
+        def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id)        
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.findByEscrituraPublica(revocacionDePoderInstance.escrituraPublica)  
+                                               
+        def userActual = springSecurityService.currentUser
+        List<Rol> currentUserRoles = UsuarioRol.findByUsuario(userActual).collect { it.rol } as List  
+        
+        def userExterno = null
+        if(currentUserRoles.authority.contains("ROLE_SOLICITANTE_EXTERNO")) {            
+            if (!revocacionDePoderInstance.datosUsuarioExterno){
+                flash.warn = "No se ha agregado un documento con los datos necesarios del usuario." 
+                redirect(action: "edit" , params : [id: revocacionDePoderInstance.id ])
+                return
+            }else{
+            
+                def usuarioGestorExterno = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_GESTOR_EXTERNO")).collect {it.usuario}        
+                usuarioGestorExterno.each{
+                    revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
+                }
+                userExterno = true
+            }
+            
+        }else if(currentUserRoles.authority.contains("ROLE_SOLICITANTE_ESPECIAL")){
+            
+            if (!revocacionDePoderInstance.datosUsuarioExterno){
+                flash.warn = "No se ha agregado un documento con los datos necesarios del usuario." 
+                redirect(action: "edit" , params : [id: revocacionDePoderInstance.id ])
+                return
+            }else{
+            
+                def usuarioGestorExterno = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_GESTOR")).collect {it.usuario}        
+                usuarioGestorExterno.each{
+                    revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
+                }
+                userExterno = true
+            }
+        }else{                                   
+            def usuarioGestorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_GESTOR")).collect {it.usuario}        
+            usuarioGestorPoderes.each{
+                revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
+            } 
+            userExterno = false
+        }  
+        
         if(revocacionDePoderInstance?.tipoDeRevocacion == "Parcial"){
             if(params.apoderadoList){
                 def apoderadoSelects = params.list('apoderadoList')        
@@ -367,16 +446,18 @@ class RevocacionDePoderController {
             revocacionDePoderInstance.apoderados.each{ it ->
                 revocacionDePoderInstance.addToApoderadosEliminar(it)
             } 
-        }
-                
-        def usuarioGestorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_GESTOR")).collect {it.usuario}        
-        usuarioGestorPoderes.each{
-            revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
-        }
+        }                
+        
         revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
-        revocacionDePoderInstance.fechaDeEnvio = new Date()        
+        revocacionDePoderInstance.fechaDeEnvio = new Date()   
+        revocacionDePoderInstance.otorgamientoDePoder = otorgamientoDePoderInstance
+        //se cambia el status de los apoderados para c/u de los apoderados
+        revocacionDePoderInstance.apoderadosEliminar.each{apoderado ->
+            apoderado.statusDePoder = 'En trámite de revocación'
+            apoderado.save()
+        }
         revocacionDePoderInstance.save()
-        //se cambia el estatus del poder cuando es una revocacion atravez de una solicitud existente
+        //se cambia el estatus del poder cuando es una revocacion a traves de una solicitud existente
         if(otorgamientoDePoderInstance){
             otorgamientoDePoderInstance.solicitudEnProceso = true
             otorgamientoDePoderInstance.save()
@@ -386,8 +467,8 @@ class RevocacionDePoderController {
         redirect(controller: "poderes", action: "index")        
     }
     /**
-    * Método para agregar apoderados dentro de la solicitud.
-    */
+     * Método para agregar apoderados dentro de la solicitud.
+     */
     def addApoderado () {
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)
         def apoderadoInstance = Apoderado.findByNombre(params."apoderado")
@@ -415,8 +496,8 @@ class RevocacionDePoderController {
     }
     def asignarA(){
         /**
-        * Método para enviar la solicitud y se asigna al usuario correspondiente.
-        */
+         * Método para enviar la solicitud y se asigna al usuario correspondiente.
+         */
         def revocacionDePoderInstance = RevocacionDePoder.get(params.idRevocacionDePoder as long)
         revocacionDePoderInstance.asignar = Usuario.get(1 as long)
         def usuarioGestorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_GESTOR")).collect {it.usuario}        
@@ -432,8 +513,8 @@ class RevocacionDePoderController {
         redirect(controller: "poderes", action: "index")
     }
     /**
-    * Método para enviar la copia de escritura publica al usuario solicitante.
-    */
+     * Método para enviar la copia de escritura publica al usuario solicitante.
+     */
     def entregarCopiaSolicitante(){
         def revocacionDePoderInstance = RevocacionDePoder.get(params.idRevocacionDePoder as long)        
         revocacionDePoderInstance.asignar = revocacionDePoderInstance.creadaPor
@@ -446,8 +527,8 @@ class RevocacionDePoderController {
         redirect(controller: "poderes", action: "index")
     }
     /**
-    * Método para asignar la solicitud al usuario resolvedor.
-    */
+     * Método para asignar la solicitud al usuario resolvedor.
+     */
     def turnarResolvedor(){
         def revocacionDePoderInstance = RevocacionDePoder.get(params.id as long)
         def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_RESOLVEDOR")).collect {it.usuario}        
@@ -463,16 +544,62 @@ class RevocacionDePoderController {
         redirect(controller: "poderes", action: "index")
     }
     /**
-    * Método para imprimir la solicitud.
-    */
-    def imprimir(Long id){
-        def revocacionDePoderInstance = RevocacionDePoder.get(id)
-        [ revocacionDePoderInstance : revocacionDePoderInstance ]
+     * Método para asignar la solicitud al usuario resolvedor.
+     */
+    def turnarGestor1(){
+        def revocacionDePoderInstance = RevocacionDePoder.get(params.id as long)
+        def usuarioResolvedorPoderes = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_GESTOR")).collect {it.usuario}        
+        usuarioResolvedorPoderes.each{
+            revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
+        }        
+        revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
+        revocacionDePoderInstance.fechaDeEnvio = new Date()
+        revocacionDePoderInstance.save()
+        //se guardan datos en la bitacora
+        bitacoraService.agregarRevocacion(revocacionDePoderInstance, springSecurityService.currentUser, "Se turnó la solicitud al Usuario Gestor")
+        flash.message = "Se ha turnado con éxito la Solicitud."        
+        redirect(controller: "poderes", action: "index")
     }
     /**
-    * Método para reasignar una solicitud en dado caso que aun no sea atendida
-    * por el usuario que la tiene actualmente asignada.
-    */
+     * Método para imprimir la solicitud.
+     */
+    def imprimir(Long id){
+        def revocacionDePoderInstance = RevocacionDePoder.get(id)
+        //datos del notario        
+        def datosNotario = null
+        if(revocacionDePoderInstance.notarioCorrespondienteId){
+            datosNotario = Usuario.get(revocacionDePoderInstance?.notarioCorrespondienteId)
+        }
+        //otorgamiento al q pertenece la revocacion        
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(revocacionDePoderInstance.otorgamientoDePoderId) 
+        //bandera para saber si es una solicitud de solicitante_externo                                       
+        def userSolicitante = revocacionDePoderInstance.creadaPor
+        List<Rol> currentUserRoles = UsuarioRol.findByUsuario(userSolicitante).collect { it.rol } as List          
+        def solicitudExterno = null
+        def solicitanteInterno = null
+        def solicitanteUSS = null
+        if(currentUserRoles.authority.contains("ROLE_SOLICITANTE_EXTERNO")) {            
+            solicitudExterno = true            
+        }else{                                   
+            solicitudExterno = false
+        }  
+        if(currentUserRoles.authority.contains("ROLE_PODERES_SOLICITANTE")) {
+            solicitanteInterno = true
+        }else if((currentUserRoles.authority.contains("ROLE_SOLICITANTE_ESPECIAL"))){
+            solicitanteUSS = true
+        }        
+        [ revocacionDePoderInstance : revocacionDePoderInstance,
+            datosNotario : datosNotario,
+            otorgamientoDePoderInstance : otorgamientoDePoderInstance,
+            solicitudExterno : solicitudExterno,
+            solicitanteInterno : solicitanteInterno,
+            solicitanteUSS : solicitanteUSS
+        ]
+    }
+    /**
+     * Método para reasignar una solicitud en dado caso que aun no sea atendida
+     * por el usuario que la tiene actualmente asignada.
+     */
     def reasignarSolicitud(Long id){        
         def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)        
         
@@ -510,4 +637,65 @@ class RevocacionDePoderController {
         [ revocacionDePoderInstance : revocacionDePoderInstance ]
     }
     
+    def uploadDatosUsuario(){                                        
+        def revocacionDePoderInstance = RevocacionDePoder.get(params.revocacionDePoder.id as long)    
+        def f = request.getFile('datosUsuario')
+        if (!f.getSize()) {
+            flash.warn = "Debe indicar la ruta del archivo."
+            redirect(action: "edit", params : [id: params.revocacionDePoder.id])
+        } else if (f.getSize() >= 52428800) {
+            flash.warn = "El archivo debe pesar menos de 50 Mb."
+        } else {
+            def filename = f.getOriginalFilename()                         
+            def extension = filename.substring(filename.lastIndexOf(".") + 1, filename.size()).toLowerCase()                       
+            revocacionDePoderInstance.nombreDatosUsuarioExterno = filename
+            revocacionDePoderInstance.datosUsuarioExterno = f.getBytes()
+            if (revocacionDePoderInstance.save(flash:true)) {                
+                flash.message = "el archivo se ha cargado correctamente."
+                redirect(action: "edit", params : [id: params.revocacionDePoder.id])
+            } else {
+                flash.error = "Error en base de datos."
+            }                       
+        }
+    }
+    def entregarCopiaGestorExterno(){
+        def revocacionDePoderInstance = RevocacionDePoder.get(params.idRevocacionDePoder as long)
+        def usuarioGestorExterno = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_GESTOR_EXTERNO")).collect {it.usuario}        
+        usuarioGestorExterno.each{
+            revocacionDePoderInstance.asignar = Usuario.get(it.id as long)   
+        }        
+        revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
+        revocacionDePoderInstance.fechaDeEnvio = new Date()
+        revocacionDePoderInstance.save()
+        //se guardan datos en la bitacora
+        bitacoraService.agregarRevocacion(revocacionDePoderInstance, springSecurityService.currentUser, "Se envió Copia Electrónica al Gestor Externo")
+        flash.message = "Se ha turnado con éxito la Solicitud."        
+        redirect(controller: "poderes", action: "index")
+        
+    }
+    def notificacionDeRechazo(){          
+        def revocacionDePoderInstance = RevocacionDePoder.get(params.idRevocacionDePoder as long)        
+        [ revocacionDePoderInstance : revocacionDePoderInstance]
+    }
+    
+    def updateNotificacionDeRechazo(){
+        def revocacionDePoderInstance = RevocacionDePoder.get(params.idRevocacionDePoder as long)  
+        def otorgamientoDePoderInstance = OtorgamientoDePoder.get(revocacionDePoderInstance.otorgamientoDePoder.id as long)
+        revocacionDePoderInstance.notificacionDeRechazo = params.notificacionDeRechazo
+        revocacionDePoderInstance.asignar = revocacionDePoderInstance.creadaPor
+        revocacionDePoderInstance.asignadaPor = springSecurityService.currentUser
+        revocacionDePoderInstance.fechaDeEnvio = new Date() 
+        //se cambia el status de los apoderados para c/u de los apoderados
+        revocacionDePoderInstance.apoderadosEliminar.each{apoderado ->
+            apoderado.statusDePoder = 'Vigente'
+            apoderado.save()
+        }
+        revocacionDePoderInstance.save()
+        if(otorgamientoDePoderInstance){
+            otorgamientoDePoderInstance.solicitudEnProceso = false
+            otorgamientoDePoderInstance.save()            
+        }
+        flash.message = "Se ha enviado la notificación de rechazo."                       
+        redirect(controller: "poderes", action: "index")
+    }
 }

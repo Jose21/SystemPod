@@ -238,7 +238,9 @@ class ConvenioController {
                 } else {
                     flash.error = "No se pudo agregar el firmante. Favor de reintentar."
                 }                
-            } else {
+            } else if (!params.firmante){
+                flash.error = "Debe agregar el nombre del Firmante. Favor de reintentar."
+            }else {
                 flash.error = "No se pudo agregar el firmante. Favor de reintentar."
             }
         }
@@ -280,8 +282,10 @@ class ConvenioController {
                 } else {
                     flash.error = "No se pudo agregar el responsable. Favor de reintentar."
                 }                
-            } else {
-                flash.message = "No se pudo agregar el responsable. Favor de reintentar."
+            } else if (!params.responsable){
+                flash.error = "Debe agregar el nombre del Responsable. Favor de reintentar."
+            }else {
+                flash.error = "No se pudo agregar el responsable. Favor de reintentar."
             }
         }
         redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
@@ -308,24 +312,38 @@ class ConvenioController {
         } else if (f.getSize() >= 52428800) {
             flash.warn = "El archivo debe pesar menos de 50 Mb."
         } else {
-            def filename = f.getOriginalFilename() 
+            def filename = f.getOriginalFilename()                         
             def extension = filename.substring(filename.lastIndexOf(".") + 1, filename.size()).toLowerCase()
+            
+           //se agregar estas lineas para quitar la validacion sobre la extension de la copia alectronica.
+            convenioInstance.nombreDeCopiaElectronica = filename
+            convenioInstance.copiaElectronica = f.getBytes()
+            if (convenioInstance.save(flash:true)) {
+                historialDeConvenioService.addCopiaFirmaToHistorial(convenioInstance, null, null,"Se adjuntó copia de Firma Electronica")
+                flash.message = "La copia electrónica del convenio se adjuntó satisfactoriamente."
+            } else {
+                flash.error = "Error en base de datos."
+            }
+            
+            //se comentan para quitar la validacion
+            /*
             def extensionList = getExtensionList()
             if (extensionList.contains(extension)) {
-                //bandera para deshabilitar la edicion.
-                //se deshabilitó la opcion
-                //convenioInstance.editable = false
-                convenioInstance.nombreDeCopiaElectronica = filename
-                convenioInstance.copiaElectronica = f.getBytes()
-                if (convenioInstance.save(flash:true)) {
-                    historialDeConvenioService.addCopiaFirmaToHistorial(convenioInstance, null, null,"Se adjuntó copia de Firma Electronica")
-                    flash.message = "La copia electrónica del convenio se adjuntó satisfactoriamente."
-                } else {
-                    flash.error = "Error en base de datos."
-                }
+            //bandera para deshabilitar la edicion.
+            //se deshabilitó la opcion
+            //convenioInstance.editable = false
+            convenioInstance.nombreDeCopiaElectronica = filename
+            convenioInstance.copiaElectronica = f.getBytes()
+            if (convenioInstance.save(flash:true)) {
+            historialDeConvenioService.addCopiaFirmaToHistorial(convenioInstance, null, null,"Se adjuntó copia de Firma Electronica")
+            flash.message = "La copia electrónica del convenio se adjuntó satisfactoriamente."
             } else {
-                flash.warn = "El archivo debe tener alguna de las siguientes extensiones: doc, docx, pdf, jpeg, jpg, png, bmp."
+            flash.error = "Error en base de datos."
             }
+            } else {
+            flash.warn = "El archivo debe tener alguna de las siguientes extensiones: doc, docx, pdf, jpeg, jpg, png, bmp."
+            
+             */
             
         }
         redirect(action: "edit", id: convenioInstance.id, params : [ anchor : params.anchor ])
@@ -558,8 +576,8 @@ class ConvenioController {
         def resultList = s.tokenize(",")
         def convenioInstanceList =[] 
         resultList.each{            
-            def results = Convenio.findAllByTagsIlikeAndEliminado("%"+it+",%", false, [sort: "id", order: "asc"])
-            convenioInstanceList = convenioInstanceList + results as Set    
+        def results = Convenio.findAllByTagsIlikeAndEliminado("%"+it+",%", false, [sort: "id", order: "asc"])
+        convenioInstanceList = convenioInstanceList + results as Set    
         }*/
         def convenioInstanceList = Convenio.findAllByTagsIlikeAndEliminado("%"+params.tags+"%", false, [sort: "id", order: "asc"])
         session.convenioInstanceList = convenioInstanceList
@@ -588,14 +606,14 @@ class ConvenioController {
             if(params?.format && params.format != "html"){
                 response.contentType = grailsApplication.config.grails.mime.types[params.format]
                 response.setHeader("Content-disposition", "attachment; filename=convenios.${params.extension}")
-                List fields = ["id", "compromisos", "dateCreated", "fechaDeFirma", "institucion","responsables", "status"]
-                Map labels = ["id": "Id Interno", "compromisos": "Compromisos","dateCreated":"Fecha Registro","fechaDeFirma":"Fecha Firma",\
-                              "institucion":"Institucion","responsables":"Responsables","status":"Estatus"]
+                List fields = ["id", "objeto", "dateCreated", "fechaDeFirma","responsables","firmantes", "institucion", "status"]
+                Map labels = ["id": "Id Interno","objeto" : "Objeto", "dateCreated":"Fecha Registro","fechaDeFirma":"Fecha Firma",\
+                              "responsables":"Responsables","firmantes":"Firmantes","institucion":"Institucion","status":"Estatus"]
                 def upperCase = { domain, value ->
                     return value.toUpperCase()
                 }
                 Map formatters = [institucion: upperCase]		
-                Map parameters = [title: "Reporte De Convenios", "column.widths": [0.2, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4], "title.font.size":12]
+                Map parameters = [title: "Reporte De Convenios", "column.widths": [0.2, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4], "title.font.size":12]
 
                 exportService.export(params.format, response.outputStream, session.convenioInstanceList, fields, labels, formatters, parameters)
             }
@@ -615,7 +633,7 @@ class ConvenioController {
      * Método para realizar una busqueda por tipo de poder.
      */
     
-     def buscarPorTipoConvenio (){
+    def buscarPorTipoConvenio (){
         def tipoConvenioActive = null
         if (params.inActive=="tipoConvenio") {
             tipoConvenioActive = "active"

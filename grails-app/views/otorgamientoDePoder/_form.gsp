@@ -18,22 +18,29 @@
         <span class="required-indicator">*</span>
     </label>
     <div class="controls">
-        <g:select class="chosen-select" optionKey="id" optionValue="nombre" name="tipoDePoder.id" id="tipoDePoder.nombre" from="${com.app.sgpod.TipoDePoder.list()}"
+        <g:select class="chosen-select" optionKey="id" optionValue="nombre" name="tipoDePoder.id" id="tipoDePoder.nombre" from="${listTipoDePoder}"
         value="${otorgamientoDePoderInstance?.categoriaDeTipoDePoder?.tipoDePoder?.id}"
             noSelection="['':'Elige un tipo de poder']"
         onchange="${remoteFunction(
-        controller:'tipoDePoder', 
-        action:'ajaxGetCategorias', 
-        params:'\'tipoDePoder.id=\' + this.value', 
-        update:'categoriaSelection'
-        )}"/>
+controller:'tipoDePoder', 
+action:'ajaxGetCategorias', 
+params:'\'tipoDePoder.id=\' + this.value', 
+update:'categoriaSelection'
+)}"/>
     </div>
+</div>
+<div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'categoriaDeTipoDePoder', 'error')} required">
+    <label for="categoriaDeTipoDePoder" class="control-label">
+        <g:message code="otorgamientoDePoder.categoriaDeTipoDePoder.label" default="Modelo" />
+        <span class="required-indicator">*</span>
+    </label>
     <div class="controls" id="categoriaSelection" >
         <select class="chosen-select" data-placeholder="Elige una categoria...">
             <option>${otorgamientoDePoderInstance?.categoriaDeTipoDePoder?.nombre}</option>
         </select>
     </div>
 </div>
+
 
 <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'poderSolicitado', 'error')} required" id="ocultar">
     <g:hiddenField name="poderSolicitado" value="${otorgamientoDePoderInstance?.poderSolicitado}"/>
@@ -72,7 +79,7 @@
 
 <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'tags', 'error')}">
     <label for="tags" class="control-label">
-        <g:message code="otorgamientoDePoder.tags.label" default="Tags" />
+        <g:message code="otorgamientoDePoder.tags.label" default="Palabras Clave" />
     </label>
     <div class="controls">
         <g:textField class="span6" name="tags" value="${otorgamientoDePoderInstance?.tags}"/>

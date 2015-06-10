@@ -81,7 +81,7 @@ log4j = {
         appender new DailyRollingFileAppender(
             name: 'dailyAppender',
             datePattern : "'.'yyyy-MM-dd",
-            fileName: "/var/uploads/sgcon/logs/sgcon.log",
+            fileName: "/var/log/tomcat7/sgcon.log",
             layout: pattern(conversionPattern:'%d [%t] %-5p %c{2} %x - %m%n')
         )
     }

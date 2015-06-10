@@ -8,7 +8,7 @@
     </head>
     <body>        
         <div class="content-header">
-            <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE, ROLE_SOLICITANTE_EXTERNO">
+            <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE, ROLE_SOLICITANTE_EXTERNO, ROLE_SOLICITANTE_ESPECIAL">
                 <div class="page-header position-relative">                
                     <h1>Solicitud de Otorgamiento de Poder
                         <small>
@@ -49,7 +49,7 @@
                         </g:eachError>
                     </div>
                 </g:hasErrors>                
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE, ROLE_SOLICITANTE_EXTERNO">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE, ROLE_SOLICITANTE_EXTERNO, ROLE_SOLICITANTE_ESPECIAL">
                     <h3 id="bloqueApoderados"  class="header smaller lighter blue">Agregar Apoderados</h3>       
                     <table class="table table-bordered table-striped">
                         <thead>
@@ -59,9 +59,10 @@
                                     <th>Puesto</th>                
                                     <th>Institución</th>
                                     <th>Email</th>
+                                    <th>IN</th>
                                     </g:if>
                                     <g:else>
-                                    <th colspan="4">Nombre</th>
+                                    <th colspan="5">Nombre</th>
                                     </g:else>
                                 <th></th>
                             </tr>
@@ -91,10 +92,17 @@
                                         <a href="#editarApoderadoModal${i}" data-toggle="modal">
                                             <i class="icon-edit bigger-110"></i>
                                         </a>
-                                        ${apoderado.nombre}</td>
-                                    <td>${apoderado.puesto}</td>
+                                        ${apoderado.nombre}
+                                    </td>
+                                    <g:if test="${apoderado.cargoApoderado}" >
+                                        <td>${apoderado.cargoApoderado}</td>
+                                    </g:if>
+                                    <g:else>
+                                        <td>${apoderado.puesto}</td>
+                                    </g:else>
                                     <td>${apoderado.institucion}</td>
                                     <td>${apoderado.email}</td>
+                                    <td>${apoderado.numeroIN}</td>
                                     <td>
                                         <g:form class="form-horizontal" controller="otorgamientoDePoder" method="post" >
                                             <!--g:hiddenField name="anchor" value="bloqueApoderado" /-->
@@ -104,57 +112,102 @@
                                         </g:form>
                                     </td>
                                 </tr>            
-                            </g:each>        
-                            <g:form controller="otorgamientoDePoder" method="post">
-                                <tr>
-                                    <td colspan="4">                  
-                                        <!--g:hiddenField name="anchor" value="bloqueApoderados" /-->
-                                        <g:textField class="span6"  name="apoderado" value="" autocomplete="off"/>
+                            </g:each>                                    
+                            <tr>
+                                <g:form controller="otorgamientoDePoder" class="form" method="post">
+                                    <td colspan="5">    
+                                        <div class="container-fluid">
+                                            <div class="form-group" >
+                                                <label for="params.apoderado" class="control-label">
+                                                    Nombre
+                                                    <span class="required-indicator">*</span>
+                                                </label>
+
+                                                <g:textField class="span6"  name="apoderado" value="${params.apoderado}" autocomplete="off"/>
+
+                                            </div>
+                                            <div class="form-group fieldcontain">
+                                                <label for="apoderado2" class="control-label">
+                                                    Repite Nombre
+                                                    <span class="required-indicator">*</span>
+                                                </label>
+                                                <div class="col-lg-10">
+                                                    <g:textField class="span6"  name="apoderado2" value="" autocomplete="off" onpaste="alert('No puedes usar esta función');return false"/>
+                                                </div>
+                                            </div> 
+                                            <div class="form-group fieldcontain">
+                                                <label for="cargoApoderado" class="control-label">
+                                                    <g:message code="cargoApoderado.nombreCargo.label" default="Puesto" />
+                                                    <span class="required-indicator">*</span>
+                                                </label>
+                                                <div class="col-lg-10">
+                                                    <g:select id="cargoApoderado" name="cargoApoderado"  style="width: 505px" from="${listCargos}" optionKey="id" required="" value="${apoderadoInstance?.cargoApoderado?.nombre}" noSelection="['':'Elige una opción.']" class="many-to-one"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group fieldcontain">
+                                                <label for="numeroIN" class="control-label">
+                                                    IN                                                    
+                                                </label>
+                                                <div class="col-lg-10">
+                                                    <g:textField class="span2"  name="numeroIN" value="${params.numeroIN}"/>
+                                                </div>
+                                            </div> 
+                                        </div>
                                     </td>
                                     <td>
                                         <g:hiddenField name="otorgamientoDePoder.id" value="${otorgamientoDePoderInstance?.id}"/>
+                                        <br/><br/><br/>
                                         <g:actionSubmit class="btn btn-primary btn-mini" action="addApoderado" value="Agregar" />
                                     </td>
-                                </tr>
-                            </g:form>
+                                </g:form>
+                            </tr>                            
                         </tbody>
                     </table>
                 </sec:ifAnyGranted>
 
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_SOLICITANTE_EXTERNO">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_SOLICITANTE_EXTERNO, ROLE_SOLICITANTE_ESPECIAL">
                     <h3 id="bloqueDatosUsuario" class="header smaller lighter blue">Datos del Usuario</h3>
                     <table class="table table-bordered table-striped">
-                        <thead>
+                        <thead>                            
                             <tr>
-                                <th colspan="2">Datos</th>                                    
+                                <th>Datos</th>
+                                    <g:if test="${otorgamientoDePoderInstance?.datosUsuarioExterno}">
+                                    <th>Descargar archivo</th>
+                                    </g:if>
                             </tr>
-                        </thead>
+                        </thead>                        
                         <tbody>
-
-                            <g:uploadForm class="form-horizontal" action="uploadDatosUsuario" >
-                                <tr>
-                                    <td>
+                            <tr>
+                                <td>
+                                    <g:uploadForm class="form-horizontal" action="uploadDatosUsuario" >
                                         <g:hiddenField name="anchor" value="bloqueDatosUsuario" />
                                         <g:hiddenField name="otorgamientoDePoder.id" value="${otorgamientoDePoderInstance?.id}" />                    
-                                        <div class="control-group">
-                                            <div class="control-label">          
-                                                <input type="file" name="datosUsuario"/> 
-                                            </div>                                                                                                                                                 
+                                        <div class="control-group">                                                     
+                                            <input type="file" name="datosUsuario"/>                                                                                                                                                                                             
                                         </div>
-                                    </td>    
-                                    <td>
-                                        <g:submitButton class="btn btn-primary btn-mini" name="adjuntar" value="Adjuntar" />
+                                        <div class="form-actions">
+                                            <g:submitButton class="btn btn-primary btn-mini" name="adjuntar" value="Adjuntar" />
+                                        </div>
+                                    </g:uploadForm>
+                                </td>    
+                                <g:if test="${otorgamientoDePoderInstance?.datosUsuarioExterno}">
+                                    <td style="text-align:center">                  
+                                        <g:link controller="poderes" action="downloadArchivo" params="[poderId: otorgamientoDePoderInstance.id]">
+                                            <g:img dir="images" file="download.png" width="64px" height="64px"/>
+                                            <br/>${otorgamientoDePoderInstance?.nombreDatosUsuarioExterno}
+                                        </g:link>
                                     </td>
-                                </tr>
-                            </g:uploadForm>
+                                </g:if>
+                            </tr>
+
                         </tbody>
                     </table>
                 </sec:ifAnyGranted>
-                
+
                 <g:form  name="myForm" class="form-horizontal" method="post"  enctype="multipart/form-data">
                     <g:hiddenField name="id" value="${otorgamientoDePoderInstance?.id}" />
                     <g:hiddenField name="version" value="${otorgamientoDePoderInstance?.version}" />
-                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE,ROLE_SOLICITANTE_EXTERNO">
+                    <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE,ROLE_SOLICITANTE_EXTERNO, ROLE_SOLICITANTE_ESPECIAL">
                         <div class="control-group fieldcontain ${hasErrors(bean: otorgamientoDePoderInstance, field: 'id', 'error')}">
                             <label for="id" class="control-label">
                                 <g:message code="otorgamientoDePoder.id.label" default="Número De Folio" />
@@ -223,7 +276,7 @@
                         </div>                        
                     </sec:ifAnyGranted>
                 </div>
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_SOLICITANTE">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR">
                     <div class="form-actions">
                         <g:actionSubmit class="btn btn-primary" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
                     </div>

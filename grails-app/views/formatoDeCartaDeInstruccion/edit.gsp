@@ -27,7 +27,7 @@
                 </ul>
             </g:hasErrors>
 
-            <g:form class="form-horizontal" method="post" >
+            <g:form class="form-horizontal" method="post"  >
                 <g:hiddenField name="id" value="${formatoDeCartaDeInstruccionInstance?.id}" />
                 <g:hiddenField name="version" value="${formatoDeCartaDeInstruccionInstance?.version}" />
                 <g:render template="form"/>

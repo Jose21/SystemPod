@@ -271,7 +271,13 @@ class FacturaController {
      * Método para guardar comentario de rechazo y enviar la factura.
      */
     def saveComentario(){                
-        def facturaInstance = Factura.get(params.factura.id)         
+        def facturaInstance = Factura.get(params.factura.id)
+        def solicitudesFacturadas = Poder.findAllByFactura(facturaInstance)        
+        solicitudesFacturadas.each{ solicitud ->
+            solicitud.factura = null
+            solicitud.facturado = false
+            solicitud.save()
+        }
         facturaInstance.comentarioDeRechazo = params.comentarioDeRechazo
         facturaInstance.asignadoPor = springSecurityService.currentUser
         facturaInstance.asignadoA = facturaInstance.creadaPor

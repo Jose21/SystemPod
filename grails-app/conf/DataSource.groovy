@@ -1,10 +1,7 @@
 dataSource {
-    pooled = true
-    username = "sgdb"
-    password = "sgdb"
-    driverClassName = "org.postgresql.Driver"
-    url = "jdbc:postgresql://localhost:5432/sgdb"
+    pooled = true    
     dialect="org.hibernate.dialect.PostgreSQLDialect"
+    driverClassName = "org.postgresql.Driver"
 }
 hibernate {
     cache.use_second_level_cache = true
@@ -15,14 +12,21 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = "create-drop"            
+            username = "sguser"
+            password = "sgpasswd"
+            url = "jdbc:postgresql://localhost:5432/sgdb"
+            dbCreate = "update"         
         }
     }
     production {
         dataSource {
+            username = "sguser"
+            password = "sgpasswd"                
+            url = "jdbc:postgresql://aa14b0zaa7u888z.cdrlazdkm8qf.us-west-2.rds.amazonaws.com:5432/sgdb" //sgcon.elasticbeanstalk.com
+            //url = "jdbc:postgresql://aa1x5omb2qv0jfi.cdrlazdkm8qf.us-west-2.rds.amazonaws.com:5432/sgdb" //sgcon2.elasticbeanstalk.com
             dbCreate = "update"
             properties {
-                maxActive = -1
+                maxActive = 100
                 minEvictableIdleTimeMillis=1800000
                 timeBetweenEvictionRunsMillis=1800000
                 numTestsPerEvictionRun=3

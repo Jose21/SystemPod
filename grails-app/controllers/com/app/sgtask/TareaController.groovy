@@ -47,7 +47,7 @@ class TareaController {
         def taskList1 = Tarea.findAllByCerradaAndResponsableAndFechaLimiteAndEliminado(false, springSecurityService.currentUser, sdf.parse(sdf.format(new Date())), false)
         def taskList2 = Tarea.findAllByCerradaAndResponsableAndFechaLimiteIsNullAndEliminado(false, springSecurityService.currentUser, false)
         def taskList = taskList1 + taskList2
-        
+                
         //Compartidos
         def c = Tarea.createCriteria()
         def sharedTaskList = c.list {
@@ -70,7 +70,7 @@ class TareaController {
         turnados = turnados.findAll {
             it.cerrada == false &&
             it.creadaPor == springSecurityService.currentUser &&
-            it.responsable != springSecurityService.currentUser
+            it.responsable != springSecurityService.currentUser &&
             it.eliminado == false
         }       
         
@@ -109,7 +109,7 @@ class TareaController {
             it.fechaLimite > new Date() &&
             it.cerrada == false &&
             it.responsable != springSecurityService.currentUser &&
-            it.creadaPor != springSecurityService.currentUser
+            it.creadaPor != springSecurityService.currentUser &&
             it.eliminado == false
         }
         
@@ -278,11 +278,11 @@ class TareaController {
             session.idConvenio = params.idConvenio as long
             def convenioInstance = Convenio.get(params.idConvenio as long)        
             if(!convenioInstance.responsables || !convenioInstance.firmantes){                
-                flash.warn = "Debe agregar al menos un responsable y un firmante oara poder turnar el convenio"
+                flash.warn = "Debe agregar al menos un responsable y un firmante para poder turnar el convenio"
                 redirect(controller: "convenio", action: "edit", id: session.idConvenio)                
             }
             
-           //se buscan los usuarios parea este modulo para q aparezcan en la lista
+            //se buscan los usuarios parea este modulo para q aparezcan en la lista
             usuariosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS_ADMIN")).collect {it.usuario}
             usuarioStandard = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS_STANDARD")).collect {it.usuario}
         
@@ -340,9 +340,26 @@ class TareaController {
         params.asignadaA = springSecurityService.currentUser
         def tareaInstance = new Tarea(params)
         if (!tareaInstance.save(flush: true)) {
-            def usuariosConveniosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS")).collect {it.usuario}            
-            render(view: "create", model: [tareaInstance: tareaInstance, usuariosConveniosList : usuariosConveniosList])
-            return
+            
+            if (session.idConvenio)  {                                                
+                def usuariosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS_ADMIN")).collect {it.usuario}     
+                def usuariosListEstandard = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_CONVENIOS_STANDARD")).collect {it.usuario}     
+                usuariosList = usuariosList + usuariosListEstandard
+             
+                render(view: "create", model: [tareaInstance: tareaInstance, usuariosList : usuariosList])
+                return
+                                                                                
+            }else{                            
+                //se buscan los usuarios parea este modulo para q aparezcan en la lista               
+                def usuariosList = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_TURNOS_ADMIN")).collect {it.usuario}
+                def usuarioStandard = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_TURNOS_STANDARD")).collect {it.usuario}        
+                usuariosList = usuariosList + usuarioStandard
+                //se quita el usuario que esta logueado en el sistema
+                usuariosList = usuariosList - springSecurityService.currentUser
+                
+                render(view: "create", model: [tareaInstance: tareaInstance, usuariosList : usuariosList])
+                return
+            }
         }
 
         //Se agrega el que lo creó como dueño y se le comparte por default
@@ -352,34 +369,65 @@ class TareaController {
         creadaPor.tarea = tareaInstance
         creadaPor.save(flush:true)
         
-        //Si el responsable es distinto al creador, se le asigna
-        if (params.responsable.id as long != springSecurityService.currentUser.id) {
-            def responsable = new UsuarioDeTarea()
-            responsable.usuario = Usuario.get(params.responsable.id as long)
-            responsable.owner = false
-            responsable.tarea = tareaInstance
-            if (responsable.save(flush:true)) {
-                //notificacionesService.tareaAsignada(tareaInstance, responsable.usuario)
-                AmazonSES enviarEmail = new AmazonSES()
-                enviarEmail.sendMail(responsable.usuario.email,"SGCON --Creación de Tarea", "Tienes un nuevo turno asignado. Folio: ${tareaInstance?.id} ,Creador del Turno: ${tareaInstance?.creadaPor?.firstName} ${tareaInstance?.creadaPor?.lastName}, Asunto: ${tareaInstance?.nombre}")                                
-            }
+        //Si el responsable es distinto al creador, se le asigna        
+        if(params.responsable){                    
+            if (params.responsable.id as long != springSecurityService.currentUser.id) {
+                def responsable = new UsuarioDeTarea()            
+                responsable.usuario = Usuario.get(params.responsable.id as long)
+                responsable.owner = false
+                responsable.tarea = tareaInstance
+                if (responsable.save(flush:true)) {
+                    //notificacionesService.tareaAsignada(tareaInstance, responsable.usuario)
+                    String stringId = tareaInstance.id 
+                    AmazonSES enviarEmail = new AmazonSES()
+                    enviarEmail.sendMail(responsable.usuario.email,responsable.usuario.firstName +" "+ responsable.usuario.lastName, "SGCON --Asignación de Tarea", "Tienes un nuevo Turno asignado", stringId, "Creador del Turno: " + tareaInstance.creadaPor.firstName +" "+ tareaInstance.creadaPor.lastName, "Nombre del Turno: " + tareaInstance.nombre)                                
+                }
+            } 
         }
         
         //Integración con Convenios
         if (session.idConvenio) {
             def convenioInstance = Convenio.get(session.idConvenio)
             convenioInstance.addToTareas(tareaInstance).save(flush:true)
-            def usuarioInstance = Usuario.get(params.responsable.id as long)
-
-            println "params.responsable: " + usuarioInstance
+            def usuarioInstance = Usuario.get(params.responsable.id as long)            
             historialDeConvenioService.addTurnosToHistorial(usuarioInstance, convenioInstance,null,"Se turnó el Convenio al usuario:")
         }
         //Integración con Otorgamiento De Poder
         if (session.idOtorgamientoDePoder){
             def otorgamientoDePoderInstance = OtorgamientoDePoder.get(session.idOtorgamientoDePoder)
-            otorgamientoDePoderInstance.asignar = otorgamientoDePoderInstance.creadaPor
-            otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
-            otorgamientoDePoderInstance.addToTareas(tareaInstance).save(flush:true)
+            def userActual = springSecurityService.currentUser
+            List<Rol> currentUserRoles = UsuarioRol.findByUsuario(userActual).collect { it.rol } as List 
+            
+            def userSolicitante = otorgamientoDePoderInstance.creadaPor        
+            List<Rol> currentRolUsers = UsuarioRol.findByUsuario(userSolicitante).collect { it.rol } as List 
+            
+            //se cambia el status de c/u de los apoderados al cancelar la solicitud
+            otorgamientoDePoderInstance.apoderados.each{apoderado ->
+                apoderado.statusDePoder = 'Cancelado'
+            }
+            otorgamientoDePoderInstance.fechaDeEnvio = new Date()
+            otorgamientoDePoderInstance.save()
+            
+            if(currentUserRoles.authority.contains("ROLE_GESTOR_EXTERNO")) {
+                otorgamientoDePoderInstance.asignar = otorgamientoDePoderInstance.creadaPor
+                otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+                otorgamientoDePoderInstance.addToTareas(tareaInstance).save(flush:true)  
+                println "entro al primer if"
+            }else if(currentRolUsers.authority.contains("ROLE_SOLICITANTE_EXTERNO")){
+                def usuarioExterno = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_GESTOR_EXTERNO")).collect {it.usuario}                
+                usuarioExterno.each { usuarioFac ->
+                    otorgamientoDePoderInstance.asignar = usuarioFac       
+                }                
+                otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+                otorgamientoDePoderInstance.addToTareas(tareaInstance).save(flush:true)
+                println "entro al segundo if"
+            }else{
+                otorgamientoDePoderInstance.asignar = otorgamientoDePoderInstance.creadaPor
+                otorgamientoDePoderInstance.asignadaPor = springSecurityService.currentUser
+                otorgamientoDePoderInstance.addToTareas(tareaInstance).save(flush:true)
+                println "entro al tecer if"
+            }
+            
         }
         //Integración con Revocación De Poder
         if (session.idRevocacionDePoder){
@@ -440,12 +488,7 @@ class TareaController {
                 }  
             }
         }
-        
-        if (!tareaInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tarea.label', default: 'Turno'), id])
-            redirect(action: "list")
-            return
-        }
+               
         if (tareaInstance.creadaPor != springSecurityService.currentUser) {
             historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "abrió un turno")
         }
@@ -454,7 +497,19 @@ class TareaController {
             def owner = false            
         }else{
             def owner = true            
-        }  
+        } 
+        
+        //opcion para verificar que el responsable abrio el turno
+        if(tareaInstance.responsable == springSecurityService.currentUser){
+            tareaInstance.check_responsable = true            
+            tareaInstance.save(flush:true)                        
+        }        
+        
+        if (!tareaInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tarea.label', default: 'Turno'), id])
+            redirect(action: "list")
+            return
+        }
         
         [tareaInstance: tareaInstance, currentUser : springSecurityService.currentUser, owner:params.owner]
     }
@@ -515,8 +570,9 @@ class TareaController {
         }
 
         //notificacionesService.tareaAsignada(tareaInstance, tareaInstance.creadaPor)
+        String stringId = tareaInstance.id        
         AmazonSES enviarEmail = new AmazonSES()
-        enviarEmail.sendMail(tareaInstance.creadaPor.email,"SGCON --Se editó un Turno", "Se realizarón modificaciones en el Turno. Folio: ${tareaInstance?.id} ,Creador del Turno: ${tareaInstance?.creadaPor?.firstName} ${tareaInstance?.creadaPor?.lastName}, Asunto: ${tareaInstance?.nombre}")
+        enviarEmail.sendMail(tareaInstance.creadaPor.email,tareaInstance.creadaPor.firstName +" "+ tareaInstance.creadaPor.firstName, "SGCON --Se editó un Turno", "Se realizarón modificaciones en el Turno", stringId, "Creador del Turno: " + tareaInstance.creadaPor.firstName +" "+ tareaInstance.creadaPor.lastName, "Nombre del Turno: " + tareaInstance.nombre)                
         historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "editó un turno")
         flash.message = message(code: 'default.updated.message', args: [message(code: 'tarea.label', default: 'Turno'), tareaInstance.id])
         redirect(action: "show", id: tareaInstance.id)
@@ -574,8 +630,9 @@ class TareaController {
             usuarioDeTarea.tarea = tareaInstance
             if (usuarioDeTarea.save(flush:true)) {            
                 //notificacionesService.tareaCompartida(tareaInstance, usuarioDeTarea.usuario)
+                String stringId = tareaInstance.id
                 AmazonSES enviarEmail = new AmazonSES()
-                enviarEmail.sendMail(usuarioDeTarea.usuario.email,"SGCon: Tienes un nuevo turno compartido.", "Folio: ${tareaInstance?.id} ,Creador del Turno: ${tareaInstance?.creadaPor?.firstName} ${tareaInstance?.creadaPor?.lastName}, Asunto: ${tareaInstance?.nombre}")
+                enviarEmail.sendMail(usuarioDeTarea.usuario.email, usuarioDeTarea.usuario.firstName +" "+ usuarioDeTarea.usuario.lastName, "SGCon: Tienes un nuevo turno compartido.", "Se te ha compartido un nuevo Turno", stringId, "Creador del Turno: " + tareaInstance.creadaPor.firstName +" "+ tareaInstance.creadaPor.lastName, "Nombre del Turno: " + tareaInstance.nombre)                
             }
             flash.message = "Tarea compartida satisfactoriamente."
         } else {
@@ -609,8 +666,9 @@ class TareaController {
             def usuariosDeTarea = tareaInstance.usuariosDeTarea
             usuariosDeTarea.each { it ->
                 //notificacionesService.tareaCerrada(tareaInstance, it.usuario)
+                String stringId = tareaInstance.id
                 AmazonSES enviarEmail = new AmazonSES()
-                enviarEmail.sendMail(it.usuario.email,"SGCon: El turno ${tareaInstance.id} ha sido cerrado.", "Creador del Turno: ${tareaInstance?.creadaPor?.firstName} ${tareaInstance?.creadaPor?.lastName}, Asunto: ${tareaInstance?.nombre}")
+                enviarEmail.sendMail(it.usuario.email, it.usuario.firstName +" "+ it.usuario.lastName, "SGCon: El turno ${tareaInstance.id} ha sido cerrado.", "El turno ha sido cerrado.", stringId, "Creador del Turno: " + tareaInstance.creadaPor.firstName +" "+ tareaInstance.creadaPor.lastName,"Nombre del Turno: " + tareaInstance.nombre)                
             }
             historialDeTareaService.agregar(tareaInstance, springSecurityService.currentUser, "concluyó un turno")
             flash.message = "La tarea fue cerrada satisfactoriamente."            
@@ -781,11 +839,11 @@ class TareaController {
         //def s = params.tags.toString().replaceAll(" ", ",")
         //def resultList = s.tokenize(",")
         //def tareaInstanceList =[]         
-       /*resultList.each{ algo -> 
-            println "it: "+ algo
-            def results = Tarea.findAllByTagsIlikeAndEliminado("%"+algo+",%", false, [sort: "id", order: "asc"])
-            tareaInstanceList = tareaInstanceList + results as Set    
-            println "tareaInstanceList: " + tareaInstanceList
+        /*resultList.each{ algo -> 
+        println "it: "+ algo
+        def results = Tarea.findAllByTagsIlikeAndEliminado("%"+algo+",%", false, [sort: "id", order: "asc"])
+        tareaInstanceList = tareaInstanceList + results as Set    
+        println "tareaInstanceList: " + tareaInstanceList
         }*/        
         def tareaInstanceList = Tarea.findAllByTagsIlikeAndEliminado("%"+params.tags+"%", false, [sort: "id", order: "asc"])
                 

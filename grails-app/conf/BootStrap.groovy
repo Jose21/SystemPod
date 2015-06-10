@@ -21,7 +21,7 @@ class BootStrap {
         switch (Environment.current) {
         case Environment.DEVELOPMENT :
                 
-            
+            /*
             new Usuario (
                 firstName : "Juan",
                 lastName : "Martinez",
@@ -31,7 +31,10 @@ class BootStrap {
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
-                passwordExpired : false
+                passwordExpired : false,
+                notaria_titular : null,
+                notaria_numero  : null,
+                notaria_entidad : null
             ).save()            
             new Usuario (
                 firstName : "Lic. Pedro",
@@ -42,18 +45,24 @@ class BootStrap {
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
-                passwordExpired : false
+                passwordExpired : false,
+                notaria_titular : null,
+                notaria_numero  : null,
+                notaria_entidad : null
             ).save()
             new Usuario (
                 firstName : "Administrador",
                 lastName : "Del Sistema",
-                email : "kokoro.miramar@gmail.com",
+                email : "sgcon@nuuptech.com",
                 username : "admin",
                 password : "4dm1n!",
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
-                passwordExpired : false
+                passwordExpired : false,
+                notaria_titular : null,
+                notaria_numero  : null,
+                notaria_entidad : null
             ).save()            
             new Usuario (
                 firstName : "LIC. ARTURO",
@@ -64,7 +73,10 @@ class BootStrap {
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
-                passwordExpired : false
+                passwordExpired : false,
+                notaria_titular : null,
+                notaria_numero  : null,
+                notaria_entidad : null
             ).save()
             new Usuario (
                 firstName : "LIC. JORGE",
@@ -75,7 +87,10 @@ class BootStrap {
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
-                passwordExpired : false
+                passwordExpired : false,
+                notaria_titular : "LIC. JORGE SANCHEZ",
+                notaria_numero  : "Notaria 86",
+                notaria_entidad : "Estado de México"
             ).save()                                
             new Usuario (
                 firstName : "LIC. CARLOS",
@@ -86,7 +101,10 @@ class BootStrap {
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
-                passwordExpired : false
+                passwordExpired : false,
+                notaria_titular : "LIC. CARLOS LOPEZ",
+                notaria_numero  : "Notaria 129",
+                notaria_entidad : "Distrito Federal"
             ).save() 
             new Usuario (
                 firstName : "admin",
@@ -97,7 +115,10 @@ class BootStrap {
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
-                passwordExpired : false
+                passwordExpired : false,
+                notaria_titular : null,
+                notaria_numero  : null,
+                notaria_entidad : null
             ).save() 
             new Usuario (
                 firstName : "Enrique",
@@ -108,7 +129,10 @@ class BootStrap {
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
-                passwordExpired : false
+                passwordExpired : false,
+                notaria_titular : null,
+                notaria_numero  : null,
+                notaria_entidad : null
             ).save() 
             new Usuario (
                 firstName : "Arturo",
@@ -119,7 +143,10 @@ class BootStrap {
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
-                passwordExpired : false
+                passwordExpired : false,
+                notaria_titular : null,
+                notaria_numero  : null,
+                notaria_entidad : null
             ).save()            
             new Usuario (
                 firstName : "Joel",
@@ -130,7 +157,10 @@ class BootStrap {
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
-                passwordExpired : false
+                passwordExpired : false,
+                notaria_titular : null,
+                notaria_numero  : null,
+                notaria_entidad : null
             ).save()
             new Usuario (
                 firstName : "Laura",
@@ -141,10 +171,41 @@ class BootStrap {
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
-                passwordExpired : false
-            ).save()          
-                     
+                passwordExpired : false,
+                notaria_titular : null,
+                notaria_numero  : null,
+                notaria_entidad : null
+            ).save()
+            new Usuario (
+                firstName : "Arturo",
+                lastName : "Cruz Jiménez",
+                email : "acruz@infonavit.org.mx",
+                username : "097682",
+                password : "12345678",
+                enabled : true,
+                accountExpired : false,
+                accountLocked : false,
+                passwordExpired : false,
+                notaria_titular : null,
+                notaria_numero  : null,
+                notaria_entidad : null
+            ).save()
+             new Usuario (
+                firstName : "Saul",
+                lastName : "Legorreta Paez",
+                email : "lego@yahoo.com.mx",
+                username : "solicitanteEspecial",
+                password : "solicitanteEspecial",
+                enabled : true,
+                accountExpired : false,
+                accountLocked : false,
+                passwordExpired : false,
+                notaria_titular : null,
+                notaria_numero  : null,
+                notaria_entidad : null
+            ).save()
                 
+                                                                          
             new Rol (authority : "ROLE_ADMINISTRADOR").save()
             new Rol (authority : "ROLE_PODERES").save()
             new Rol (authority : "ROLE_PODERES_RESOLVEDOR").save()
@@ -158,6 +219,8 @@ class BootStrap {
             new Rol (authority : "ROLE_FACTURAS").save()
             new Rol (authority : "ROLE_TURNOS_ADMIN").save()
             new Rol (authority : "ROLE_TURNOS_STANDARD").save()
+            new Rol (authority : "ROLE_PODERES_ENLACE").save()  
+            new Rol (authority : "ROLE_SOLICITANTE_ESPECIAL").save()  
             
                 
             new UsuarioRol (usuario : Usuario.findByUsername("admin"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
@@ -171,6 +234,8 @@ class BootStrap {
             new UsuarioRol (usuario : Usuario.findByUsername("turnos"), rol : Rol.findByAuthority("ROLE_TURNOS_ADMIN")).save()
             new UsuarioRol (usuario : Usuario.findByUsername("gestorExterno"), rol : Rol.findByAuthority("ROLE_GESTOR_EXTERNO")).save()
             new UsuarioRol (usuario : Usuario.findByUsername("solicitanteExterno"), rol : Rol.findByAuthority("ROLE_SOLICITANTE_EXTERNO")).save()
+            new UsuarioRol (usuario : Usuario.findByUsername("097682"), rol : Rol.findByAuthority("ROLE_PODERES_ENLACE")).save()
+            new UsuarioRol (usuario : Usuario.findByUsername("solicitanteEspecial"), rol : Rol.findByAuthority("ROLE_SOLICITANTE_ESPECIAL")).save()
             
                 
             new Grupo(nombre:"Sin Categoría", descripcion: "asd").save()
@@ -251,11 +316,14 @@ class BootStrap {
             
             
             new ConfigurarParametro(
-            estadoCriticoPoder:"3", estadoSemiPoder:"5",
-            estadoCriticoSolicitud:"10", estadoSemiSolicitud:"15"
+                estadoCriticoPoder:"3", estadoSemiPoder:"5",
+                estadoCriticoSolicitud:"10", estadoSemiSolicitud:"15"
             ).save()
-                                    
-            /*new Persona (
+             
+            */
+              
+            /*
+            new Persona (
             nombre : "Administrador Del Sistema",
             usuario : Usuario.findByUsername("admin")
             ).save()
@@ -270,31 +338,36 @@ class BootStrap {
             new Persona (
             nombre : "Test Tres",
             usuario : Usuario.findByUsername("test3")
-            ).save()*/
+            ).save()
+            */
+                                                                         
             break
+            
         case Environment.PRODUCTION :
-           /* 
+           
             new Usuario (
                 firstName : "Administrador",
                 lastName : "Del Sistema",
-                email : "the.real.thom@gmail.com",
+                email : "sgcon@nuuptech.com",
                 username : "admin",
                 password : "4dm1n!",
                 enabled : true,
                 accountExpired : false,
                 accountLocked : false,
-                passwordExpired : false
+                passwordExpired : false,
+                notaria_titular : null,
+                notaria_numero  : null,
+                notaria_entidad : null
             ).save()
                 
-            new Rol (authority : "ROLE_ADMINISTRADOR").save()
-                
+            new Rol (authority : "ROLE_ADMINISTRADOR").save()                
             new UsuarioRol (usuario : Usuario.findByUsername("admin"), rol : Rol.findByAuthority("ROLE_ADMINISTRADOR")).save()
-                
-            new Grupo(nombre:"Sin Categoría", descripcion: "asd").save()
-                
+            
+            /*
+            new Grupo(nombre:"Sin Categoría", descripcion: "asd").save()                
             new StatusDelConvenio(nombre:"En Elaboración").save()
             new StatusDelConvenio(nombre:"Vigente").save()
-            */
+             */
              
             break
         }

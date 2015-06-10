@@ -65,7 +65,8 @@ class Tarea implements Comparable {
     *Baja lógica
     *
     */
-   boolean eliminado = null
+    boolean eliminado = null
+    boolean check_responsable = null
     
     static belongsTo = [ 
         convenio : Convenio,
@@ -94,6 +95,7 @@ class Tarea implements Comparable {
         prioridad blank:false, inList : ["Normal", "Urgente"]
         tags nullable:true, maxSize:1000
         eliminado nullable:true
+        check_responsable nullable:true
     }
     
     static mapping = {

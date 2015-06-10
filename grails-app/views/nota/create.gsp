@@ -1,4 +1,4 @@
-<%@ page import="com.app.sgtask.Nota" %>
+<%@ page import="com.app.sgtask.Nota;java.text.SimpleDateFormat" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -44,6 +44,20 @@
                                 <g:textField class="span4 validate[required]" name="escrituraPublicaRevocacion" value="${revocacionDePoderInstance?.escrituraPublicaRevocacion}"/>
                             </div>
                         </div>
+                        <div class="control-group fieldcontain ${hasErrors(bean: revocacionDePoderInstance, field: 'fechaVencimiento', 'error')} ">
+                            <label for="fechaDeRevocacion" class="control-label">
+                                <g:message code="revocacionDePoder.fechaDeRevocacion.label" default="Fecha De Revocación" />
+                                <span class="required-indicator">*</span>
+                            </label>
+                            <div class="controls">          
+                                <div class="row-fluid input-append">
+                                    <input readonly="readonly" class="span6 date-picker validate[required]" id="fechaDeRevocacion" type="text" value="${revocacionDePoderInstance?.fechaDeRevocacion?(new SimpleDateFormat("dd/MM/yyyy")).format(revocacionDePoderInstance?.fechaDeRevocacion):""}" data-date-format="dd/mm/yyyy" name="fechaDeRevocacion" />      
+                                    <span class="add-on">
+                                        <i class="icon-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div> 
                     </g:if>
                     <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES">
                         <div class="form-actions">
@@ -78,7 +92,7 @@
             $(document).ready(function() {
             // binds form submission and fields to the validation engine
             $("#myForm").validationEngine();
-            });          
+            });
         </script>     
     </body>
 </html>

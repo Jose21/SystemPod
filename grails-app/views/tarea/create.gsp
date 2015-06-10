@@ -55,7 +55,7 @@
                         <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />
                     </div>
                 </sec:ifAnyGranted>
-                <sec:ifAnyGranted roles="ROLE_PODERES_RESOLVEDOR, ROLE_GESTOR_EXTERNO">
+                <sec:ifAnyGranted roles="ROLE_PODERES_RESOLVEDOR, ROLE_GESTOR_EXTERNO, ROLE_PODERES_GESTOR">
                     <div class="form-actions">
                         <g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.label', default: 'Enviar')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
                     </div>
@@ -66,7 +66,13 @@
             $(document).ready(function() {
             // binds form submission and fields to the validation engine
             $("#myForm").validationEngine();
-            });          
+            });     
+
+             $('.form-horizontal').submit(function()
+             {    
+             $('#descripcion').val($('#editor1').html());    
+             });   
+            
         </script>  
     </body>
 </html>

@@ -45,7 +45,7 @@ class Nota {
         tarea nullable:true
         documentos nullable:true
         agregadaPor nullable:false
-        poder nullable:true
+        poder nullable:true        
     }
     
     static mapping = {

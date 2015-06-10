@@ -16,4 +16,9 @@ class TipoDePoder {
 
     static constraints = {
     }
+    
+     String toString() {
+        "${nombre}"
+    }    
+    
 }

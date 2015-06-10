@@ -178,7 +178,7 @@
                                             <div class="widget-body">
                                                 <div class="widget-main no-padding">
                                                     <div class="dialogs">                
-                                                        <g:each var="nota" in="${tareaInstance?.notas.sort { it.dateCreated }}">
+                                                        <g:each var="nota" in="${tareaInstance?.notas.sort{it.dateCreated}.reverse()}">
                                                             <div class="itemdiv dialogdiv">
                                                                 <div class="user">
                                                                     <g:if test="${nota?.agregadaPor?.id == currentUser.id}">
@@ -206,6 +206,7 @@
                                                                         <a href="#">Título: ${nota.titulo}</a>
                                                                     </div>
                                                                     <div class="text">
+                                                                        Descripción: </br>
                                                                         <%=nota.descripcion%>
                                                                         <g:if test="${nota.documentos}">
                                                                             -- Archivos adjuntos<br/>

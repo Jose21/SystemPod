@@ -5,86 +5,98 @@ import com.app.sgtask.Tarea
 import com.app.sgtask.Nota
 
 /**
-* Domain class de una solicitud de poder que hereda a las domain class Otorgamiento y Revocación de poder.
-* En esta tabla se guardan las solicitudes. 
-*/
+ * Domain class de una solicitud de poder que hereda a las domain class Otorgamiento y Revocación de poder.
+ * En esta tabla se guardan las solicitudes. 
+ */
 class Poder {
     /**
-    * Categoría que tiene una solicitud.
-    */
+     * Fecha de cuando se crea la solicitud.
+     */
+    Date registroDeLaSolicitud
+    /**
+     * Categoría que tiene una solicitud.
+     */
     CategoriaDeTipoDePoder categoriaDeTipoDePoder
     /**
-    * Delegación del solicitante.
-    */
+     * Delegación del solicitante.
+     */
     Delegacion delegacion
     /**
-    * Usuario creador de la solicitud.
-    */
+     * Usuario creador de la solicitud.
+     */
     Usuario creadaPor
     /**
-    * Número de escritura publica de la solicitud.
-    */
+     * Número de escritura publica de la solicitud.
+     */
     String escrituraPublica
     /**
-    * Usuario que tiene asignada la solicitud.
-    */
+     * Usuario que tiene asignada la solicitud.
+     */
     Usuario asignar
     /**
-    * Usuario que asignó la solicitud.
-    */
+     * Usuario que asignó la solicitud.
+     */
     Usuario asignadaPor
     /**
-    * Campo Comentarios dentro de la solicitud.
-    */
+     * Campo Comentarios dentro de la solicitud.
+     */
     String comentarios
     /**
-    * Campo que hace refencia a la carta de instrucción. 
-    */
+     * Campo que hace refencia a la carta de instrucción. 
+     */
     CartaDeInstruccion cartaDeInstruccion
     /**
-    * Palabras clave para la búsqueda.
-    */
+     * Palabras clave para la búsqueda.
+     */
     String tags
     /**
-    * Usuario resposanble a quien le llegan las notificaciones sobre la solicitud.
-    */
+     * Usuario resposanble a quien le llegan las notificaciones sobre la solicitud.
+     */
     Usuario responsable
     /**
-    * Fecha de cuando se envia la solicitud.
-    */
+     * Fecha de cuando se envia la solicitud.
+     */
     Date fechaDeEnvio
     /**
-    * Usuario gestor dentro del sistema.
-    */
+     * Usuario gestor dentro del sistema.
+     */
     Usuario usuarioGestor
     /**
-    * Notario que generó la escritura pública.
-    */
+     * Notario que generó la escritura pública.
+     */
     Usuario notarioCorrespondiente
     /**
-    * bandera que se usa para saber si ya esta facturada una solicitud.
-    */
+     * bandera que se usa para saber si ya esta facturada una solicitud.
+     */
     boolean facturado = false
     /**
-    * Factura correspondiente.
-    */
+     * Factura correspondiente.
+     */
     Factura factura
     /**
-    * bandera para ocultar la solicitud de la bandeja del solicitante
-    */
+     * bandera para ocultar la solicitud de la bandeja del solicitante
+     */
     boolean ocultadoPorSolicitante = false
     /**
-    * bandera para ocultar la solicitud de la bandeja del usuario resolvedor
-    */
+     * bandera para ocultar la solicitud de la bandeja del usuario resolvedor
+     */
     boolean ocultadoPorResolvedor = false
     /**
-    * Copia electronica del documentos firmado. 
-    */
+     * Copia electronica del documentos firmado. 
+     */
     byte[] datosUsuarioExterno
+    /**
+     * nombre del archivo 
+     */
+    String nombreDatosUsuarioExterno
+    
+    //documento de proyecto para solicitar vo bo de carta de instruccion entre el notario y el resolvedor   
+    DocumentoDeProyecto documentoDeProyecto   
+    
     
     /**
-    * Esta es la relación que tiene con otras tablas en una relacion tipo  1-n.
-    */
+     * Esta es la relación que tiene con otras tablas en una relacion tipo  1-n.
+     */
     static hasMany = [ 
         documentos : DocumentoDePoder,
         tareas : Tarea,
@@ -96,6 +108,7 @@ class Poder {
     
     static constraints = {
         
+        registroDeLaSolicitud nullable:false
         categoriaDeTipoDePoder blank:false
         delegacion nullable:false
         creadaPor nullable:false
@@ -122,7 +135,8 @@ class Poder {
         ocultadoPorSolicitante blank:false
         ocultadoPorResolvedor blank:false
         datosUsuarioExterno nullable:true, maxSize:52428800
-                
+        nombreDatosUsuarioExterno nullable:true, maxSize:1000   
+        documentoDeProyecto nullable: true 
     }
     
     String toString() {

@@ -117,8 +117,8 @@ class ApoderadoController {
     /**
     * Metodo para actualizar los datos de un apoderado en las solicitudes de otorgamiento y revicación de poder.
     */
-    def updateIt(Long id, Long version) {
-        println params
+    def updateIt(Long id, Long version) { 
+        println "params: " + params
         def apoderadoInstance = Apoderado.get(id)
         def otorgamientoDePoderInstance = OtorgamientoDePoder.get(params.otorgamientoDePoder.id as long)
         if (version != null) {

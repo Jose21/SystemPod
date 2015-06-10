@@ -54,7 +54,7 @@
                     <span class="red" style="font-weight: bold">SGCON</span>
                   </h1>
                   <h3>
-                    <span class="red" style="font-weight: bold">Sistema de Gestión de Convenios y Poderes.</span>
+                    <span class="red" style="font-weight: bold">Sistema de Gestión de Poderes.</span>
                   </h3>
                 </div>
               </div>

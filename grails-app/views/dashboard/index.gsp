@@ -80,17 +80,17 @@
                     <div class="widget-body">
                         <div class="widget-main">
                             <p>
-                                Bienvenido al Sistema de Control de Gestión de Convenios, Tareas y Poderes.
-                            </p>
-                            <p>
+                                Bienvenido al Sistema de Control de Gestión de Poderes.
+                            </p>                            
+                            <!--p>
                                 Gestión de Convenios: Permite agregar, modificar y gestionar los convenios existentes.
                             </p>
                             <p>
                                 Gestión de Tareas: Brinda la posibilidad de administrar las tareas pendientes por realizar.
-                            </p>
+                            </p-->                           
                             <p>
-                                Gestión de Poderes: A través de este módulo es posible la administración de poderes.
-                            </p>
+                                Gestión de Poderes: A través de este módulo es posible la administración y control de poderes otorgados por Infonavit.
+                            </p>                            
                         </div>
                     </div>
                 </div>
@@ -100,7 +100,7 @@
                 <div class="widget-box transparent">
                     <div class="widget-header widget-header-small header-color-blue2">
                         <h4 class="smaller">              
-                            <i class="icon-check bigger-110"></i>
+                            <i class="icon-cogs bigger-110"></i>
                             Opciones
                         </h4>
                     </div>
@@ -112,17 +112,17 @@
                                     <i class="icon-key bigger-110"></i>
                                     Cambiar Contraseña
                                 </g:link>
-                                <g:link controller="dashboard" action="changeinfo" class="btn btn-small btn-block btn-primary">
-                                    <i class="icon-edit bigger-110"></i>
-                                    Cambiar Información
-                                </g:link>
+                                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR">    
+                                    <g:link controller="dashboard" action="changeinfo" class="btn btn-small btn-block btn-primary">
+                                        <i class="icon-edit bigger-110"></i>
+                                        Cambiar Información
+                                    </g:link>
+                                </sec:ifAnyGranted>                                
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </body>
 </html>

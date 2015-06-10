@@ -7,7 +7,7 @@
             <span class="required-indicator">*</span>
         </label>
     </sec:ifAnyGranted>
-    <sec:ifAnyGranted roles="ROLE_PODERES_RESOLVEDOR">
+    <sec:ifAnyGranted roles="ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_GESTOR">
         <label for="nombre" class="control-label">
             <g:message code="tarea.nombre.label" default="Título" />
             <span class="required-indicator">*</span>
@@ -25,13 +25,17 @@
             <span class="required-indicator">*</span>
         </label>
     </sec:ifAnyGranted>
-    <sec:ifAnyGranted roles="ROLE_PODERES_RESOLVEDOR">
+    <sec:ifAnyGranted roles="ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_GESTOR">
         <label for="descripcion" class="control-label">
             <g:message code="tarea.descripcion.label" default="Motivos" />
         </label>
     </sec:ifAnyGranted>
     <div class="controls">
-        <g:textArea name="descripcion" class="ckeditor" maxlength="10240" value="${tareaInstance?.descripcion}"/>
+        <!--g:textArea name="descripcion" class="ckeditor" maxlength="10240" value="${tareaInstance?.descripcion}"/-->
+        <div name="descripcion" class="wysiwyg-editor" id="editor1">
+            ${raw(tareaInstance?.descripcion)}
+        </div>
+        <g:hiddenField name="descripcion" />
     </div>
 </div>
 
@@ -102,4 +106,7 @@
     </div>
 
 </g:if>
-<g:javascript src="ckeditor/ckeditor.js"/>
+
+<script type="text/javascript">    
+    
+</script>

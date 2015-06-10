@@ -11,11 +11,7 @@ class RevocacionDePoder extends Poder{
     /**
     * Motivo de la revocación.
     */
-    MotivoDeRevocacion motivoDeRevocacion
-    /**
-    * Quien solicita la revocación.
-    */
-    String solicitadoPor
+    MotivoDeRevocacion motivoDeRevocacion  
     /**
     * Fecha de revocación.
     */    
@@ -44,16 +40,24 @@ class RevocacionDePoder extends Poder{
     static hasMany = [         
         apoderadosEliminar : Apoderado       
     ]
+    /**
+    *Notificación para rechazo de solicitud
+    */
+    String notificacionDeRechazo
+   
+    
+    static belongsTo = [ otorgamientoDePoder : OtorgamientoDePoder ]
     
     static constraints = {                
-        motivoDeRevocacion nullable:false
-        solicitadoPor blank:false        
+        motivoDeRevocacion nullable:false               
         fechaDeRevocacion nullable:true
         tipoDeRevocacion blank:false, inList : ["Total", "Parcial"]
         agregarApoderado blank:false
         apoderadosEliminar nullable:true
         agregadaManualmente blank:false
         escrituraPublicaRevocacion nullable:true
+        otorgamientoDePoder nullable:true
+        notificacionDeRechazo nullable:true, maxSize:5000
     }
     
     String toString() {

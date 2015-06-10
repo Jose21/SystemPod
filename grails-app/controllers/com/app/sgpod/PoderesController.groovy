@@ -3,10 +3,13 @@ package com.app.sgpod
 import org.springframework.dao.DataIntegrityViolationException
 import java.text.SimpleDateFormat
 import com.pogos.BusquedaBean
+import com.pogos.ResultadoBusquedaApoderado
+import com.pogos.ResultadosReporteOtorgamiento
 import grails.plugins.springsecurity.Secured
 import com.app.security.Usuario
 import com.app.security.Rol
 import com.app.security.UsuarioRol
+import com.app.sgcon.Persona
 
 @Secured(['IS_AUTHENTICATED_FULLY'])
 class PoderesController {
@@ -30,7 +33,7 @@ class PoderesController {
             (creadaPor == springSecurityService.currentUser &&  asignar == springSecurityService.currentUser && ocultadoPorSolicitante == false) || (creadaPor == springSecurityService.currentUser && asignar == null) || (asignar == springSecurityService.currentUser && ocultadoPorSolicitante == false)
         }    
         def poderesList = poderesList1.list() + poderesList2.list()
-        
+                       
         def parameters = ConfigurarParametro.get(1 as long)        
         
         def otorgamientosRojosList = []
@@ -157,7 +160,9 @@ class PoderesController {
         //solicitudes de otorgamiento        
         def solicitantes1 = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_SOLICITANTE")).collect {it.usuario}
         def solicitantes2 = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_SOLICITANTE_EXTERNO")).collect {it.usuario}
-        def usuarioSolicitante = solicitantes1 + solicitantes2
+        def solicitantes3 = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_GESTOR_EXTERNO")).collect {it.usuario}
+        def solicitantes0 = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_SOLICITANTE_ESPECIAL")).collect {it.usuario}
+        def usuarioSolicitante = solicitantes1 + solicitantes2 + solicitantes3 + solicitantes0
         def enviadosOtorgamientosSolicitante = null
         def enviadosRevocacionesSolicitante = null
         def enviados3 = []
@@ -184,56 +189,70 @@ class PoderesController {
         enviadosRevocacionesSolicitante = enviados4        
         def enviadosSolicitanteList = enviadosOtorgamientosSolicitante + enviadosRevocacionesSolicitante
         
-        //Poderes que están por vencer
-        def listaPoderes = OtorgamientoDePoder.list()
         
-        def poderCriticoList = []
-        def poderSemicriticoList = []        
-        def poderNoCritico = []
-        listaPoderes.each {poder ->
-            if(poder.fechaVencimiento){
-                def fechaHoy = new Date()                
-                def fechaVencimiento = poder.fechaVencimiento                
-                def diasParaVencimiento = fechaVencimiento - fechaHoy                                 
-                if(diasParaVencimiento <= parameters.estadoCriticoPoder){
-                    poderCriticoList.add(poder)
-                }else if(diasParaVencimiento <= parameters.estadoSemiPoder && diasParaVencimiento > parameters.estadoCriticoPoder ){
-                    poderSemicriticoList.add(poder)
-                }else{
-                    poderNoCritico.add(poder)
-                }                 
-            }            
+        def fechaDeEstadoCritico = new Date() + parameters.estadoCriticoPoder
+        def fechaSemicritico = new Date() + parameters.estadoSemiPoder
+           
+        def results = OtorgamientoDePoder.where {
+            (fechaVencimiento <= fechaDeEstadoCritico)
         }
-        def poderesPorVencerList = poderCriticoList + poderSemicriticoList
+        def poderCriticoList = results.list()        
         
+        def results2 = OtorgamientoDePoder.where {
+            (fechaVencimiento <= fechaSemicritico && fechaVencimiento >= fechaDeEstadoCritico)
+        }
+        def poderSemicriticoList = results2.list()
+                                                
+        def poderesPorVencerTotal = poderCriticoList.size() + poderSemicriticoList.size()
+                                     
         //prorrogas de otorgamiento de poder        
-        def prorrogaList = []      
-        listaPoderes.each { poder ->
-            if(poder.prorrogas){
-                poder.prorrogas.each{prorroga ->
-                    if(prorroga.asignadoA == springSecurityService.currentUser && prorroga.ocultado == false){                        
-                        prorrogaList.add(prorroga)                        
-                    }
-                }               
-            }                
-        }
-        //prorrogas de revocacion de poder
-        def listaPoderesRevocacion = RevocacionDePoder.list()              
-        listaPoderesRevocacion.each{ poder ->
-            if(poder.prorrogas){
-                poder.prorrogas.each{prorroga ->
-                    if(prorroga.asignadoA == springSecurityService.currentUser && prorroga.ocultado == false){                        
-                        prorrogaList.add(prorroga)                        
-                    }
-                }               
-            }                
-        }        
-        prorrogaList.sort{ it.getId() }
+        def prorrogaListPrincipal = Prorroga.list()
+        def prorrogaList = []
+        def listaPoderesRevocacion = []        
+        
+        prorrogaListPrincipal.each { prorroga ->
+            if(prorroga.class == 'com.app.sgpod.otorgamientoDePoder' && prorroga.asignadoA == springSecurityService.currentUser && prorroga.ocultado == false){
+                prorrogaList.add(prorroga)
+            }else if(prorroga.class == 'com.app.sgpod.revocacionDePoder' && prorroga.asignadoA == springSecurityService.currentUser && prorroga.ocultado == false){
+                listaPoderesRevocacion.add(prorroga)
+            }              
+        }                            
+        prorrogaList?.sort{ it.getId() }
         
         //facturas
         def facturaList = Factura.findAllByAsignadoAAndOcultadoPorFacturas(springSecurityService.currentUser, false)  
         //facturas enviadas
         def facturasEnviadasList = Factura.findAllByAsignadoPorAndOcultadoPorResolvedor(springSecurityService.currentUser, false)
+                
+        def usuarioFacturas = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_FACTURAS")).collect {it.usuario}
+        def isFacturas = false
+        usuarioFacturas.each { usuarioFac ->
+            if(usuarioFac == springSecurityService.currentUser){
+                isFacturas = true                
+            }            
+        }  
+        def usuarioEnlace = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_ENLACE")).collect {it.usuario}
+        def isEnlace = false
+        usuarioEnlace.each { usuarioEnl ->
+            if(usuarioEnl == springSecurityService.currentUser){
+                isEnlace = true                
+            }          
+        }  
+        
+        //bandera para saber si es una solicitud de solicitante_externo 
+        def usuarioExterno = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_SOLICITANTE_EXTERNO")).collect {it.usuario}
+        def solicitudExterno = null
+        usuarioExterno.each { usuarioFac ->
+            if(usuarioFac == springSecurityService.currentUser){
+                solicitudExterno = true                
+            }else{
+                solicitudExterno = false                
+            }            
+        }    
+        
+        //lista de proyectos
+        def proyectosList = DocumentoDeProyecto.findAllByAsignadoAOrAsignadoPor(springSecurityService.currentUser,springSecurityService.currentUser)  
+        println "proyectosList: " + proyectosList
         
         render (
             view: "index", 
@@ -258,25 +277,33 @@ class PoderesController {
                 enviadosSolicitanteTotal : enviadosSolicitanteList.size(),
                 poderCriticoInstanceList : poderCriticoList,
                 poderSemicriticoInstanceList : poderSemicriticoList,
-                poderesPorVencerTotal : poderesPorVencerList.size(),
+                poderesPorVencerTotal : poderesPorVencerTotal,
                 prorrogaList : prorrogaList,
                 prorrogaListTotal : prorrogaList.size(),
                 facturaList : facturaList,
                 facturaListTotal : facturaList.size(),
                 facturasEnviadasList : facturasEnviadasList,
-                facturasEnviadasTotal : facturasEnviadasList.size()
+                facturasEnviadasTotal : facturasEnviadasList.size(),
+                proyectosList : proyectosList,
+                proyectosTotal : proyectosList.size(),
+                isFacturas : isFacturas,
+                isEnlace : isEnlace,
+                solicitudExterno : solicitudExterno
             ]
         )
     }
     
     def otorgamientoConsulta() {
         
-        [nombreApoderadoActive:"active"] 
+        def notarios = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_NOTARIO")).collect {it.usuario} 
+        session.notarios = notarios             
+        [nombreApoderadoActive:"active", notarios : notarios] 
     }
     
     def revocacionConsulta() {
-        
-        [nombreApoderadoActive:"active"] 
+        def notarios = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_NOTARIO")).collect {it.usuario} 
+        session.notarios = notarios   
+        [nombreApoderadoActive:"active", notarios : notarios] 
     }
     
     def busquedaGeneral() {
@@ -290,26 +317,77 @@ class PoderesController {
     }
     /**
      * Método para busquedas por nombre del apoderado.
+     * en otorgamiento de poder
      */
-    def buscarNombreApoderado (){
+    def buscarNombreApoderado (){        
         def nombreApoderadoActive = null
         if (params.inActive=="nombreApoderado") {
             nombreApoderadoActive = "active"
         }
         def r = OtorgamientoDePoder.createCriteria()
-        def otorgamientoDePoderInstanceList = r.list {
+        def resultados = r.list {
             apoderados {
-                ilike("nombre", "%"+params.nombre+"%")
+                ilike("nombre", "%"+params.nombre+"%")                
             }
             order("id", "asc")
-        }        
-        session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList
+        }          
+        resultados.unique()
+        def otorgamientoDePoderInstanceList = [] 
+        def countApoderadosTotal = 0
+        def poderesParaReporteList = []
+        resultados.each{it ->
+            def nuevoPoder = new ResultadoBusquedaApoderado()
+            nuevoPoder.id = it.id            
+            nuevoPoder.registroDeLaSolicitud = it.registroDeLaSolicitud            
+            nuevoPoder.tipoDePoder = it.categoriaDeTipoDePoder.tipoDePoder.nombre
+            nuevoPoder.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder.nombre
+            nuevoPoder.delegacion = it.delegacion
+            nuevoPoder.escrituraPublica = it.escrituraPublica  
+            nuevoPoder.fechaDeOtorgamiento = it.fechaDeOtorgamiento                         
+            def listOk = []
+            def listKo = []  
+            //countApoderadosTotal = countApoderadosTotal + 1
+            it.apoderados.each{apoderado ->
+                if(apoderado.nombre.contains(params.nombre.toUpperCase())){                     
+                    listOk.add(apoderado)
+                    countApoderadosTotal = countApoderadosTotal + 1
+                }else{                           
+                    listKo.add(apoderado)
+                } 
+            }     
+            listOk.sort{it.nombre}  
+            nuevoPoder.apoderados = listOk            
+            nuevoPoder.totalApoderados = it.apoderados.size() -1
+            otorgamientoDePoderInstanceList.add(nuevoPoder)             
+        }  
+        //se crea la lista para generar el reporte
+        otorgamientoDePoderInstanceList.each{it ->           
+            it.apoderados.each{poderInstance ->                
+                def nuevoPoderReporte = new ResultadosReporteOtorgamiento()
+                nuevoPoderReporte.id = it.id + "-O"
+                if(it.totalApoderados > 0){
+                    nuevoPoderReporte.apoderado = poderInstance.nombre + " y " +it.totalApoderados + " más."
+                }else{
+                    nuevoPoderReporte.apoderado = poderInstance.nombre
+                }                
+                nuevoPoderReporte.fechaDeOtorgamiento = it.fechaDeOtorgamiento
+                nuevoPoderReporte.registroDeLaSolicitud = it.registroDeLaSolicitud
+                nuevoPoderReporte.tipoDePoder = it.tipoDePoder
+                nuevoPoderReporte.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder
+                nuevoPoderReporte.delegacion = it.delegacion
+                nuevoPoderReporte.escrituraPublica = it.escrituraPublica
+                nuevoPoderReporte.statusDePoderApoderado = poderInstance.statusDePoder
+                poderesParaReporteList.add(nuevoPoderReporte)
+            }            
+        }
+        session.poderesParaReporteList = poderesParaReporteList
+        session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList        
         render(
             view: "otorgamientoConsulta", 
             model: [
                 otorgamientoDePoderInstanceList: otorgamientoDePoderInstanceList,
-                otorgamientoDePoderInstanceTotal: otorgamientoDePoderInstanceList.size(),
-                nombreApoderadoActive : nombreApoderadoActive       
+                otorgamientoDePoderInstanceTotal: countApoderadosTotal,
+                nombreApoderadoActive : nombreApoderadoActive                
             ]
         )       
     }
@@ -322,18 +400,63 @@ class PoderesController {
             porDelegacionActive = "active"
         }        
         def c = OtorgamientoDePoder.createCriteria()
-        def otorgamientoDePoderInstanceList = c.list {
+        def resultados = c.list {
             delegacion {
                 like("nombre", "%"+params.nombre+"%")
             }
             order("id", "asc")
         }
+        
+        resultados.unique()
+        def otorgamientoDePoderInstanceList = []   
+        def poderesParaReporteList = []
+        def countApoderadosTotal = 0
+        resultados.each{ it ->
+            def nuevoPoder = new ResultadoBusquedaApoderado()
+            nuevoPoder.id = it.id
+            nuevoPoder.registroDeLaSolicitud = it.registroDeLaSolicitud            
+            nuevoPoder.tipoDePoder = it.categoriaDeTipoDePoder.tipoDePoder.nombre
+            nuevoPoder.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder.nombre
+            nuevoPoder.delegacion = it.delegacion
+            nuevoPoder.escrituraPublica = it.escrituraPublica  
+            nuevoPoder.fechaDeOtorgamiento = it.fechaDeOtorgamiento
+            def listOk = []
+            it.apoderados.each {apoderado ->
+                listOk.add(apoderado)
+                countApoderadosTotal = countApoderadosTotal + 1
+            }   
+            listOk.sort{it.nombre}  
+            nuevoPoder.apoderados = listOk  
+            nuevoPoder.totalApoderados = it.apoderados.size() -1
+            otorgamientoDePoderInstanceList.add(nuevoPoder)                             
+        }                       
+        //se crea la lista para generar el reporte
+        otorgamientoDePoderInstanceList.each{it ->           
+            it.apoderados.each{poderInstance ->                
+                def nuevoPoderReporte = new ResultadosReporteOtorgamiento()
+                nuevoPoderReporte.id = it.id + "-O"                
+                if(it.totalApoderados > 0){
+                    nuevoPoderReporte.apoderado = poderInstance.nombre + " y " +it.totalApoderados + " más."
+                }else{
+                    nuevoPoderReporte.apoderado = poderInstance.nombre
+                }                               
+                nuevoPoderReporte.fechaDeOtorgamiento = it.fechaDeOtorgamiento
+                nuevoPoderReporte.registroDeLaSolicitud = it.registroDeLaSolicitud
+                nuevoPoderReporte.tipoDePoder = it.tipoDePoder
+                nuevoPoderReporte.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder
+                nuevoPoderReporte.delegacion = it.delegacion
+                nuevoPoderReporte.escrituraPublica = it.escrituraPublica
+                nuevoPoderReporte.statusDePoderApoderado = poderInstance.statusDePoder
+                poderesParaReporteList.add(nuevoPoderReporte)
+            }            
+        }
+        session.poderesParaReporteList = poderesParaReporteList
         session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList
         render(
             view: "otorgamientoConsulta", 
             model: [
                 otorgamientoDePoderInstanceList: otorgamientoDePoderInstanceList,
-                otorgamientoDePoderInstanceTotal: otorgamientoDePoderInstanceList.size(),
+                otorgamientoDePoderInstanceTotal: countApoderadosTotal,
                 porDelegacionActive : porDelegacionActive       
             ]
         )       
@@ -351,7 +474,7 @@ class PoderesController {
         def fechaInicio = null
         def fechaFin = null
         def busquedaBean = null
-        def otorgamientoDePoderInstanceList = []
+        def resultados = []
         if (params.rangoDeFechaOtorgamiento != "") {
             flash.warn = null
             rangoDeFechaOtorgamiento = params.rangoDeFechaOtorgamiento
@@ -360,16 +483,61 @@ class PoderesController {
             busquedaBean = new BusquedaBean()        
             busquedaBean.fechaInicio = fechaInicio
             busquedaBean.fechaFin = fechaFin
-            otorgamientoDePoderInstanceList = OtorgamientoDePoder.findAllByFechaDeOtorgamientoBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin, [sort: "id", order: "asc"])
+            resultados = OtorgamientoDePoder.findAllByFechaDeOtorgamientoBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin, [sort: "id", order: "asc"])
         } else {
             flash.warn = "Debe elegir un rango de fechas válido."
         }
+        
+        resultados.unique()
+        def otorgamientoDePoderInstanceList = [] 
+        def poderesParaReporteList = []
+        def countApoderadosTotal = 0
+        resultados.each{ it ->
+            def nuevoPoder = new ResultadoBusquedaApoderado()
+            nuevoPoder.id = it.id
+            nuevoPoder.registroDeLaSolicitud = it.registroDeLaSolicitud            
+            nuevoPoder.tipoDePoder = it.categoriaDeTipoDePoder.tipoDePoder.nombre
+            nuevoPoder.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder.nombre
+            nuevoPoder.delegacion = it.delegacion
+            nuevoPoder.escrituraPublica = it.escrituraPublica  
+            nuevoPoder.fechaDeOtorgamiento = it.fechaDeOtorgamiento               
+            def listOk = []
+            it.apoderados.each {apoderado ->
+                listOk.add(apoderado)
+                countApoderadosTotal = countApoderadosTotal + 1
+            }   
+            listOk.sort{it.nombre}  
+            nuevoPoder.apoderados = listOk  
+            nuevoPoder.totalApoderados = it.apoderados.size() -1
+            otorgamientoDePoderInstanceList.add(nuevoPoder)   
+        }     
+        //se crea la lista para generar el reporte
+        otorgamientoDePoderInstanceList.each{it ->           
+            it.apoderados.each{poderInstance ->                
+                def nuevoPoderReporte = new ResultadosReporteOtorgamiento()
+                nuevoPoderReporte.id = it.id + "-O"                
+                if(it.totalApoderados > 0){
+                    nuevoPoderReporte.apoderado = poderInstance.nombre + " y " +it.totalApoderados + " más."
+                }else{
+                    nuevoPoderReporte.apoderado = poderInstance.nombre
+                }                                
+                nuevoPoderReporte.fechaDeOtorgamiento = it.fechaDeOtorgamiento
+                nuevoPoderReporte.registroDeLaSolicitud = it.registroDeLaSolicitud
+                nuevoPoderReporte.tipoDePoder = it.tipoDePoder
+                nuevoPoderReporte.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder
+                nuevoPoderReporte.delegacion = it.delegacion
+                nuevoPoderReporte.escrituraPublica = it.escrituraPublica
+                nuevoPoderReporte.statusDePoderApoderado = poderInstance.statusDePoder
+                poderesParaReporteList.add(nuevoPoderReporte)
+            }            
+        }
+        session.poderesParaReporteList = poderesParaReporteList
         session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList
         render(
             view: "otorgamientoConsulta", 
             model: [
                 otorgamientoDePoderInstanceList: otorgamientoDePoderInstanceList,
-                otorgamientoDePoderInstanceTotal: otorgamientoDePoderInstanceList.size(),
+                otorgamientoDePoderInstanceTotal: countApoderadosTotal,
                 busquedaBean : busquedaBean,
                 rangoDeFechaOtorgamiento : params.rangoDeFechaOtorgamiento,
                 porFechaOtorgamientoActive : porFechaOtorgamientoActive
@@ -385,13 +553,57 @@ class PoderesController {
         if (params.inActive == "porEscrituraPublica") {
             porEscrituraPublicaActive = "active"
         }
-        def otorgamientoDePoderInstanceList = OtorgamientoDePoder.findAllByEscrituraPublicaLike("%"+params.escrituraPublica+"%", [sort: "id", order: "asc"])        
+        def resultados = OtorgamientoDePoder.findAllByEscrituraPublicaLike("%"+params.escrituraPublica+"%", [sort: "id", order: "asc"])        
+        resultados.unique()
+        def otorgamientoDePoderInstanceList = [] 
+        def poderesParaReporteList = []
+        def countApoderadosTotal = 0
+        resultados.each{ it ->
+            def nuevoPoder = new ResultadoBusquedaApoderado()
+            nuevoPoder.id = it.id
+            nuevoPoder.registroDeLaSolicitud = it.registroDeLaSolicitud            
+            nuevoPoder.tipoDePoder = it.categoriaDeTipoDePoder.tipoDePoder.nombre
+            nuevoPoder.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder.nombre
+            nuevoPoder.delegacion = it.delegacion
+            nuevoPoder.escrituraPublica = it.escrituraPublica  
+            nuevoPoder.fechaDeOtorgamiento = it.fechaDeOtorgamiento               
+            def listOk = []
+            it.apoderados.each {apoderado ->
+                listOk.add(apoderado)
+                countApoderadosTotal = countApoderadosTotal + 1
+            }   
+            listOk.sort{it.nombre}  
+            nuevoPoder.apoderados = listOk  
+            nuevoPoder.totalApoderados = it.apoderados.size() -1
+            otorgamientoDePoderInstanceList.add(nuevoPoder)   
+        } 
+        //se crea la lista para generar el reporte
+        otorgamientoDePoderInstanceList.each{it ->           
+            it.apoderados.each{poderInstance ->                
+                def nuevoPoderReporte = new ResultadosReporteOtorgamiento()
+                nuevoPoderReporte.id = it.id + "-O"                
+                if(it.totalApoderados > 0){
+                    nuevoPoderReporte.apoderado = poderInstance.nombre + " y " +it.totalApoderados + " más."
+                }else{
+                    nuevoPoderReporte.apoderado = poderInstance.nombre
+                }                                
+                nuevoPoderReporte.fechaDeOtorgamiento = it.fechaDeOtorgamiento
+                nuevoPoderReporte.registroDeLaSolicitud = it.registroDeLaSolicitud
+                nuevoPoderReporte.tipoDePoder = it.tipoDePoder
+                nuevoPoderReporte.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder
+                nuevoPoderReporte.delegacion = it.delegacion
+                nuevoPoderReporte.escrituraPublica = it.escrituraPublica
+                nuevoPoderReporte.statusDePoderApoderado = poderInstance.statusDePoder
+                poderesParaReporteList.add(nuevoPoderReporte)
+            }            
+        }
+        session.poderesParaReporteList = poderesParaReporteList
         session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList
         render(
             view: "otorgamientoConsulta", 
             model: [
                 otorgamientoDePoderInstanceList: otorgamientoDePoderInstanceList,
-                otorgamientoDePoderInstanceTotal: otorgamientoDePoderInstanceList.size(),
+                otorgamientoDePoderInstanceTotal: countApoderadosTotal,
                 porEscrituraPublicaActive : porEscrituraPublicaActive       
             ]
         )       
@@ -409,17 +621,244 @@ class PoderesController {
         def resultList = s.tokenize(",")
         def otorgamientoDePoderInstanceList =[] 
         resultList.each{            
-            def results = OtorgamientoDePoder.findAllByTagsIlike("%"+it+"@%", [sort: "id", order: "asc"])
-            otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList + results as Set    
+        def results = OtorgamientoDePoder.findAllByTagsIlike("%"+it+"@%", [sort: "id", order: "asc"])
+        otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList + results as Set    
         }*/
-        def otorgamientoDePoderInstanceList = OtorgamientoDePoder.findAllByTagsIlike("%"+params.tags+"%", [sort: "id", order: "asc"])
+        def resultados = OtorgamientoDePoder.findAllByTagsIlike("%"+params.tags+"%", [sort: "id", order: "asc"])
+        resultados.unique()
+        def otorgamientoDePoderInstanceList = [] 
+        def poderesParaReporteList = []
+        def countApoderadosTotal = 0
+        resultados.each{ it ->
+            def nuevoPoder = new ResultadoBusquedaApoderado()
+            nuevoPoder.id = it.id
+            nuevoPoder.registroDeLaSolicitud = it.registroDeLaSolicitud            
+            nuevoPoder.tipoDePoder = it.categoriaDeTipoDePoder.tipoDePoder.nombre
+            nuevoPoder.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder.nombre
+            nuevoPoder.delegacion = it.delegacion
+            nuevoPoder.escrituraPublica = it.escrituraPublica  
+            nuevoPoder.fechaDeOtorgamiento = it.fechaDeOtorgamiento    
+            
+            def listOk = []
+            it.apoderados.each {apoderado ->
+                listOk.add(apoderado)
+                countApoderadosTotal = countApoderadosTotal + 1
+            }   
+            
+            listOk.sort{it.nombre}  
+            nuevoPoder.apoderados = listOk  
+            nuevoPoder.totalApoderados = it.apoderados.size() -1
+            otorgamientoDePoderInstanceList.add(nuevoPoder)   
+        } 
+        //se crea la lista para generar el reporte
+        otorgamientoDePoderInstanceList.each{it ->           
+            it.apoderados.each{poderInstance ->                
+                def nuevoPoderReporte = new ResultadosReporteOtorgamiento()
+                nuevoPoderReporte.id = it.id + "-O"                
+                if(it.totalApoderados > 0){
+                    nuevoPoderReporte.apoderado = poderInstance.nombre + " y " +it.totalApoderados + " más."
+                }else{
+                    nuevoPoderReporte.apoderado = poderInstance.nombre
+                }                                
+                nuevoPoderReporte.fechaDeOtorgamiento = it.fechaDeOtorgamiento
+                nuevoPoderReporte.registroDeLaSolicitud = it.registroDeLaSolicitud
+                nuevoPoderReporte.tipoDePoder = it.tipoDePoder
+                nuevoPoderReporte.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder
+                nuevoPoderReporte.delegacion = it.delegacion
+                nuevoPoderReporte.escrituraPublica = it.escrituraPublica
+                nuevoPoderReporte.statusDePoderApoderado = poderInstance.statusDePoder
+                poderesParaReporteList.add(nuevoPoderReporte)
+            }            
+        }
+        session.poderesParaReporteList = poderesParaReporteList
         session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList
         render(
             view: "otorgamientoConsulta", 
             model: [
                 otorgamientoDePoderInstanceList: otorgamientoDePoderInstanceList,
-                otorgamientoDePoderInstanceTotal: otorgamientoDePoderInstanceList.size(),
+                otorgamientoDePoderInstanceTotal: countApoderadosTotal,
                 porTagsActive : porTagsActive       
+            ]
+        )       
+    }
+    /**
+     * Método para busquedas por notario para otorgamientos de poder.
+     */
+    def buscarPorNotario (){        
+        def porNotarioActive = null
+        if (params.inActive=="porNotario") {
+            porNotarioActive = "active"
+        }        
+        def notarioInstance = Usuario.get(params.id)               
+        def resultados = OtorgamientoDePoder.findAll {
+            notarioCorrespondiente == notarioInstance
+        }        
+        resultados.unique()
+        def otorgamientoDePoderInstanceList = []   
+        def poderesParaReporteList = []
+        def countApoderadosTotal = 0
+        resultados.each{ it ->
+            def nuevoPoder = new ResultadoBusquedaApoderado()
+            nuevoPoder.id = it.id
+            nuevoPoder.registroDeLaSolicitud = it.registroDeLaSolicitud            
+            nuevoPoder.tipoDePoder = it.categoriaDeTipoDePoder.tipoDePoder.nombre
+            nuevoPoder.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder.nombre
+            nuevoPoder.delegacion = it.delegacion
+            nuevoPoder.escrituraPublica = it.escrituraPublica  
+            nuevoPoder.fechaDeOtorgamiento = it.fechaDeOtorgamiento
+            def listOk = []
+            it.apoderados.each {apoderado ->
+                listOk.add(apoderado)
+                countApoderadosTotal = countApoderadosTotal + 1
+            }   
+            listOk.sort{it.nombre}  
+            nuevoPoder.apoderados = listOk  
+            nuevoPoder.totalApoderados = it.apoderados.size() -1
+            otorgamientoDePoderInstanceList.add(nuevoPoder)                             
+        }      
+        //se crea la lista para generar el reporte
+        otorgamientoDePoderInstanceList.each{it ->           
+            it.apoderados.each{poderInstance ->                
+                def nuevoPoderReporte = new ResultadosReporteOtorgamiento()
+                nuevoPoderReporte.id = it.id + "-O"                
+                if(it.totalApoderados > 0){
+                    nuevoPoderReporte.apoderado = poderInstance.nombre + " y " +it.totalApoderados + " más."
+                }else{
+                    nuevoPoderReporte.apoderado = poderInstance.nombre
+                }                               
+                nuevoPoderReporte.fechaDeOtorgamiento = it.fechaDeOtorgamiento
+                nuevoPoderReporte.registroDeLaSolicitud = it.registroDeLaSolicitud
+                nuevoPoderReporte.tipoDePoder = it.tipoDePoder
+                nuevoPoderReporte.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder
+                nuevoPoderReporte.delegacion = it.delegacion
+                nuevoPoderReporte.escrituraPublica = it.escrituraPublica
+                nuevoPoderReporte.statusDePoderApoderado = poderInstance.statusDePoder
+                poderesParaReporteList.add(nuevoPoderReporte)
+            }            
+        }
+        session.poderesParaReporteList = poderesParaReporteList
+        session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList
+        render(
+            view: "otorgamientoConsulta", 
+            model: [
+                otorgamientoDePoderInstanceList: otorgamientoDePoderInstanceList,
+                otorgamientoDePoderInstanceTotal: countApoderadosTotal,
+                porNotarioActive : porNotarioActive,
+                nombreNotario : notarioInstance
+            ]
+        )       
+    }
+    /**
+     * Método de busqueda por status del otorgamiento
+     */
+    def buscarPorStatus(){        
+        def porStatusActive = null
+        if (params.inActive=="porStatus") {
+            porStatusActive = "active"
+        }                    
+        def resultados = OtorgamientoDePoder.where{
+            apoderados { statusDePoder == params.statusDePoder}
+        }                                
+        
+        def otorgamientoDePoderInstanceList = []   
+        def poderesParaReporteList = []
+        def countApoderadosTotal = 0
+        resultados.each{ it ->
+            def nuevoPoder = new ResultadoBusquedaApoderado()
+            nuevoPoder.id = it.id
+            nuevoPoder.registroDeLaSolicitud = it.registroDeLaSolicitud            
+            nuevoPoder.tipoDePoder = it.categoriaDeTipoDePoder.tipoDePoder.nombre
+            nuevoPoder.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder.nombre
+            nuevoPoder.delegacion = it.delegacion
+            nuevoPoder.escrituraPublica = it.escrituraPublica  
+            nuevoPoder.fechaDeOtorgamiento = it.fechaDeOtorgamiento
+            def listOk = []
+            it.apoderados.each {apoderado ->                                
+                if(apoderado.statusDePoder == params.statusDePoder){
+                    countApoderadosTotal = countApoderadosTotal + 1
+                    listOk.add(apoderado)
+                }
+            }   
+            listOk.sort{it.nombre}  
+            nuevoPoder.apoderados = listOk  
+            nuevoPoder.totalApoderados = it.apoderados.size() -1
+            otorgamientoDePoderInstanceList.add(nuevoPoder)                             
+        } 
+        
+        //se crea la lista para generar el reporte
+        otorgamientoDePoderInstanceList.each{it ->           
+            it.apoderados.each{poderInstance ->                
+                def nuevoPoderReporte = new ResultadosReporteOtorgamiento()
+                nuevoPoderReporte.id = it.id + "-O"                
+                if(it.totalApoderados > 0){
+                    nuevoPoderReporte.apoderado = poderInstance.nombre + " y " +it.totalApoderados + " más."
+                }else{
+                    nuevoPoderReporte.apoderado = poderInstance.nombre
+                }                                
+                nuevoPoderReporte.fechaDeOtorgamiento = it.fechaDeOtorgamiento
+                nuevoPoderReporte.registroDeLaSolicitud = it.registroDeLaSolicitud
+                nuevoPoderReporte.tipoDePoder = it.tipoDePoder
+                nuevoPoderReporte.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder
+                nuevoPoderReporte.delegacion = it.delegacion
+                nuevoPoderReporte.escrituraPublica = it.escrituraPublica
+                nuevoPoderReporte.statusDePoderApoderado = poderInstance.statusDePoder
+                poderesParaReporteList.add(nuevoPoderReporte)
+            }              
+        }
+         
+        session.poderesParaReporteList = poderesParaReporteList
+        session.otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList
+        
+        
+        render(
+            view: "otorgamientoConsulta", 
+            model: [
+                
+                otorgamientoDePoderInstanceList: otorgamientoDePoderInstanceList,
+                otorgamientoDePoderInstanceTotal: countApoderadosTotal,
+                porStatusActive : porStatusActive
+            ]
+        )                
+    }
+    /**
+     * Método para busquedas por notario para otorgamientos de poder.
+     */
+    def registrosTotales(){        
+        def registrosTotalesActive = null
+        if (params.inActive=="registrosTotales") {
+            registrosTotalesActive = "active"
+        }        
+        //def notarioInstance = Usuario.get(params.id)               
+        def resultados = OtorgamientoDePoder.list()    
+        resultados.unique()
+        resultados.sort{it.id}
+        def otorgamientoDePoderInstanceList = []   
+        def poderesParaReporteList = []
+        def countRegistrosTotales = 0            
+        //se crea la lista para generar el reporte
+        resultados.each{it ->           
+            it.apoderados.sort{it.nombre}each{poderInstance ->                
+                def nuevoPoderReporte = new ResultadosReporteOtorgamiento()
+                nuevoPoderReporte.id = it.id + "-O"                
+                nuevoPoderReporte.apoderado = poderInstance.nombre                              
+                nuevoPoderReporte.fechaDeOtorgamiento = it.fechaDeOtorgamiento
+                nuevoPoderReporte.registroDeLaSolicitud = it.registroDeLaSolicitud
+                nuevoPoderReporte.tipoDePoder = it.categoriaDeTipoDePoder.tipoDePoder.nombre
+                nuevoPoderReporte.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder.nombre
+                nuevoPoderReporte.delegacion = it.delegacion
+                nuevoPoderReporte.escrituraPublica = it.escrituraPublica
+                nuevoPoderReporte.statusDePoderApoderado = poderInstance.statusDePoder
+                poderesParaReporteList.add(nuevoPoderReporte)
+                countRegistrosTotales = countRegistrosTotales +1
+            }            
+        }        
+        session.poderesParaReporteList = poderesParaReporteList        
+        render(
+            view: "otorgamientoConsulta", 
+            model: [
+                otorgamientoDePoderInstanceList: otorgamientoDePoderInstanceList,
+                otorgamientoDePoderInstanceTotal: countRegistrosTotales,
+                registrosTotalesActive : registrosTotalesActive
             ]
         )       
     }
@@ -431,19 +870,72 @@ class PoderesController {
         if (params.inActive=="nombreApoderado") {
             nombreApoderadoActive = "active"
         }
+                
         def s = RevocacionDePoder.createCriteria()
-        def revocacionDePoderInstanceList = s.list {
-            apoderados {
+        def resultados = s.list {
+            apoderadosEliminar {
                 ilike("nombre", "%"+params.nombre+"%")
             }
             order("id", "asc")
         } 
+        println "total antes del unique: " + resultados.size()
+        resultados.unique()
+        println "total despues del unique: " + resultados.size()
+        def revocacionDePoderInstanceList = [] 
+        def countApoderadosTotal = 0
+        def poderesParaReporteList = []
+        resultados.each{it ->
+            def nuevoPoder = new ResultadoBusquedaApoderado()
+            nuevoPoder.id = it.id            
+            nuevoPoder.registroDeLaSolicitud = it.registroDeLaSolicitud            
+            nuevoPoder.tipoDePoder = it.categoriaDeTipoDePoder.tipoDePoder.nombre
+            nuevoPoder.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder.nombre
+            nuevoPoder.delegacion = it.delegacion
+            nuevoPoder.escrituraPublica = it.escrituraPublicaRevocacion  
+            nuevoPoder.fechaDeRevocacion = it.fechaDeRevocacion                         
+            def listOk = []
+            def listKo = []  
+            //countApoderadosTotal = countApoderadosTotal + 1
+            it.apoderadosEliminar.each{apoderado ->
+                if(apoderado.nombre.contains(params.nombre.toUpperCase())){                     
+                    listOk.add(apoderado)
+                    countApoderadosTotal = countApoderadosTotal + 1                    
+                }else{                           
+                    listKo.add(apoderado)
+                } 
+            }           
+            listOk.sort{it.nombre}  
+            nuevoPoder.apoderados = listOk            
+            nuevoPoder.totalApoderados = it.apoderadosEliminar.size() -1
+            revocacionDePoderInstanceList.add(nuevoPoder)             
+        }            
+        //se crea la lista para generar el reporte
+        revocacionDePoderInstanceList.each{it ->               
+            it.apoderados.each{poderInstance ->                
+                def nuevoPoderReporte = new ResultadosReporteOtorgamiento()
+                nuevoPoderReporte.id = it.id + "-R"
+                if(it.totalApoderados > 0){
+                    nuevoPoderReporte.apoderado = poderInstance.nombre + " y " +it.totalApoderados + " más."
+                }else{
+                    nuevoPoderReporte.apoderado = poderInstance.nombre
+                }                                
+                nuevoPoderReporte.registroDeLaSolicitud = it.registroDeLaSolicitud
+                nuevoPoderReporte.tipoDePoder = it.tipoDePoder
+                nuevoPoderReporte.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder
+                nuevoPoderReporte.delegacion = it.delegacion
+                nuevoPoderReporte.escrituraPublica = it.escrituraPublica
+                nuevoPoderReporte.statusDePoderApoderado = poderInstance.statusDePoder
+                poderesParaReporteList.add(nuevoPoderReporte)
+            }            
+        }
+        session.poderesParaReporteList = poderesParaReporteList
         session.revocacionDePoderInstanceList = revocacionDePoderInstanceList
+                                     
         render(
             view: "revocacionConsulta", 
             model: [
                 revocacionDePoderInstanceList : revocacionDePoderInstanceList,
-                revocacionDePoderInstanceTotal : revocacionDePoderInstanceList.size(),
+                revocacionDePoderInstanceTotal : poderesParaReporteList.size(),
                 nombreApoderadoActive : nombreApoderadoActive       
             ]
         )       
@@ -457,19 +949,62 @@ class PoderesController {
             porDelegacionActive = "active"
         }        
         //def revocacionDePoderInstanceList = RevocacionDePoder.findAllByDelegacionIlike("%"+params.delegacion+"%", [sort: "id", order: "asc"])
-        def g = RevocacionDePoder.createCriteria()
-        def revocacionDePoderInstanceList = g.list {
+        def g = RevocacionDePoder.createCriteria()        
+        def resultados = g.list {
             delegacion {
-                ilike("nombre", "%"+params.delegacion+"%")
+                like("nombre", "%"+params.nombre+"%")
             }
             order("id", "asc")
-        } 
+        }
+        resultados.unique()
+        def revocacionDePoderInstanceList = []   
+        def poderesParaReporteList = []
+        def countApoderadosTotal = 0
+        resultados.each{ it ->
+            def nuevoPoder = new ResultadoBusquedaApoderado()
+            nuevoPoder.id = it.id
+            nuevoPoder.registroDeLaSolicitud = it.registroDeLaSolicitud            
+            nuevoPoder.tipoDePoder = it.categoriaDeTipoDePoder.tipoDePoder.nombre
+            nuevoPoder.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder.nombre
+            nuevoPoder.delegacion = it.delegacion
+            nuevoPoder.escrituraPublica = it.escrituraPublicaRevocacion  
+            nuevoPoder.fechaDeRevocacion = it.fechaDeRevocacion
+            def listOk = []
+            it.apoderadosEliminar.each {apoderado ->
+                listOk.add(apoderado)
+                countApoderadosTotal = countApoderadosTotal + 1
+            }   
+            listOk.sort{it.nombre}  
+            nuevoPoder.apoderados = listOk  
+            nuevoPoder.totalApoderados = it.apoderadosEliminar.size() -1
+            revocacionDePoderInstanceList.add(nuevoPoder)                             
+        }                       
+        //se crea la lista para generar el reporte
+        revocacionDePoderInstanceList.each{it ->           
+            it.apoderados.each{poderInstance ->                
+                def nuevoPoderReporte = new ResultadosReporteOtorgamiento()
+                nuevoPoderReporte.id = it.id + "-R"                                
+                if(it.totalApoderados > 0){
+                    nuevoPoderReporte.apoderado = poderInstance.nombre + " y " +it.totalApoderados + " más."
+                }else{
+                    nuevoPoderReporte.apoderado = poderInstance.nombre
+                }                 
+                nuevoPoderReporte.registroDeLaSolicitud = it.registroDeLaSolicitud
+                nuevoPoderReporte.tipoDePoder = it.tipoDePoder
+                nuevoPoderReporte.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder
+                nuevoPoderReporte.delegacion = it.delegacion
+                nuevoPoderReporte.escrituraPublica = it.escrituraPublica
+                nuevoPoderReporte.statusDePoderApoderado = poderInstance.statusDePoder
+                poderesParaReporteList.add(nuevoPoderReporte)
+            }            
+        }
+        session.poderesParaReporteList = poderesParaReporteList
         session.revocacionDePoderInstanceList = revocacionDePoderInstanceList
         render(
             view: "revocacionConsulta", 
             model: [
                 revocacionDePoderInstanceList: revocacionDePoderInstanceList,
-                revocacionDePoderInstanceTotal: revocacionDePoderInstanceList.size(),
+                revocacionDePoderInstanceTotal: poderesParaReporteList.size(),
                 porDelegacionActive : porDelegacionActive       
             ]
         )       
@@ -482,13 +1017,56 @@ class PoderesController {
         if (params.inActive=="porNumeroEscritura") {
             porNumeroEscrituraActive = "active"
         }
-        def revocacionDePoderInstanceList = RevocacionDePoder.findAllByEscrituraPublicaRevocacionLike("%"+params.escrituraPublica+"%", [sort: "id", order: "asc"])        
+        def resultados = RevocacionDePoder.findAllByEscrituraPublicaRevocacionLike("%"+params.escrituraPublica+"%", [sort: "id", order: "asc"])        
+        resultados.unique()
+        def revocacionDePoderInstanceList = [] 
+        def poderesParaReporteList = []
+        def countApoderadosTotal = 0
+        resultados.each{ it ->
+            def nuevoPoder = new ResultadoBusquedaApoderado()
+            nuevoPoder.id = it.id
+            nuevoPoder.registroDeLaSolicitud = it.registroDeLaSolicitud            
+            nuevoPoder.tipoDePoder = it.categoriaDeTipoDePoder.tipoDePoder.nombre
+            nuevoPoder.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder.nombre
+            nuevoPoder.delegacion = it.delegacion
+            nuevoPoder.escrituraPublica = it.escrituraPublicaRevocacion  
+            nuevoPoder.fechaDeRevocacion = it.fechaDeRevocacion           
+            def listOk = []
+            it.apoderadosEliminar.each {apoderado ->
+                listOk.add(apoderado)
+                countApoderadosTotal = countApoderadosTotal + 1
+            }   
+            listOk.sort{it.nombre}  
+            nuevoPoder.apoderados = listOk  
+            nuevoPoder.totalApoderados = it.apoderadosEliminar.size() -1
+            revocacionDePoderInstanceList.add(nuevoPoder)   
+        } 
+        //se crea la lista para generar el reporte
+        revocacionDePoderInstanceList.each{it ->           
+            it.apoderados.each{poderInstance ->                
+                def nuevoPoderReporte = new ResultadosReporteOtorgamiento()
+                nuevoPoderReporte.id = it.id + "-R"                
+                if(it.totalApoderados > 0){
+                    nuevoPoderReporte.apoderado = poderInstance.nombre + " y " +it.totalApoderados + " más."
+                }else{
+                    nuevoPoderReporte.apoderado = poderInstance.nombre
+                }                                            
+                nuevoPoderReporte.registroDeLaSolicitud = it.registroDeLaSolicitud
+                nuevoPoderReporte.tipoDePoder = it.tipoDePoder
+                nuevoPoderReporte.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder
+                nuevoPoderReporte.delegacion = it.delegacion
+                nuevoPoderReporte.escrituraPublica = it.escrituraPublica
+                nuevoPoderReporte.statusDePoderApoderado = poderInstance.statusDePoder
+                poderesParaReporteList.add(nuevoPoderReporte)
+            }            
+        }
+        session.poderesParaReporteList = poderesParaReporteList
         session.revocacionDePoderInstanceList = revocacionDePoderInstanceList
         render(
             view: "revocacionConsulta", 
             model: [
                 revocacionDePoderInstanceList: revocacionDePoderInstanceList,
-                revocacionDePoderInstanceTotal: revocacionDePoderInstanceList.size(),
+                revocacionDePoderInstanceTotal: poderesParaReporteList.size(),
                 porNumeroEscrituraActive : porNumeroEscrituraActive       
             ]
         )       
@@ -506,7 +1084,7 @@ class PoderesController {
         def fechaInicio = null
         def fechaFin = null
         def busquedaBean = null
-        def revocacionDePoderInstanceList = []
+        def resultados = []
         if (params.rangoDeFechaRevocacion) {
             flash.warn = null
             rangoDeFechaRevocacion = params.rangoDeFechaRevocacion
@@ -515,16 +1093,59 @@ class PoderesController {
             busquedaBean = new BusquedaBean()        
             busquedaBean.fechaInicio = fechaInicio
             busquedaBean.fechaFin = fechaFin
-            revocacionDePoderInstanceList = RevocacionDePoder.findAllByFechaDeRevocacionBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin, [sort: "id", order: "asc"])
+            resultados = RevocacionDePoder.findAllByFechaDeRevocacionBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin, [sort: "id", order: "asc"])
         } else {
             flash.warn = "Debe elegir un rango de fechas válido."
         }
+        resultados.unique() 
+        def revocacionDePoderInstanceList = []
+        def poderesParaReporteList = []
+        def countApoderadosTotal = 0
+        resultados.each{ it ->
+            def nuevoPoder = new ResultadoBusquedaApoderado()
+            nuevoPoder.id = it.id
+            nuevoPoder.registroDeLaSolicitud = it.registroDeLaSolicitud            
+            nuevoPoder.tipoDePoder = it.categoriaDeTipoDePoder.tipoDePoder.nombre
+            nuevoPoder.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder.nombre
+            nuevoPoder.delegacion = it.delegacion
+            nuevoPoder.escrituraPublica = it.escrituraPublicaRevocacion  
+            nuevoPoder.fechaDeRevocacion = it.fechaDeRevocacion           
+            def listOk = []
+            it.apoderadosEliminar.each {apoderado ->
+                listOk.add(apoderado)
+                countApoderadosTotal = countApoderadosTotal + 1
+            }   
+            listOk.sort{it.nombre}  
+            nuevoPoder.apoderados = listOk  
+            nuevoPoder.totalApoderados = it.apoderadosEliminar.size() -1
+            revocacionDePoderInstanceList.add(nuevoPoder)   
+        } 
+        //se crea la lista para generar el reporte
+        revocacionDePoderInstanceList.each{it ->           
+            it.apoderados.each{poderInstance ->                
+                def nuevoPoderReporte = new ResultadosReporteOtorgamiento()
+                nuevoPoderReporte.id = it.id + "-R"                
+                if(it.totalApoderados > 0){
+                    nuevoPoderReporte.apoderado = poderInstance.nombre + " y " +it.totalApoderados + " más."
+                }else{
+                    nuevoPoderReporte.apoderado = poderInstance.nombre
+                }                                            
+                nuevoPoderReporte.registroDeLaSolicitud = it.registroDeLaSolicitud
+                nuevoPoderReporte.tipoDePoder = it.tipoDePoder
+                nuevoPoderReporte.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder
+                nuevoPoderReporte.delegacion = it.delegacion
+                nuevoPoderReporte.escrituraPublica = it.escrituraPublica
+                nuevoPoderReporte.statusDePoderApoderado = poderInstance.statusDePoder
+                poderesParaReporteList.add(nuevoPoderReporte)
+            }            
+        }
+        session.poderesParaReporteList = poderesParaReporteList
         session.revocacionDePoderInstanceList = revocacionDePoderInstanceList
         render(
             view: "revocacionConsulta", 
             model: [
                 revocacionDePoderInstanceList: revocacionDePoderInstanceList,
-                revocacionDePoderInstanceTotal: revocacionDePoderInstanceList.size(),
+                revocacionDePoderInstanceTotal: poderesParaReporteList.size(),
                 busquedaBean : busquedaBean,
                 rangoDeFechaRevocacion : params.rangoDeFechaRevocacion,
                 porFechaRevocacionActive : porFechaRevocacionActive
@@ -543,20 +1164,242 @@ class PoderesController {
         def resultList = s.tokenize(",")
         def revocacionDePoderInstanceList =[] 
         resultList.each{            
-            def results = RevocacionDePoder.findAllByTagsIlike("%"+it+"@%", [sort: "id", order: "asc"])
-            revocacionDePoderInstanceList = revocacionDePoderInstanceList + results as Set    
+        def results = RevocacionDePoder.findAllByTagsIlike("%"+it+"@%", [sort: "id", order: "asc"])
+        revocacionDePoderInstanceList = revocacionDePoderInstanceList + results as Set    
         }*/
-        def revocacionDePoderInstanceList = RevocacionDePoder.findAllByTagsIlike("%"+params.tags+"%", [sort: "id", order: "asc"])
+        def resultados = RevocacionDePoder.findAllByTagsIlike("%"+params.tags+"%", [sort: "id", order: "asc"])
+        resultados.unique()
+        def revocacionDePoderInstanceList = [] 
+        def poderesParaReporteList = []
+        def countApoderadosTotal = 0
+        resultados.each{ it ->
+            def nuevoPoder = new ResultadoBusquedaApoderado()
+            nuevoPoder.id = it.id
+            nuevoPoder.registroDeLaSolicitud = it.registroDeLaSolicitud            
+            nuevoPoder.tipoDePoder = it.categoriaDeTipoDePoder.tipoDePoder.nombre
+            nuevoPoder.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder.nombre
+            nuevoPoder.delegacion = it.delegacion
+            nuevoPoder.escrituraPublica = it.escrituraPublicaRevocacion  
+            nuevoPoder.fechaDeRevocacion = it.fechaDeRevocacion           
+            def listOk = []
+            it.apoderadosEliminar.each {apoderado ->
+                listOk.add(apoderado)
+                countApoderadosTotal = countApoderadosTotal + 1
+            }   
+            listOk.sort{it.nombre}  
+            nuevoPoder.apoderados = listOk  
+            nuevoPoder.totalApoderados = it.apoderadosEliminar.size() -1
+            revocacionDePoderInstanceList.add(nuevoPoder)   
+        } 
+        //se crea la lista para generar el reporte
+        revocacionDePoderInstanceList.each{it ->           
+            it.apoderados.each{poderInstance ->                
+                def nuevoPoderReporte = new ResultadosReporteOtorgamiento()
+                nuevoPoderReporte.id = it.id + "-R"                
+                if(it.totalApoderados > 0){
+                    nuevoPoderReporte.apoderado = poderInstance.nombre + " y " +it.totalApoderados + " más."
+                }else{
+                    nuevoPoderReporte.apoderado = poderInstance.nombre
+                }                                            
+                nuevoPoderReporte.registroDeLaSolicitud = it.registroDeLaSolicitud
+                nuevoPoderReporte.tipoDePoder = it.tipoDePoder
+                nuevoPoderReporte.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder
+                nuevoPoderReporte.delegacion = it.delegacion
+                nuevoPoderReporte.escrituraPublica = it.escrituraPublica
+                nuevoPoderReporte.statusDePoderApoderado = poderInstance.statusDePoder
+                poderesParaReporteList.add(nuevoPoderReporte)
+            }            
+        }
+        session.poderesParaReporteList = poderesParaReporteList
         session.revocacionDePoderInstanceList = revocacionDePoderInstanceList
         render(
             view: "revocacionConsulta", 
             model: [
                 revocacionDePoderInstanceList: revocacionDePoderInstanceList,
-                revocacionDePoderInstanceTotal: revocacionDePoderInstanceList.size(),
+                revocacionDePoderInstanceTotal: poderesParaReporteList.size(),
                 porTagsActive : porTagsActive       
             ]
         )       
     }
+    
+    def buscarPorNotarioRevocacion (){        
+        def porNotarioActive = null
+        if (params.inActive=="porNotario") {
+            porNotarioActive = "active"
+        }        
+        def notarioInstance = Usuario.get(params.id)               
+        def resultados = RevocacionDePoder.findAll {
+            notarioCorrespondiente == notarioInstance
+        }        
+        resultados.unique()
+        def revocacionDePoderInstanceList = []   
+        def poderesParaReporteList = []
+        def countApoderadosTotal = 0
+        resultados.each{ it ->
+            def nuevoPoder = new ResultadoBusquedaApoderado()
+            nuevoPoder.id = it.id
+            nuevoPoder.registroDeLaSolicitud = it.registroDeLaSolicitud            
+            nuevoPoder.tipoDePoder = it.categoriaDeTipoDePoder.tipoDePoder.nombre
+            nuevoPoder.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder.nombre
+            nuevoPoder.delegacion = it.delegacion
+            nuevoPoder.escrituraPublica = it.escrituraPublicaRevocacion  
+            nuevoPoder.fechaDeRevocacion = it.fechaDeRevocacion
+            def listOk = []
+            it.apoderadosEliminar.each {apoderado ->
+                listOk.add(apoderado)
+                countApoderadosTotal = countApoderadosTotal + 1
+            }   
+            listOk.sort{it.nombre}  
+            nuevoPoder.apoderados = listOk  
+            nuevoPoder.totalApoderados = it.apoderadosEliminar.size() -1
+            revocacionDePoderInstanceList.add(nuevoPoder)                             
+        }      
+        //se crea la lista para generar el reporte
+        revocacionDePoderInstanceList.each{it ->           
+            it.apoderados.each{poderInstance ->                
+                def nuevoPoderReporte = new ResultadosReporteOtorgamiento()
+                nuevoPoderReporte.id = it.id + "-R"                
+                if(it.totalApoderados > 0){
+                    nuevoPoderReporte.apoderado = poderInstance.nombre + " y " +it.totalApoderados + " más."
+                }else{
+                    nuevoPoderReporte.apoderado = poderInstance.nombre
+                }                               
+                nuevoPoderReporte.fechaDeRevocacion = it.fechaDeRevocacion
+                nuevoPoderReporte.registroDeLaSolicitud = it.registroDeLaSolicitud
+                nuevoPoderReporte.tipoDePoder = it.tipoDePoder
+                nuevoPoderReporte.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder
+                nuevoPoderReporte.delegacion = it.delegacion
+                nuevoPoderReporte.escrituraPublica = it.escrituraPublica
+                nuevoPoderReporte.statusDePoderApoderado = poderInstance.statusDePoder
+                poderesParaReporteList.add(nuevoPoderReporte)
+            }            
+        }
+        session.poderesParaReporteList = poderesParaReporteList
+        session.revocacionDePoderInstanceList = revocacionDePoderInstanceList
+        render(
+            view: "revocacionConsulta", 
+            model: [
+                revocacionDePoderInstanceList: revocacionDePoderInstanceList,
+                revocacionDePoderInstanceTotal: countApoderadosTotal,
+                porNotarioActive : porNotarioActive,
+                nombreNotario : notarioInstance
+            ]
+        )       
+    }
+    
+    /**
+     * Método de busqueda por status del otorgamiento
+     */
+    def buscarPorStatusRevocacion(){        
+        def porStatusActive = null
+        if (params.inActive=="porStatus") {
+            porStatusActive = "active"
+        }                    
+        def resultados = RevocacionDePoder.where{
+            apoderados { statusDePoder == params.statusDePoder}
+        }                                
+        
+        def revocacionDePoderInstanceList = []   
+        def poderesParaReporteList = []
+        def countApoderadosTotal = 0
+        resultados.each{ it ->
+            def nuevoPoder = new ResultadoBusquedaApoderado()
+            nuevoPoder.id = it.id
+            nuevoPoder.registroDeLaSolicitud = it.registroDeLaSolicitud            
+            nuevoPoder.tipoDePoder = it.categoriaDeTipoDePoder.tipoDePoder.nombre
+            nuevoPoder.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder.nombre
+            nuevoPoder.delegacion = it.delegacion
+            nuevoPoder.escrituraPublica = it.escrituraPublicaRevocacion  
+            nuevoPoder.fechaDeRevocacion = it.fechaDeRevocacion
+            def listOk = []
+            it.apoderadosEliminar.each {apoderado ->                                
+                if(apoderado.statusDePoder == params.statusDePoder){
+                    countApoderadosTotal = countApoderadosTotal + 1
+                    listOk.add(apoderado)
+                }
+            }   
+            listOk.sort{it.nombre}  
+            nuevoPoder.apoderados = listOk  
+            nuevoPoder.totalApoderados = it.apoderadosEliminar.size() -1
+            revocacionDePoderInstanceList.add(nuevoPoder)                             
+        } 
+        
+        //se crea la lista para generar el reporte
+        revocacionDePoderInstanceList.each{it ->           
+            it.apoderados.each{poderInstance ->                
+                def nuevoPoderReporte = new ResultadosReporteOtorgamiento()
+                nuevoPoderReporte.id = it.id + "-R"                
+                if(it.totalApoderados > 0){
+                    nuevoPoderReporte.apoderado = poderInstance.nombre + " y " +it.totalApoderados + " más."
+                }else{
+                    nuevoPoderReporte.apoderado = poderInstance.nombre
+                }                                
+                nuevoPoderReporte.fechaDeRevocacion = it.fechaDeRevocacion
+                nuevoPoderReporte.registroDeLaSolicitud = it.registroDeLaSolicitud
+                nuevoPoderReporte.tipoDePoder = it.tipoDePoder
+                nuevoPoderReporte.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder
+                nuevoPoderReporte.delegacion = it.delegacion
+                nuevoPoderReporte.escrituraPublica = it.escrituraPublica
+                nuevoPoderReporte.statusDePoderApoderado = poderInstance.statusDePoder
+                poderesParaReporteList.add(nuevoPoderReporte)
+            }              
+        }
+         
+        session.poderesParaReporteList = poderesParaReporteList
+        session.revocacionDePoderInstanceList = revocacionDePoderInstanceList
+        
+        
+        render(
+            view: "revocacionConsulta", 
+            model: [
+                
+                revocacionDePoderInstanceList: revocacionDePoderInstanceList,
+                revocacionDePoderInstanceTotal: countApoderadosTotal,
+                porStatusActive : porStatusActive
+            ]
+        )                
+    }
+    
+    def registrosTotalesRevocacion(){        
+        def registrosTotalesActive = null
+        if (params.inActive=="registrosTotales") {
+            registrosTotalesActive = "active"
+        }        
+        //def notarioInstance = Usuario.get(params.id)               
+        def resultados = RevocacionDePoder.list()    
+        resultados.unique()
+        resultados.sort{it.id}
+        def revocacionDePoderInstanceList = []   
+        def poderesParaReporteList = []
+        def countRegistrosTotales = 0            
+        //se crea la lista para generar el reporte
+        resultados.each{it ->           
+            it.apoderadosEliminar.sort{it.nombre}each{poderInstance ->                
+                def nuevoPoderReporte = new ResultadosReporteOtorgamiento()
+                nuevoPoderReporte.id = it.id + "-R"                
+                nuevoPoderReporte.apoderado = poderInstance.nombre                              
+                nuevoPoderReporte.fechaDeRevocacion = it.fechaDeRevocacion
+                nuevoPoderReporte.registroDeLaSolicitud = it.registroDeLaSolicitud
+                nuevoPoderReporte.tipoDePoder = it.categoriaDeTipoDePoder.tipoDePoder.nombre
+                nuevoPoderReporte.categoriaDeTipoDePoder = it.categoriaDeTipoDePoder.nombre
+                nuevoPoderReporte.delegacion = it.delegacion
+                nuevoPoderReporte.escrituraPublica = it.escrituraPublicaRevocacion
+                nuevoPoderReporte.statusDePoderApoderado = poderInstance.statusDePoder
+                poderesParaReporteList.add(nuevoPoderReporte)
+                countRegistrosTotales = countRegistrosTotales +1
+            }            
+        }        
+        session.poderesParaReporteList = poderesParaReporteList        
+        render(
+            view: "revocacionConsulta", 
+            model: [
+                revocacionDePoderInstanceList: revocacionDePoderInstanceList,
+                revocacionDePoderInstanceTotal: countRegistrosTotales,
+                registrosTotalesActive : registrosTotalesActive
+            ]
+        )       
+    }
+    
     /**
      * Método para busquedas por nombre en busqueda general.
      */
@@ -627,15 +1470,15 @@ class PoderesController {
         def resultList = s.tokenize(",")
         def otorgamientoDePoderInstanceList =[] 
         resultList.each{            
-            def results = OtorgamientoDePoder.findAllByTagsIlike("%"+it+"@%", [sort: "id", order: "asc"])
-            otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList + results as Set    
+        def results = OtorgamientoDePoder.findAllByTagsIlike("%"+it+"@%", [sort: "id", order: "asc"])
+        otorgamientoDePoderInstanceList = otorgamientoDePoderInstanceList + results as Set    
         }
         def st = params.tags.toString().replaceAll(" ", "")
         def resultList2 = st.tokenize(",")
         def revocacionDePoderInstanceList =[] 
         resultList2.each{            
-            def results2 = RevocacionDePoder.findAllByTagsIlike("%"+it+"@%", [sort: "id", order: "asc"])
-            revocacionDePoderInstanceList = revocacionDePoderInstanceList + results2 as Set    
+        def results2 = RevocacionDePoder.findAllByTagsIlike("%"+it+"@%", [sort: "id", order: "asc"])
+        revocacionDePoderInstanceList = revocacionDePoderInstanceList + results2 as Set    
         }*/
         def otorgamientoDePoderInstanceList = OtorgamientoDePoder.findAllByTagsIlike("%"+params.tags+"%", [sort: "id", order: "asc"])
         def revocacionDePoderInstanceList = RevocacionDePoder.findAllByTagsIlike("%"+params.tags+"%", [sort: "id", order: "asc"])
@@ -655,26 +1498,29 @@ class PoderesController {
     /**
      * Método para generar reportes en las busquedas.
      */
-    def generarReporteOtorgamiento(){
-        def otorgamientoDePoderInstanceList = session.otorgamientoDePoderInstanceList
+    def generarReporteOtorgamiento(){        
+        def otorgamientoDePoderInstanceList = session.poderesParaReporteList        
         def inActive = session.inActive
         log.info "activo:." + session.inActive
-        log.info "total::." + session.otorgamientoDePoderInstanceList.size()
+        //log.info "total::." + otorgamientoDePoderInstanceList.size()
         log.info "params::::::::::::::::"+ params
         log.info "otorgamiento::::::"+ session.otorgamientoDePoderInstanceList
         if(params?.format && params.format != "html"){
             response.contentType = grailsApplication.config.grails.mime.types[params.format]
-            response.setHeader("Content-disposition", "attachment; filename=otorgamiento.${params.extension}")
-            List fields = ["id", "categoriaDeTipoDePoder.tipoDePoder.nombre", "categoriaDeTipoDePoder.nombre", "apoderados.nombre", "registroDeLaSolicitud", "delegacion"]
-            Map labels = ["id":"Número de Folio", "categoriaDeTipoDePoder.tipoDePoder.nombre":"Tipo de Poder", "categoriaDeTipoDePoder.nombre":"Categoria", "apoderados.nombre": "Apoderados", "registroDeLaSolicitud":"Registro De Solicitud",
-                          "delegacion":"Delegación"]
+            response.setHeader("Content-disposition", "attachment; filename=Reporte de Otorgamiento(s) de poder(es).${params.extension}")
+            List fields = ["id", "apoderado",  "escrituraPublica", "registroDeLaSolicitud", "tipoDePoder",
+                             "categoriaDeTipoDePoder", "delegacion", "statusDePoderApoderado"]
+            Map labels = ["id":"Folio", "apoderado":"Nombre del Apoderado", "escrituraPublica":"Escritura Pública",
+                            "registroDeLaSolicitud":"Fecha de Registro", 
+                            "tipoDePoder":"Tipo de Poder", "categoriaDeTipoDePoder":"Categoria", 
+                          "delegacion":"Delegación", "statusDePoderApoderado":"Estatus"]
             def upperCase = { domain, value ->
                 return value.toUpperCase()
             }
             Map formatters = [contrato: upperCase]		
-            Map parameters = [title: "Reporte de Otorgamiento de Poder ", "column.widths": [0.2, 0.4, 0.4, 0.4, 0.4, 0.4], "title.font.size":12]
+            Map parameters = [title: "Reporte de Otorgamiento de Poder ", "column.widths": [0.2, 0.5, 0.3, 0.4, 0.4, 0.6, 0.4,0.4], "title.font.size":12]
 
-            exportService.export(params.format, response.outputStream, session.otorgamientoDePoderInstanceList, fields, labels, formatters, parameters)
+            exportService.export(params.format, response.outputStream, session.poderesParaReporteList, fields, labels, formatters, parameters)
         }
         render(
             view: "list", 
@@ -684,7 +1530,7 @@ class PoderesController {
     }
     
     def generarReporteRevocacion(){
-        def revocacionDePoderInstanceList = session.revocacionDePoderInstanceList
+        def revocacionDePoderInstanceList = session.poderesParaReporteList 
         def inActive = session.inActive
         log.info "activo:." + session.inActive
         log.info "total::." + session.revocacionDePoderInstanceList.size()
@@ -692,17 +1538,20 @@ class PoderesController {
         log.info "convenioinstance::::::"+ session.revocacionDePoderInstanceList
         if(params?.format && params.format != "html"){
             response.contentType = grailsApplication.config.grails.mime.types[params.format]
-            response.setHeader("Content-disposition", "attachment; filename=revocacion.${params.extension}")
-            List fields = ["id", "apoderadosEliminar.nombre", "escrituraPublica","fechaDeRevocacion"]
-            Map labels = ["id": "Número de Folio","apoderadosEliminar.nombre": "Nombre Apoderado","escrituraPublica":"Escritura Pública",
-                          "fechaDeRevocacion":"Fecha Revocación"]
+            response.setHeader("Content-disposition", "attachment; filename=Reporte de revocacion(es) de poder(es).${params.extension}")
+            List fields = ["id", "apoderado",  "escrituraPublica", "registroDeLaSolicitud", "tipoDePoder",
+                             "categoriaDeTipoDePoder", "delegacion", "statusDePoderApoderado"]
+            Map labels = ["id":"Folio", "apoderado":"Nombre del Apoderado", "escrituraPublica":"Escritura Pública",
+                            "registroDeLaSolicitud":"Fecha de Registro", 
+                            "tipoDePoder":"Tipo de Poder", "categoriaDeTipoDePoder":"Categoria", 
+                          "delegacion":"Delegación", "statusDePoderApoderado":"Estatus"]
             def upperCase = { domain, value ->
                 return value.toUpperCase()
             }
             Map formatters = [nombreDeNotario: upperCase]		
-            Map parameters = [title: "Reporte de Revocación de Poder ", "column.widths": [0.2, 0.4, 0.4, 0.4], "title.font.size":12]
+            Map parameters = [title: "Reporte de Revocación de Poder ", "column.widths": [0.2, 0.5, 0.3, 0.4, 0.4, 0.6, 0.4,0.4], "title.font.size":12]
 
-            exportService.export(params.format, response.outputStream, session.revocacionDePoderInstanceList, fields, labels, formatters, parameters)
+            exportService.export(params.format, response.outputStream, session.poderesParaReporteList, fields, labels, formatters, parameters)
         }
         render(
             view: "list", 
@@ -714,12 +1563,66 @@ class PoderesController {
         
         params.max = Math.min(max ?: 10, 100)
         
-        [
-            otorgamientoDePoderInstanceList: OtorgamientoDePoder.list(params),
-            otorgamientoDePoderInstanceTotal: OtorgamientoDePoder.count(),
-            revocacionDePoderInstanceList: RevocacionDePoder.list(params),
-            revocacionDePoderInstanceTotal: RevocacionDePoder.count()
-        ]                
+        []                
     }
+    def rangoDeFechaBitacora () {        
+              
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")       
+        def rangoDeFechaBitacora = null
+        def fechaInicio = null
+        def fechaFin = null
+        def busquedaBean = null
+        def otorgamientoDePoderInstanceList = []
+        def revocacionDePoderInstanceList = []
+        if (params.rangoDeFechaBitacora) {
+            flash.warn = null
+            rangoDeFechaBitacora = params.rangoDeFechaBitacora
+            fechaInicio = sdf.parse(rangoDeFechaBitacora.split("-")[0].trim())
+            fechaFin = sdf.parse(rangoDeFechaBitacora.split("-")[1].trim())
+            busquedaBean = new BusquedaBean()        
+            busquedaBean.fechaInicio = fechaInicio
+            busquedaBean.fechaFin = fechaFin
+            otorgamientoDePoderInstanceList = OtorgamientoDePoder.findAllByRegistroDeLaSolicitudBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin, [sort: "id", order: "asc"])
+            revocacionDePoderInstanceList = RevocacionDePoder.findAllByRegistroDeLaSolicitudBetween(busquedaBean.fechaInicio, busquedaBean.fechaFin, [sort: "id", order: "asc"])           
+        } else {
+            flash.warn = "Debe elegir un rango de fechas válido."
+        } 
+        if(!otorgamientoDePoderInstanceList && !revocacionDePoderInstanceList){
+            flash.warn = "No se encontraron coincidencias."
+        }
+        render(
+            view: "bitacoraList", 
+            model: [
+                otorgamientoDePoderInstanceList: otorgamientoDePoderInstanceList,
+                revocacionDePoderInstanceList: revocacionDePoderInstanceList,                
+                busquedaBean : busquedaBean,
+                rangoDeFechaBitacora : params.rangoDeFechaBitacora                
+            ]
+        )
+    }
+    def downloadArchivo () {
+                       
+        if(params.id){
+            def poderId = params.id
+            def poderInstance = Poder.get(poderId as long)
+            response.setHeader("Content-Disposition", "attachment;filename=\"" + poderInstance.nombreDatosUsuarioExterno + "\"");
+            byte[] datosUsuarioExterno = poderInstance.datosUsuarioExterno
+            response.outputStream << datosUsuarioExterno
+        }else{
+        
+            def poderInstance = Poder.get(params.poderId as long)
+            response.setHeader("Content-Disposition", "attachment;filename=\"" + poderInstance.nombreDatosUsuarioExterno + "\"");
+            byte[] datosUsuarioExterno = poderInstance.datosUsuarioExterno
+            response.outputStream << datosUsuarioExterno
+        }  
+    }    
     
+    def editarNotario (){        
+        def notarios = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_PODERES_NOTARIO")).collect {it.usuario}                
+        [ notarios : notarios ]
+    }
+    def editarSolicitanteExterno (){        
+        def solicitantesExternos = UsuarioRol.findAllByRol(Rol.findByAuthority("ROLE_SOLICITANTE_EXTERNO")).collect {it.usuario}         
+        [ solicitantesExternos : solicitantesExternos ]
+    }
 }

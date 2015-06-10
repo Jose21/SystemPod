@@ -10,6 +10,11 @@
     <body>
         <div class="page-header position-relative">            
             <div class="btn-group">
+                <g:if test="${otorgamientoDePoderInstance.documentoPoderEspecial}">
+                    <g:link class="btn btn-danger btn-small tip-bottom" action="downloadArchivo2" id="${otorgamientoDePoderInstance?.id}">
+                        <i class="icon-download"></i> Descargar Archivo de Solicitud de Poder Especial
+                    </g:link>  
+                </g:if>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
                     <g:if test="${!otorgamientoDePoderInstance.documentos && ocultarBoton != true && !otorgamientoDePoderInstance.tareas}">
                         <g:link class="btn btn-success btn-small tip-bottom" action="existe" id="${otorgamientoDePoderInstance?.id}">
@@ -17,9 +22,9 @@
                         </g:link>
                     </g:if>
                 </sec:ifAnyGranted>                
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_GESTOR_EXTERNO">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_GESTOR_EXTERNO, ROLE_PODERES_GESTOR">
                     <g:if test="${!otorgamientoDePoderInstance.documentos && !otorgamientoDePoderInstance.tareas && ocultarBoton != true}">
-                        <g:link controller="tarea" action="create" class="btn btn-small btn-danger tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id ]">
+                        <g:link controller="tarea" action="create" class="btn btn-small btn-warning tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id ]">
                             <i class="icon-thumbs-down"></i> Rechazar Solicitud
                         </g:link>
                     </g:if>
@@ -32,19 +37,29 @@
                     </g:if>
                 </sec:ifAnyGranted>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_NOTARIO">
-                    <g:if test="${!otorgamientoDePoderInstance.documentos}">
+                    <g:if test="${!otorgamientoDePoderInstance.documentos && otorgamientoDePoderInstance.documentoDeProyecto}">
                         <g:link  action="edit" class="btn btn-small btn-warning tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]">
                             <i class="icon-external-link"></i> Enviar Copia Electrónica
                         </g:link>
                     </g:if>
+                    <g:else>
+                        <g:link  controller="documentoDeProyecto" action="create" class="btn btn-small btn-warning tip-bottom" params="[ idOtorgamiento : otorgamientoDePoderInstance?.id]">
+                            <i class="icon-external-link"></i> Solicitar VoBo de Carta de Instrucción
+                        </g:link>
+                    </g:else>
                 </sec:ifAnyGranted>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
-                    <g:if test="${otorgamientoDePoderInstance.documentos && ocultarBoton == false}">
+                    <g:if test="${otorgamientoDePoderInstance.documentos && ocultarBoton == false && solicitudExterno == false}">
                         <g:link  action="entregarCopiaSolicitante" class="btn btn-small btn-purple tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
                             <i class="icon-external-link"></i> Enviar Copia al Solicitante
                         </g:link>
                     </g:if>
-                    <g:if test="${otorgamientoDePoderInstance.documentos && ocultarBoton == true && !otorgamientoDePoderInstance.notas}">                        
+                    <g:elseif test="${otorgamientoDePoderInstance.documentos && ocultarBoton == false && solicitudExterno == true}">
+                        <g:link  action="entregarCopiaGestorExterno" class="btn btn-small btn-purple tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+                            <i class="icon-external-link"></i> Enviar Copia al Gestor Externo
+                        </g:link>
+                    </g:elseif>
+                    <g:if test="${otorgamientoDePoderInstance.documentos && ocultarBoton == true && !otorgamientoDePoderInstance.notas && solicitudExterno == false}">                        
                         <g:link  controller="nota" action="create" class="btn btn-small btn-purple tip-bottom" params="[ otorgamientoDePoderId : otorgamientoDePoderInstance?.id]">
                             <i class="icon-file-text"></i> Notificar Envio de Documento Físico
                         </g:link>
@@ -61,18 +76,33 @@
                             <i class="icon-external-link"></i> Turnar a Resolvedor
                         </g:link>
                     </g:if>
+                    <g:if test="${otorgamientoDePoderInstance.documentos && ocultarBoton == true && !otorgamientoDePoderInstance.notas && solicitudExterno == true}">                        
+                        <g:link  controller="nota" action="create" class="btn btn-small btn-purple tip-bottom" params="[ otorgamientoDePoderId : otorgamientoDePoderInstance?.id]">
+                            <i class="icon-file-text"></i> Notificar Envio de Documento Físico
+                        </g:link>
+                    </g:if>
                 </sec:ifAnyGranted>
                 <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_GESTOR_EXTERNO">
-                    <g:if test="${ocultarBoton != true}">
-                        <g:link action="turnarResolvedor" class="btn btn-small btn-info tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
-                            <i class="icon-external-link"></i> Turnar a Resolvedor
+                    <g:if test="${ocultarBoton != true && !otorgamientoDePoderInstance.documentos && !otorgamientoDePoderInstance?.tareas}">
+                        <g:link action="turnarGestor" class="btn btn-small btn-info tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+                            <i class="icon-external-link"></i> Turnar a Gestor
+                        </g:link>
+                    </g:if>
+                    <g:if test="${ocultarBoton != true && !otorgamientoDePoderInstance.documentos && otorgamientoDePoderInstance?.tareas}">
+                        <g:link action="turnarSolicitanteExterni" class="btn btn-small btn-info tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+                            <i class="icon-external-link"></i> Enviar cancelacion a Solicitante
+                        </g:link>
+                    </g:if>
+                    <g:if test="${otorgamientoDePoderInstance.documentos && ocultarBoton == false && solicitudExterno == true}">
+                        <g:link  action="entregarCopiaSolicitante" class="btn btn-small btn-purple tip-bottom" params="[ idOtorgamientoDePoder : otorgamientoDePoderInstance?.id]" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+                            <i class="icon-external-link"></i> Enviar Copia al Solicitante
                         </g:link>
                     </g:if>
                 </sec:ifAnyGranted>
                 <g:link action="imprimir" class="btn btn-small btn-success tip-bottom" params="[ id : otorgamientoDePoderInstance?.id]" target="_blank">
                     <i class="icon-print"></i> Imprimir Solicitud
                 </g:link>
-                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_NOTARIO">
+                <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR">
                     <g:if test="${ocultarBoton != true}">
                         <a class="btn btn-small btn-inverse tip-bottom" href="#reasignarSolicitud" data-toggle="modal">
                             <i class="icon-reply"></i> Reasignar Solicitud
@@ -114,16 +144,16 @@
                                                                 </div>
                                                             </td>
                                                         </sec:ifAnyGranted>
-                                                        </tr>
-                                                    </table>
-                                                </td>
                                             </tr>
+                                        </table>
+                                        </td>
+                                        </tr>
                                         </table>
                                     </g:elseif>
                                     <g:else>
                                         <h4 class="lighter"><i class="icon-file-text"></i> Solicitud de Otorgamiento de Poder </h4>                                    
-                                    </g:else>                                        
-                                </div>
+                                    </g:else>                                                                       
+                                </div>                                
                                 <div class="widget-body">
                                     <div class="widget-main">
                                         <g:render template="/otorgamientoDePoder/solicitudOtorgamiento" />
@@ -151,7 +181,31 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                            </g:if>                                                                                        	
+                                            </g:if>
+                                            <sec:ifAnyGranted roles="ROLE_ADMINISTRADOR, ROLE_PODERES, ROLE_PODERES_RESOLVEDOR, ROLE_PODERES_GESTOR, ROLE_SOLICITANTE_EXTERNO, ROLE_SOLICITANTE_ESPECIAL, ROLE_GESTOR_EXTERNO, ROLE_PODERES_ENLACE">                                                     
+                                                <g:if test="${otorgamientoDePoderInstance?.datosUsuarioExterno}"> 
+                                                    <table class="table table-bordered table-striped" border="2">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="2"><g:message code="otorgamientoDePoder.datosUsuarioExterno.label" default="Documentos de Solicitante Externo" /></th>                            
+                                                            </tr>                            
+                                                        </thead>
+                                                        <tbody>                            
+                                                            <tr>
+                                                                <td style="text-align:center">
+                                                                    Descargar
+                                                                </td>
+                                                                <td style="text-align:center">                                                                
+                                                                    <g:link controller="poderes" action="downloadArchivo" params="[poderId: otorgamientoDePoderInstance.id]">
+                                                                        ${otorgamientoDePoderInstance?.nombreDatosUsuarioExterno?.encodeAsHTML()}
+                                                                        <i class="icon-download"></i>
+                                                                    </g:link>
+                                                                </td>                        
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </g:if> 
+                                            </sec:ifAnyGranted>
                                         </div>
                                     </div>
                                 </div>
@@ -163,7 +217,6 @@
                                                 Notificación de Rechazo
                                             </h4>
                                         </div>
-
                                         <div class="widget-body">
                                             <div class="widget-main no-padding">
                                                 <div class="dialogs">                

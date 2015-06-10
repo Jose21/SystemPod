@@ -7,8 +7,8 @@
         <g:message code="cartaDeInstruccionDeOtorgamiento.registro.label" default="Registro" />
         <span class="required-indicator">*</span>
     </label>
-    <div class="controls">
-        <g:textField name="registro" required="" value="${cartaDeInstruccionDeOtorgamientoInstance?.registro}"/>
+    <div class="controls">        
+        <input readonly="readonly" class="span3" id="registro" type="text" value="${cartaDeInstruccionDeOtorgamientoInstance?.registro}" name="registro" />      
     </div>
 </div>
 
@@ -18,8 +18,10 @@
         <span class="required-indicator">*</span>
     </label>
     <div class="controls">
-        <g:textField name="fecha" required="" value="${cartaDeInstruccionDeOtorgamientoInstance?.fecha}"/>
-    </div>
+        <div class="row-fluid input-append">
+            <input readonly="readonly" class="span4" id="fecha" type="text" value="${cartaDeInstruccionDeOtorgamientoInstance?.fecha}" name="fecha" />      
+        </div>
+    </div>    
 </div>
 
 <div class="control-group fieldcontain ${hasErrors(bean: cartaDeInstruccionDeOtorgamientoInstance, field: 'contenido', 'error')} required">
@@ -27,8 +29,17 @@
         <g:message code="cartaDeInstruccionDeOtorgamiento.contenido.label" default="Contenido" />
         <span class="required-indicator">*</span>
     </label>
-    <div class="controls">
-        <g:textArea class="ckeditor" name="contenido" cols="40" rows="5" maxlength="1048576" required="" value="${cartaDeInstruccionDeOtorgamientoInstance?.contenido}"/>
+    <div class="controls">       
+        <div name="contenido" class="wysiwyg-editor" id="editor1">
+            ${raw(cartaDeInstruccionDeOtorgamientoInstance?.contenido)}
+        </div>
+        <g:hiddenField name="contenido" />
     </div>
 </div>
-<g:javascript src="ckeditor/ckeditor.js"/>
+
+<script type="text/javascript">    
+    $('.form-horizontal').submit(function()
+    {    
+    $('#contenido').val($('#editor1').html());    
+    });    
+</script>

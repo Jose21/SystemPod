@@ -8,7 +8,7 @@
     </head>
     <body>
         <div class="page-header position-relative">
-            <h1>Nuevo: Solicitud de Revocación de Poder</h1>            
+            <h1>Solicitud de Revocación de Poder</h1>            
         </div>
         <div class="container-fluid">
             <g:render template="/shared/alerts" />

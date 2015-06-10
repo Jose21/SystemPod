@@ -6,11 +6,7 @@ import com.app.sgtask.Tarea
 /**
 * Domain class hija de la domain Poder, hereda todas sus propiedades.
 */
-class OtorgamientoDePoder extends Poder {
-    /**
-    * Fecha de cuando se crea la solicitud.
-    */
-    Date registroDeLaSolicitud
+class OtorgamientoDePoder extends Poder {    
     /**
     * Poder que es solicitado.
     */
@@ -43,14 +39,20 @@ class OtorgamientoDePoder extends Poder {
     /**
     * Bandera para saber si hay una solicitud en proceso de un mismo poder.
     */
-    boolean solicitudEnProceso = false
+    boolean solicitudEnProceso 
     
+     /**
+    * Agregar documento de justificacion de poder especial.
+    */
+     byte[] documentoPoderEspecial
+     String nombreDocumentoPoderEspecial
+             
     static hasMany = [         
-        apoderadosVigentes : Apoderado        
+        apoderadosVigentes : Apoderado       
     ]
     
     static constraints = {       
-        registroDeLaSolicitud nullable:false
+        
         
         poderSolicitado blank:true, nullable:true, maxSize:1048576
         motivoDeOtorgamiento nullable:false, maxSize:1048576
@@ -62,6 +64,8 @@ class OtorgamientoDePoder extends Poder {
         voBoDocumentoFisico blank:false
         apoderadosVigentes nullable:true
         solicitudEnProceso blank:false
+        documentoPoderEspecial nullable:true, maxSize:52428800
+        nombreDocumentoPoderEspecial nullable:true, maxSize:1000                 
     }
     
     String toString() {

@@ -47,7 +47,7 @@
         <tr>
             <td bgcolor="#E7EBEB" style="text-align: CENTER">
                 <span style="font-family: sans-serif;font-size: 14px;font-weight: bold">
-                    APODERADOS
+                    APODERADOS A REVOCAR EL PODER
                 </span>
             </td>
         </tr>
@@ -56,17 +56,17 @@
                 <table width="100%" border="0">
                     <thead>
                         <tr>                    
-                            <td style="text-align: CENTER;font-size: 14px;font-weight: bold">NOMBRE</td>
-                            <td style="text-align: CENTER;font-size: 14px;font-weight: bold">PUESTO</td>
-                            <td style="text-align: CENTER;font-size: 14px;font-weight: bold">INSTITUCION</td>                    
+                            <td style="text-align: left;font-size: 14px;font-weight: bold; width:40%">NOMBRE</td>
+                            <td style="text-align: left;font-size: 14px;font-weight: bold; width:30%">PUESTO</td>
+                            <td style="text-align: left;font-size: 14px;font-weight: bold; width:30%">INSTITUCION</td>                    
                         </tr>
                     </thead>
                     <tbody> 
                         <g:each in="${revocacionDePoderInstance?.apoderados}" status="i" var="apoderado">
                             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">                        
-                                <td style="text-align: center">${fieldValue(bean: apoderado, field: "nombre")}</td>
-                                <td style="text-align: center">${fieldValue(bean: apoderado, field: "puesto")}</td>
-                                <td style="text-align: center">${fieldValue(bean: apoderado, field: "institucion")}</td>                                                                
+                                <td style="text-align: left; width:40%">${fieldValue(bean: apoderado, field: "nombre")}</td>
+                                <td style="text-align: left; width:30%">${fieldValue(bean: apoderado, field: "puesto")}</td>
+                                <td style="text-align: left; width:30%">${fieldValue(bean: apoderado, field: "institucion")}</td>                                                                
                             </tr>
                         </g:each>                                
                     </tbody>
@@ -149,7 +149,7 @@
         <tr>
             <td style="text-align: center">
                 <span style="font-family: sans-serif;font-size: 14px;font-weight: bold">
-                    Gerente Jurídico
+                    Gerente de Coordinación Jurídica
                 </span>
             </td>
         </tr>
